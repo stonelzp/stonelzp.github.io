@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Semaphore-信号量]]></title>
+    <url>%2F2018%2F06%2F28%2FSemaphore-%E4%BF%A1%E5%8F%B7%E9%87%8F%2F</url>
+    <content type="text"><![CDATA[Semaphore,中文叫信号量，日语叫セマフォ（= .=）。经常会在多线程的编程中用到。信号量说简单点就是为了线程同步，或者说是为了限制线程能运行的数量。 仔细说明一下就是，信号量会在内部维护一个计数器，当一个线程调用了这个信号量，计数器就会减1，直到计数器减为0，调用这个信号量的线程将会被阻塞，直到有别的线程释放掉一个信号量使其计数器加1。 那么问题就来了，这个信号量维护的这个计数器应该是对线程的死锁有所防护的，也就是说同一时间只有一个线程能过获取这个信号量，而且当线程获取信号量的时候对信号量中的计数器进行减操作是具有原子性的操作。对于这个计数器的保存位置应该深入调查一下。 实例代码：12345678910111213141516171819202122232425262728293031323334353637383940414243using System;using System.Collections.Generic;using System.Linq;using System.Text;using System.Threading;namespace Semaphore1&#123; class Program &#123; //我设置一个最大允许5个线程允许的信号量 //并将它的计数器的初始值设为0 //这就是说除了调用该信号量的线程都将被阻塞 static Semaphore semaphore = new Semaphore(0, 5); static void Main(string[] args) &#123; for (int i = 1; i &lt;= 5; i++) &#123; Thread thread = new Thread(new ParameterizedThreadStart(work)); thread.Start(i); &#125; Thread.Sleep(1000); Console.WriteLine(&quot;Main thread over!&quot;); //释放信号量，将初始值设回5，你可以将 //将这个函数看成你给它传的是多少值，计数器 //就会加多少回去，Release()相当于是Release(1) semaphore.Release(5); &#125; static void work(object obj) &#123; semaphore.WaitOne(); Console.WriteLine(&quot;Thread &#123;0&#125; start!&quot;,obj); semaphore.Release(); &#125; &#125;&#125;]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[iOS真机安装Build出错]]></title>
     <url>%2F2018%2F06%2F08%2FiOS%E7%9C%9F%E6%9C%BA%E5%AE%89%E8%A3%85Build%E5%87%BA%E9%94%99%2F</url>
     <content type="text"><![CDATA[为了面试，需要用尽一切手段了，把自己的毕业设计的时候做的2D游戏也拿出来了（捂脸）。找到了自己之前保存好的已经编译好的安装包，希望能够平安无事的安装到自己的系统高版本的iPhone7上。但是再次编译的时候果不其然还是要报错。1'__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support for __declspec attributes 但是无论是Xcode还是Unity都已经升级的面目全非了，打开以前保存的Unity工程果不其然各种报错。想要解决出现的问题，第一个是NGUI的版本问题，代码中出现的一部分说是已经不支持Unity5.4+了…上网搜了一下，结果没有找到任何解答。 第一下就碰壁，只能再回去找已经编译好的文件的Build错误了。 问题解决继续搜关键词，看到了Unity社区中有一个这个提问：Error “unknown type name __declspec” after Xcode 7.3 upgrade 出问题的代码部分跟我的是一样的:1234567NORETURN static void il2cpp_codegen_raise_exception (Il2CppCodeGenException *ex)&#123; il2cpp::vm::Exception::Raise ((Il2CppException*)ex);#if __has_builtin(__builtin_unreachable) __builtin_unreachable();#endif&#125; 当然我是根本不知道这几行代码到底是干什么的。但是就是出错了…继续往下看，好像看到了一个解决方案: It has helped me: 1) Remove ‘NORETURN’2) Clean build3) Build it Like a hack:) XCode7.3, Unity5.2.2 UPD: XCode7.3, Unity5.3.4f1 - no issue 跟我的情况太像了，抱着试一试的态度，然后…Build通过了，游戏也成功的安装到了我的手机上了。 で？这个NORETURN到底是个什么？ 查了一下发现这个属性不光是Swift中的，C++中也有。所以说我已经厌倦了什么都学，什么都学对自己来说就是什么都学不会。自己之前一段时间看了Swift然后又去干别的，妥妥的全部忘光。 noreturn in Swiftnoreturn是一种属性，被这个属性修饰的函数表示没有任何返回值，函数可以被重写，但是重写之后也必须没有返回值。 具有代表性的函数有：exit(),abort()等等。 这里有一篇介绍Swift的Attributes的文章Swift - Attributes(@attribute) について 【編集中】介绍了Swift中的修饰属性。 noreturn in C++相比之下我更在意noreturn在C++中的作用。试着查了一下What is the point of noreturn? 字面意思看起来是:不返回函数的结果，没有返回值。但实际上跟void funtion还是有很大的区别。 void function运行会返回调用函数，只不过没有返回值。 被noreturn修饰的函数在运行结束之后并不会返回调用函数。 12345678910[[ noreturn ]] void f() &#123; throw "error"; // OK&#125;void g() &#123; f(); // unreachable: 在调用了`f()`之后，下面的代码永远不会执行 std::cout &lt;&lt; "No! That's impossible" &lt;&lt; std::endl;&#125; 别的事情不说，每次发现这种有关语言的语法的地方不明白的时候，就觉得特别打脸。]]></content>
