@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C#中的单例模式-SingletonPattern]]></title>
+    <url>%2F2018%2F07%2F15%2FC%23%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-SingletonPattern%2F</url>
+    <content type="text"><![CDATA[这次来整理一下C的单例模式，参考的文章是Implementing the Singleton Pattern in C#。 曾经在做一个数据库管理类中经常多次使用了一个数据库管理的实例类对象，每次在新的不相关的类中需要使用数据库操作的时候都重新实例化一个数据库管理类对象，久而久之就觉得有些麻烦。便决定使用单例模式来管理，同时深究一下单例模式与C#中的使用。 算是这篇文章的汉化与总结吧。 –未完–]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Semaphore-信号量]]></title>
     <url>%2F2018%2F06%2F28%2FSemaphore-%E4%BF%A1%E5%8F%B7%E9%87%8F%2F</url>
     <content type="text"><![CDATA[Semaphore,中文叫信号量，日语叫セマフォ（= .=）。经常会在多线程的编程中用到。信号量说简单点就是为了线程同步，或者说是为了限制线程能运行的数量。 仔细说明一下就是，信号量会在内部维护一个计数器，当一个线程调用了这个信号量，计数器就会减1，直到计数器减为0，调用这个信号量的线程将会被阻塞，直到有别的线程释放掉一个信号量使其计数器加1。 那么问题就来了，这个信号量维护的这个计数器应该是对线程的死锁有所防护的，也就是说同一时间只有一个线程能过获取这个信号量，而且当线程获取信号量的时候对信号量中的计数器进行减操作是具有原子性的操作。对于这个计数器的保存位置应该深入调查一下。 实例代码：12345678910111213141516171819202122232425262728293031323334353637383940414243using System;using System.Collections.Generic;using System.Linq;using System.Text;using System.Threading;namespace Semaphore1&#123; class Program &#123; //我设置一个最大允许5个线程允许的信号量 //并将它的计数器的初始值设为0 //这就是说除了调用该信号量的线程都将被阻塞 static Semaphore semaphore = new Semaphore(0, 5); static void Main(string[] args) &#123; for (int i = 1; i &lt;= 5; i++) &#123; Thread thread = new Thread(new ParameterizedThreadStart(work)); thread.Start(i); &#125; Thread.Sleep(1000); Console.WriteLine(&quot;Main thread over!&quot;); //释放信号量，将初始值设回5，你可以将 //将这个函数看成你给它传的是多少值，计数器 //就会加多少回去，Release()相当于是Release(1) semaphore.Release(5); &#125; static void work(object obj) &#123; semaphore.WaitOne(); Console.WriteLine(&quot;Thread &#123;0&#125; start!&quot;,obj); semaphore.Release(); &#125; &#125;&#125;]]></content>
