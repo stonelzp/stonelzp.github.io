@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-18T10:12:25.494Z">
+<meta property="og:updated_time" content="2018-07-18T11:18:24.923Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录刚学UE的一些疑问">
 <meta name="twitter:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点">
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-18T19:12:25+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-18T20:18:24+09:00">
                 2018-07-18
               </time>
             
@@ -428,16 +428,28 @@
 <h4 id="ifndef方式"><a href="#ifndef方式" class="headerlink" title="#ifndef方式"></a>#ifndef方式</h4><p>这种方式受C/C++语言标准支持，可以保证同一个文件不会被同时包含，也能保证内容完全相同的两个文件（或者代码片段）不会被同时包含。缺点是不同头文件中的宏的名字如果相同，会导致编译器找不到声明的问题。另外由于编译器每次需要打开头文件来判定是否有重复的定义，会导致编译的时间要长。</p>
 <h4 id="progma-once方式"><a href="#progma-once方式" class="headerlink" title="#progma once方式"></a>#progma once方式</h4><p>这种方式是保证“物理存在上”同一个文件不会被包含多次。而不是内容相同的两个文件。而且无法对一个头文件中一段代码做<code>pragma once</code>声明，只能针对文件。当然也不会发生第一种方式的宏名碰撞引发的问题。</p>
 <p>使用哪一种方式见仁见智，有好处有坏处。根据情况使用。</p>
-<p>附上别人的博客链接<a href="https://www.cnblogs.com/hokyhu/archive/2009/03/30/1425604.html" target="_blank" rel="noopener">#pragma once与#ifndef解析</a></p>
-<p>时间线比较新的分析<a href="flast.hateblo.jp/entry/2015/12/05/000000">インクルードガードとpragma once</a></p>
-<p>stackoverflow上关于上述两种方式的争论<a href="https://stackoverflow.com/questions/1143936/pragma-once-vs-include-guards" target="_blank" rel="noopener">#pragma once vs include guards?</a></p>
+<ul>
+<li><a href="https://www.cnblogs.com/hokyhu/archive/2009/03/30/1425604.html" target="_blank" rel="noopener">附上别人的博客链接: #pragma once与#ifndef解析</a></li>
+<li><a href="flast.hateblo.jp/entry/2015/12/05/000000">时间线比较新的分析: インクルードガードとpragma once</a></li>
+<li><a href="https://stackoverflow.com/questions/1143936/pragma-once-vs-include-guards" target="_blank" rel="noopener">stackoverflow上关于上述两种方式的争论: #pragma once vs include guards?</a></li>
+</ul>
+<h3 id="C-中的weak-pointer"><a href="#C-中的weak-pointer" class="headerlink" title="C++中的weak pointer"></a>C++中的weak pointer</h3><p><code>std::weak_ptr</code>是一个很好的解决<strong>悬空指针</strong>问题的方式。使用原生指针（raw pointers）的话不知道现在所引用的资源是否已经被释放。而使用<code>std::shared_ptr</code>来管理的话，<code>std::weak_ptr</code>只管使用，而不关心资源的使用情况，反正也不管理指向的资源。</p>
+<p>因为本身<code>std::weak_ptr</code>并不能直接引用到对象，不会影响对象的自动释放，不会影响对象的引用计数，需要使用<code>lock()</code>来升级到<code>std::shared_ptr</code>来进行操作。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://my.oschina.net/u/2368952/blog/416606" target="_blank" rel="noopener">C++ weak pointer</a></li>
+<li><a href="https://stackoverflow.com/questions/12030650/when-is-stdweak-ptr-useful" target="_blank" rel="noopener">When is std::weak_ptr useful?</a></li>
+</ul>
 <h3 id="道听途说"><a href="#道听途说" class="headerlink" title="道听途说"></a>道听途说</h3><h4 id="1-关于C-中的资源释放"><a href="#1-关于C-中的资源释放" class="headerlink" title="1.关于C++中的资源释放"></a>1.关于C++中的资源释放</h4><p>一般在c++中应该是资源的获取与申请（<code>new</code>等等的操作）与资源的释放都是需要程序员手动操作的。但是如果使用了UE管理的资源，比如继承了UE中的类库等等的操作，那么释放这些资源的操作，在UE中会自动释放而不需要程序员的额外操作，反而要是操作了还会出问题。</p>
 <p>当然这个问题只是道听途说，未能够验证。</p>
 <p>当然需要仔细调查了啊</p>
 <h4 id="2-关于UE中UObject的派生对象的垃圾回收问题"><a href="#2-关于UE中UObject的派生对象的垃圾回收问题" class="headerlink" title="2.关于UE中UObject的派生对象的垃圾回收问题"></a>2.关于UE中UObject的派生对象的垃圾回收问题</h4><p>如果一个UObject的派生类对象中有一个UObject的派生类对象的指针变量，当这个指针变量经过<code>NewObject&lt;&gt;()</code>的操作实例化了之后，这个实例化对象就成为了<strong>GC对象</strong>（garbage collection）,不需要显式的<code>delete</code>垃圾回收了。</p>
 <p>只是指针变量在声明的时候最好加上<code>UPROPERTY()</code>来让GC更好的回收<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY()</span><br><span class="line">UObject* MyObjectReference;</span><br></pre></td></tr></table></figure></p>
 <p>总结来说，在C++中使用了<code>new</code>等等的方式来申请了一部分空间的话在使用结束的时候需要显式的释放掉，否则的话就会造成内存泄漏。然而上述的使用方式会使得得到的资源自动回收。</p>
-<p>参考来源<a href="https://answers.unrealengine.com/questions/4485/question-uobject-pointer-references.html" target="_blank" rel="noopener">[Question]UObject Pointer References</a></p>
+<p>参考来源:</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/4485/question-uobject-pointer-references.html" target="_blank" rel="noopener">[Question]UObject Pointer References</a></li>
+</ul>
 
       
     </div>
@@ -659,7 +671,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-与C-的不同之处"><span class="nav-number">1.</span> <span class="nav-text">C++与C#的不同之处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的C-不同的地方"><span class="nav-number">2.</span> <span class="nav-text">UE4中的C++不同的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-UCLASS"><span class="nav-number">2.1.</span> <span class="nav-text">1.UCLASS( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-GENERAED-BODY"><span class="nav-number">2.2.</span> <span class="nav-text">2.GENERAED_BODY( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-UPROPERTY-UFUNCTION"><span class="nav-number">2.3.</span> <span class="nav-text">3.UPROPERTY( , ) UFUNCTION( , )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-TArray-UE4中的数组（重要）"><span class="nav-number">2.4.</span> <span class="nav-text">4.TArray-UE4中的数组（重要）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma-once-vs-include-guard"><span class="nav-number">3.</span> <span class="nav-text">#pragma once vs include guard</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifndef方式"><span class="nav-number">3.1.</span> <span class="nav-text">#ifndef方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#progma-once方式"><span class="nav-number">3.2.</span> <span class="nav-text">#progma once方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#道听途说"><span class="nav-number">4.</span> <span class="nav-text">道听途说</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关于C-中的资源释放"><span class="nav-number">4.1.</span> <span class="nav-text">1.关于C++中的资源释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-关于UE中UObject的派生对象的垃圾回收问题"><span class="nav-number">4.2.</span> <span class="nav-text">2.关于UE中UObject的派生对象的垃圾回收问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-与C-的不同之处"><span class="nav-number">1.</span> <span class="nav-text">C++与C#的不同之处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的C-不同的地方"><span class="nav-number">2.</span> <span class="nav-text">UE4中的C++不同的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-UCLASS"><span class="nav-number">2.1.</span> <span class="nav-text">1.UCLASS( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-GENERAED-BODY"><span class="nav-number">2.2.</span> <span class="nav-text">2.GENERAED_BODY( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-UPROPERTY-UFUNCTION"><span class="nav-number">2.3.</span> <span class="nav-text">3.UPROPERTY( , ) UFUNCTION( , )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-TArray-UE4中的数组（重要）"><span class="nav-number">2.4.</span> <span class="nav-text">4.TArray-UE4中的数组（重要）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma-once-vs-include-guard"><span class="nav-number">3.</span> <span class="nav-text">#pragma once vs include guard</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifndef方式"><span class="nav-number">3.1.</span> <span class="nav-text">#ifndef方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#progma-once方式"><span class="nav-number">3.2.</span> <span class="nav-text">#progma once方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中的weak-pointer"><span class="nav-number">4.</span> <span class="nav-text">C++中的weak pointer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#道听途说"><span class="nav-number">5.</span> <span class="nav-text">道听途说</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关于C-中的资源释放"><span class="nav-number">5.1.</span> <span class="nav-text">1.关于C++中的资源释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-关于UE中UObject的派生对象的垃圾回收问题"><span class="nav-number">5.2.</span> <span class="nav-text">2.关于UE中UObject的派生对象的垃圾回收问题</span></a></li></ol></li></ol></div>
             
 
           </div>
