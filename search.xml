@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[记录刚学UE的一些疑问]]></title>
+    <url>%2F2018%2F07%2F18%2F%E8%AE%B0%E5%BD%95%E5%88%9A%E5%AD%A6UE%E7%9A%84%E4%B8%80%E4%BA%9B%E7%96%91%E9%97%AE%2F</url>
+    <content type="text"><![CDATA[为了记录自己在学习UE引擎过程中遇到的一些疑问点 C++与C#的不同之处时隔多年见到C++的第一个违和感是头文件，为什么需要写头文件这个问题我找了一些别人写的代码发现了一下几个规则： 在C++的头文件中SampleCode.h中一般都会预先定义一些东西 需要包含的其他头文件 123#include "Engine.h"#include "MyAppUtilities.h"... 定义需要使用的宏 预处理（C++的预处理器需要了解一下） 123//一般常量居多？#define PI 3.1415926... 定义类，类中包含该有的成员， 123456789class SampleClass&#123; //Attributes or functions public: protected: private:&#125; UE4中的C++不同的地方1.UCLASS( )Sample Code:1234567891011121314151617181920#include "Engine.h" //如果需要使用UE的library的话#include "MyAppUtilities.h"UCLASS()//class UMyClass : public UObject&#123; GENERATED_BODY() public: //构造函数 UMyClass(); UPROPERTY(BlueprintReadWrite, Category = "MyApp") int32 IntProp; UFUNCTION(BlueprintCallable, Category = "MyApp") float LengthOfSomething(const int32 index); private: TArray&lt;int&gt; IntArrayWork;&#125; 对于UCLASS()，如果需要继承UE的类库，则都要加上这个。最好声明的类名也以U开头为好？ 但是我觉得这种声明不是跟UE的类库搞混了吗，辨识度低我觉得应该没有这么智障的规则。 2.GENERAED_BODY( )这一句话必须要写的原因需要调查 3.UPROPERTY( , ) UFUNCTION( , )貌似使用这个声明的属性跟方法UE的Blueprint可以使用。（好一个破坏封装的使用的方法） 4.TArray-UE4中的数组（重要）先上本家，官方文档TArray:Arrays in Unreal Engine。再上中文翻译虚幻引擎中的数组–TArry:Arrays]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>UnralEngine4</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[C#中的单例模式-SingletonPattern]]></title>
     <url>%2F2018%2F07%2F15%2FC%23%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-SingletonPattern%2F</url>
     <content type="text"><![CDATA[这次来整理一下C的单例模式，参考的文章是Implementing the Singleton Pattern in C#。 曾经在做一个数据库管理类中经常多次使用了一个数据库管理的实例类对象，每次在新的不相关的类中需要使用数据库操作的时候都重新实例化一个数据库管理类对象，久而久之就觉得有些麻烦。便决定使用单例模式来管理，同时深究一下单例模式与C#中的使用。 算是这篇文章的汉化与总结吧。 –未完–]]></content>
