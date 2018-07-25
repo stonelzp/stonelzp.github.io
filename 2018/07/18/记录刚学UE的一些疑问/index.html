@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-18T11:18:24.923Z">
+<meta property="og:updated_time" content="2018-07-25T04:00:23.370Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录刚学UE的一些疑问">
 <meta name="twitter:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-07-18T20:18:24+09:00">
-                2018-07-18
+              <time title="更新于" itemprop="dateModified" datetime="2018-07-25T13:00:23+09:00">
+                2018-07-25
               </time>
             
           </span>
@@ -440,6 +440,17 @@
 <li><a href="https://my.oschina.net/u/2368952/blog/416606" target="_blank" rel="noopener">C++ weak pointer</a></li>
 <li><a href="https://stackoverflow.com/questions/12030650/when-is-stdweak-ptr-useful" target="_blank" rel="noopener">When is std::weak_ptr useful?</a></li>
 </ul>
+<h3 id="开启HSLS语法高亮"><a href="#开启HSLS语法高亮" class="headerlink" title="开启HSLS语法高亮"></a>开启HSLS语法高亮</h3><h4 id="HLSL-Tools-for-Visual-Studio"><a href="#HLSL-Tools-for-Visual-Studio" class="headerlink" title="HLSL Tools for Visual Studio"></a>HLSL Tools for Visual Studio</h4><p>应该是HLSL的语法编辑器插件，有自动补全的功能，附上下载链接。但是并没有解语法高亮的问题。</p>
+<p>下载链接：</p>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=TimGJones.HLSLToolsforVisualStudio" target="_blank" rel="noopener">HLSL Tools for Visual Studio</a></li>
+</ul>
+<h4 id="在VS2017中开启语法高亮（syntax-high-lighting）"><a href="#在VS2017中开启语法高亮（syntax-high-lighting）" class="headerlink" title="在VS2017中开启语法高亮（syntax high lighting）"></a>在VS2017中开启语法高亮（syntax high lighting）</h4><p>虽然不是针对VS2017的解决方案，但是设定之后的确解决的这个问题：</p>
+<p>设定顺序：</p>
+<ul>
+<li>在VS2017中 Go to Tools -&gt; Options -&gt; Text Editor -&gt; Fie Extension 在这里选择编辑文件的扩展名与文法编辑器，然后添加保存。</li>
+</ul>
+<p>这样设定应该里面有效果了。</p>
 <h3 id="道听途说"><a href="#道听途说" class="headerlink" title="道听途说"></a>道听途说</h3><h4 id="1-关于C-中的资源释放"><a href="#1-关于C-中的资源释放" class="headerlink" title="1.关于C++中的资源释放"></a>1.关于C++中的资源释放</h4><p>一般在c++中应该是资源的获取与申请（<code>new</code>等等的操作）与资源的释放都是需要程序员手动操作的。但是如果使用了UE管理的资源，比如继承了UE中的类库等等的操作，那么释放这些资源的操作，在UE中会自动释放而不需要程序员的额外操作，反而要是操作了还会出问题。</p>
 <p>当然这个问题只是道听途说，未能够验证。</p>
 <p>当然需要仔细调查了啊</p>
@@ -521,6 +532,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/07/20/关于学习UE4的粒子系统过程中遇到的疑问/" rel="prev" title="关于学习UE4的粒子系统过程中遇到的疑问">
+                关于学习UE4的粒子系统过程中遇到的疑问 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -600,7 +615,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -622,7 +637,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -671,7 +686,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-与C-的不同之处"><span class="nav-number">1.</span> <span class="nav-text">C++与C#的不同之处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的C-不同的地方"><span class="nav-number">2.</span> <span class="nav-text">UE4中的C++不同的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-UCLASS"><span class="nav-number">2.1.</span> <span class="nav-text">1.UCLASS( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-GENERAED-BODY"><span class="nav-number">2.2.</span> <span class="nav-text">2.GENERAED_BODY( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-UPROPERTY-UFUNCTION"><span class="nav-number">2.3.</span> <span class="nav-text">3.UPROPERTY( , ) UFUNCTION( , )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-TArray-UE4中的数组（重要）"><span class="nav-number">2.4.</span> <span class="nav-text">4.TArray-UE4中的数组（重要）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma-once-vs-include-guard"><span class="nav-number">3.</span> <span class="nav-text">#pragma once vs include guard</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifndef方式"><span class="nav-number">3.1.</span> <span class="nav-text">#ifndef方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#progma-once方式"><span class="nav-number">3.2.</span> <span class="nav-text">#progma once方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中的weak-pointer"><span class="nav-number">4.</span> <span class="nav-text">C++中的weak pointer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#道听途说"><span class="nav-number">5.</span> <span class="nav-text">道听途说</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关于C-中的资源释放"><span class="nav-number">5.1.</span> <span class="nav-text">1.关于C++中的资源释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-关于UE中UObject的派生对象的垃圾回收问题"><span class="nav-number">5.2.</span> <span class="nav-text">2.关于UE中UObject的派生对象的垃圾回收问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-与C-的不同之处"><span class="nav-number">1.</span> <span class="nav-text">C++与C#的不同之处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的C-不同的地方"><span class="nav-number">2.</span> <span class="nav-text">UE4中的C++不同的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-UCLASS"><span class="nav-number">2.1.</span> <span class="nav-text">1.UCLASS( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-GENERAED-BODY"><span class="nav-number">2.2.</span> <span class="nav-text">2.GENERAED_BODY( )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-UPROPERTY-UFUNCTION"><span class="nav-number">2.3.</span> <span class="nav-text">3.UPROPERTY( , ) UFUNCTION( , )</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-TArray-UE4中的数组（重要）"><span class="nav-number">2.4.</span> <span class="nav-text">4.TArray-UE4中的数组（重要）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma-once-vs-include-guard"><span class="nav-number">3.</span> <span class="nav-text">#pragma once vs include guard</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifndef方式"><span class="nav-number">3.1.</span> <span class="nav-text">#ifndef方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#progma-once方式"><span class="nav-number">3.2.</span> <span class="nav-text">#progma once方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中的weak-pointer"><span class="nav-number">4.</span> <span class="nav-text">C++中的weak pointer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启HSLS语法高亮"><span class="nav-number">5.</span> <span class="nav-text">开启HSLS语法高亮</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HLSL-Tools-for-Visual-Studio"><span class="nav-number">5.1.</span> <span class="nav-text">HLSL Tools for Visual Studio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在VS2017中开启语法高亮（syntax-high-lighting）"><span class="nav-number">5.2.</span> <span class="nav-text">在VS2017中开启语法高亮（syntax high lighting）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#道听途说"><span class="nav-number">6.</span> <span class="nav-text">道听途说</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关于C-中的资源释放"><span class="nav-number">6.1.</span> <span class="nav-text">1.关于C++中的资源释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-关于UE中UObject的派生对象的垃圾回收问题"><span class="nav-number">6.2.</span> <span class="nav-text">2.关于UE中UObject的派生对象的垃圾回收问题</span></a></li></ol></li></ol></div>
             
 
           </div>
