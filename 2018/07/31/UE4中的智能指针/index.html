@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-01T02:15:50.768Z">
+<meta property="og:updated_time" content="2018-08-01T09:28:18.367Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的智能指针">
 <meta name="twitter:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T11:15:50+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T18:28:18+09:00">
                 2018-08-01
               </time>
             
@@ -405,7 +405,27 @@
 <ul>
 <li><a href="https://api.unrealengine.com/INT/Programming/UnrealArchitecture/SmartPointerLibrary/index.html" target="_blank" rel="noopener">Unreal Smart Pointer Library</a></li>
 </ul>
-<h1 id="C-的指针"><a href="#C-的指针" class="headerlink" title="C++的指针"></a>C++的指针</h1>
+<h1 id="C-的智能指针"><a href="#C-的智能指针" class="headerlink" title="C++的智能指针"></a>C++的智能指针</h1><p>指针的使用伴随着内存泄漏(memory leak)的问题，可能会发生内存泄漏的情况有：</p>
+<ul>
+<li>new或者malloc出来的内存因为程序员的疏忽忘记释放</li>
+<li>程序运行发生错误(throw)，未能执行内存释放程序</li>
+</ul>
+<p>所以不是说只要程序员足够谨慎就能够避免指针造成的内存泄漏的问题。</p>
+<h2 id="C-11中的智能指针"><a href="#C-11中的智能指针" class="headerlink" title="C++11中的智能指针"></a>C++11中的智能指针</h2><p>主要在用的智能指针有：unique_ptr, shared_ptr, weak_ptr。</p>
+<p>这3种指针组件就是采用了boost里的智能指针方案。很多有用过boost智能指针的朋友，很容易地就能发现它们之间的关间：<br>|std|boost|功能说明|<br>|—-|—-|—-|<br>|unique_ptr|scoped_ptr|独占指针对象，并保证指针所指对象生命周期与其一致|<br>|shared_ptr|shared_ptr|可共享指针对象，可以赋值给shared_ptr或weak_ptr。<br>指针所指对象在所有的相关联的shared_ptr生命周期结束时结束，是强引用。|<br>|weak_ptr|weak_ptr|它不能决定所指对象的生命周期，引用所指对象时，需要lock()成shared_ptr才能使用。|</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://my.oschina.net/hevakelcj/blog/465978" target="_blank" rel="noopener">C++11中的智能指针</a></li>
+</ul>
+<h2 id="三种智能指针的特性用法"><a href="#三种智能指针的特性用法" class="headerlink" title="三种智能指针的特性用法"></a>三种智能指针的特性用法</h2><p>参考链接：</p>
+<ul>
+<li><a href="https://blog.csdn.net/haolexiao/article/details/56773039" target="_blank" rel="noopener">C++11及C++14标准的智能指针</a></li>
+</ul>
+<h2 id="比起直接使用new优先使用std-make-unique和std-make-shared"><a href="#比起直接使用new优先使用std-make-unique和std-make-shared" class="headerlink" title="比起直接使用new优先使用std::make_unique和std::make_shared"></a>比起直接使用new优先使用std::make_unique和std::make_shared</h2><p>参考链接：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/boydfd/p/5146432.html" target="_blank" rel="noopener">Item 21: 比起直接使用new优先使用std::make_unique和std::make_shared</a></li>
+</ul>
+
       
     </div>
     
@@ -630,7 +650,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的智能指针"><span class="nav-number">1.</span> <span class="nav-text">UE4的智能指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-的指针"><span class="nav-number">2.</span> <span class="nav-text">C++的指针</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的智能指针"><span class="nav-number">1.</span> <span class="nav-text">UE4的智能指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-的智能指针"><span class="nav-number">2.</span> <span class="nav-text">C++的智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11中的智能指针"><span class="nav-number">2.1.</span> <span class="nav-text">C++11中的智能指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种智能指针的特性用法"><span class="nav-number">2.2.</span> <span class="nav-text">三种智能指针的特性用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比起直接使用new优先使用std-make-unique和std-make-shared"><span class="nav-number">2.3.</span> <span class="nav-text">比起直接使用new优先使用std::make_unique和std::make_shared</span></a></li></ol></li></ol></div>
             
 
           </div>
