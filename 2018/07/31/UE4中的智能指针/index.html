@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="UE4,C++," />
+  <meta name="keywords" content="C++,UE4," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
-<meta name="keywords" content="UE4,C++">
+<meta name="keywords" content="C++,UE4">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UE4中的智能指针">
 <meta property="og:url" content="http://stonelzp.github.io/2018/07/31/UE4中的智能指针/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-01T09:28:18.367Z">
+<meta property="og:updated_time" content="2018-08-01T09:34:05.365Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的智能指针">
 <meta name="twitter:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T18:28:18+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T18:34:05+09:00">
                 2018-08-01
               </time>
             
@@ -403,10 +403,7 @@
 <h1 id="UE4的智能指针"><a href="#UE4的智能指针" class="headerlink" title="UE4的智能指针"></a>UE4的智能指针</h1><p>智能指针并不能使用<code>UPROPERTY()</code>，<code>TSharedRef</code>,<code>TSharedPtr</code>,<code>TWeakPtr</code>等等。</p>
 <p>参考链接：</p>
 <ul>
-<li><a href="https://api.unrealengine.com/INT/Programming/UnrealArchitecture/SmartPointerLibrary/index.html" target="_blank" rel="noopener">Unreal Smart Pointer Library</a></li>
-</ul>
-<h1 id="C-的智能指针"><a href="#C-的智能指针" class="headerlink" title="C++的智能指针"></a>C++的智能指针</h1><p>指针的使用伴随着内存泄漏(memory leak)的问题，可能会发生内存泄漏的情况有：</p>
-<ul>
+<li><a href="https://api.unrealengine.com/INT/Programming/UnrealArchitecture/SmartPointerLibrary/index.html" target="_blank" rel="noopener">Unreal Smart Pointer Library</a> <h1 id="C-的智能指针"><a href="#C-的智能指针" class="headerlink" title="C++的智能指针"></a>C++的智能指针</h1>指针的使用伴随着内存泄漏(memory leak)的问题，可能会发生内存泄漏的情况有：</li>
 <li>new或者malloc出来的内存因为程序员的疏忽忘记释放</li>
 <li>程序运行发生错误(throw)，未能执行内存释放程序</li>
 </ul>
@@ -420,6 +417,13 @@
 <h2 id="三种智能指针的特性用法"><a href="#三种智能指针的特性用法" class="headerlink" title="三种智能指针的特性用法"></a>三种智能指针的特性用法</h2><p>参考链接：</p>
 <ul>
 <li><a href="https://blog.csdn.net/haolexiao/article/details/56773039" target="_blank" rel="noopener">C++11及C++14标准的智能指针</a></li>
+</ul>
+<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3><p><code>std::weak_ptr</code>是一个很好的解决<strong>悬空指针</strong>问题的方式。使用原生指针（raw pointers）的话不知道现在所引用的资源是否已经被释放。而使<br>用<code>std::shared_ptr</code>来管理的话，<code>std::weak_ptr</code>只管使用，而不关心资源的使用情况，反正也不管理指向的资源。</p>
+<p>因为本身<code>std::weak_ptr</code>并不能直接引用到对象，不会影响对象的自动释放，不会影响对象的引用计数，需要使用<code>lock()</code>来升级到<code>std::shared_ptr</code>来进行操作。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://my.oschina.net/u/2368952/blog/416606" target="_blank" rel="noopener">C++ weak pointer</a></li>
+<li><a href="https://stackoverflow.com/questions/12030650/when-is-stdweak-ptr-useful" target="_blank" rel="noopener">When is std::weak_ptr useful?</a></li>
 </ul>
 <h2 id="比起直接使用new优先使用std-make-unique和std-make-shared"><a href="#比起直接使用new优先使用std-make-unique和std-make-shared" class="headerlink" title="比起直接使用new优先使用std::make_unique和std::make_shared"></a>比起直接使用new优先使用std::make_unique和std::make_shared</h2><p>参考链接：</p>
 <ul>
@@ -471,9 +475,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
-          
             <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          
+            <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
           
         </div>
       
@@ -579,7 +583,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -650,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的智能指针"><span class="nav-number">1.</span> <span class="nav-text">UE4的智能指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-的智能指针"><span class="nav-number">2.</span> <span class="nav-text">C++的智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11中的智能指针"><span class="nav-number">2.1.</span> <span class="nav-text">C++11中的智能指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种智能指针的特性用法"><span class="nav-number">2.2.</span> <span class="nav-text">三种智能指针的特性用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比起直接使用new优先使用std-make-unique和std-make-shared"><span class="nav-number">2.3.</span> <span class="nav-text">比起直接使用new优先使用std::make_unique和std::make_shared</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的智能指针"><span class="nav-number">1.</span> <span class="nav-text">UE4的智能指针</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-的智能指针"><span class="nav-number">2.</span> <span class="nav-text">C++的智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11中的智能指针"><span class="nav-number">2.1.</span> <span class="nav-text">C++11中的智能指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种智能指针的特性用法"><span class="nav-number">2.2.</span> <span class="nav-text">三种智能指针的特性用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#weak-ptr"><span class="nav-number">2.2.1.</span> <span class="nav-text">weak_ptr</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比起直接使用new优先使用std-make-unique和std-make-shared"><span class="nav-number">2.3.</span> <span class="nav-text">比起直接使用new优先使用std::make_unique和std::make_shared</span></a></li></ol></li></ol></div>
             
 
           </div>
