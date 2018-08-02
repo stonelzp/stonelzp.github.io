@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C++中的static关键字]]></title>
+    <url>%2F2018%2F08%2F02%2FC-%E4%B8%AD%E7%9A%84static%E5%85%B3%E9%94%AE%E5%AD%97%2F</url>
+    <content type="text"><![CDATA[static 关键字可用于声明变量、函数、类数据成员和类函数。 之后需要好好整理一下，static关键字的用法。 参考链接： C/C++ 中的static关键字 The static keyword and its various uses in C++]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[UE4的Plugin使用]]></title>
+    <url>%2F2018%2F08%2F02%2FUE4%E7%9A%84Plugin%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[制作UE4的插件相当于给UE4引擎添加新的功能模块。UE4的功能模块组成是由Module组成的，关于Module具体是什么，中文翻译就是模块，自己的理解中可以说是文件的单位了。 新建的插件代表着跟UE4本来的功能模块不是从属于一个Module，所以需要为自己制作的插件制作一个属性为Public的公开接口以供UE4引擎调用。 Plugin的Public公开权限一般一个Module中不想公开的源文件都会设置为Private权限，不允许外界的Module访问。要把权限公开，使得其他的模块能够访问的话需要以下两步。 头文件的位置 头文件(.h)放到[\Source\Public]文件夹中去 cpp实现文件放到[\Source\Private]文件夹中去 添加Export用的宏在类的声明中添加一个宏：&lt;大写字母的Module名字&gt;_API 例如：1234UCLASS()class SAYHELLO_API USayHelloFunction : public UBlueprintFunctionLibrary&#123; GENERATED_BODY()&#125; 这样一个名为SayHello的Module的class的权限就变成公开的了。 Tips： 上述的SAYHELLO_API的定义文件位置在Intermediate/Build/Win64/UE4Editor/Development/SayHello/Definitions.SayHello.h。里面定义了DLLEXPORT,DLLIMPORT。 UE会按照Module的单位生成DLL，&lt;ModuleName&gt;_API在自身的Module中会指定DLLEXPORT，在其他的Module中会指定DLLIMPORT。（啥意思？书上就写了这么多。。。） 参考资料： Unreal Engine 4 Documentation - Plugins Unreal Engine 4 C++ 插件介绍 ue4插件开发]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[C++中的const修饰符]]></title>
-    <url>%2F2018%2F08%2F01%2FC-%E4%B8%AD%E7%9A%84const%E4%BF%AE%E9%A5%B0%E7%AC%A6%2F</url>
+    <url>%2F2018%2F08%2F01%2FC%2B%2B%E4%B8%AD%E7%9A%84const%E4%BF%AE%E9%A5%B0%E7%AC%A6%2F</url>
     <content type="text"><![CDATA[C++中经常会看到const关键字来修饰很多东西，在这里把自己遇到的一些情况收集并整理一下。 参考链接 C++ Const Usage Explanation 关于C++ const 的全面总结]]></content>
       <categories>
         <category>编程</category>
@@ -37,7 +59,7 @@
   </entry>
   <entry>
     <title><![CDATA[UE4中的C++]]></title>
-    <url>%2F2018%2F08%2F01%2FUE4%E4%B8%AD%E7%9A%84C%2F</url>
+    <url>%2F2018%2F08%2F01%2FUE4%E4%B8%AD%E7%9A%84C%2B%2B%2F</url>
     <content type="text"><![CDATA[UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。 值类型？指针？在标准C++中，类的声明可以12345ClassExample ObjName;/或者是ClassExample* ObjPtr; 而在UE4中为了统一值类型与指针的规则，想这种类的声明全部使用指针类型，不使用值类型。1UObject* o; UE4生成类对象实例(Instance)直接上例子：12345678//声明UMyClass* MyClass;//生成实例MyClass = NewObject&lt;UMyClass&gt;();//或者MyClass = NewObject&lt;UMyClass&gt;(Owner); Tips: 在构造函数中不能使用NewObject&lt;T&gt;生成其他的对实例。会使程序Crash。如果想生成其他的Object的话使用FObjectInitializer::CreateDefaultSubobject&lt;T&gt;函数 123ASomeActor::ASomeActor(const FObjectInitializer &amp; ObjectInitializer) : Super(ObjectInitializer)&#123; SampleActor = ObjectInitialize.CreateDefaultSubobject&lt;ASampleActor&gt;(this, TEXT("SampleActor"));&#125; Actor的实例化Actor的Component实例化从Content(Asset)中加载Object对象数据UE4中的容器]]></content>
       <categories>
         <category>UnrealEngine4</category>

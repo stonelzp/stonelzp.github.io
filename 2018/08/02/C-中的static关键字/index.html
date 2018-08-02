@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="C++," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="爱自己，对爱你的人来说，是最大的安慰">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="http://stonelzp.github.io/about/index.html">
+<meta name="description" content="static 关键字可用于声明变量、函数、类数据成员和类函数。">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++中的static关键字">
+<meta property="og:url" content="http://stonelzp.github.io/2018/08/02/C-中的static关键字/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="爱自己，对爱你的人来说，是最大的安慰">
+<meta property="og:description" content="static 关键字可用于声明变量、函数、类数据成员和类函数。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-27T12:46:47.526Z">
+<meta property="og:updated_time" content="2018-08-02T02:45:59.098Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="爱自己，对爱你的人来说，是最大的安慰">
+<meta name="twitter:title" content="C++中的static关键字">
+<meta name="twitter:description" content="static 关键字可用于声明变量、函数、类数据成员和类函数。">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/about/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/2018/08/02/C-中的static关键字/"/>
 
 
 
 
 
-  <title>about | StoneのBLOG</title>
+  <title>C++中的static关键字 | StoneのBLOG</title>
   
 
 
@@ -284,33 +285,214 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2018/08/02/C-中的static关键字/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">about</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">C++中的static关键字</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T11:41:29+09:00">
+                2018-08-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-02T11:45:59+09:00">
+                2018-08-02
+              </time>
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>static 关键字可用于声明变量、函数、类数据成员和类函数。</p>
+<a id="more"></a>
+<p>之后需要好好整理一下，static关键字的用法。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://zheming.wang/blog/2012/06/28/18316F9F-EB98-4088-AE29-C151BAEC8E71/" target="_blank" rel="noopener">C/C++ 中的static关键字</a></li>
+<li><a href="https://stackoverflow.com/questions/15235526/the-static-keyword-and-its-various-uses-in-c" target="_blank" rel="noopener">The static keyword and its various uses in C++</a></li>
+</ul>
+
       
     </div>
     
     
     
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/2018/08/02/C-中的static关键字/" title="C++中的static关键字">http://stonelzp.github.io/2018/08/02/C-中的static关键字/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/02/UE4的Plugin使用/" rel="next" title="UE4的Plugin使用">
+                <i class="fa fa-chevron-left"></i> UE4的Plugin使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -319,6 +501,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
