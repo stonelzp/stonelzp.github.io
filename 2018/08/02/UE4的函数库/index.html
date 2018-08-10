@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-03T06:18:11.038Z">
+<meta property="og:updated_time" content="2018-08-09T06:55:29.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4的函数库">
 <meta name="twitter:description" content="在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-03T15:18:11+09:00">
-                2018-08-03
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-09T15:55:29+09:00">
+                2018-08-09
               </time>
             
           </span>
@@ -413,7 +413,7 @@
 <ul>
 <li>C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Engine\Private\KismetRendngLibrary.cpp</li>
 </ul>
-<p>其中有如下的实现代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">UTextureRenderTarget2D* UKismetRenderingLibrary::CreateRenderTarget2D(UObject* WorldContextObject, int32 Width, int32 Height, ETextureRenderTargetFormat Format)</span><br><span class="line">&#123;</span><br><span class="line">    UWorld* World = GEngine-&gt;GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Width &gt; <span class="number">0</span> &amp;&amp; Height &gt; <span class="number">0</span> &amp;&amp; World &amp;&amp; FApp::CanEverRender())</span><br><span class="line">    &#123;</span><br><span class="line">        UTextureRenderTarget2D* NewRenderTarget2D = NewObject&lt;UTextureRenderTarget2D&gt;(WorldContextObject);</span><br><span class="line">        check(NewRenderTarget2D);</span><br><span class="line">        NewRenderTarget2D-&gt;RenderTargetFormat = Format;</span><br><span class="line">        NewRenderTarget2D-&gt;InitAutoFormat(Width, Height); </span><br><span class="line">        NewRenderTarget2D-&gt;UpdateResourceImmediate(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> NewRenderTarget2D; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其中有如下的实现代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">UTextureRenderTarget3D* UKismetRenderingLibrary::CreateRenderTarget2D(UObject* WorldContextObject, int32 Width, int32 Height, ETextureRenderTargetFormat Format)</span><br><span class="line">&#123;</span><br><span class="line">    UWorld* World = GEngine-&gt;GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Width &gt; <span class="number">0</span> &amp;&amp; Height &gt; <span class="number">0</span> &amp;&amp; World &amp;&amp; FApp::CanEverRender())</span><br><span class="line">    &#123;</span><br><span class="line">        UTextureRenderTarget2D* NewRenderTarget2D = NewObject&lt;UTextureRenderTarget2D&gt;(WorldContextObject);</span><br><span class="line">        check(NewRenderTarget2D);</span><br><span class="line">        NewRenderTarget2D-&gt;RenderTargetFormat = Format;</span><br><span class="line">        NewRenderTarget2D-&gt;InitAutoFormat(Width, Height); </span><br><span class="line">        NewRenderTarget2D-&gt;UpdateResourceImmediate(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> NewRenderTarget2D; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>或许可以给与一些参照。</p>
 <h2 id="UMaterialInstanceDynamic"><a href="#UMaterialInstanceDynamic" class="headerlink" title="UMaterialInstanceDynamic"></a>UMaterialInstanceDynamic</h2><p>Ureal Engine 4 Documentation:</p>
 <ul>
@@ -594,7 +594,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -616,7 +616,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

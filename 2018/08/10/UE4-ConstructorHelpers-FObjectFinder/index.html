@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="UE4," />
+  <meta name="keywords" content="UE4,编程," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="目的是在UE中获取到一张Texture2D图片的所有像素值，并将这些像素值进行某些处理并保存到另外一个Texture中。">
-<meta name="keywords" content="UE4">
+<meta name="description" content="先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。">
+<meta name="keywords" content="UE4,编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="UE4中读取Texture2D的像素值">
-<meta property="og:url" content="http://stonelzp.github.io/2018/08/03/UE4中读取Texture2D的像素值/index.html">
+<meta property="og:title" content="UE4-ConstructorHelpers::FObjectFinder">
+<meta property="og:url" content="http://stonelzp.github.io/2018/08/10/UE4-ConstructorHelpers-FObjectFinder/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="目的是在UE中获取到一张Texture2D图片的所有像素值，并将这些像素值进行某些处理并保存到另外一个Texture中。">
+<meta property="og:description" content="先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-08T07:30:59.217Z">
+<meta property="og:updated_time" content="2018-08-10T07:16:47.833Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UE4中读取Texture2D的像素值">
-<meta name="twitter:description" content="目的是在UE中获取到一张Texture2D图片的所有像素值，并将这些像素值进行某些处理并保存到另外一个Texture中。">
+<meta name="twitter:title" content="UE4-ConstructorHelpers::FObjectFinder">
+<meta name="twitter:description" content="先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/2018/08/03/UE4中读取Texture2D的像素值/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/2018/08/10/UE4-ConstructorHelpers-FObjectFinder/"/>
 
 
 
 
 
-  <title>UE4中读取Texture2D的像素值 | StoneのBLOG</title>
+  <title>UE4-ConstructorHelpers::FObjectFinder | StoneのBLOG</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2018/08/03/UE4中读取Texture2D的像素值/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2018/08/10/UE4-ConstructorHelpers-FObjectFinder/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">UE4中读取Texture2D的像素值</h1>
+          <h1 class="post-title" itemprop="name headline">UE4-ConstructorHelpers::FObjectFinder</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-03T14:52:11+09:00">
-                2018-08-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-10T15:38:38+09:00">
+                2018-08-10
               </time>
             
 
@@ -342,12 +342,34 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-08T16:30:59+09:00">
-                2018-08-08
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-10T16:16:47+09:00">
+                2018-08-10
               </time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
+                    <span itemprop="name">UnrealEngine4</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -376,40 +398,41 @@
       
 
       
-        <p>目的是在UE中获取到一张Texture2D图片的所有像素值，并将这些像素值进行某些处理并保存到另外一个Texture中。</p>
+        <p>先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。</p>
 <a id="more"></a>
-<h1 id="第一步：获取到Texture2D资源"><a href="#第一步：获取到Texture2D资源" class="headerlink" title="第一步：获取到Texture2D资源"></a>第一步：获取到Texture2D资源</h1><p>Unreal Engine 4 Documentation</p>
+<p>制作一个粒子表现的话首先要先实例化一个Instance，这个实例首先依附在一个Acor上。当然，像Unity的脚本函数一样，在Scene中制作一个Actor然后把脚本当做一个ActorComponent的方案是可行的。然后在脚本中使用<code>this-&gt;GetOwner()</code>即可以获取到这个Actor。可以使用<code>this-&gt;GetOwner()-&gt;GetName()</code>来获取到Actor的名字。</p>
+<p>参考链接：</p>
 <ul>
-<li><a href="http://api.unrealengine.com/INT/Programming/Assets/ReferencingAssets/index.html" target="_blank" rel="noopener">Referencing Assets</a></li>
+<li><a href="https://answers.unrealengine.com/questions/300035/get-actor-from-component-in-c.html" target="_blank" rel="noopener">Get actor from component in c++?</a></li>
 </ul>
-<p>对于高速化来说异步加载资源也是好的解决方案</p>
-<p>Ureal Engine 4 Documentation</p>
+<p>在这里遇见了一个问题。就是在使用UE的<code>UE_LOG</code>打印输出的时候发生了类型错误。</p>
 <ul>
-<li><a href="https://docs.unrealengine.com/en-us/Programming/Assets/AsyncLoading" target="_blank" rel="noopener">Asynchronous Asset Loading</a></li>
+<li>在<code>UE_LOG</code>中使用的都是基础类型，<code>%d,%s</code>等等。</li>
+<li><code>GetName()</code>函数返回的变量类型则是UE的<code>FString</code>类型</li>
 </ul>
-<h1 id="参考的文章"><a href="#参考的文章" class="headerlink" title="参考的文章"></a>参考的文章</h1><ul>
-<li><a href="https://answers.unrealengine.com/questions/25594/accessing-pixel-values-of-texture2d.html" target="_blank" rel="noopener">Accessing pixel values of Texture2D</a><ul>
-<li><blockquote>
-<p>First you need to understand that a texture is normally, a sum of multiple images called MipMaps. MipMaps are down-scaled versions of your images, always in steps of power of 2, so the original image, is, say, 512x512 - this would be the MipMap “0”, then the engine generates the MipMap “1” which is 256x256 and then MipMap “2” which is 128x128, this continues on down to 16x16 I think. The farther away the texture is rendered, the smaller version of the image is used. This means that you need to access the mipmap 0 of your texture.</p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="对上面的答案进行了非常好的总结的文章"><a href="#对上面的答案进行了非常好的总结的文章" class="headerlink" title="对上面的答案进行了非常好的总结的文章"></a>对上面的答案进行了非常好的总结的文章</h1><ul>
-<li><p><a href="http://isaratech.com/ue4-reading-the-pixels-from-a-utexture2d/" target="_blank" rel="noopener">UE4 – Reading the pixels from a UTexture2D</a></p>
-</li>
-<li><p><a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/84701-reading-data-from-utexture2d" target="_blank" rel="noopener">Reading data from UTexture2D</a></p>
-</li>
-</ul>
-<h1 id="之后附上完整的代码"><a href="#之后附上完整的代码" class="headerlink" title="之后附上完整的代码"></a>之后附上完整的代码</h1><h1 id="UE4中的资源管理"><a href="#UE4中的资源管理" class="headerlink" title="UE4中的资源管理"></a>UE4中的资源管理</h1><ul>
-<li><a href="https://api.unrealengine.com/INT/Engine/Basics/AssetsAndPackages/AssetManagement/index.html" target="_blank" rel="noopener">Asset Management</a></li>
-</ul>
-<h1 id="拓展知识"><a href="#拓展知识" class="headerlink" title="拓展知识"></a>拓展知识</h1><p>在代码中看到了<code>static_cast</code>这个语句，竟然不知道是做什么的。查了一下</p>
+<p>解决例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Actor component .cpp file</span></span><br><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"show value: : %s"</span>, *(<span class="keyword">this</span>-&gt;GetOwner()-&gt;GetName()));</span><br></pre></td></tr></table></figure></p>
+<p>解决案参考：</p>
 <ul>
-<li><a href="https://blog.csdn.net/bzhxuexi/article/details/17021559" target="_blank" rel="noopener">C++中static_cast, dynamic_cast, const_cast用法/使用情况及区别解析</a></li>
+<li><a href="https://answers.unrealengine.com/questions/1903/log-issue-passing-a-fstring.html" target="_blank" rel="noopener">Log issue (passing a FString)</a></li>
+<li><a href="https://wiki.unrealengine.com/Logs,_Printing_Messages_To_Yourself_During_Runtime#Log_an_FString.2CInt.2CFloat" target="_blank" rel="noopener">Logs, Printing Messages To Yourself During Runtime</a></li>
 </ul>
-<p>之后要好好整理一下。</p>
+<p>能够获取到Parent的Actor就可以根据自身的Actor来制作InstanceStaticMeshComponent了。</p>
+<h2 id="InstanceStaticMeshComponent"><a href="#InstanceStaticMeshComponent" class="headerlink" title="InstanceStaticMeshComponent"></a>InstanceStaticMeshComponent</h2><p>使用方法参照：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/464719/using-instanced-static-meshes-in-c.html" target="_blank" rel="noopener">Using Instanced Static Meshes in C++?</a></li>
+</ul>
+<p>下一步就是发生问题的地方，为制作好的InstanceStaticMeshComponent添加StaticMesh。</p>
+<p>上网查查资料就有，这篇文章就行</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/13555/question-apply-static-mesh-to-staticmesh-component.html" target="_blank" rel="noopener">QUESTION Apply Static Mesh to StaticMesh component</a></li>
+</ul>
+<p>照着做本来不会出错的但是我一运行，UE4肯定Crash。</p>
+<p>原因就在于题目所提到的关于<code>ContructorHelpers::FObjectFinder</code>的使用上。<strong>总结来说就是这个函数只能运行在类的构造函数中，或者构造函数里调用的函数中。</strong></p>
+<p>解决文章：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/246199/how-to-use-constructorhelpersfobjectfinder.html" target="_blank" rel="noopener">How to use ConstructorHelpers::FObjectFinder?</a></li>
+</ul>
+<p>这个回答中有提到。之后再整理。</p>
 
       
     </div>
@@ -441,7 +464,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://stonelzp.github.io/2018/08/03/UE4中读取Texture2D的像素值/" title="UE4中读取Texture2D的像素值">http://stonelzp.github.io/2018/08/03/UE4中读取Texture2D的像素值/</a>
+    <a href="http://stonelzp.github.io/2018/08/10/UE4-ConstructorHelpers-FObjectFinder/" title="UE4-ConstructorHelpers::FObjectFinder">http://stonelzp.github.io/2018/08/10/UE4-ConstructorHelpers-FObjectFinder/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -458,6 +481,8 @@
           
             <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
           
+            <a href="/tags/编程/" rel="tag"><i class="fa fa-tag"></i> 编程</a>
+          
         </div>
       
 
@@ -469,8 +494,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/02/UE4的函数库/" rel="next" title="UE4的函数库">
-                <i class="fa fa-chevron-left"></i> UE4的函数库
+              <a href="/2018/08/06/SSH原理知识普及/" rel="next" title="SSH原理知识普及">
+                <i class="fa fa-chevron-left"></i> SSH原理知识普及
               </a>
             
           </div>
@@ -478,10 +503,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/06/SSH原理知识普及/" rel="prev" title="SSH原理知识普及">
-                SSH原理知识普及 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -633,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一步：获取到Texture2D资源"><span class="nav-number">1.</span> <span class="nav-text">第一步：获取到Texture2D资源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考的文章"><span class="nav-number">2.</span> <span class="nav-text">参考的文章</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对上面的答案进行了非常好的总结的文章"><span class="nav-number">3.</span> <span class="nav-text">对上面的答案进行了非常好的总结的文章</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#之后附上完整的代码"><span class="nav-number">4.</span> <span class="nav-text">之后附上完整的代码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的资源管理"><span class="nav-number">5.</span> <span class="nav-text">UE4中的资源管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展知识"><span class="nav-number">6.</span> <span class="nav-text">拓展知识</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#InstanceStaticMeshComponent"><span class="nav-number">1.</span> <span class="nav-text">InstanceStaticMeshComponent</span></a></li></ol></div>
             
 
           </div>
