@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C++编程思想手抄]]></title>
+    <url>%2F2018%2F11%2F01%2FC-%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E6%89%8B%E6%8A%84%2F</url>
+    <content type="text"><![CDATA[好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去法线这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。 想要把那份源码记在脑子里似的，希望能够多过几遍，之后肯定会用的上的。 所以言归正传，聊聊现在看的书，C++编程思想。我会记下来我觉得非常有意义的话语，多看多读，能够印在脑子里面是最好，因为有些东西知道了就想会在代码中潜移默化的表现出来。 第一章 对象导言 在面向对象的程序设计中，答案是非常新奇的：编译器不做传统意义上的函数调用。由非OOP编译器产生的函数调用会导致与被调用代码的早捆绑(early binding)，对于这一术语，读者可能还没有听说过，因为从来没有想到过它。早捆绑的意思是，编译器会对特定的函数名产生调用，而连接器将这个调用解析为要执行代码的绝对地址。在OOP中直到程序运行时，编译器才能确定执行代码的地。所以，当消息被发送给一般对象时，需要采用其他的方案。 为了解决这一问题，面向对象语言采用晚捆绑(late binding) 的思想。当给对象发送消息时，在程序运行的时候才去确定调用的代码。编译器保证这个被调用的函数存在，并执行参数和返回类型的检查【其中不采用这种处理方式的语言称为弱类型(weakly typed) 语言】，但是它并不知道将执行的确切代码。 为了执行晚捆绑，C++编译器在真正调用的地方插入一段特殊的代码。通过使用存放在对象自身中的信息，这段代码在运行时计算被调用函数函数体的地址（这一过程将在15章中详细介绍）。这样每个对象就能根据这段二进制的内容有不同的行为。当一个对象接收到消息时，它根据这个消息判断应该做什么。 我们可以用关键字virtual声明他希望某个函数有晚捆绑的灵活性。我们并不需要懂得virtual的使用机制，但是没有它，我们就不能用C++进行面向对象的程序设计。在C++中，必须记住添加virtual关键字，因为根据规定，默认情况下成员函数不能动态捆绑。virtual函数（虚函数）可用来表示出现在相同家族中的类具有不同的行为。这些不同是产生多态行为的原因。]]></content>
+      <categories>
+        <category>编程</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UE4中的Casting]]></title>
     <url>%2F2018%2F10%2F09%2FUE4%E4%B8%AD%E7%9A%84Casting%2F</url>
     <content type="text"><![CDATA[关于Cast To节点在Blueprint中能够做什么的问题。下面是官方文档中的说明。 Casting in Blueprint 其中的一句话： By using the Get Player Charactor node, then using a Cast To MyCharactor node(the special Charactor Blueprint), you can say if the Player Charactor is MyCharactor, let me access the Variables, Functions, Events or any other special functionality contained within that Blueprint.]]></content>
