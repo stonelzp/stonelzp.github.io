@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C++中得到函数名字]]></title>
+    <url>%2F2019%2F01%2F28%2FC%2B%2B%E4%B8%AD%E5%BE%97%E5%88%B0%E5%87%BD%E6%95%B0%E5%90%8D%E5%AD%97%2F</url>
+    <content type="text"><![CDATA[应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。 在Python中就有这种库，直接能得到函数的调信息名字全部打印出来。但是在C++中就没有现成的库。 自己创建一个库？对我来说还是太早了。 在C++中得到函数名字 __func__可以得到函数名字。在函数里面调用输出就好。 123FString fun_name = FString(UTF8_TO_CHAR(__func__));UE_LOG(LogTemp, Log, TEXT("Function name is : %s), *fun_name); __FUNCTION__可以得到类名加函数名。 123FString func_name = FString(UTF8_TO_CHAR(__FUNCTION__));UE_LOG(LogTemp, Log, TEXT("Function name is : %s), *func_name); 以上是在UE4引擎中输出的结果，也有试过__PRETTY_FUNCTION__来输出但是出现了编译错误。 参考文章： 6.49 Function Name as Strings How to get function name in C++]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[EffectiveC++-Chapter01-Accustoming-Yourself-to-C++]]></title>
+    <url>%2F2019%2F01%2F10%2FEffectiveC%2B%2B-Chapter01-Accustoming-Yourself-to-C%2B%2B%2F</url>
+    <content type="text"><![CDATA[Effective C++的第一章内容总结。 条款01：View C++ as a federation of languages.(视C++为一个语言联邦) C Object-Oriented C++ Templete C++ STL 例如对内置（也就是C-like）类型而言pass-by-value通常比pass-by-reference高效，但当你从C part of C++移往Object-Oriented C++，由于用户自定义的（user-defined)构造函数和析构函数的存在，pass-by-reference-to-const往往更好。运用Template C++时尤其如此，因为彼时你甚至不知道所处理的对象的类型。然而一旦跨入STL你就会了解，迭代器和函数对象都是在C指针之上塑造出来的，所以对STL的迭代器和函数对象而言，旧式的C pass-by-value守则再次适用（参数传递方式的选择细节请见条款20）。 条款02：Prefer consts,enums,and inlines to #define.(尽量以const,enum,inline替换#define)123456class GamePlayer &#123;private: enum &#123; NumTurns = 5&#125;; // "the enum hack"补偿作法。以保证NumTurns在编译期间有正确的值 int scores[NumTurns]; // 本是定义的地方，NumTurns未必会有初值，编译器也许会报错&#125; 基于数个理由enum hack值得我们认识。第一，enum hack的行为某方面说较像#define而不像const，有时候这正是你想要的。例如取一个const的地址是合法的，但取一个enum的地址就不合法而取一个#define的地址通常也不合法。 认识enum hack的第二个理由纯粹是为了实用主义。许多代码用了它，所以看到它是你必须认识它。事实上，“enum hack”是template metaprogramming(模板元编程)的基础技术。 12345678#define CALL_WITH_MAX(a, b) f((a) &gt; f(b) ? (a) : (b))// 推荐的写法template&lt;typename T&gt;inline void callwithmax(const T&amp; a, const T&amp; b)&#123; f(a &gt; b ? a : b);&#125; 使用template inline函数（见条款30）也可以获得类似宏带来的效率以及一般函数所有可预料行为和类型安全性（type safety）。 请记住： 对于单纯常量，最好以const对象或enums替换#define 对于形似函数的宏（macs），最好改用inline函数替换#define 条款03：Use const whenever possible(尽可能使用const)]]></content>
+      <categories>
+        <category>Effective C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>笔记</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[EffectC++-导读]]></title>
     <url>%2F2019%2F01%2F07%2FEffectiveC%2B%2B-%E5%AF%BC%E8%AF%BB%2F</url>
     <content type="text"><![CDATA[Effective C++ 的导读章节的内容整理，知识点备忘吧。应该会将以后的章节归档到一起。 术语（Terminology)关于声明与定义应该有了初步的认识，在其他的C++学习章节有提到过这之间的区分。 定义式(definition)的任务是提供编译器一些声明式所遗漏的细节。对对象而言，定义式是编译器为此编译器拨内存的起点。 这里有一个对于初始化(initialization)的default构造函数的认知误区： default构造函数是一个可被调用而不带任何实参 这样的构造函数要不没有参数，要不就是每个参数都有缺省值 不是说构造函数就是没有参数的。 explicit关键字应用场景：123456789class B&#123;public: explicit B(int x = 0, bool b = true);&#125;;class C&#123;public: explicit C(inx x);&#125;; 在构造函数的前面加上explicit关键字可以防止被用来执行隐式类型转换(implicit type conversions)，但是仍可以被用来进行显式类型转换(explicit type cnversions). 比如说传参的时候，参数应该是一个类型B的对象1234567void doSomething(B bObject);B bObj1;doSomething(28); // 错误，int跟B之间没有隐式类型转换doSomething(B(28)); // 正确，有显式转型，即cast 虽然上述的使用是我之前知道的但是不知道为什么是正确的。为了防止构造函数被隐式类型转换，把构造函数声明为explicit是一个好的选择。 copy构造函数和copy assignment操作符 copy构造函数被用来“以同型对象初始化自我对象” copy assignment操作符被用来“从另一个同型对象中拷贝其值到自我对象” 1234567891011class Widget &#123;public: Widget(); // 默认构造函数 Widget(const Widget&amp; rhs); // copy构造函数 Widget&amp; operator=(const Widget&amp; rhs); // copy assignment操作符 ...&#125;;Widget w1; // 调用默认构造函数Widget w2 = w1; // 调用copy构造函数w1 = w2; // 调用copy assignment操作符 上述的代码应该足够说明用法，但是需要注意的是看见=的时候要注意：1Widget w3 = w2; // 调用copy构造函数 幸运的是“copy构造函数”很容易个“copy赋值”有所区别。如果一个对象被定义（例如以上语句中的w3)，一定会有一个构造函数被调用，不可能调用赋值操作。如果没有新对象被定义（例如前述的“w1=w2”语句），就不会有构造函数被调用，那么当然是赋值操作被调用。 STLTR1和BoostBoost]]></content>
@@ -68,8 +93,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -80,8 +105,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -111,8 +136,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -156,8 +181,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -168,8 +193,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -180,8 +205,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -192,8 +217,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -204,8 +229,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -252,8 +277,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
