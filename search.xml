@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C++中的文字编码与文字存储类型]]></title>
+    <url>%2F2019%2F02%2F14%2FC%2B%2B%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97%E7%BC%96%E7%A0%81%E4%B8%8E%E6%96%87%E5%AD%97%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B%2F</url>
+    <content type="text"><![CDATA[在准备把函数名字输出的时候遇到了输出乱码的问题。12TCHAR* text = "DLL内容テスト。";UE_LOG(LogTemp, Log, TEXT("TEXT: %s"), text); 在我写这段代码之前我连TCHAR是什么类型都不知道，经过一番的调查，关于文字编码和文字的数据存储类型，了解到了很多。 源码的存储格式关于源码的存储格式，在我现在的地方，使用的大多是日语系统因此在什么都不动的情况下使用的是日语的默认 Japanese(Shift-JIS) 格式。至于怎么确认存储格式的话，在一些编辑器中应该就可以查看。 在Visual Studio 2017中改变文件存储格式 File -&gt; Save as -&gt; 下面Save旁边的箭头 -&gt; save with encoding -&gt; replace -&gt; Encoding 一般比较喜欢的就是Unicode(UTF-8) 就是了，毕竟兼容了英文字母之外的字符。 比如最前面把函数名字输出却遇到了乱码的的方，如果将源码存储为UTF-8格式，就不会出现乱码了。 C++中的字符存储类型关于字符的存储问题，首先要分清楚各种字符的存储类型。 char普通的8位字节类型。 wchar_t宽字符类型，表示范围要远大于char类型，表示类型有16位与32位，具体环境具体判断。Unicode编码字符一般以wchar_t类型存储。 为了让编译器识别Unicode字符串，必须在前面加一个L :1wchar_t * text = L"这是中文字符"; 看到这个L，让我想起了现在看的一个日志开源库里的一段糟心的代码：12345678910#ifdef _WIN32# define _PLOG_NSTR(x) L##x# define PLOG_NSTR(x) _PLOG_NSTR(x)#else# define PLOG_NSTR(x) x#endif// UsagePLOG_NSTR("context"); 简单来说就是一个把字符串添加L的宏，刚开始看到的时候糟心的不行。这段内容使用Unicode编码的意思，但是这里有一个问题： 添加了L也就是说是使用Unicode编码，使用wchar_t数据类型存储。接着上述例子，PLOG_NSTR宏接收的如果不是简单的英文字母而是汉字或者日语，简单地输出会正确的输出吗？ 此时源码的存储格式是否支持Unicode编码会产生影响吗？ Shift-JIS格式的源码配合英文字母是能够正确输出的(源码是DLL) 1234PLOG_NSTR("line@");// outputline@ Shift-JIS格式的源码配合日文内容也是能够正确输出的(源码是DLL) 1234PLOG_NSTR("line内容テスト@");// outputline内容テスト@ 当在UEEditor中实验的时候，Shift-JIS的格式源码没有正确输出。 结论：源码的存储格式应该存储为Unicode格式。在字符编码想要支持Unicode和ANSI两种格式的时候应该添加类似以下的宏123456#ifdef _UNICODE#define __T(x) L##x#define _T(x) __T(x)#else#define _T(x) x#endif 关于为什么不直接使用添加L的宏的原因是：防止数据变量声明和定义是的类型冲突。使用宏避免char与L的宽字符存储类型冲突。 在tchar.h文件中可以找到关于__T(x)宏的定义，貌似不包含这个文件的时候，自己定义也可以。 TCHARTHAR是对上述两种字符存储类型的统一，参考以下：12345#ifdef UNICODEtypedef wchar_t TCHAR;#elsetypedef char TCHAR;#endif 当程序定义了UNICODE的时候TCHAR就是宽字符存储类型即wchar_t，当未定义的时候就是普通的char数据类型。 UE4中的字符类型转换当对字符的存储类型有了一些了解，就来看看他们之间的转换吧。先列出一些参考文章： Charactor Encoding]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[初识DLL-在UE4与Unity中使用DLL]]></title>
+    <url>%2F2019%2F01%2F28%2F%E5%88%9D%E8%AF%86DLL-%E5%9C%A8UE4%E4%B8%8EUnity%E4%B8%AD%E4%BD%BF%E7%94%A8DLL%2F</url>
+    <content type="text"><![CDATA[记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。 DEBUG DLL关于DLL的DEBUG的问题，直接在工程里面DEBUG的方法我没有头绪。目前的方法是： 选中Build的模式为Release，x64然后编译。在工程文件夹中找到编译完毕的dll文件导入到调用的工程里面进行调用测试。 其他DLL中头文件的引入在使用plog 源码的时候尝试引入头文件的地方：12// for example#include &lt;plog/Util.h&gt; 上面的引入会出错，而把尖括号换成双引号后就好了。 关于这两者的区别： 用尖括号来指定文件时，预处理器是以特定的方式来寻找文件，一般是环境中或编译器命令行指定的某种寻找路径。这种设置寻找路径的机制随机器，操作系统，C++实现的不同而不同，要视具体的情况而定。 用双引号来指定文件时，预处理器是以“由实现定义的的方式”来寻找文件。它通常是从当前的目录开始寻找，如果没有找到，那么include命令就按与尖括号同样的方式开始寻找。 要说DLL不支持尖括号的查找也不是，内置的一些库还是可以使用尖括号来include的，难不成自己添加的文件就要使用双引号吗？ 另外关于头文件返回上一级路径的写法：1#include "../Util.h" 函数名字前面加上&amp; In C++, when the ref-sign(&amp;) is used before the function name in the declaration of a function it is associated with the return value of the function and means that the function will return by reference. Use of ‘&amp;’ operator before a function name in C++]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>Unity</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[C++中得到函数名字]]></title>
     <url>%2F2019%2F01%2F28%2FC%2B%2B%E4%B8%AD%E5%BE%97%E5%88%B0%E5%87%BD%E6%95%B0%E5%90%8D%E5%AD%97%2F</url>
     <content type="text"><![CDATA[应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。 在Python中就有这种库，直接能得到函数的调信息名字全部打印出来。但是在C++中就没有现成的库。 自己创建一个库？对我来说还是太早了。 在C++中得到函数名字 __func__可以得到函数名字。在函数里面调用输出就好。 123FString fun_name = FString(UTF8_TO_CHAR(__func__));UE_LOG(LogTemp, Log, TEXT("Function name is : %s), *fun_name); __FUNCTION__可以得到类名加函数名。 123FString func_name = FString(UTF8_TO_CHAR(__FUNCTION__));UE_LOG(LogTemp, Log, TEXT("Function name is : %s), *func_name); 以上是在UE4引擎中输出的结果，也有试过__PRETTY_FUNCTION__来输出但是出现了编译错误。 参考文章： 6.49 Function Name as Strings How to get function name in C++]]></content>
@@ -8,8 +31,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -93,8 +116,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -136,8 +159,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -181,8 +204,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -193,8 +216,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -205,8 +228,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -217,8 +240,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -229,8 +252,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -277,8 +300,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
