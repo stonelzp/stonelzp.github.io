@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-18T10:06:38.181Z">
+<meta property="og:updated_time" content="2019-02-22T04:34:32.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识DLL-在UE4与Unity中使用DLL">
 <meta name="twitter:description" content="记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-18T19:06:38+09:00">
-                2019-02-18
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-22T13:34:32+09:00">
+                2019-02-22
               </time>
             
           </span>
@@ -400,6 +400,12 @@
       
         <p>记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。</p>
 <a id="more"></a>
+<h1 id="新建DLL工程"><a href="#新建DLL工程" class="headerlink" title="新建DLL工程"></a>新建DLL工程</h1><p>先新建一个简单的DLL工程，然后在里面添加内容，方法可以参照：</p>
+<ul>
+<li><a href="https://wiki.unrealengine.com/Linking_Dlls" target="_blank" rel="noopener">Linking Dlls</a></li>
+</ul>
+<h1 id="导出函数"><a href="#导出函数" class="headerlink" title="导出函数"></a>导出函数</h1><p>添加了具体的库的功能之后，需要将函数导出供外部使用。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DLL_EXPORT __declspec(dllexport)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> DLL_EXPORT <span class="title">ExportFuncName</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>像这样，上述的函数就被导出，能够被外部调用了。</p>
 <h1 id="DEBUG-DLL"><a href="#DEBUG-DLL" class="headerlink" title="DEBUG DLL"></a>DEBUG DLL</h1><p>关于DLL的DEBUG的问题，直接在工程里面DEBUG的方法我没有头绪。目前的方法是：</p>
 <p>选中Build的模式为<code>Release，x64</code>然后编译。在工程文件夹中找到编译完毕的dll文件导入到调用的工程里面进行调用测试。</p>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="DLL中头文件的引入"><a href="#DLL中头文件的引入" class="headerlink" title="DLL中头文件的引入"></a>DLL中头文件的引入</h2><p>在使用<strong>plog</strong> 源码的时候尝试引入头文件的地方：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// for example</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;plog/Util.h&gt;</span></span></span><br></pre></td></tr></table></figure></p>
@@ -417,7 +423,13 @@
 <ul>
 <li><a href="https://stackoverflow.com/questions/23776784/use-of-operator-before-a-function-name-in-c" target="_blank" rel="noopener">Use of ‘&amp;’ operator before a function name in C++</a></li>
 </ul>
-
+<h2 id="C-类构造函数初始化列表"><a href="#C-类构造函数初始化列表" class="headerlink" title="C++类构造函数初始化列表"></a>C++类构造函数初始化列表</h2><ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/8-5a-constructor-member-initializer-lists/" target="_blank" rel="noopener">Constructor member initializer lists</a></li>
+</ul>
+<p>可以参照以上的文章，主要是可以在声明的同时初始化，在构造函数里面的知只是赋值操作，不是所谓的初始化。</p>
+<p>比如说类中想要拥有const类型的变量的话，可以利用构造函数的初始化函数列表来给类中常量赋初值。</p>
+<h2 id="C-中的函数指针"><a href="#C-中的函数指针" class="headerlink" title="C++中的函数指针"></a>C++中的函数指针</h2><h2 id="C-运算符重载"><a href="#C-运算符重载" class="headerlink" title="C++运算符重载"></a>C++运算符重载</h2><h2 id="C-中的流"><a href="#C-中的流" class="headerlink" title="C++中的流"></a>C++中的流</h2><p>要把流与字符串分开来看，流是对象，可以用来处理字符串。</p>
+<h3 id="stringstream"><a href="#stringstream" class="headerlink" title="stringstream"></a>stringstream</h3><h3 id="st-c-str-函数"><a href="#st-c-str-函数" class="headerlink" title="st(), c_str()函数"></a>st(), c_str()函数</h3><h2 id="深入理解char-与char-的差别"><a href="#深入理解char-与char-的差别" class="headerlink" title="深入理解char*与char[]的差别"></a>深入理解char*与char[]的差别</h2>
       
     </div>
     
@@ -642,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG-DLL"><span class="nav-number">1.</span> <span class="nav-text">DEBUG DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL中头文件的引入"><span class="nav-number">2.1.</span> <span class="nav-text">DLL中头文件的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数名字前面加上-amp"><span class="nav-number">2.2.</span> <span class="nav-text">函数名字前面加上&amp;</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#新建DLL工程"><span class="nav-number">1.</span> <span class="nav-text">新建DLL工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导出函数"><span class="nav-number">2.</span> <span class="nav-text">导出函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG-DLL"><span class="nav-number">3.</span> <span class="nav-text">DEBUG DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL中头文件的引入"><span class="nav-number">4.1.</span> <span class="nav-text">DLL中头文件的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数名字前面加上-amp"><span class="nav-number">4.2.</span> <span class="nav-text">函数名字前面加上&amp;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类构造函数初始化列表"><span class="nav-number">4.3.</span> <span class="nav-text">C++类构造函数初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的函数指针"><span class="nav-number">4.4.</span> <span class="nav-text">C++中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-运算符重载"><span class="nav-number">4.5.</span> <span class="nav-text">C++运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的流"><span class="nav-number">4.6.</span> <span class="nav-text">C++中的流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stringstream"><span class="nav-number">4.6.1.</span> <span class="nav-text">stringstream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-c-str-函数"><span class="nav-number">4.6.2.</span> <span class="nav-text">st(), c_str()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解char-与char-的差别"><span class="nav-number">4.7.</span> <span class="nav-text">深入理解char*与char[]的差别</span></a></li></ol></li></ol></div>
             
 
           </div>
