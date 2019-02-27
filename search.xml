@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[C++编程思想-第16章-模板介绍]]></title>
+    <url>%2F2019%2F02%2F22%2FC%2B%2B%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3-%E7%AC%AC16%E7%AB%A0-%E6%A8%A1%E6%9D%BF%E4%BB%8B%E7%BB%8D%2F</url>
+    <content type="text"><![CDATA[记下关于模板的知识与理解。 继承和组合提供了重用对象代码的方法，而C++的模板特征提供了重用源代码的方法。 截止到最近为止我对模板的理解也就之停留在表面:作为一种类型的容器。比如说实现一个可以存储任类型的Stack，有一些共同的操作，当你想使用的时候放入具体的类型进行实例化(instanation)。容器，貌似很好理解的样子。 这也是文章开头所提的到的部分，最最简单且易为理解的部分。 小tips： staic int a[100];这样的写法，编译器会将这个static数组初始化为0. 模板介绍(第十六章)16.3模板语法template这个关键字会告诉编译器，随后的类定义将操作一个或更多未指明的类型。当由这个模板产生实际类代码的时，必须指定这些类型以使编译器能够替换他们。123456789101112131415161718192021using namespace std;template&lt;class T&gt;class Array&#123; enum &#123; size = 100; &#125;; T A[size];public: T&amp; operator[]（int index)&#123; require（index &gt;= 0 &amp;&amp; index &lt; size, "Index out of range"); return A[index]; &#125;&#125;int main()&#123; Array&lt;int&gt; ia; Array&lt;float&gt; fa; // ......&#125; 这时，编译器两次扩展了Array模板【这被称为实例化(instantiation)】，创建两个新的生成类（generated class），可以把它们看做Arrray_int和Array_float（不同的编译器对名称有不同的修饰方法）。这些类就像是手工创建的一样，只是这里是当定义了对象ia和fa后由编译器来创建这些类。我们还会注意到，编译器避免了或者连接器合并了类的重复定义。 16.3.1非内联函数定义希望有非内联函数定义的时候，这时编译器需要在成员函数定义之前看到template声明。 1234567891011121314template&lt;class T&gt;class Array &#123; enum &#123; size = 100; &#125; T A[size];public： T &amp;operator(int index);&#125;;template&lt;class T&gt;T&amp; Array&lt;T&gt; ::operator[](int index)&#123; require（index &gt;=0 &amp;&amp; index &lt; size), "Index out of range"; return A[index];&#125; 关于内联函数和非内联函数的定义在别的章节会有提到。在此不赘述。 在引用模板的类名的地方，必须伴有该模板的参数列表，这样在按照模板生成实例的时候，因为模板参数中的参数修饰类名，以便为每一个模板实例产生唯一的类名标识符。 因此模板的参数列表在引用模板类名的时候，也要有一席之地。 模板的非内联函数定义之前一定要加上template声明。 16.3.1.1头文件 即使是在创建非内联函数定义时，我们还是把模板的所有声明和定义都放入一个头文件中。这似乎违背了通常的头文件规则：“不要放置分配存储空间的任何东西”（这条规则是为了防止在连接期间的多重定义错误），但模板定义很特殊。在template&lt;…&gt; 之后的任何东西都意味着编译器在当时不为他分配存储空间，而是一直处于等待状态直到被一个模板示例告知。在编译器和连接器中有机制能去掉统一模板的多重定义。所以为了使用方便，几乎总是在头文件中防止全部的模板声明和定义。 16.3.3模板中的常量 模板参数并不局限于类定义的类型，可以使用编译器内置类型。这些参数值在编译期间变成模板的特定示例的常量。我们甚至可以对这些参数使用默认值。 12345678910111213141516171819202122232425262728293031323334353637383940414243template&lt;class T, int size = 100&gt;class Array&#123; T array[size];public： T&amp; operator[](int index)&#123; require(index &gt;=0 &amp;&amp; index &lt; size, "Index out of rande"); return array[index]; &#125; int length() const &#123; return size; &#125;&#125;;class Number &#123; float f;public: Number(float ff = 0.0f) : f（ff) &#123;&#125; Number&amp; operator=（const Number&amp; n)&#123; f = n.f; return *this; &#125; operator float() const &#123; return f; &#125; // ???? friend ostream&amp; operator&lt;&lt;(ostream&amp; os, const Number&amp; x)&#123; return os &lt;&lt; x.f; &#125;&#125;;template&lt;class T, int size = 20&gt;class Holder&#123; Array&lt;T, size&gt;* np;public： Holder() : np(0) &#123;&#125; T&amp; operator[](int i) &#123; require(0 &lt;=i &amp;&amp; i &lt; size); if(!np) np = new Array&lt;T, size&gt;; return np-&gt;operator[](i）； &#125; intlength() const&#123; returnsize； &#125; ~Holder() &#123;delete np;&#125;&#125;;int main()&#123; Holder&lt;Number&gt; h; // ......&#125; 上面的例子中的size的值没有房放在类中，但是对他的使用就如同是成员函数中的数据成员。 我记录下来上面这段代码的原因还有一个就是懒惰初始化(lazy initialization).上面的Holder中有一个指向Array的指针，而不是指向类型Array的嵌入对象。该指针在构造函数中不被初始化，而是被推迟到了第一次访问的时候。还有等等的稀有的用法。 这个章节还有许多其他内容，但是貌似跟我现在急需要理解的内容相差甚远，暂时保留。 第二卷第五章 深入理解模板]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[C++中的强制类型转换-cast]]></title>
     <url>%2F2019%2F02%2F18%2FC%2B%2B%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-cast%2F</url>
     <content type="text"><![CDATA[实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:stati_cast,dynamic_cast,const_cast,reinterpret_cast。 提笔要写，先看别人的总结 When should static_cast, dynamic_cast, const_cast and reinterpret_cast be used? 这里我遇见的情况就是static_cast的重要的用法。继承类型的向下类型转换。下面来看看我遇见的神仙代码：123456789101112131415161718192021222324252627template&lt;class T&gt;class Singleton : NonCopyable&#123;public: Singleton() &#123; assert(!m_instance); m_instance = static_cast&lt;T*&gt;(this); &#125; ~Singleton() &#123; assert(m_instance); m_instance = 0; &#125; static T* getInstance() &#123; return m_instance; &#125;private: static T* m_instance;&#125;;template&lt;class T&gt;T* Singleton&lt;T&gt;::m_instance = NULL; 一个单例模板类，读代码的时候，按照这个模板被实例化的是他的子类，顺便这个子类所具有的instance的引用就变成它自己了。我什么时候也能写出这么优秀的代码。 还有其他的强制类型转换，遇见的时候具体分析吧。]]></content>
@@ -26,7 +38,7 @@
   <entry>
     <title><![CDATA[初识DLL-在UE4与Unity中使用DLL]]></title>
     <url>%2F2019%2F01%2F28%2F%E5%88%9D%E8%AF%86DLL-%E5%9C%A8UE4%E4%B8%8EUnity%E4%B8%AD%E4%BD%BF%E7%94%A8DLL%2F</url>
-    <content type="text"><![CDATA[记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。 新建DLL工程先新建一个简单的DLL工程，然后在里面添加内容，方法可以参照： Linking Dlls 导出函数添加了具体的库的功能之后，需要将函数导出供外部使用。1234567891011121314#pragma once#define DLL_EXPORT __declspec(dllexport)#ifdef __cplusplusextern "C"&#123;#endif int DLL_EXPORT ExportFuncName()&#123; return 0;&#125; // ......#ifdef __cplusplus&#125;#endif 像这样，上述的函数就被导出，能够被外部调用了。 DEBUG DLL关于DLL的DEBUG的问题，直接在工程里面DEBUG的方法我没有头绪。目前的方法是： 选中Build的模式为Release，x64然后编译。在工程文件夹中找到编译完毕的dll文件导入到调用的工程里面进行调用测试。 其他DLL中头文件的引入在使用plog 源码的时候尝试引入头文件的地方：12// for example#include &lt;plog/Util.h&gt; 上面的引入会出错，而把尖括号换成双引号后就好了。 关于这两者的区别： 用尖括号来指定文件时，预处理器是以特定的方式来寻找文件，一般是环境中或编译器命令行指定的某种寻找路径。这种设置寻找路径的机制随机器，操作系统，C++实现的不同而不同，要视具体的情况而定。 用双引号来指定文件时，预处理器是以“由实现定义的的方式”来寻找文件。它通常是从当前的目录开始寻找，如果没有找到，那么include命令就按与尖括号同样的方式开始寻找。 要说DLL不支持尖括号的查找也不是，内置的一些库还是可以使用尖括号来include的，难不成自己添加的文件就要使用双引号吗？ 另外关于头文件返回上一级路径的写法：1#include "../Util.h" 函数名字前面加上&amp; In C++, when the ref-sign(&amp;) is used before the function name in the declaration of a function it is associated with the return value of the function and means that the function will return by reference. Use of ‘&amp;’ operator before a function name in C++ C++类构造函数初始化列表 Constructor member initializer lists 可以参照以上的文章，主要是可以在声明的同时初始化，在构造函数里面的知只是赋值操作，不是所谓的初始化。 比如说类中想要拥有const类型的变量的话，可以利用构造函数的初始化函数列表来给类中常量赋初值。 C++中的函数指针C++运算符重载C++中的流要把流与字符串分开来看，流是对象，可以用来处理字符串。 stringstreamst(), c_str()函数深入理解char*与char[]的差别]]></content>
+    <content type="text"><![CDATA[记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。 新建DLL工程先新建一个简单的DLL工程，然后在里面添加内容，方法可以参照： Linking Dlls 导出函数添加了具体的库的功能之后，需要将函数导出供外部使用。1234567891011121314#pragma once#define DLL_EXPORT __declspec(dllexport)#ifdef __cplusplusextern "C"&#123;#endif int DLL_EXPORT ExportFuncName()&#123; return 0;&#125; // ......#ifdef __cplusplus&#125;#endif 像这样，上述的函数就被导出，能够被外部调用了。 导出函数的时候遇到的问题当我在UE4中使用inline这个关键字的时候，给我报错了。 我在DLL导出函数的时候，导出的函数前面加了inline关键字，所以把导出函数的定义跟声明都写在了头文件里。发生了什么呢？ 在UE4中我获取到了DLL Plugin中的dll库，得到了DLL的Handle，但是准备使用这个Handel取出里面的函数的时候，取出来的是空。函数名什么的都是正确的情况下。 发生上述的情况下我试着去掉DLL中的导出函数的inline声明，声明和定义分开在头文件和cpp文件，就解决了。 回归第一句的事实，貌似UE4C++中对于inline关键字是不支持的。哪怕是动态库中导出来的函数。 UE4Editor中调用DLL在文章最开始的地方提到的链接已经说明的很清楚了。 要点在于: 把制作好的DLL放到特定的文件夹中，一般是Plugin文件夹里面建立一个Plugin。 创建一个类继承BlueprintFunctionLibrary这样蓝图也能使用 声明的函数要是静态的（static） 调用DLL中的函数的步骤是: 定义一个函数指针用来接收DLL中导出的函数(Use typedef to declare a method to store the DLL method) 声明一个Handle来保持与DLL的连接（void* v_dllHandle) 都不为空的时候调用导出来的函数。 123456789101112131415161718192021222324typedef int(*_getFunc)(int a, int b);_getFunc m_getFuncFromDll;void * v_dllHandle;void ULOGBlueprintFunctionLibrary::DLLFunc(int a, int b）&#123; FString dllfilepath = FPaths::Combine(*FPaths::ProjectPluginsDir(), TEXT("DLLLibrary"), TEXT("DLLName.dll")); if(FPaths::FileExists(dllfilepath)) &#123; v_dllHandle = FPlatformProcess::GetDllHandle(*dllfilepath); if(v_dllHandle != NULL) &#123; FString procName = "FunctionName"; m_getFuncFromDll = (_getFunc)FPlatformProcess::GetDllExport(v_dllHandle, *procName); if(m_getFuncFromDll != NULL) &#123; m_getFuncFromDll(a,b); &#125; &#125; &#125;&#125; 使用的方法就像述。 DEBUG DLL关于DLL的DEBUG的问题，直接在工程里面DEBUG的方法我没有头绪。目前的方法是： 选中Build的模式为Release，x64然后编译。在工程文件夹中找到编译完毕的dll文件导入到调用的工程里面进行调用测试。 其他DLL中头文件的引入在使用plog 源码的时候尝试引入头文件的地方：12// for example#include &lt;plog/Util.h&gt; 上面的引入会出错，而把尖括号换成双引号后就好了。 关于这两者的区别： 用尖括号来指定文件时，预处理器是以特定的方式来寻找文件，一般是环境中或编译器命令行指定的某种寻找路径。这种设置寻找路径的机制随机器，操作系统，C++实现的不同而不同，要视具体的情况而定。 用双引号来指定文件时，预处理器是以“由实现定义的的方式”来寻找文件。它通常是从当前的目录开始寻找，如果没有找到，那么include命令就按与尖括号同样的方式开始寻找。 要说DLL不支持尖括号的查找也不是，内置的一些库还是可以使用尖括号来include的，难不成自己添加的文件就要使用双引号吗？ 另外关于头文件返回上一级路径的写法：1#include "../Util.h" 函数名字前面加上&amp; In C++, when the ref-sign(&amp;) is used before the function name in the declaration of a function it is associated with the return value of the function and means that the function will return by reference. Use of ‘&amp;’ operator before a function name in C++ C++类构造函数初始化列表 Constructor member initializer lists 可以参照以上的文章，主要是可以在声明的同时初始化，在构造函数里面的知只是赋值操作，不是所谓的初始化。 比如说类中想要拥有const类型的变量的话，可以利用构造函数的初始化函数列表来给类中常量赋初值。 C++中的函数指针C++运算符重载C++中的流要把流与字符串分开来看，流是对象，可以用来处理字符串。 stringstreamst(), c_str()函数深入理解char*与char[]的差别]]></content>
       <categories>
         <category>C++</category>
       </categories>
@@ -43,8 +55,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -128,8 +140,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -140,8 +152,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -171,8 +183,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -216,8 +228,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -228,8 +240,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -240,8 +252,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -252,8 +264,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -264,8 +276,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -312,8 +324,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-22T04:34:32.318Z">
+<meta property="og:updated_time" content="2019-02-27T05:38:48.445Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识DLL-在UE4与Unity中使用DLL">
 <meta name="twitter:description" content="记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-22T13:34:32+09:00">
-                2019-02-22
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-27T14:38:48+09:00">
+                2019-02-27
               </time>
             
           </span>
@@ -406,6 +406,28 @@
 </ul>
 <h1 id="导出函数"><a href="#导出函数" class="headerlink" title="导出函数"></a>导出函数</h1><p>添加了具体的库的功能之后，需要将函数导出供外部使用。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DLL_EXPORT __declspec(dllexport)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> DLL_EXPORT <span class="title">ExportFuncName</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
 <p>像这样，上述的函数就被导出，能够被外部调用了。</p>
+<h2 id="导出函数的时候遇到的问题"><a href="#导出函数的时候遇到的问题" class="headerlink" title="导出函数的时候遇到的问题"></a>导出函数的时候遇到的问题</h2><p>当我在UE4中使用inline这个关键字的时候，给我报错了。</p>
+<p>我在DLL导出函数的时候，导出的函数前面加了<strong>inline</strong>关键字，所以把导出函数的定义跟声明都写在了头文件里。发生了什么呢？</p>
+<ul>
+<li>在UE4中我获取到了<strong>DLL Plugin</strong>中的dll库，得到了DLL的Handle，但是准备使用这个Handel取出里面的函数的时候，取出来的是空。函数名什么的都是正确的情况下。</li>
+</ul>
+<p>发生上述的情况下我试着去掉DLL中的导出函数的<code>inline</code>声明，声明和定义分开在头文件和cpp文件，就解决了。</p>
+<p>回归第一句的事实，貌似UE4C++中对于inline关键字是不支持的。哪怕是动态库中导出来的函数。</p>
+<h1 id="UE4Editor中调用DLL"><a href="#UE4Editor中调用DLL" class="headerlink" title="UE4Editor中调用DLL"></a>UE4Editor中调用DLL</h1><p>在文章最开始的地方提到的链接已经说明的很清楚了。</p>
+<p>要点在于:</p>
+<ul>
+<li>把制作好的DLL放到特定的文件夹中，一般是Plugin文件夹里面建立一个Plugin。</li>
+<li>创建一个类继承<code>BlueprintFunctionLibrary</code>这样蓝图也能使用</li>
+<li>声明的函数要是静态的（static）</li>
+<li>调用DLL中的函数的步骤是:<ul>
+<li>定义一个函数指针用来接收DLL中导出的函数(Use <code>typedef</code> to declare a method to store the DLL method)</li>
+<li>声明一个Handle来保持与DLL的连接（<code>void* v_dllHandle</code>)</li>
+<li>都不为空的时候调用导出来的函数。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*_getFunc)</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">_getFunc m_getFuncFromDll;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> * v_dllHandle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> ULOGBlueprintFunctionLibrary::DLLFunc(<span class="keyword">int</span> a, <span class="keyword">int</span> b）</span><br><span class="line">&#123;</span><br><span class="line">    FString dllfilepath = FPaths::Combine(*FPaths::ProjectPluginsDir(), TEXT(<span class="string">"DLLLibrary"</span>), TEXT(<span class="string">"DLLName.dll"</span>));</span><br><span class="line">    <span class="keyword">if</span>(FPaths::FileExists(dllfilepath))</span><br><span class="line">    &#123;</span><br><span class="line">        v_dllHandle = FPlatformProcess::GetDllHandle(*dllfilepath);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(v_dllHandle != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            FString procName = <span class="string">"FunctionName"</span>;</span><br><span class="line">            m_getFuncFromDll = (_getFunc)FPlatformProcess::GetDllExport(v_dllHandle, *procName);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(m_getFuncFromDll != <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                m_getFuncFromDll(a,b);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用的方法就像述。</p>
 <h1 id="DEBUG-DLL"><a href="#DEBUG-DLL" class="headerlink" title="DEBUG DLL"></a>DEBUG DLL</h1><p>关于DLL的DEBUG的问题，直接在工程里面DEBUG的方法我没有头绪。目前的方法是：</p>
 <p>选中Build的模式为<code>Release，x64</code>然后编译。在工程文件夹中找到编译完毕的dll文件导入到调用的工程里面进行调用测试。</p>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="DLL中头文件的引入"><a href="#DLL中头文件的引入" class="headerlink" title="DLL中头文件的引入"></a>DLL中头文件的引入</h2><p>在使用<strong>plog</strong> 源码的时候尝试引入头文件的地方：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// for example</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;plog/Util.h&gt;</span></span></span><br></pre></td></tr></table></figure></p>
@@ -583,7 +605,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -654,7 +676,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#新建DLL工程"><span class="nav-number">1.</span> <span class="nav-text">新建DLL工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导出函数"><span class="nav-number">2.</span> <span class="nav-text">导出函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG-DLL"><span class="nav-number">3.</span> <span class="nav-text">DEBUG DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL中头文件的引入"><span class="nav-number">4.1.</span> <span class="nav-text">DLL中头文件的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数名字前面加上-amp"><span class="nav-number">4.2.</span> <span class="nav-text">函数名字前面加上&amp;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类构造函数初始化列表"><span class="nav-number">4.3.</span> <span class="nav-text">C++类构造函数初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的函数指针"><span class="nav-number">4.4.</span> <span class="nav-text">C++中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-运算符重载"><span class="nav-number">4.5.</span> <span class="nav-text">C++运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的流"><span class="nav-number">4.6.</span> <span class="nav-text">C++中的流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stringstream"><span class="nav-number">4.6.1.</span> <span class="nav-text">stringstream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-c-str-函数"><span class="nav-number">4.6.2.</span> <span class="nav-text">st(), c_str()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解char-与char-的差别"><span class="nav-number">4.7.</span> <span class="nav-text">深入理解char*与char[]的差别</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#新建DLL工程"><span class="nav-number">1.</span> <span class="nav-text">新建DLL工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导出函数"><span class="nav-number">2.</span> <span class="nav-text">导出函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#导出函数的时候遇到的问题"><span class="nav-number">2.1.</span> <span class="nav-text">导出函数的时候遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4Editor中调用DLL"><span class="nav-number">3.</span> <span class="nav-text">UE4Editor中调用DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG-DLL"><span class="nav-number">4.</span> <span class="nav-text">DEBUG DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL中头文件的引入"><span class="nav-number">5.1.</span> <span class="nav-text">DLL中头文件的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数名字前面加上-amp"><span class="nav-number">5.2.</span> <span class="nav-text">函数名字前面加上&amp;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类构造函数初始化列表"><span class="nav-number">5.3.</span> <span class="nav-text">C++类构造函数初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的函数指针"><span class="nav-number">5.4.</span> <span class="nav-text">C++中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-运算符重载"><span class="nav-number">5.5.</span> <span class="nav-text">C++运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的流"><span class="nav-number">5.6.</span> <span class="nav-text">C++中的流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stringstream"><span class="nav-number">5.6.1.</span> <span class="nav-text">stringstream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-c-str-函数"><span class="nav-number">5.6.2.</span> <span class="nav-text">st(), c_str()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解char-与char-的差别"><span class="nav-number">5.7.</span> <span class="nav-text">深入理解char*与char[]的差别</span></a></li></ol></li></ol></div>
             
 
           </div>
