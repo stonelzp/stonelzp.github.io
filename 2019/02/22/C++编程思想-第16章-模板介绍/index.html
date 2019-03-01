@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记下关于模板的知识与理解。 继承和组合提供了重用对象代码的方法，而C++的模板特征提供了重用源代码的方法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-26T09:32:16.527Z">
+<meta property="og:updated_time" content="2019-02-28T10:51:46.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++编程思想-第16章-模板介绍">
 <meta name="twitter:description" content="记下关于模板的知识与理解。 继承和组合提供了重用对象代码的方法，而C++的模板特征提供了重用源代码的方法。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-26T18:32:16+09:00">
-                2019-02-26
+              <time title="更新于" itemprop="dateModified" datetime="2019-02-28T19:51:46+09:00">
+                2019-02-28
               </time>
             
           </span>
@@ -429,7 +429,8 @@
 <p>上面的例子中的size的值没有房放在类中，但是对他的使用就如同是成员函数中的数据成员。</p>
 <p>我记录下来上面这段代码的原因还有一个就是<em>懒惰初始化(lazy initialization)</em>.上面的Holder中有一个指向Array的指针，而不是指向类型Array的嵌入对象。该指针在构造函数中不被初始化，而是被推迟到了第一次访问的时候。还有等等的稀有的用法。</p>
 <p>这个章节还有许多其他内容，但是貌似跟我现在急需要理解的内容相差甚远，暂时保留。</p>
-<h1 id="第二卷第五章-深入理解模板"><a href="#第二卷第五章-深入理解模板" class="headerlink" title="第二卷第五章 深入理解模板"></a>第二卷第五章 深入理解模板</h1>
+<h1 id="第二卷第五章-深入理解模板"><a href="#第二卷第五章-深入理解模板" class="headerlink" title="第二卷第五章 深入理解模板"></a>第二卷第五章 深入理解模板</h1><p>关于模板的使用问题，在真正的使用模板之前一定要先让编译器看到模板的声明和定义，比如说在同一个文件里写一个类继承一个模板的时候，模板的声明和定义不能在类的下方，应该先写模板再用。</p>
+
       
     </div>
     
@@ -499,6 +500,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/C++-制作一个静态的单一实例/" rel="prev" title="C++-制作一个静态的单一实例">
+                C++-制作一个静态的单一实例 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -579,7 +584,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
