@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[为什么要用size_t]]></title>
+    <url>%2F2019%2F03%2F12%2F%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8size-t%2F</url>
+    <content type="text"><![CDATA[总的来说就是为了提高代码的可移植性，有效性或者可读性。 Why size_t matters 之后整理一下这篇文章的内容。]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[new与malloc的区别]]></title>
+    <url>%2F2019%2F03%2F12%2Fnew%E4%B8%8Emalloc%E7%9A%84%E5%8C%BA%E5%88%AB%2F</url>
+    <content type="text"><![CDATA[new/delete与malloc/free显而易见的区别是，前者会调用对象的构造/析构函数，而后者不会。 再仔细说明就是new的操作是新建对象 ，而malloc只是分配一块内存而已。 在Stack Overflow上有更为详尽的说明，有时间的话好好整理一下。 What is the difference between new/delete and malloc/free?]]></content>
+      <categories>
+        <category>C++</category>
+        <category>C</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>编程</tag>
+        <tag>C</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[C++中的运算符重载]]></title>
+    <url>%2F2019%2F03%2F05%2FC%2B%2B%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD%2F</url>
+    <content type="text"><![CDATA[运算符重载(operator overloading)只是一种”语法上的方便“（syntactic sugar).也就是说它只是另一种函数调用的方式。 运算符重载有成员与算符和非成员运算符之分，那么这个之间有什么区别呢，应该选择哪一种呢？ 总的来说，如果没有什么差异，它们应该是成员运算符。这样做强调了运算符和类的结合。当左操作数是当前类的对象时，运算符会工作的很好。 但有的时候左侧操作数是别的类对象。这种情况通常出现在输入输出流重载operator&lt;&lt;和&gt;&gt; 时。因为输入输出流是一个基本C++库。 这里就说到了关键了。为了应付各种数据类型的输出，输入输出流的重载就很重要了。 1// 代码之后贴 这里我先暂停一下，说一说为什么要认识运算符重载这个问题。 举例来说，cout这个类是我学C++最早接触的对象了之一了，但是却很不是理解。其实即就是cout对&lt;&lt;运算符进行了重载。 我自己创建了一个Record类，希望这个类能对接在&lt;&lt;后面的数据进行一些操作，比如说接收数据什么的。12Record &lt;&lt; 2;Record &lt;&lt; "str string"; 想这样把后面的数据接收保存在类内变量中。就这样我遇见了下面的代码:12345678// 在Record类内template&lt;typename T&gt;Record&amp; operator&lt;&lt;(const T&amp; data)&#123; m_message &lt;&lt; data; return *this;&#125; 代表着混沌势力的模板登场了（对我来说)。这里就涉及到了函数模板的问题。我看到上面的代码的时候第一反应是，这段代码能直接用？ 答案是肯定的，像类模板的使用那样，指定明确的模板参数类型来特化函数模板使用是可行的，也就是我觉得应该这样做的，但是让编译器从函数的参数中推断出它们的类型将会更方便。 后面的内容就更多了，在别的模板章节中展开更好。 回到上面的代码，m_message &lt;&lt; data 的m_message是什么类型合适呢？是ostringstream。是C++标准库的东西，这样就省得自己一个一个重载数据类型了。方法是个好方法，但是最后我没用上。因为要处理宽字符的问题，涉及到宽窄字符互相转换的问题，试来试去总是出问题，我就Pass掉了，全部交给UE4里的FString类型和TEXT（）来处理了。]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[C++-制作一个静态的单一实例]]></title>
     <url>%2F2019%2F03%2F01%2FC%2B%2B-%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E7%9A%84%E5%8D%95%E4%B8%80%E5%AE%9E%E4%BE%8B%2F</url>
     <content type="text"><![CDATA[制作单一实例，就会想到Singleton，单例模式。在C++里面如何制作一个唯一的一个实例，我只是有一个想法，然后付诸实践。也许这个想法或许是错的。但是重要的是我将这个想法付诸实践的过程，这个过程中我明白了许多知识点，只是不想忘记而已。 指定需要单例化的类首先要选一个适合的类进行单一实例化。举例来说我现在正在制作一个日志系统，故而我希望有一个唯一的实例Logger来管理关于日志的一切。所以我声明了以下： 12345678910111213// Logger.hclass Logger&#123; Logger(); ~Logger();&#125;// Logger.cpp#include "Logger.h"Logger::Logger()&#123;&#125;Logger::~Logger()&#123;&#125; 像这样子。 制作一个单例模板关于这个单例模板其实我也不太清楚具体是为什么而制作的，只是我在学习plog这个日志库的时候看到就学了。首先它是一个模板，怎么用为什么要这么用，需要我理解模板的使用。 12345678910111213141516171819202122232425262728293031template&lt;class T&gt;class Singleton :NonCopyable&#123;public: Singleton() &#123; if(m_instance == NULL) &#123; m_instance = static_cast&lt;T*&gt;(this); &#125; &#125; ~Singleton() &#123; if(m_instance != NULL) &#123; m_instance = 0; &#125; &#125; static T* getInstance() &#123; return m_instance; &#125;private: static T* m_instance;&#125;template&lt;class T&gt;T* Singleton&lt;T&gt;::m_instance = NULL; 先把出现的NonCopyable类的出现放在一边，讨论一下这个模板。 这个模板有一个私有静态属性，类型为T，而且在构造函数里面进行了像下类型转换，使用`static_cast，这个算是骚操作么，我也不太清楚。还有注意取得这个属性的指针函数是静态的，也就是有准备把这个单一实例声明为静态的。 总结一句话来说就是我们得到使用了这个模板并实例化成功的静态实例的指针引用。 引用这里让我有些不舒服的是引用这个词，按照我所理解的，引用和指针并不是一样的： 引用（reference）（&amp;）就像能自动的被编译器间接引用的常量型指针。 关于这一部分我应该是需要用大量的时间去理解的。在C++编程思想第一卷第十一章的-引用和拷贝构造函数里面有较为详细的说明。之后也会有提到。 静态类成员关于静态类成员，Static Members of a C++ Class 里面的说明应该很详细了。 要点在于: 静态类成员只有一份拷贝，无论类被实例化了多少次。 静态类函数只能调用静态类成员。 可以使用类公开的静态成员和静态函数，甚至类没有被实例化。 类静态成员没有this指针，可以用&lt;类名&gt;::&lt;静态成员&gt;来获取。 静态类成员必须在类外初始化 这个是我制作的单例模式的关键理解部分。 关于NonCopyable类这个类可谓是突然出现在我的面前，一查却发现大有来历。就是一个防止类被复制的类。123456789class NonCopyable&#123;protected: NonCopyable()&#123;&#125;private: NonCopyable(const NonCopyable&amp;); NonCopyable&amp; operator=(const NonCopyable&amp;);&#125; 这个地方涉及了许多拷贝构造函数相关的东西，C++编程思想第一卷第十一章-引用和拷贝构造函数的内容，之后需要好好理解。 静态实例实装经过上面的洗礼，我试着写成下面这样：123456789101112class Logger : public Singleton&lt;Logger&gt;&#123;private: static Logger logger;private: Logger(); Logger(const Logger&amp;); ~Logger();&#125;Logger Logger::logger = Logger(); 我在类里面声明了一个自身类的静态实例。加上继承来的静态方法可以取到这个静态实例。然后定义了它。 这里有一个问题就是，当我在类外面定义logger的时候，Logger Logger::logger = Logger();,编译报错了，因为当时我没有加上Logger(const Logger&amp;);这句话。 这句话是什么呢，貌似就是所谓的拷贝构造函数。并且被设置成了私有的。]]></content>
@@ -27,7 +65,7 @@
   <entry>
     <title><![CDATA[C++中的强制类型转换-cast]]></title>
     <url>%2F2019%2F02%2F18%2FC%2B%2B%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-cast%2F</url>
-    <content type="text"><![CDATA[实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:stati_cast,dynamic_cast,const_cast,reinterpret_cast。 提笔要写，先看别人的总结 When should static_cast, dynamic_cast, const_cast and reinterpret_cast be used? 这里我遇见的情况就是static_cast的重要的用法。继承类型的向下类型转换。下面来看看我遇见的神仙代码：123456789101112131415161718192021222324252627template&lt;class T&gt;class Singleton : NonCopyable&#123;public: Singleton() &#123; assert(!m_instance); m_instance = static_cast&lt;T*&gt;(this); &#125; ~Singleton() &#123; assert(m_instance); m_instance = 0; &#125; static T* getInstance() &#123; return m_instance; &#125;private: static T* m_instance;&#125;;template&lt;class T&gt;T* Singleton&lt;T&gt;::m_instance = NULL; 一个单例模板类，读代码的时候，按照这个模板被实例化的是他的子类，顺便这个子类所具有的instance的引用就变成它自己了。我什么时候也能写出这么优秀的代码。 还有其他的强制类型转换，遇见的时候具体分析吧。]]></content>
+    <content type="text"><![CDATA[实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:stati_cast,dynamic_cast,const_cast,reinterpret_cast。 static_cast提笔要写，先看别人的总结 When should static_cast, dynamic_cast, const_cast and reinterpret_cast be used? 这里我遇见的情况就是static_cast的重要的用法。继承类型的向下类型转换。下面来看看我遇见的神仙代码：123456789101112131415161718192021222324252627template&lt;class T&gt;class Singleton : NonCopyable&#123;public: Singleton() &#123; assert(!m_instance); m_instance = static_cast&lt;T*&gt;(this); &#125; ~Singleton() &#123; assert(m_instance); m_instance = 0; &#125; static T* getInstance() &#123; return m_instance; &#125;private: static T* m_instance;&#125;;template&lt;class T&gt;T* Singleton&lt;T&gt;::m_instance = NULL; 一个单例模板类，读代码的时候，按照这个模板被实例化的是他的子类，顺便这个子类所具有的instance的引用就变成它自己了。我什么时候也能写出这么优秀的代码。 还有其他的强制类型转换，遇见的时候具体分析吧。 const_cast在做各种数据类型匹配的时候，遇到了这样的问题：123// UE4 C++FString text = "111";TCHAR* t_text = *text; 上面是想把FString类型转化为TCHAR*类型的数据。 但是上面的会报错，原因是无法将const THCAR*转化为TCHAR*。那就直接加上关键字const就解决了。但是问题是这个t_text是我设置的即将要传入另外一个函数的参数，它要是设置为常量类型的话就没法传参了。 把常量指针变成普通的指针，就是我接触到const_cast的起因。但是关于它的使用，可不是一句话就能总结的。 const_cast实现的原因在于C++对于指针的转换是任意的，它不会检查类型，任何指针之间都可以进行互相转换。 去const限定12const TCHAR* t_text = "1234";TCHAR* text = const_cast&lt;TCHAR*&gt;(t_text); 将常量指针转化为了正常指针，但是正常情况下不会做这种弱智操作。正常声明就行了，但是有的时候要传参的情况传的不是常量怎么办，那只好强制转换了。 去const限定的操作绝对不是为了修改它的内容，既然声明了常量还要修改那为什么还要声明为常量。既然声明了常量就要贯彻到底。绝对不对const数据进行重新赋值。 根据别人的文章内容，强行修改常量的值会产生未定义行为（Undefined Behavior）,这种行为由编译器决定如何处理。]]></content>
       <categories>
         <category>C++</category>
       </categories>
@@ -67,8 +105,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -152,8 +190,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -164,8 +202,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -195,8 +233,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -240,8 +278,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -252,8 +290,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -264,8 +302,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -276,8 +314,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -288,8 +326,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -336,8 +374,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>

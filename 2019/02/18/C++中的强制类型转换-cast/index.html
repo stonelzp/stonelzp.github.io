@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:stati_cast,dynamic_cast,const_cast,reinterpret_cast。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-18T10:49:40.398Z">
+<meta property="og:updated_time" content="2019-03-05T06:29:12.016Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++中的强制类型转换-cast">
 <meta name="twitter:description" content="实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:stati_cast,dynamic_cast,const_cast,reinterpret_cast。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-18T19:49:40+09:00">
-                2019-02-18
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-05T15:29:12+09:00">
+                2019-03-05
               </time>
             
           </span>
@@ -400,13 +400,24 @@
       
         <p>实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:<code>stati_cast</code>,<code>dynamic_cast</code>,<code>const_cast</code>,<code>reinterpret_cast</code>。</p>
 <a id="more"></a>
-<p>提笔要写，先看别人的总结</p>
+<h2 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h2><p>提笔要写，先看别人的总结</p>
 <ul>
 <li><a href="https://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used" target="_blank" rel="noopener">When should static_cast, dynamic_cast, const_cast and reinterpret_cast be used?</a></li>
 </ul>
 <p>这里我遇见的情况就是static_cast的重要的用法。继承类型的向下类型转换。下面来看看我遇见的神仙代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">Singleton</span> :</span> NonCopyable</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Singleton()</span><br><span class="line">	&#123;</span><br><span class="line">		assert(!m_instance);</span><br><span class="line">		m_instance = <span class="keyword">static_cast</span>&lt;T*&gt;(<span class="keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	~Singleton()</span><br><span class="line">	&#123;</span><br><span class="line">		assert(m_instance);</span><br><span class="line">		m_instance = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">static</span> T* <span class="title">getInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> m_instance;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">static</span> T* m_instance;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">T</span>* <span class="title">Singleton</span>&lt;T&gt;:</span>:m_instance = <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure></p>
 <p>一个单例模板类，读代码的时候，按照这个模板被实例化的是他的子类，顺便这个子类所具有的instance的引用就变成它自己了。我什么时候也能写出这么优秀的代码。</p>
 <p>还有其他的强制类型转换，遇见的时候具体分析吧。</p>
+<h2 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h2><p>在做各种数据类型匹配的时候，遇到了这样的问题：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UE4 C++</span></span><br><span class="line">FString text = <span class="string">"111"</span>;</span><br><span class="line">TCHAR* t_text = *text;</span><br></pre></td></tr></table></figure></p>
+<p>上面是想把FString类型转化为TCHAR*类型的数据。</p>
+<p>但是上面的会报错，原因是无法将<code>const THCAR*</code>转化为<code>TCHAR*</code>。那就直接加上关键字const就解决了。但是问题是这个<code>t_text</code>是我设置的即将要传入另外一个函数的参数，它要是设置为常量类型的话就没法传参了。</p>
+<p>把常量指针变成普通的指针，就是我接触到<code>const_cast</code>的起因。但是关于它的使用，可不是一句话就能总结的。</p>
+<blockquote>
+<p>const_cast实现的原因在于C++对于指针的转换是任意的，它不会检查类型，任何指针之间都可以进行互相转换。</p>
+</blockquote>
+<h3 id="去const限定"><a href="#去const限定" class="headerlink" title="去const限定"></a>去const限定</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> TCHAR* t_text = <span class="string">"1234"</span>;</span><br><span class="line">TCHAR* text = <span class="keyword">const_cast</span>&lt;TCHAR*&gt;(t_text);</span><br></pre></td></tr></table></figure>
+<p>将常量指针转化为了正常指针，但是正常情况下不会做这种弱智操作。正常声明就行了，但是有的时候要传参的情况传的不是常量怎么办，那只好强制转换了。</p>
+<p><strong>去const限定的操作绝对不是为了修改它的内容</strong>，既然声明了常量还要修改那为什么还要声明为常量。既然声明了常量就要贯彻到底。<strong>绝对不对const数据进行重新赋值</strong>。</p>
+<p>根据别人的文章内容，强行修改常量的值会产生<em>未定义行为（Undefined Behavior）</em>,这种行为由编译器决定如何处理。</p>
 
       
     </div>
@@ -532,8 +543,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -552,7 +572,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -563,7 +583,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -574,7 +594,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -613,6 +633,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#static-cast"><span class="nav-number">1.</span> <span class="nav-text">static_cast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#const-cast"><span class="nav-number">2.</span> <span class="nav-text">const_cast</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#去const限定"><span class="nav-number">2.1.</span> <span class="nav-text">去const限定</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
