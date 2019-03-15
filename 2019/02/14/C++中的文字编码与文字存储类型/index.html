@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="在准备把函数名字输出的时候遇到了输出乱码的问题。12TCHAR* text = &quot;DLL内容テスト。&quot;;UE_LOG(LogTemp, Log, TEXT(&quot;TEXT: %s&quot;), text);">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-15T05:43:19.449Z">
+<meta property="og:updated_time" content="2019-03-12T07:09:59.483Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++中的文字编码与文字存储类型">
 <meta name="twitter:description" content="在准备把函数名字输出的时候遇到了输出乱码的问题。12TCHAR* text = &quot;DLL内容テスト。&quot;;UE_LOG(LogTemp, Log, TEXT(&quot;TEXT: %s&quot;), text);">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-02-15T14:43:19+09:00">
-                2019-02-15
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-12T16:09:59+09:00">
+                2019-03-12
               </time>
             
           </span>
@@ -432,7 +432,7 @@
 </li>
 </ul>
 <p>结论：源码的存储格式应该存储为Unicode格式。在字符编码想要支持Unicode和ANSI两种格式的时候应该添加类似以下的宏<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _UNICODE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __T(x)    L##x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x)     __T(x)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x)     x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
-<p>关于为什么不直接使用添加L的宏的原因是：防止数据变量声明和定义是的类型冲突。使用宏避免char与L的宽字符存储类型冲突。</p>
+<p>关于为什么不直接使用添加L的宏的原因是：防止数据变量声明和定义时的类型冲突。使用宏避免char与L的宽字符存储类型冲突。</p>
 <p>在tchar.h文件中可以找到关于__T(x)宏的定义，貌似不包含这个文件的时候，自己定义也可以。</p>
 <h4 id="TCHAR"><a href="#TCHAR" class="headerlink" title="TCHAR"></a>TCHAR</h4><p>THAR是对上述两种字符存储类型的统一，参考以下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
 <p>当程序定义了UNICODE的时候TCHAR就是宽字符存储类型即wchar_t，当未定义的时候就是普通的char数据类型。</p>
@@ -440,6 +440,16 @@
 <ul>
 <li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/StringHandling/CharacterEncoding" target="_blank" rel="noopener">Charactor Encoding</a></li>
 </ul>
+<h2 id="C-宽字符"><a href="#C-宽字符" class="headerlink" title="C++宽字符"></a>C++宽字符</h2><p>当我觉得我能理解并分别和使用C++中的宽字符的时候，现实告诉我还是太天真了。</p>
+<p>先看看这篇文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/daliang126/article/details/53584395" target="_blank" rel="noopener">彻底解密C++宽字符</a></li>
+</ul>
+<p>写了很多我看不懂的，就是很复杂。我有照着别的示例程序试着写了一下宽窄字符转换，但是英文还好，没看出来什么变化，但是把日语从<code>const char*</code> 变成<code>const wchar_t*</code>的时候乱码还是乱码。</p>
+<p>我使用的是<code>mbstowcs</code>函数来实现的，微软的官网文档也有介绍。官方推荐的是使用<code>mbstowcs_s</code>这个函数。有机会的话可以再试试。</p>
+<p>应该有更深层次的原因，只不过我放弃了。借用4的<code>FString</code>和<code>TEXT()</code>宏来解决了。</p>
+<p>我在plog中看到的宽窄字符转换跟下面的很像说不定好用：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Unicode字符集下可用</span></span><br><span class="line"><span class="comment">//--------------------------------------------------------宽字符串转换到窄字符串</span></span><br><span class="line"><span class="keyword">char</span>* pC = <span class="literal">NULL</span>;   </span><br><span class="line"><span class="keyword">wchar_t</span> wStr[<span class="number">20</span>] = <span class="string">L"宽字符串"</span>;  </span><br><span class="line"><span class="keyword">int</span> iLen = WideCharToMultiByte( CP_ACP,<span class="number">0</span>,wStr,<span class="number">-1</span>,<span class="literal">NULL</span>,<span class="number">0</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>); </span><br><span class="line"><span class="keyword">if</span>( iLen &gt; <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">    pC = ( <span class="keyword">char</span>* )HeapAlloc( GetProcessHeap() ,<span class="number">0</span> ,iLen );</span><br><span class="line">    <span class="keyword">if</span>( !pC ) <span class="keyword">return</span>;</span><br><span class="line">    WideCharToMultiByte( CP_ACP ,<span class="number">0</span> ,wStr ,<span class="number">-1</span> ,pC ,iLen ,<span class="literal">NULL</span> ,<span class="literal">NULL</span> );  </span><br><span class="line">    <span class="built_in">printf</span>( <span class="string">"%s \n"</span>, pC );</span><br><span class="line">    HeapFree( GetProcessHeap() ,<span class="number">0</span> ,pC );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//--------------------------------------------------------窄字符串转换到宽字符串</span></span><br><span class="line"><span class="keyword">char</span> cStr[<span class="number">20</span>] = <span class="string">"这是窄字符串"</span>;</span><br><span class="line"><span class="keyword">wchar_t</span>* pWideString = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">int</span> iLenWide = MultiByteToWideChar( CP_ACP ,<span class="number">0</span> ,cStr ,<span class="number">-1</span> ,<span class="literal">NULL</span> ,<span class="number">0</span> ); </span><br><span class="line"><span class="keyword">if</span> ( iLenWide &gt; <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">    pWideString = ( <span class="keyword">wchar_t</span>* )<span class="built_in">malloc</span>( iLenWide * <span class="keyword">sizeof</span>(<span class="keyword">wchar_t</span>) );</span><br><span class="line">    <span class="keyword">if</span>( !pWideString ) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    MultiByteToWideChar( CP_ACP ,<span class="number">0</span> ,cStr ,<span class="number">-1</span> ,pWideString ,iLenWide ); </span><br><span class="line">    MessageBox( <span class="literal">NULL</span>, pWideString , <span class="number">0</span> , <span class="number">0</span> );  </span><br><span class="line">    <span class="built_in">free</span>( pWideString ); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -592,7 +602,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -663,7 +673,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码的存储格式"><span class="nav-number">1.</span> <span class="nav-text">源码的存储格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的字符存储类型"><span class="nav-number">2.</span> <span class="nav-text">C++中的字符存储类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#char"><span class="nav-number">2.0.1.</span> <span class="nav-text">char</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wchar-t"><span class="nav-number">2.0.2.</span> <span class="nav-text">wchar_t</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCHAR"><span class="nav-number">2.0.3.</span> <span class="nav-text">TCHAR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4中的字符类型转换"><span class="nav-number">3.</span> <span class="nav-text">UE4中的字符类型转换</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码的存储格式"><span class="nav-number">1.</span> <span class="nav-text">源码的存储格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的字符存储类型"><span class="nav-number">2.</span> <span class="nav-text">C++中的字符存储类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#char"><span class="nav-number">2.0.1.</span> <span class="nav-text">char</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wchar-t"><span class="nav-number">2.0.2.</span> <span class="nav-text">wchar_t</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCHAR"><span class="nav-number">2.0.3.</span> <span class="nav-text">TCHAR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4中的字符类型转换"><span class="nav-number">3.</span> <span class="nav-text">UE4中的字符类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-宽字符"><span class="nav-number">4.</span> <span class="nav-text">C++宽字符</span></a></li></ol></div>
             
 
           </div>
