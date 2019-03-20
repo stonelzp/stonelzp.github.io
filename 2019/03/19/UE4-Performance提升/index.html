@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Git," />
+  <meta name="keywords" content="UE4,Performance," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="git rebase的使用简介">
-<meta name="keywords" content="Git">
+<meta name="description" content="主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。">
+<meta name="keywords" content="UE4,Performance">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git-rebases使用方法">
-<meta property="og:url" content="http://stonelzp.github.io/2018/08/30/git-rebases使用方法/index.html">
+<meta property="og:title" content="UE4-Performance提升">
+<meta property="og:url" content="http://stonelzp.github.io/2019/03/19/UE4-Performance提升/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="git rebase的使用简介">
+<meta property="og:description" content="主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-30T06:15:44.307Z">
+<meta property="og:updated_time" content="2019-03-20T11:24:22.104Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git-rebases使用方法">
-<meta name="twitter:description" content="git rebase的使用简介">
+<meta name="twitter:title" content="UE4-Performance提升">
+<meta name="twitter:description" content="主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/2018/08/30/git-rebases使用方法/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/2019/03/19/UE4-Performance提升/"/>
 
 
 
 
 
-  <title>git-rebases使用方法 | StoneのBLOG</title>
+  <title>UE4-Performance提升 | StoneのBLOG</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2018/08/30/git-rebases使用方法/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2019/03/19/UE4-Performance提升/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">git-rebases使用方法</h1>
+          <h1 class="post-title" itemprop="name headline">UE4-Performance提升</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T15:12:42+09:00">
-                2018-08-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-19T19:47:59+09:00">
+                2019-03-19
               </time>
             
 
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-30T15:15:44+09:00">
-                2018-08-30
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-20T20:24:22+09:00">
+                2019-03-20
               </time>
             
           </span>
@@ -361,8 +361,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工具/" itemprop="url" rel="index">
-                    <span itemprop="name">工具</span>
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
+                    <span itemprop="name">UnrealEngine4</span>
                   </a>
                 </span>
 
@@ -398,7 +398,94 @@
       
 
       
-        <p>git rebase的使用简介</p>
+        <p>主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。</p>
+<a id="more"></a>
+<p>我在知乎看见一篇文章整理的非常好：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/36434616" target="_blank" rel="noopener">Performance and Profiling(UE4优化)</a></li>
+</ul>
+<p>根据这个再根据自己在工作中遇到的问题进行进一步细致的总结吧。</p>
+<p>发现了BasePass的消耗很高，查一下。</p>
+<h1 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h1><h2 id="Base-Pass"><a href="#Base-Pass" class="headerlink" title="Base Pass"></a>Base Pass</h2><p>关于base pass的总结：</p>
+<ul>
+<li><p><a href="https://unrealartoptimization.github.io/book/profiling/passes-base/" target="_blank" rel="noopener">UNREAL ART OPTIMIZATION - Base Pass</a></p>
+<p>  <strong>Responsible for</strong></p>
+<pre><code>• Rendering final attributes of Opaque or Masked materials to the G-Buffer
+
+• Reading static lighting and saving it to G-Buffer
+
+• Applying DBuffer decals
+
+• Applying fog
+
+• Calculating final velocity (from packed 3D velocity)
+
+• In forward renderer: dynamic lighting
+</code></pre><p>  <strong>Cost affected for</strong></p>
+<pre><code>• Rendering resolution
+
+• Shader complexity
+
+• Number of objects
+
+• Number of decals
+
+• Triangle count
+</code></pre></li>
+</ul>
+<p>在basepass阶段做了许多工作，其中<strong>Shader Complexity</strong> 是影响性能的一个很重要的因素。</p>
+<h3 id="Optimization-1"><a href="#Optimization-1" class="headerlink" title="Optimization"></a>Optimization</h3><p>如何优化这个问题首先要知道那个地方需要优化。</p>
+<ul>
+<li>Shader Complexity: 在view-mode下可以查看shader的复杂度。</li>
+<li>Stat: 在Material Editor里面有stat window查看pass的数量</li>
+<li>Rendering Resolution: 可以查看和影响G-Buffer和其他贴图的质量。<ul>
+<li><code>stat RHI</code>: 查看G-Buffer的内存占用</li>
+</ul>
+</li>
+</ul>
+<p>英文文章读起来不如中文的快，那么容易理解，但是有些话翻译成中文的话不知道为什么就变了味道。还是多读几遍人家的文章吧。</p>
+<h3 id="GPU-Visualizer"><a href="#GPU-Visualizer" class="headerlink" title="GPU Visualizer"></a>GPU Visualizer</h3><h4 id="1-BasePass-Dynamic"><a href="#1-BasePass-Dynamic" class="headerlink" title="1.BasePass-Dynamic"></a>1.BasePass-Dynamic</h4><blockquote>
+<p> <span style="color:red">BasePass 0 = Opaque Meshes.</span></p>
+</blockquote>
+<blockquote>
+<p> <span style="color:red">BasePass 1 = Alpha Masked Opaque Meshes for Z-depth.</span></p>
+</blockquote>
+<blockquote>
+<p> <span style="color:red">BasePass Dynamic = Animated Vertices such as Skeletal, GeoCache(Alembic),etc.</span></p>
+</blockquote>
+<p>在上面我只看到了<strong>Dynamic</strong>，而其他的是<strong>Static EBassPassDrawListType=0</strong>和<strong>Static EBasePassDrawListType=1</strong>意思是不是一样的我也不确定。</p>
+<p>于是我查了查<strong>EBasePassDrawListType</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Source UnrealEngine4源码：Runtime\Render\Private\BasePassRendering.cpp</span></span><br><span class="line">EBasePassDrawListType DrawType = EBasePass_Default;</span><br><span class="line"></span><br><span class="line"><span class="comment">// The definition of the type</span></span><br><span class="line"><span class="keyword">enum</span> EBasePassDrawListType</span><br><span class="line">&#123;</span><br><span class="line">    EBasePass_Default = <span class="number">0</span>,</span><br><span class="line">    EBasePass_Masked,</span><br><span class="line">    EBasePass_MAX</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看这个声明貌似上面的是对的。</p>
+<p>还有一个我有点在意的是在VR的模式下会出现两种</p>
+<ul>
+<li>View0</li>
+<li>View1</li>
+</ul>
+<p>这两种处理，一开始我认为是两个摄像机的存在导致的，删了一个摄像机没啥影响。后来新建了一个新的VR项目试试发现原本就会有两个摄像机（Runtime），一个VR设备用另一个不知道干啥的，运行时会生成。查了一下也没找到，先写下来。</p>
+<p>所以<strong>Dynamic</strong>处理占用时间，是因为<strong>顶点动画</strong>比较多。</p>
+<h1 id="HTC-Vive"><a href="#HTC-Vive" class="headerlink" title="HTC Vive"></a>HTC Vive</h1><p><strong>Vive的刷新率只有90Hz。</strong></p>
+<p>这是什么概念？每秒刷新90帧的能力，这跟游戏能够达到的帧率有很大不同。</p>
+<ol>
+<li>这里就有疑问了，如果游戏的帧率高于显示器（VR）的刷新率会怎么样。</li>
+</ol>
+<p><span style="color:red"><strong>会造成撕裂(tearing)。</strong></span></p>
+<p>GPU活儿干多了，比如说应该把一帧的图像交给显示器，结果交付了一帧还多的数据（显示器来取数据的速度慢了一拍，本应该取走的一帧数据被显卡二次更新中途，）。产生了画面撕裂。</p>
+<p><strong>V-Sync</strong>被用来解决这个问题，垂直同步(Vertical Synchronization)通过建立一个不让在显示器刷新前将后备缓冲中的画面拷贝到显示缓冲中的规定来解决这个问(有条件的双倍缓冲)。如果FPS高于刷新率的话没有问题，后备缓冲的更新完成后，系统处于等待状态。当显示器刷新后，后备缓存拷入显示缓存，显卡则可以在后备缓存中描画新的画面。</p>
+<ol start="2">
+<li>游戏的帧率低于显示器（VR）的刷新率会怎样</li>
+</ol>
+<p>如果打开了垂直同步，那么帧数直接减半。理论上讲，双缓冲的VSync，FPS将是一组不连续的整数，其等于<strong>刷新率/n</strong>。</p>
+<p>这就是为什么我总是看Vive的帧率被锁在45帧的原因。</p>
+<p>那么进入正题，UE4中的<strong>Smoothed Frame Rate Range</strong>有什么用。</p>
+<h2 id="Smoothed-Frame-Rate-Range"><a href="#Smoothed-Frame-Rate-Range" class="headerlink" title="Smoothed Frame Rate Range"></a>Smoothed Frame Rate Range</h2><ul>
+<li><a href="https://answers.unrealengine.com/questions/90743/what-exactly-does-smooth-frame-rate-do.html" target="_blank" rel="noopener">What exactly does “Smooth Frame Rate” do?</a></li>
+</ul>
+<blockquote>
+<p><strong>With Frame Rate Smoothing, the application is determining what range is acceptable for frame rate wandering,so you can cap your frame rate to between Min and Max allowable frame rates.Since this is application based,it will make these changes before any hardware vsync changes.</strong></p>
+</blockquote>
+<p>举例来说，如果设置了Max60f，Min40f的话，当超过60帧会保持在60帧，当低于60帧而高于40帧的时候会保持帧数，但是低于40帧的时候就会降到30帧。</p>
+<p>得益于现在的显卡很多具有自适应的垂直同步功能。</p>
+<p>当然上面的内容只是我看文章得到的，并没有实际试验过。</p>
 
       
     </div>
@@ -430,7 +517,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://stonelzp.github.io/2018/08/30/git-rebases使用方法/" title="git-rebases使用方法">http://stonelzp.github.io/2018/08/30/git-rebases使用方法/</a>
+    <a href="http://stonelzp.github.io/2019/03/19/UE4-Performance提升/" title="UE4-Performance提升">http://stonelzp.github.io/2019/03/19/UE4-Performance提升/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -445,7 +532,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i> Git</a>
+            <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+            <a href="/tags/Performance/" rel="tag"><i class="fa fa-tag"></i> Performance</a>
           
         </div>
       
@@ -458,8 +547,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/16/UE4-Error-Message整理/" rel="next" title="UE4:Error_Message整理">
-                <i class="fa fa-chevron-left"></i> UE4:Error_Message整理
+              <a href="/2019/03/15/UE4光照学习调查笔记/" rel="next" title="UE4光照学习调查笔记">
+                <i class="fa fa-chevron-left"></i> UE4光照学习调查笔记
               </a>
             
           </div>
@@ -467,10 +556,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/09/UE4中的Casting/" rel="prev" title="UE4中的Casting">
-                UE4中的Casting <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -522,8 +607,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -603,6 +697,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimization"><span class="nav-number">1.</span> <span class="nav-text">Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Base-Pass"><span class="nav-number">1.1.</span> <span class="nav-text">Base Pass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimization-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">Optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU-Visualizer"><span class="nav-number">1.1.2.</span> <span class="nav-text">GPU Visualizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-BasePass-Dynamic"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">1.BasePass-Dynamic</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTC-Vive"><span class="nav-number">2.</span> <span class="nav-text">HTC Vive</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Smoothed-Frame-Rate-Range"><span class="nav-number">2.1.</span> <span class="nav-text">Smoothed Frame Rate Range</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
