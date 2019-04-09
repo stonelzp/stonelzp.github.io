@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-05T08:28:05.070Z">
+<meta property="og:updated_time" content="2019-04-09T07:03:17.074Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-Performance提升">
 <meta name="twitter:description" content="主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-05T17:28:05+09:00">
-                2019-04-05
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-09T16:03:17+09:00">
+                2019-04-09
               </time>
             
           </span>
@@ -657,8 +657,312 @@
 <ul>
 <li><a href="https://www.youtube.com/watch?v=hcxetY8g_fs" target="_blank" rel="noopener">UE4 Performance and Profiling | Unreal Dev Day Montreal 2017 | Unreal Engine</a></li>
 </ul>
-<p>这其实是一个视频，我尝试的边看边做笔记，结果足足整理了三页内容，虽然是就是抄的英文，等之后有时间再记录下来吧。</p>
-<h1 id="GPU-Performance-for-Game-Artists"><a href="#GPU-Performance-for-Game-Artists" class="headerlink" title="GPU Performance for Game Artists"></a>GPU Performance for Game Artists</h1><p>这是上面的视频里大力推荐的一篇文章。有时间我也得看一下，去理解一下整理一下。</p>
+<p>这其实是一个视频，我尝试的边看边做笔记，结果足足整理了三页，虽然是就是抄的英文，等之后有时间再记录下来吧。</p>
+<p>现在要将这些内容整理一下，同时也温习一下视频的内容。</p>
+<h2 id="1-CPU-GPU-Profiler"><a href="#1-CPU-GPU-Profiler" class="headerlink" title="1.CPU/GPU Profiler"></a>1.CPU/GPU Profiler</h2><p>我觉得有必要区分这两种Profiler，因为我最近接触的总是GPUProfiler，搞得我都不知道CPU要怎么Profiling了。</p>
+<h2 id="2-Profiling-in-a-Build"><a href="#2-Profiling-in-a-Build" class="headerlink" title="2.Profiling in a Build"></a>2.Profiling in a Build</h2><p>算是准备优化之前的准备工作吧。</p>
+<ol>
+<li><p>Minimize the noise that can interface with profiling</p>
+<ul>
+<li>Turn off everything you are not using</li>
+<li>Turn off v-sync <code>r.vsync 0</code></li>
+</ul>
+</li>
+<li><p>Turn off Framerate Smoothing</p>
+</li>
+<li><p>Make a Test build</p>
+<ul>
+<li>Testing in a Development build inflates the Draw thread with noise</li>
+</ul>
+</li>
+</ol>
+<p>尽可能的关闭噪声（noise），前两项是必须要做的，但是第三项，我也不太清楚我理解对不对，开发的时候使用的是<strong>Development mode</strong>，所以尽可能的减少噪音就直接build工程（即<strong>Shipping mode</strong>）来optimization。</p>
+<p>但是吧，还能不能用<em>stat</em>一类的命令来debug了我还真没试过。</p>
+<h2 id="3-Profiling-from-within-the-Editor"><a href="#3-Profiling-from-within-the-Editor" class="headerlink" title="3.Profiling from within the Editor"></a>3.Profiling from within the Editor</h2><p>可能就是上面的补充吧，其实我也是这么做的。在Editor中Optimization肯定会有noise。</p>
+<p>前面也有提到具体怎么做(虽然是VR的，但是应该都一样)这里就简单抄一下。</p>
+<ol>
+<li>Play in Standalone</li>
+<li>Make sure the Editor is set to NOT update i realtime</li>
+<li><p>Minimize the Editor</p>
+<ul>
+<li>VR &gt; Editor Preference &gt; Play &gt; should minimize Editor on VRPIE</li>
+</ul>
+</li>
+<li><p>Make sure to turn off Frame Rate Smoothing</p>
+</li>
+<li>Turn off VSync</li>
+</ol>
+<h2 id="4-General-Process"><a href="#4-General-Process" class="headerlink" title="4.General Process"></a>4.General Process</h2><ol>
+<li><p>Identify the bottleneck</p>
+<ul>
+<li>Game Thread</li>
+<li><p>Render Thread</p>
+<ul>
+<li>CPU</li>
+<li>GPU</li>
+</ul>
+</li>
+<li><p>Often jumps back and forth as you optimize</p>
+</li>
+<li>Use <code>r.ScreenPercentage 10</code> to quickly check if you are GPU bound</li>
+</ul>
+</li>
+</ol>
+<p>最后一条很有用。</p>
+<h3 id="Game-Thread"><a href="#Game-Thread" class="headerlink" title="Game Thread"></a>Game Thread</h3><ul>
+<li>Code or Blueprint</li>
+</ul>
+<h3 id="CPU-Render"><a href="#CPU-Render" class="headerlink" title="CPU Render"></a>CPU Render</h3><ul>
+<li>Object count,draw calls,culling</li>
+</ul>
+<h3 id="GPU-Render"><a href="#GPU-Render" class="headerlink" title="GPU Render"></a>GPU Render</h3><ul>
+<li>Shaders, overdraw,light</li>
+</ul>
+<h2 id="5-Measuring-in-Milliseconds"><a href="#5-Measuring-in-Milliseconds" class="headerlink" title="5.Measuring in Milliseconds"></a>5.Measuring in Milliseconds</h2><ul>
+<li><p>Use <em><span style="color:green">stat unit</span></em>,not just <em><span style="color:green">stat fps</span></em></p>
+<ul>
+<li>Largest number shows you the likely bottleneck</li>
+</ul>
+</li>
+<li><p>Milliseconds per frame</p>
+<ul>
+<li><span style="color:grey">Frame:</span> total time to finish each frame</li>
+<li><span style="color:red">Game:</span> C++ or BP gameplay operations</li>
+<li><span style="color:blue">Draw:</span> CPU render time</li>
+<li><span style="color:purple">GPU:</span> GPU render time</li>
+</ul>
+</li>
+<li>You can also use <em><span style="color:green">stat unitGraph</span></em>,whitch shows a line graph playback.<ul>
+<li>Mostly useful for spotting repeating hitches</li>
+</ul>
+</li>
+</ul>
+<h3 id="ScreenPercentage"><a href="#ScreenPercentage" class="headerlink" title="ScreenPercentage"></a>ScreenPercentage</h3><p>前面有提到使用这个命令来模拟VR的性能，还有就是使用这个命令来快速确认游戏的性能瓶颈是不是GPU。</p>
+<ul>
+<li>Mostly useful to measure problems unrelated to Game Thread</li>
+<li>Use <em>stat unit</em> to show milliseconds</li>
+<li>Use <em><span style="color:green">r.ScreenPercentage 10</span></em><ul>
+<li>Or any number smaller than 100</li>
+<li>Reduces number od pixels sent to the GPU</li>
+<li>If things get faster,you were GPU bound</li>
+<li>If they dont get faster,you were CPU bound</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-Show-Flags"><a href="#6-Show-Flags" class="headerlink" title="6.Show Flags"></a>6.Show Flags</h2><p>One of the simplest ways to look for problems is to turn off partsof your scene.</p>
+<p>Helps know when to look into reducing</p>
+<ul>
+<li>LODs</li>
+<li>Less translucency</li>
+<li>Adjust lighting</li>
+</ul>
+<p><em><span style="color:green">show assetType</span></em> or <em><span style="color:green">showFlag.assetType 0-1</span></em></p>
+<ul>
+<li>Staticmeshes</li>
+<li>Skeletalmeshes</li>
+<li>Particles</li>
+<li>Lighting</li>
+<li>Transluncency</li>
+<li>Reflectionenvironment</li>
+<li>Many more listed in docs</li>
+</ul>
+<h2 id="7-Diagnostic-Tools-Realtime-stats-and-view-modes"><a href="#7-Diagnostic-Tools-Realtime-stats-and-view-modes" class="headerlink" title="7.Diagnostic Tools-Realtime stats and view modes"></a>7.Diagnostic Tools-Realtime stats and view modes</h2><h3 id="Stat-commands"><a href="#Stat-commands" class="headerlink" title="Stat commands"></a>Stat commands</h3><ul>
+<li><em><span style="color:green">stat fps</span></em></li>
+<li><em><span style="color:green">stat unit</span></em></li>
+<li><em><span style="color:green">stat scenerendering</span></em></li>
+<li><em><span style="color:green">stat gpu</span></em></li>
+<li><em><span style="color:green">stat engine</span></em></li>
+<li><em><span style="color:green">stat streaming</span></em></li>
+<li><em><span style="color:green">stat emitters</span></em></li>
+<li><em><span style="color:green">stat lighting</span></em></li>
+</ul>
+<p><span style="color:green"></span></p>
+<h4 id="Stat-SceneRendering"><a href="#Stat-SceneRendering" class="headerlink" title="Stat SceneRendering"></a>Stat SceneRendering</h4><ul>
+<li><p>Only place to see draw calls</p>
+<ul>
+<li>Draw call is a single request to GPU to draw something</li>
+<li>Prime candidate for CPU slowdown on lower-end machines and also on mobile(less of a concern with Metal and Vulkan)</li>
+</ul>
+</li>
+<li><p>Also good palce to see time for:</p>
+<ul>
+<li>Shadows</li>
+<li>Decals</li>
+<li>Post Processing</li>
+<li>Lighting</li>
+</ul>
+</li>
+</ul>
+<p>这个命令挺重要的。</p>
+<h4 id="Stat-GPU"><a href="#Stat-GPU" class="headerlink" title="Stat GPU"></a>Stat GPU</h4><ul>
+<li>Relatively new 4.15</li>
+<li>Realtime readout from GPU</li>
+<li><p>Gives highlights, but not details</p>
+<ul>
+<li>Makes i very good to quickly target trouble spots</li>
+</ul>
+</li>
+<li><p>Use the full GPU profiler if you want to target individual things</p>
+<ul>
+<li>Example:if you want to find specific lights that are casting shadows</li>
+</ul>
+</li>
+</ul>
+<h3 id="Optimization-View-Modes"><a href="#Optimization-View-Modes" class="headerlink" title="Optimization View Modes"></a>Optimization View Modes</h3><h4 id="Shader-Complexity"><a href="#Shader-Complexity" class="headerlink" title="Shader Complexity"></a>Shader Complexity</h4><ul>
+<li>Show how much your shhaders are costing on the GPU</li>
+<li><p>Good way to see overdraw issues</p>
+<ul>
+<li>Overdraw is when a pixel must be drawn multiple times</li>
+<li>One of the most common content issues for optimization</li>
+</ul>
+</li>
+<li><p>Graph at the bottom shows where the pixel and vertex shaders are in terms of performance</p>
+</li>
+<li>If you see a lot of red and white,reconsider your approach</li>
+</ul>
+<h4 id="Quad-Overdraw"><a href="#Quad-Overdraw" class="headerlink" title="Quad Overdraw"></a>Quad Overdraw</h4><ul>
+<li>Helps show how you are using your polygon count on the screen</li>
+<li><p>Can help show where meshes should be LOD-ed down</p>
+<ul>
+<li>Too much green shows areas that should be simplified</li>
+<li>Anything more than green is starting to get costly, commonly translucency overdraw</li>
+</ul>
+</li>
+<li><p>Very useful for MSAA on Forward Rendering,as the number of poly edges dramatically affects performance</p>
+</li>
+</ul>
+<h4 id="Quad-Overdraw-in-depth"><a href="#Quad-Overdraw-in-depth" class="headerlink" title="Quad Overdraw in-depth"></a>Quad Overdraw in-depth</h4><ul>
+<li><p>Your GPU breaks the view up into quads</p>
+<ul>
+<li>2*2 groups of pixels</li>
+<li>This is more efficient than performing all operations on all pixels</li>
+</ul>
+</li>
+<li><p>Very small, or very long, thin geometry wastes pixels</p>
+<ul>
+<li>Regular, large polygons make the best use of pixel quads, best use of GPU</li>
+</ul>
+</li>
+<li><p>Model with regular trangles and LDD aggressively</p>
+</li>
+</ul>
+<blockquote>
+<p>When you are looking at an opaque object on the deferred render, and you see a lot of green ,that means all 4 pixels of that quad had to be recalculated over and over.</p>
+</blockquote>
+<blockquote>
+<p>you should probably be using lower LODs.</p>
+</blockquote>
+<h4 id="Shader-Complexity-Quad-Overdraw"><a href="#Shader-Complexity-Quad-Overdraw" class="headerlink" title="Shader Complexity + Quad Overdraw"></a>Shader Complexity + Quad Overdraw</h4><ul>
+<li>Combines two powerful view modes into one</li>
+<li>USeful to get an idea of expensive shader anf geometry at a glance</li>
+<li>You will still need the individual settings to help diagnose specifics</li>
+</ul>
+<h4 id="Liht-Complexity"><a href="#Liht-Complexity" class="headerlink" title="Liht Complexity"></a>Liht Complexity</h4><ul>
+<li>Visualizes the cost of scene lighting</li>
+<li>As lights overlap, the colors shift from cool to warm to white</li>
+<li>Only shows cost of lighting, not shadowing</li>
+<li>Obviously, white is bad</li>
+<li>Great way to see where you should be lowing light radii</li>
+<li>By flipping this on and off, you can quickly see if the cost of any given light is “worth it”</li>
+</ul>
+<h4 id="Lightmap-Density"><a href="#Lightmap-Density" class="headerlink" title="Lightmap Density"></a>Lightmap Density</h4><ul>
+<li>Shows the density of texels for lightmap purposes</li>
+<li><p>Color shifts from cool to warm an density increases</p>
+<ul>
+<li>Most things can be blue</li>
+<li>Shadow maps don’t often need to be very high res</li>
+</ul>
+</li>
+<li><p>Keep this as low as possible</p>
+<ul>
+<li>Cost adds up quickly</li>
+</ul>
+</li>
+</ul>
+<h4 id="Stationary-Light-Overlap"><a href="#Stationary-Light-Overlap" class="headerlink" title="Stationary Light Overlap"></a>Stationary Light Overlap</h4><ul>
+<li>Only a maxium of 4 stationary lights can affect any given object</li>
+<li>Beyound that,any other lights fall back to Movable(fully dynamic)</li>
+<li>This view mode helps track down where that might be happening</li>
+<li>Reminder to keep lighth radii as small as you can get it</li>
+<li>Do you have a stationary sun?<ul>
+<li>Congratulations! That’s one of the four lights!</li>
+</ul>
+</li>
+</ul>
+<h4 id="LOD-Coloration"><a href="#LOD-Coloration" class="headerlink" title="LOD Coloration"></a>LOD Coloration</h4><ul>
+<li>This mode shows the current mesh LODs in use by color coding them</li>
+<li>Very fast way to through ypur scene and verify that things are LODing when they should be</li>
+<li>Interestingly, mode clearly shows that the trees are not LODing at all in this project<ul>
+<li>Was able to diagnose frame drop instantly using this mode</li>
+</ul>
+</li>
+</ul>
+<h2 id="8-Profilling-Tools"><a href="#8-Profilling-Tools" class="headerlink" title="8.Profilling Tools"></a>8.Profilling Tools</h2><h3 id="CPU-Profiling"><a href="#CPU-Profiling" class="headerlink" title="CPU Profiling"></a>CPU Profiling</h3><ul>
+<li><p>Integrated tool to take apart a segment od your gameplay and see wat’s happening on each tick</p>
+<ul>
+<li>Very useful way to profile Blueprint performance</li>
+</ul>
+</li>
+<li><p>Measures a segment of time</p>
+<ul>
+<li>Within that segment, can look a individual frames or averages</li>
+</ul>
+</li>
+<li><p>Requires two special Stat Commands</p>
+<ul>
+<li><em><span style="color:green">stat startfile</span></em> &amp; <em><span style="color:green">stat stopfile</span></em></li>
+<li>Tese generate a log file between the interval of the commands</li>
+<li>Profiller allows deep analysis that log</li>
+</ul>
+</li>
+<li><p>Step down into world tick and see individual Blueprint functions</p>
+</li>
+<li>Can be used for CPU(Game and Draw) and GPU</li>
+</ul>
+<p>捕获下来的日志可以在UE4的<strong>Session Frontend</strong>中展开分析。</p>
+<h3 id="GPU-Profiling"><a href="#GPU-Profiling" class="headerlink" title="GPU Profiling"></a>GPU Profiling</h3><ul>
+<li><p>Three method to profile GPU functions</p>
+<ul>
+<li><span stype="color:green">stat GPU</span> command in tne viewport</li>
+<li>Recorded file log in the <strong>Session Frontend</strong></li>
+<li>GPU Profiler<ul>
+<li>Can dump out to either the log or its own UI</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Great way to visualize the cost of:</p>
+<ul>
+<li>Base pass</li>
+<li>Lighting</li>
+<li>Shadows</li>
+<li>Post processing</li>
+</ul>
+</li>
+</ul>
+<h3 id="Tracking-Slow-Frame"><a href="#Tracking-Slow-Frame" class="headerlink" title="Tracking Slow Frame"></a>Tracking Slow Frame</h3><ul>
+<li><p><em><span style="color:green">stat dumpHitches</span></em></p>
+<ul>
+<li>The command is used to dump any hitched over a given time in milliseconds out to the log</li>
+<li>Use command <em><span style="color:green">t.hitchThreshhold 0.xx</span></em> to set value (0.05 is default)</li>
+</ul>
+</li>
+<li><p><em><span style="color:green">memReport -full</span></em></p>
+<ul>
+<li>Full breakdown of how memory is being used</li>
+<li>There’s a great blog post on how this works</li>
+</ul>
+</li>
+</ul>
+<p>虽然我还没有尝试过但是我可以使用上面的命令来找到游戏运行时候突然消耗非常高的那一帧究竟做了什么。</p>
+<h3 id="startFPSChart-and-stopFPSChart"><a href="#startFPSChart-and-stopFPSChart" class="headerlink" title="startFPSChart and stopFPSChart"></a>startFPSChart and stopFPSChart</h3><ul>
+<li><p>You can use the commands <em><span style="color:green">startFPSChart/span&gt;</span></em> and <em><span style="color:green">stopFPSChart/span&gt;</span></em> to create a diagram of framerates over time</p>
+</li>
+<li><p>You can call these at start and end of a Level Sequence to automatically read out the frame rates along a given course, as defined by a cinematic</p>
+</li>
+</ul>
+<p>这里使用完这个命令之后会输出日志文件，需要使用别的软件把日志文件转化为图表。我用了GoogleDrive上的Excel做的。</p>
+<h2 id="9-Blueprint-Optimizations-Or-Keeping-the-Kids-from-Eating-the-Crayons"><a href="#9-Blueprint-Optimizations-Or-Keeping-the-Kids-from-Eating-the-Crayons" class="headerlink" title="9.Blueprint Optimizations - Or:Keeping the Kids from Eating the Crayons"></a>9.Blueprint Optimizations - Or:Keeping the Kids from Eating the Crayons</h2><h1 id="GPU-Performance-for-Game-Artists"><a href="#GPU-Performance-for-Game-Artists" class="headerlink" title="GPU Performance for Game Artists"></a>GPU Performance for Game Artists</h1><p>这是上面的视频里大力推荐的一篇文章。有时间我也得看一下，去理解一下整理一下。</p>
 <ul>
 <li><a href="www.fragmentbuffer.com/gpu-performance-for-game-artists/">GPU Performance for Game Artists</a></li>
 </ul>
@@ -887,7 +1191,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimization"><span class="nav-number">1.</span> <span class="nav-text">Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Emulate-HMD-performance"><span class="nav-number">1.1.</span> <span class="nav-text">Emulate HMD performance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ready-Profiling"><span class="nav-number">1.2.</span> <span class="nav-text">Ready Profiling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VR-Instanced-Stereo"><span class="nav-number">1.3.</span> <span class="nav-text">VR Instanced Stereo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Base-Pass"><span class="nav-number">1.4.</span> <span class="nav-text">1.Base Pass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimization-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">Optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU-Visualizer"><span class="nav-number">1.4.2.</span> <span class="nav-text">GPU Visualizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-BasePass-Dynamic"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">1.BasePass-Dynamic</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-PrePass"><span class="nav-number">1.5.</span> <span class="nav-text">2.PrePass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Translucency"><span class="nav-number">1.6.</span> <span class="nav-text">3.Translucency</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Separate-Translucency"><span class="nav-number">1.6.1.</span> <span class="nav-text">Separate Translucency</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Shadow"><span class="nav-number">1.7.</span> <span class="nav-text">4.Shadow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fake-Shadow"><span class="nav-number">1.7.1.</span> <span class="nav-text">Fake Shadow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Capsule-Shadow"><span class="nav-number">1.7.2.</span> <span class="nav-text">Capsule Shadow</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Command-Introduction"><span class="nav-number">1.8.</span> <span class="nav-text">Command Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stat-SceneRendering"><span class="nav-number">1.8.1.</span> <span class="nav-text">stat SceneRendering</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RenderQueryResult"><span class="nav-number">1.8.1.1.</span> <span class="nav-text">RenderQueryResult</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bluerint优化"><span class="nav-number">2.</span> <span class="nav-text">Bluerint优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tick-Event"><span class="nav-number">2.1.</span> <span class="nav-text">Tick Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spawn"><span class="nav-number">2.2.</span> <span class="nav-text">Spawn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nativizing-Blueprint"><span class="nav-number">2.3.</span> <span class="nav-text">Nativizing Blueprint</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Landscape-Optimization"><span class="nav-number">3.</span> <span class="nav-text">Landscape Optimization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTC-Vive"><span class="nav-number">4.</span> <span class="nav-text">HTC Vive</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Smoothed-Frame-Rate-Range"><span class="nav-number">4.1.</span> <span class="nav-text">Smoothed Frame Rate Range</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的一些概念"><span class="nav-number">5.</span> <span class="nav-text">UE4中的一些概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Instanced-Static-Mesh"><span class="nav-number">5.1.</span> <span class="nav-text">Instanced Static Mesh</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#剔除"><span class="nav-number">5.1.1.</span> <span class="nav-text">剔除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的Profiling"><span class="nav-number">5.1.2.</span> <span class="nav-text">简单的Profiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Render-Query-Result"><span class="nav-number">5.1.3.</span> <span class="nav-text">Render Query Result</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何正确的使用"><span class="nav-number">5.1.4.</span> <span class="nav-text">如何正确的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Culling-Distance"><span class="nav-number">5.1.5.</span> <span class="nav-text">Culling Distance</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4-Performance-and-Profiling"><span class="nav-number">6.</span> <span class="nav-text">UE4 Performance and Profiling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPU-Performance-for-Game-Artists"><span class="nav-number">7.</span> <span class="nav-text">GPU Performance for Game Artists</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tech-Art-Aid-videos-on-Youtube"><span class="nav-number">8.</span> <span class="nav-text">Tech Art Aid videos on Youtube</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Optimization"><span class="nav-number">1.</span> <span class="nav-text">Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Emulate-HMD-performance"><span class="nav-number">1.1.</span> <span class="nav-text">Emulate HMD performance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ready-Profiling"><span class="nav-number">1.2.</span> <span class="nav-text">Ready Profiling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VR-Instanced-Stereo"><span class="nav-number">1.3.</span> <span class="nav-text">VR Instanced Stereo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Base-Pass"><span class="nav-number">1.4.</span> <span class="nav-text">1.Base Pass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimization-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">Optimization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU-Visualizer"><span class="nav-number">1.4.2.</span> <span class="nav-text">GPU Visualizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-BasePass-Dynamic"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">1.BasePass-Dynamic</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-PrePass"><span class="nav-number">1.5.</span> <span class="nav-text">2.PrePass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Translucency"><span class="nav-number">1.6.</span> <span class="nav-text">3.Translucency</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Separate-Translucency"><span class="nav-number">1.6.1.</span> <span class="nav-text">Separate Translucency</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Shadow"><span class="nav-number">1.7.</span> <span class="nav-text">4.Shadow</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fake-Shadow"><span class="nav-number">1.7.1.</span> <span class="nav-text">Fake Shadow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Capsule-Shadow"><span class="nav-number">1.7.2.</span> <span class="nav-text">Capsule Shadow</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Command-Introduction"><span class="nav-number">1.8.</span> <span class="nav-text">Command Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stat-SceneRendering"><span class="nav-number">1.8.1.</span> <span class="nav-text">stat SceneRendering</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RenderQueryResult"><span class="nav-number">1.8.1.1.</span> <span class="nav-text">RenderQueryResult</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bluerint优化"><span class="nav-number">2.</span> <span class="nav-text">Bluerint优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tick-Event"><span class="nav-number">2.1.</span> <span class="nav-text">Tick Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spawn"><span class="nav-number">2.2.</span> <span class="nav-text">Spawn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nativizing-Blueprint"><span class="nav-number">2.3.</span> <span class="nav-text">Nativizing Blueprint</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Landscape-Optimization"><span class="nav-number">3.</span> <span class="nav-text">Landscape Optimization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTC-Vive"><span class="nav-number">4.</span> <span class="nav-text">HTC Vive</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Smoothed-Frame-Rate-Range"><span class="nav-number">4.1.</span> <span class="nav-text">Smoothed Frame Rate Range</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的一些概念"><span class="nav-number">5.</span> <span class="nav-text">UE4中的一些概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Instanced-Static-Mesh"><span class="nav-number">5.1.</span> <span class="nav-text">Instanced Static Mesh</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#剔除"><span class="nav-number">5.1.1.</span> <span class="nav-text">剔除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的Profiling"><span class="nav-number">5.1.2.</span> <span class="nav-text">简单的Profiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Render-Query-Result"><span class="nav-number">5.1.3.</span> <span class="nav-text">Render Query Result</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何正确的使用"><span class="nav-number">5.1.4.</span> <span class="nav-text">如何正确的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Culling-Distance"><span class="nav-number">5.1.5.</span> <span class="nav-text">Culling Distance</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4-Performance-and-Profiling"><span class="nav-number">6.</span> <span class="nav-text">UE4 Performance and Profiling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-CPU-GPU-Profiler"><span class="nav-number">6.1.</span> <span class="nav-text">1.CPU/GPU Profiler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Profiling-in-a-Build"><span class="nav-number">6.2.</span> <span class="nav-text">2.Profiling in a Build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Profiling-from-within-the-Editor"><span class="nav-number">6.3.</span> <span class="nav-text">3.Profiling from within the Editor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-General-Process"><span class="nav-number">6.4.</span> <span class="nav-text">4.General Process</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Game-Thread"><span class="nav-number">6.4.1.</span> <span class="nav-text">Game Thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-Render"><span class="nav-number">6.4.2.</span> <span class="nav-text">CPU Render</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU-Render"><span class="nav-number">6.4.3.</span> <span class="nav-text">GPU Render</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Measuring-in-Milliseconds"><span class="nav-number">6.5.</span> <span class="nav-text">5.Measuring in Milliseconds</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ScreenPercentage"><span class="nav-number">6.5.1.</span> <span class="nav-text">ScreenPercentage</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Show-Flags"><span class="nav-number">6.6.</span> <span class="nav-text">6.Show Flags</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-Diagnostic-Tools-Realtime-stats-and-view-modes"><span class="nav-number">6.7.</span> <span class="nav-text">7.Diagnostic Tools-Realtime stats and view modes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stat-commands"><span class="nav-number">6.7.1.</span> <span class="nav-text">Stat commands</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Stat-SceneRendering"><span class="nav-number">6.7.1.1.</span> <span class="nav-text">Stat SceneRendering</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Stat-GPU"><span class="nav-number">6.7.1.2.</span> <span class="nav-text">Stat GPU</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimization-View-Modes"><span class="nav-number">6.7.2.</span> <span class="nav-text">Optimization View Modes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Complexity"><span class="nav-number">6.7.2.1.</span> <span class="nav-text">Shader Complexity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Quad-Overdraw"><span class="nav-number">6.7.2.2.</span> <span class="nav-text">Quad Overdraw</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Quad-Overdraw-in-depth"><span class="nav-number">6.7.2.3.</span> <span class="nav-text">Quad Overdraw in-depth</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shader-Complexity-Quad-Overdraw"><span class="nav-number">6.7.2.4.</span> <span class="nav-text">Shader Complexity + Quad Overdraw</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Liht-Complexity"><span class="nav-number">6.7.2.5.</span> <span class="nav-text">Liht Complexity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lightmap-Density"><span class="nav-number">6.7.2.6.</span> <span class="nav-text">Lightmap Density</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Stationary-Light-Overlap"><span class="nav-number">6.7.2.7.</span> <span class="nav-text">Stationary Light Overlap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LOD-Coloration"><span class="nav-number">6.7.2.8.</span> <span class="nav-text">LOD Coloration</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-Profilling-Tools"><span class="nav-number">6.8.</span> <span class="nav-text">8.Profilling Tools</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-Profiling"><span class="nav-number">6.8.1.</span> <span class="nav-text">CPU Profiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GPU-Profiling"><span class="nav-number">6.8.2.</span> <span class="nav-text">GPU Profiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tracking-Slow-Frame"><span class="nav-number">6.8.3.</span> <span class="nav-text">Tracking Slow Frame</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#startFPSChart-and-stopFPSChart"><span class="nav-number">6.8.4.</span> <span class="nav-text">startFPSChart and stopFPSChart</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Blueprint-Optimizations-Or-Keeping-the-Kids-from-Eating-the-Crayons"><span class="nav-number">6.9.</span> <span class="nav-text">9.Blueprint Optimizations - Or:Keeping the Kids from Eating the Crayons</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPU-Performance-for-Game-Artists"><span class="nav-number">7.</span> <span class="nav-text">GPU Performance for Game Artists</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tech-Art-Aid-videos-on-Youtube"><span class="nav-number">8.</span> <span class="nav-text">Tech Art Aid videos on Youtube</span></a></li></ol></div>
             
 
           </div>
