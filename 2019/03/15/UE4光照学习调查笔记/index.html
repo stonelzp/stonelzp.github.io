@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-11T10:55:24.383Z">
+<meta property="og:updated_time" content="2019-04-16T08:16:21.769Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4光照学习调查笔记">
 <meta name="twitter:description" content="提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-11T19:55:24+09:00">
-                2019-04-11
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T17:16:21+09:00">
+                2019-04-16
               </time>
             
           </span>
@@ -633,11 +633,15 @@
 <h2 id="Lighting-needs-to-be-rebuilt"><a href="#Lighting-needs-to-be-rebuilt" class="headerlink" title="Lighting needs to be rebuilt"></a>Lighting needs to be rebuilt</h2><p>光照烘焙，一般的情况下这个提示是要烘焙光照，但是我遇到了烘焙光照之后还有这个提示的问题。是在我删除掉场景里的所有FoliageStaticMesh之后。</p>
 <h3 id="DumpUnbuildLightInteractions"><a href="#DumpUnbuildLightInteractions" class="headerlink" title="DumpUnbuildLightInteractions"></a>DumpUnbuildLightInteractions</h3><p>在Command Line中输入上述的命令，可以在OutputMessage里面输出需要烘焙的对象信息。</p>
 <h1 id="Light-Map"><a href="#Light-Map" class="headerlink" title="Light Map"></a>Light Map</h1><p>光照贴图这个部分能说的东西实在时候太多了，要理解的东西也非常多，<strong>LightMap</strong>具体是个什么东西，用来存储什么数据？搜LightMap的时候又会出现其他的概念，<strong>LightMass</strong>又是什么？</p>
+<p>LightMass在上面也有提到一点。</p>
 <h2 id="Unwrapping-UVs-for-Lightmaps"><a href="#Unwrapping-UVs-for-Lightmaps" class="headerlink" title="Unwrapping UVs for Lightmaps"></a>Unwrapping UVs for Lightmaps</h2><p>当试着搜LightMap的时候，就会出现这篇官方文档<br>-<a href="https://docs.unrealengine.com/en-US/Engine/Content/Types/StaticMeshes/LightmapUnwrapping" target="_blank" rel="noopener">Unwrapping UVs for Lightmaps</a></p>
 <h2 id="Lightmass-1"><a href="#Lightmass-1" class="headerlink" title="Lightmass"></a>Lightmass</h2><p>这个有我下载的PDF，有时间总结一下。</p>
 <ul>
 <li><a href="">Lightmassの仕組み ~Lightmap編~ (Epic Games Japan- 篠山範明)</a></li>
 </ul>
+<p>这篇文章提到的：</p>
+<p><strong>LightMap和ShadowMap是以Actor为单位各自保持的。</strong></p>
+<p>可以在Statistics中的StaticMeshLighting info中看到Actor的各自持有的<strong>TextureLM</strong>和<strong>TextureSM</strong>。</p>
 <h1 id="LightingTroubleshootingGuide"><a href="#LightingTroubleshootingGuide" class="headerlink" title="LightingTroubleshootingGuide"></a>LightingTroubleshootingGuide</h1><ul>
 <li><a href="https://wiki.unrealengine.com/LightingTroubleshootingGuide#Lightmap_Resolution_.2F_Shadow_Quality" target="_blank" rel="noopener">LightTroubleshootingGuide</a></li>
 </ul>
