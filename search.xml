@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[UE4-SplineComponent学习]]></title>
+    <url>%2F2019%2F04%2F22%2FUE4-SplineComponent%E5%AD%A6%E4%B9%A0%2F</url>
+    <content type="text"><![CDATA[偶然发现了一个很有趣的控件，Spline Component，感觉会很有用就记下来了。 Spline Using Splines &amp; Spline Components | Live Training | Unreal Engine 这是四年前的视频你敢信？！ 记录一下这个视频里出现的常用的关于Spline的操作函数。 Functions1.GetNumSplinePoints Store number of Spline points. 在Spline的Component中输入Get就能看到好多和其相关的函数。 2.AddSplinePoint Spline Mesh]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UE4-Material学习]]></title>
     <url>%2F2019%2F04%2F11%2FUE4-Material%E5%AD%A6%E4%B9%A0%2F</url>
     <content type="text"><![CDATA[关于UE4中的材质，也有好多能说的，这里记录一些遇到的关于材质的知识点作为知识储备。 MaterialMaterial nodeShadowPassSwitchMaterial Parameter Collections Material Parameter Collections]]></content>
