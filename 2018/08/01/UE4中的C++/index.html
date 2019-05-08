@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-01T06:09:37.121Z">
+<meta property="og:updated_time" content="2019-05-08T11:21:52.029Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的C++">
 <meta name="twitter:description" content="UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T15:09:37+09:00">
-                2018-08-01
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-08T20:21:52+09:00">
+                2019-05-08
               </time>
             
           </span>
@@ -408,7 +408,21 @@
 <li>在构造函数中不能使用<code>NewObject&lt;T&gt;</code>生成其他的对实例。会使程序Crash。如果想生成其他的Object的话使用<code>FObjectInitializer::CreateDefaultSubobject&lt;T&gt;</code>函数  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ASomeActor::ASomeActor(<span class="keyword">const</span> FObjectInitializer &amp; ObjectInitializer) : Super(ObjectInitializer)&#123;</span><br><span class="line">   SampleActor = ObjectInitialize.CreateDefaultSubobject&lt;ASampleActor&gt;(<span class="keyword">this</span>, TEXT(<span class="string">"SampleActor"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h1 id="Actor的实例化"><a href="#Actor的实例化" class="headerlink" title="Actor的实例化"></a>Actor的实例化</h1><h1 id="Actor的Component实例化"><a href="#Actor的Component实例化" class="headerlink" title="Actor的Component实例化"></a>Actor的Component实例化</h1><h1 id="从Content-Asset-中加载Object对象数据"><a href="#从Content-Asset-中加载Object对象数据" class="headerlink" title="从Content(Asset)中加载Object对象数据"></a>从Content(Asset)中加载Object对象数据</h1><h1 id="UE4中的容器"><a href="#UE4中的容器" class="headerlink" title="UE4中的容器"></a>UE4中的容器</h1>
+<h1 id="Actor的实例化"><a href="#Actor的实例化" class="headerlink" title="Actor的实例化"></a>Actor的实例化</h1><h1 id="Actor的Component实例化"><a href="#Actor的Component实例化" class="headerlink" title="Actor的Component实例化"></a>Actor的Component实例化</h1><h2 id="1-在UE4C-中试着添加component"><a href="#1-在UE4C-中试着添加component" class="headerlink" title="1.在UE4C++中试着添加component"></a>1.在UE4C++中试着添加component</h2><h3 id="1-添加SkeletalMeshComponent"><a href="#1-添加SkeletalMeshComponent" class="headerlink" title="1.添加SkeletalMeshComponent"></a>1.添加SkeletalMeshComponent</h3><p>或许有一天我会再次遇见这个问题，就是想要用C++来写全部的东西。比如说在C++中为一个Actor添加ActorComponent（这个ActorComponent就是要写的C++本体了），这是很顺利。然后再为这个Actor添加一个SkeletalMeshComponent组件。</p>
+<p>问题就出现在这里。</p>
+<p>我天真的以为在这个ActorComponent中使用<code>this-&gt;GetOwner()-&gt;GetRootComponent()</code>然后创建组件就能成功了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其他的省略</span></span><br><span class="line"><span class="keyword">this</span>-&gt;GetOwner()-&gt;GetRootComponent()-&gt;CreateDefaultSubject&lt;USkeletalMeshComponent&gt;(TEXT(<span class="string">"SkeletalMeshName"</span>));</span><br></pre></td></tr></table></figure>
+<p>然后UE4Editor就驾崩了。</p>
+<p><code>CreateDefaultSubject</code>直接用就行，不用加前面的一串限定，我还不知原因。把前面删了之后就不会崩溃了。而且去View试图中找Actor下面也确实有生成的SkeletalMeshComponent了。</p>
+<p>于是我就SetSkeletalMesh之后发现，明明SkeletalMesh上面有值，也就是正确赋值了，Mesh不显示。</p>
+<p>对比了一下终于发现这种方法生成的SkeletalMeshComponent，后面带了一个<strong>inherited</strong>的标识。</p>
+<p>去搜了一下<strong>inherited skeletal mesh component doesnt show mesh</strong></p>
+<p>天杀的这种UE4程序级别的BUG也能被我碰到。都2019年了还没解决么。看样子是15年提的问题。</p>
+<p>也许会有别的方式来为一个Actor在C++中创建SkeletalMeshComponent，但是我没有找到。想了想，还是直接用Blueprint吧，当然直接让Actor直接Add一个Component就能解决然后在C++中保留这个组件的ref就行，但是这样的话不是纯C++的话，为什么直接效率一些直接用BP吧。</p>
+<p>为什么我C++中创建就是<em>inherited</em>的对象？是创建的姿势不对么…</p>
+<p>我也试过用<code>NewObject&lt;USkeletalMeshComponent&gt;</code>来创建过，但可能是因为代码在构造函数里，还没运行，只是编译一下</p>
+<p>UE4Editor就驾崩了。</p>
+<h1 id="从Content-Asset-中加载Object对象数据"><a href="#从Content-Asset-中加载Object对象数据" class="headerlink" title="从Content(Asset)中加载Object对象数据"></a>从Content(Asset)中加载Object对象数据</h1><h1 id="UE4中的容器"><a href="#UE4中的容器" class="headerlink" title="UE4中的容器"></a>UE4中的容器</h1>
       
     </div>
     
@@ -633,7 +647,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#值类型？指针？"><span class="nav-number">1.</span> <span class="nav-text">值类型？指针？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4生成类对象实例-Instance"><span class="nav-number">2.</span> <span class="nav-text">UE4生成类对象实例(Instance)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor的实例化"><span class="nav-number">3.</span> <span class="nav-text">Actor的实例化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor的Component实例化"><span class="nav-number">4.</span> <span class="nav-text">Actor的Component实例化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从Content-Asset-中加载Object对象数据"><span class="nav-number">5.</span> <span class="nav-text">从Content(Asset)中加载Object对象数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的容器"><span class="nav-number">6.</span> <span class="nav-text">UE4中的容器</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#值类型？指针？"><span class="nav-number">1.</span> <span class="nav-text">值类型？指针？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4生成类对象实例-Instance"><span class="nav-number">2.</span> <span class="nav-text">UE4生成类对象实例(Instance)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor的实例化"><span class="nav-number">3.</span> <span class="nav-text">Actor的实例化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor的Component实例化"><span class="nav-number">4.</span> <span class="nav-text">Actor的Component实例化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-在UE4C-中试着添加component"><span class="nav-number">4.1.</span> <span class="nav-text">1.在UE4C++中试着添加component</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-添加SkeletalMeshComponent"><span class="nav-number">4.1.1.</span> <span class="nav-text">1.添加SkeletalMeshComponent</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#从Content-Asset-中加载Object对象数据"><span class="nav-number">5.</span> <span class="nav-text">从Content(Asset)中加载Object对象数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的容器"><span class="nav-number">6.</span> <span class="nav-text">UE4中的容器</span></a></li></ol></div>
             
 
           </div>
