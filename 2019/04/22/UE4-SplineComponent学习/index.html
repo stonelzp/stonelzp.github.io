@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="偶然发现了一个很有趣的控件，Spline Component，感觉会很有用就记下来了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-23T09:16:06.182Z">
+<meta property="og:updated_time" content="2019-05-14T06:51:00.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-SplineComponent学习">
 <meta name="twitter:description" content="偶然发现了一个很有趣的控件，Spline Component，感觉会很有用就记下来了。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-04-23T18:16:06+09:00">
-                2019-04-23
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-14T15:51:00+09:00">
+                2019-05-14
               </time>
             
           </span>
@@ -409,7 +409,9 @@
 <p>Store number of Spline points.</p>
 <p>在Spline的Component中输入Get就能看到好多和其相关的函数。</p>
 <p>2.AddSplinePoint</p>
-<h1 id="Spline-Mesh"><a href="#Spline-Mesh" class="headerlink" title="Spline Mesh"></a>Spline Mesh</h1>
+<h1 id="Spline-Mesh"><a href="#Spline-Mesh" class="headerlink" title="Spline Mesh"></a>Spline Mesh</h1><h1 id="在C-中使用Spline"><a href="#在C-中使用Spline" class="headerlink" title="在C++中使用Spline"></a>在C++中使用Spline</h1><h2 id="从Actor中获取SplineComponent"><a href="#从Actor中获取SplineComponent" class="headerlink" title="从Actor中获取SplineComponent"></a>从Actor中获取SplineComponent</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AActor* Object;</span><br><span class="line"></span><br><span class="line">USplineComponent * comp = Object-&gt;FindComponentByClass&lt;USplineComponent&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> splineLength = comp-&gt;GetSplineLength();</span><br></pre></td></tr></table></figure>
+<p>原本我是把这个Spline控件放在了一个Actor上面，然后更新DistanceAlongSpline的变量值来控制Actor在Spline上的位置，但是我却忽视了Actor移动的时候这个Spline也在移动，所以没有按照预期的进行。只有将Actor和spline分开，放到另外一个Actor上了。</p>
+
       
     </div>
     
@@ -632,7 +634,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spline"><span class="nav-number">1.</span> <span class="nav-text">Spline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Functions"><span class="nav-number">1.1.</span> <span class="nav-text">Functions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spline-Mesh"><span class="nav-number">2.</span> <span class="nav-text">Spline Mesh</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spline"><span class="nav-number">1.</span> <span class="nav-text">Spline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Functions"><span class="nav-number">1.1.</span> <span class="nav-text">Functions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spline-Mesh"><span class="nav-number">2.</span> <span class="nav-text">Spline Mesh</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#在C-中使用Spline"><span class="nav-number">3.</span> <span class="nav-text">在C++中使用Spline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#从Actor中获取SplineComponent"><span class="nav-number">3.1.</span> <span class="nav-text">从Actor中获取SplineComponent</span></a></li></ol></li></ol></div>
             
 
           </div>

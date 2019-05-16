@@ -14,7 +14,7 @@
   <entry>
     <title><![CDATA[UE4-SplineComponent学习]]></title>
     <url>%2F2019%2F04%2F22%2FUE4-SplineComponent%E5%AD%A6%E4%B9%A0%2F</url>
-    <content type="text"><![CDATA[偶然发现了一个很有趣的控件，Spline Component，感觉会很有用就记下来了。 Spline Using Splines &amp; Spline Components | Live Training | Unreal Engine 这是四年前的视频你敢信？！ 记录一下这个视频里出现的常用的关于Spline的操作函数。 Functions1.GetNumSplinePoints Store number of Spline points. 在Spline的Component中输入Get就能看到好多和其相关的函数。 2.AddSplinePoint Spline Mesh]]></content>
+    <content type="text"><![CDATA[偶然发现了一个很有趣的控件，Spline Component，感觉会很有用就记下来了。 Spline Using Splines &amp; Spline Components | Live Training | Unreal Engine 这是四年前的视频你敢信？！ 记录一下这个视频里出现的常用的关于Spline的操作函数。 Functions1.GetNumSplinePoints Store number of Spline points. 在Spline的Component中输入Get就能看到好多和其相关的函数。 2.AddSplinePoint Spline Mesh在C++中使用Spline从Actor中获取SplineComponent12345AActor* Object;USplineComponent * comp = Object-&gt;FindComponentByClass&lt;USplineComponent&gt;();float splineLength = comp-&gt;GetSplineLength(); 原本我是把这个Spline控件放在了一个Actor上面，然后更新DistanceAlongSpline的变量值来控制Actor在Spline上的位置，但是我却忽视了Actor移动的时候这个Spline也在移动，所以没有按照预期的进行。只有将Actor和spline分开，放到另外一个Actor上了。]]></content>
       <categories>
         <category>UnrealEngine4</category>
       </categories>
