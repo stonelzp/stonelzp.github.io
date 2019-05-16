@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-01T03:18:30.997Z">
+<meta property="og:updated_time" content="2019-05-16T06:50:19.039Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的函数回调实现">
 <meta name="twitter:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T12:18:30+09:00">
-                2018-08-01
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-16T15:50:19+09:00">
+                2019-05-16
               </time>
             
           </span>
@@ -402,7 +402,7 @@
 <p>说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。</p>
 <a id="more"></a>
 <p>上面的话是<a href="http://sourcecodereadingofunreal.readthedocs.io/en/latest/content/programmingSkill.html" target="_blank" rel="noopener">Unreal用到一些编程技巧</a>里的内容。</p>
-<h1 id="UE4中的函数回调-CallBack"><a href="#UE4中的函数回调-CallBack" class="headerlink" title="UE4中的函数回调(CallBack)"></a>UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
+<h1 id="1-先理解什么是”函数回调”"><a href="#1-先理解什么是”函数回调”" class="headerlink" title="1.先理解什么是”函数回调”"></a>1.先理解什么是”函数回调”</h1><h1 id="UE4中的函数回调-CallBack"><a href="#UE4中的函数回调-CallBack" class="headerlink" title="UE4中的函数回调(CallBack)"></a>UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
 <p>关于UE C++的代理，存在着以下的几种方式：</p>
 <ul>
 <li>静态的Single-cast Delegates</li>
@@ -682,7 +682,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的函数回调-CallBack"><span class="nav-number">1.</span> <span class="nav-text">UE4中的函数回调(CallBack)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Multi-cast-Delegates"><span class="nav-number">1.1.</span> <span class="nav-text">Dynamic Multi-cast Delegates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blueprint-Event与Blueprint-Function"><span class="nav-number">1.2.</span> <span class="nav-text">Blueprint Event与Blueprint Function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要使用Delegate和Event？"><span class="nav-number">2.</span> <span class="nav-text">为什么要使用Delegate和Event？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Event"><span class="nav-number">2.1.</span> <span class="nav-text">关于Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate的使用情况"><span class="nav-number">2.2.</span> <span class="nav-text">Delegate的使用情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推测1"><span class="nav-number">2.2.1.</span> <span class="nav-text">推测1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-中的代理实现"><span class="nav-number">3.</span> <span class="nav-text">C++中的代理实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-先理解什么是”函数回调”"><span class="nav-number">1.</span> <span class="nav-text">1.先理解什么是”函数回调”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的函数回调-CallBack"><span class="nav-number">2.</span> <span class="nav-text">UE4中的函数回调(CallBack)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Multi-cast-Delegates"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Multi-cast Delegates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blueprint-Event与Blueprint-Function"><span class="nav-number">2.2.</span> <span class="nav-text">Blueprint Event与Blueprint Function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要使用Delegate和Event？"><span class="nav-number">3.</span> <span class="nav-text">为什么要使用Delegate和Event？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Event"><span class="nav-number">3.1.</span> <span class="nav-text">关于Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate的使用情况"><span class="nav-number">3.2.</span> <span class="nav-text">Delegate的使用情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推测1"><span class="nav-number">3.2.1.</span> <span class="nav-text">推测1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-中的代理实现"><span class="nav-number">4.</span> <span class="nav-text">C++中的代理实现</span></a></li></ol></div>
             
 
           </div>
