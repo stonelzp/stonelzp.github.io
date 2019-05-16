@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-16T06:50:19.039Z">
+<meta property="og:updated_time" content="2019-05-16T09:54:53.119Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的函数回调实现">
 <meta name="twitter:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-16T15:50:19+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-16T18:54:53+09:00">
                 2019-05-16
               </time>
             
@@ -402,7 +402,18 @@
 <p>说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。</p>
 <a id="more"></a>
 <p>上面的话是<a href="http://sourcecodereadingofunreal.readthedocs.io/en/latest/content/programmingSkill.html" target="_blank" rel="noopener">Unreal用到一些编程技巧</a>里的内容。</p>
-<h1 id="1-先理解什么是”函数回调”"><a href="#1-先理解什么是”函数回调”" class="headerlink" title="1.先理解什么是”函数回调”"></a>1.先理解什么是”函数回调”</h1><h1 id="UE4中的函数回调-CallBack"><a href="#UE4中的函数回调-CallBack" class="headerlink" title="UE4中的函数回调(CallBack)"></a>UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
+<h1 id="1-先理解什么是”函数回调”"><a href="#1-先理解什么是”函数回调”" class="headerlink" title="1.先理解什么是”函数回调”"></a>1.先理解什么是”函数回调”</h1><blockquote>
+<p>A “callback” is any function that is called by another function whitch takes the first function as a parameter. A lot of the time, a “callback” is a function that is called when something happens. That something can be called an “event” in programmer-speak.</p>
+</blockquote>
+<p>摘自Stack Overflow：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/9596276/how-to-explain-callbacks-in-plain-english-how-are-they-different-from-calling-o" target="_blank" rel="noopener">How to explain callbacks in plain english? How are they different from calling one function from another function?</a></li>
+</ul>
+<p>实际的应用场景就类似：<strong>类A需要类B做一件事情，类B做完之后需要告知类A已经做完了这件事情，至于告知的具体方法(函数的具体实现)类A并没有事先告诉类B(编译期间)，等类B做完看一下类A留下的便条(绑定的事件)，根据信条里面的内容(函数的具体实现)来通知类A。</strong></p>
+<p>用简单的代码来表示CallBack就是：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"B work has done."</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void B( void (A_prt) (void))&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>学了C++的虚函数之后，理解起来就是快 =。=</p>
+<h1 id="2-UE4中的函数回调-CallBack"><a href="#2-UE4中的函数回调-CallBack" class="headerlink" title="2.UE4中的函数回调(CallBack)"></a>2.UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
 <p>关于UE C++的代理，存在着以下的几种方式：</p>
 <ul>
 <li>静态的Single-cast Delegates</li>
@@ -438,6 +449,12 @@
 <p><strong>Event的默认实现</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File: CallbackExample.cpp</span></span><br><span class="line"><span class="comment">// Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//static FVector TheVector事先声明的属性</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VectorInputEvent_Implementation(<span class="keyword">const</span> FVector&amp; VecValue)-&gt;<span class="keyword">void</span>&#123;</span><br><span class="line">    TheVector = VecValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VecArrayInputFuncion_Implementation(<span class="keyword">const</span> TArray&lt;FVector&gt;&amp; VecValues)-&gt; TArray&lt;<span class="keyword">float</span>&gt;&#123;</span><br><span class="line">    TArray&lt;<span class="keyword">float</span>&gt; Result;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; Val : VecValue)</span><br><span class="line">        Result.Emplace(FVector::Dist(TheVector, Val));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>以上的代码实装完成之后，继承了上面的<code>CallbackExample</code>类的Blueprint就可以在Blueprint Editor中对上述UE C++中的事件与函数进行重写了。</p>
 <p>以上，是对UE中的代理与事件，在可用范围内的总结与实现。但是对于在什么情况下使用这一点上仍然有许多疑问。</p>
+<h2 id="UE-C-之间简单的函数回调实现"><a href="#UE-C-之间简单的函数回调实现" class="headerlink" title="UE C++之间简单的函数回调实现"></a>UE C++之间简单的函数回调实现</h2><p>说实话，函数回调跟代理的概念我还是没太理清。在许多的实际应用上，有些操作你叫它代理也行，叫它函数回调也行。用自己的感受就好比是参考系不同一样。就像上面举的函数回调的例子来说：</p>
+<p>函数回调就是类A想要在类B在运行中达成某种条件的时候调用类A提供的函数。这个时候类A是主参考系。</p>
+<p>代理就是类B在运行中达成某种条件的时候想要通知类A，但是不知道方法，而且觉得这个方法还是由类A决定为好，于是就提供给类A一个纸条(代理)，类A要实现代理内容。这个时候类B就是主参考系了。</p>
+<p>我是这样理解的，不知道是否正确。但是在UE4之中delegate的出现比较多，之后就用代理来称呼了。</p>
+<p>在Blueprint和AnimationBlueprint中可以很容易的实现代理，利用Blueprint自带的<strong>Event Dispatchers</strong>就可以快速的实现。函数绑定的时候需要注意的是要Cast正确的对象。</p>
+<p>在UE C++实现代理就稍微有些复杂。但还是很简单的。</p>
 <h1 id="为什么要使用Delegate和Event？"><a href="#为什么要使用Delegate和Event？" class="headerlink" title="为什么要使用Delegate和Event？"></a>为什么要使用Delegate和Event？</h1><p>关于代理的实现，就算明白了也需要知道需要在什么情况下使用代理，否则没有意义。</p>
 <h2 id="关于Event"><a href="#关于Event" class="headerlink" title="关于Event"></a>关于Event</h2><p>在UE4中的Blueprint中应没有委托这一说，全部是以Event的名字来称呼的。</p>
 <h2 id="Delegate的使用情况"><a href="#Delegate的使用情况" class="headerlink" title="Delegate的使用情况"></a>Delegate的使用情况</h2><h3 id="推测1"><a href="#推测1" class="headerlink" title="推测1"></a>推测1</h3><p>面向对象的说法只是一种理想的情况，总会有想要实现别人功能的情况。比如说ClassA想要实现一个功能，但是明显这个功能是由ClassB负责的部分，要是自己来实现的话不好，所以自己的话，声明一个Delegate，想用的时候就把这个广播出去(Broadcast)，实现了这接口的内容会被调用。</p>
@@ -682,7 +699,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-先理解什么是”函数回调”"><span class="nav-number">1.</span> <span class="nav-text">1.先理解什么是”函数回调”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的函数回调-CallBack"><span class="nav-number">2.</span> <span class="nav-text">UE4中的函数回调(CallBack)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Multi-cast-Delegates"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Multi-cast Delegates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blueprint-Event与Blueprint-Function"><span class="nav-number">2.2.</span> <span class="nav-text">Blueprint Event与Blueprint Function</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要使用Delegate和Event？"><span class="nav-number">3.</span> <span class="nav-text">为什么要使用Delegate和Event？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Event"><span class="nav-number">3.1.</span> <span class="nav-text">关于Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate的使用情况"><span class="nav-number">3.2.</span> <span class="nav-text">Delegate的使用情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推测1"><span class="nav-number">3.2.1.</span> <span class="nav-text">推测1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-中的代理实现"><span class="nav-number">4.</span> <span class="nav-text">C++中的代理实现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-先理解什么是”函数回调”"><span class="nav-number">1.</span> <span class="nav-text">1.先理解什么是”函数回调”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-UE4中的函数回调-CallBack"><span class="nav-number">2.</span> <span class="nav-text">2.UE4中的函数回调(CallBack)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Multi-cast-Delegates"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Multi-cast Delegates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blueprint-Event与Blueprint-Function"><span class="nav-number">2.2.</span> <span class="nav-text">Blueprint Event与Blueprint Function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE-C-之间简单的函数回调实现"><span class="nav-number">2.3.</span> <span class="nav-text">UE C++之间简单的函数回调实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要使用Delegate和Event？"><span class="nav-number">3.</span> <span class="nav-text">为什么要使用Delegate和Event？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Event"><span class="nav-number">3.1.</span> <span class="nav-text">关于Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate的使用情况"><span class="nav-number">3.2.</span> <span class="nav-text">Delegate的使用情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推测1"><span class="nav-number">3.2.1.</span> <span class="nav-text">推测1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-中的代理实现"><span class="nav-number">4.</span> <span class="nav-text">C++中的代理实现</span></a></li></ol></div>
             
 
           </div>
