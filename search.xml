@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[我所理解的Lambda表达式]]></title>
+    <url>%2Fthe-lambda-what-i-understand%2F</url>
+    <content type="text"><![CDATA[纠结了好久，最终决定把lambda这个部分从Unity中分离出来单独总结。理解并能够使用Lambda表达式是这篇文章的目的。除此之外如果有关于lambda的拓展用法亦或者好的使用案例一并在这里记录。 首先是Lambda的基础概念 Lambdalambda expressions是什么 A lambda expression is a block of code (an expression or a statement block) that is treated as an object. It can be passed as an argument to methods, and it can also be returned by method calls. 来自 Lambda expressions (C# Programming Guide) 匿名函数，也可以这样叫，将函数作为对象处理，用{}包含。因为最近一年之和C++打交道，C#的语言机制究竟是什么样子的完全不记得了，关于C#的编译执行过程应该与C++区别并整理到别的文章去。 但是就C++的感觉来说，lambda给我的印象就是函数指针。但是内部的处理我还是不清楚(无论是C#还是C++)，比如说函数指针(lambda)的调用代价是什么样子的，跟普通的函数调用有什么区别等等。 但是这些先放一边，将lambda视为一个对象，可以作为参数①，可以作为返回函数调用②。 lambda怎么用既然要使用lambda就要知道它的使用方式是什么样子的。 私はこうしてLINQ・ラムダ式を理解できた（入門） 这篇涉及了一些Linq的东西，讲的会比较多一些，但是很好的涵盖的lambda的继承用法。 C# 今更ですが、ラムダ式 这篇讲的内容比较少但是对于基础讲的很具体。 lambda文法什么时候用lambda]]></content>
+      <categories>
+        <category>C#</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+        <tag>lambda</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[VS中有用的插件]]></title>
     <url>%2Fvisual-studio-plugins%2F</url>
     <content type="text"><![CDATA[PluginsVsVimProductivity Power Tools Productivity Power Tools 2017/2019 具体的功能之后有时间整理一下。]]></content>
@@ -13,15 +25,15 @@
   </entry>
   <entry>
     <title><![CDATA[Unity知识点记录]]></title>
-    <url>%2Funity-c%23-learning-note%2F</url>
-    <content type="text"><![CDATA[Unity的使用这次终于不是自己单枪匹马的干，而是真的项目中使用Unity引擎来做开发了。 先附上官方文档： Unity User Manual (2019.1) 1.Unity C# 中的一些比较重要的使用1.MenuItem1234#if UNITY_EDITOR [UnityEditor.MenuItem(&quot;Project/Operation&quot;) public static void OperationRun()&#123;&#125;#endif 或者12345using UnityEditor;using UnityEngine; [MenuItem(&quot;Project/Operation&quot;)] public static void OperationRun()&#123;&#125; 上面的用法，貌似也可以被叫做Debug Menu ,感觉用处相当大。 2.Unity C# 中的序列化(Serialization) Unity与C#的序列化与反序列化 Unity 遊戲存檔機制淺談，從序列化 (Serialization) 到儲存裝置 (Storage) 3.MessagePack 黒騎士と白の魔王におけるMessagePack-CSharpのUnionの活用事例 4.FindObjectOfType （シーン上にある該当する物の中からUnityが適当に選んだ１つが返ります。１つも存在していなかったらnullが返ります） ゲームオブジェクトを参照して、スクリプトにアクセスするのがGetCompornetで、 スクリプトを参照して、スクリプトにアクセスするのがFindObjectOfTypeです。 就像上面说的那样，下面附上使用： Object.FindObjectOfType Object.FindObjectsOfType 123public static Object FindObjectOfType (Type type);public static Object[] FindObjectsOfType (Type type); 这个方法非常低效，不适合在每一帧都调用，可以利用SingletonPattern。 2.C# 语法？类型声明 Why is there a questionmark on the private variable definition? ?? operator What do two question marks together mean in C#? $ operator $ - 字符串内插（C# 参照） where关键字 where (generic type constraint) (C# Reference) 一般类型约束？ For example, you can declare a generic class, MyGenericClass, such that the type parameter T implements the IComparable&lt;T&gt; interface:1public class AGenericClass&lt;T&gt; where T : IComparable&lt;T&gt; &#123; &#125; 使用了模板但是约束了类型，是这样的么。 我发誓这个关键字在我以前用C#的时候肯定知道，但是我忘了。。 await/async C# 今更ですが、await / async Taskを極めろ！async/await完全攻略 3.LINQ (Linq) はじめての LINQ - Qiita 4.Reactive Extensions (Rx) こわくないReactive Extensions超入門 - Qiita 5.UniRx 又见Rx——Rx via UniRx 这是我在知乎上找到的一篇文章，感觉能学到很多东西。 Reactive Extensions for Unity UniRxを導入するメリット ～こういう時にUniRxは使えるよ～ - Qiita 6.Lambda直接搜C# lambda最先出来的三个链接。 C# 今更ですが、ラムダ式 Lambda expressions (C# Programming Guide) =&gt; operator (C# Reference)]]></content>
+    <url>%2Funity-learning-note%2F</url>
+    <content type="text"><![CDATA[更新内容Unity的使用这次终于不是自己单枪匹马的干，而是真的项目中使用Unity引擎来做开发了。 先附上官方文档： Unity User Manual (2019.1) 1.Unity C# 中的一些比较重要的使用1.MenuItem1234#if UNITY_EDITOR [UnityEditor.MenuItem(&quot;Project/Operation&quot;) public static void OperationRun()&#123;&#125;#endif 或者12345using UnityEditor;using UnityEngine; [MenuItem(&quot;Project/Operation&quot;)] public static void OperationRun()&#123;&#125; 上面的用法，貌似也可以被叫做Debug Menu ,感觉用处相当大。 2.Unity C# 中的序列化(Serialization) Unity与C#的序列化与反序列化 Unity 遊戲存檔機制淺談，從序列化 (Serialization) 到儲存裝置 (Storage) 3.MessagePack 黒騎士と白の魔王におけるMessagePack-CSharpのUnionの活用事例 4.FindObjectOfType （シーン上にある該当する物の中からUnityが適当に選んだ１つが返ります。１つも存在していなかったらnullが返ります） ゲームオブジェクトを参照して、スクリプトにアクセスするのがGetCompornetで、 スクリプトを参照して、スクリプトにアクセスするのがFindObjectOfTypeです。 就像上面说的那样，下面附上使用： Object.FindObjectOfType Object.FindObjectsOfType 123public static Object FindObjectOfType (Type type);public static Object[] FindObjectsOfType (Type type); 这个方法非常低效，不适合在每一帧都调用，可以利用SingletonPattern。 2.C# 语法？类型声明 Why is there a questionmark on the private variable definition? ?? operator What do two question marks together mean in C#? $ operator $ - 字符串内插（C# 参照） where关键字 where (generic type constraint) (C# Reference) 一般类型约束？ For example, you can declare a generic class, MyGenericClass, such that the type parameter T implements the IComparable&lt;T&gt; interface:1public class AGenericClass&lt;T&gt; where T : IComparable&lt;T&gt; &#123; &#125; 使用了模板但是约束了类型，是这样的么。 我发誓这个关键字在我以前用C#的时候肯定知道，但是我忘了。。 await/async C# 今更ですが、await / async Taskを極めろ！async/await完全攻略 3.LINQ (Linq) はじめての LINQ - Qiita 当我想深入了解LINQ的时候，我发现我需要先理解Lambda表达式。 4.Reactive Extensions (Rx) こわくないReactive Extensions超入門 - Qiita 5.UniRx 又见Rx——Rx via UniRx 这是我在知乎上找到的一篇文章，感觉能学到很多东西。 Reactive Extensions for Unity UniRxを導入するメリット ～こういう時にUniRxは使えるよ～ - Qiita 6.Lambda直接搜C# lambda最先出来的三个链接。 Lambda expressions (C# Programming Guide) =&gt; operator (C# Reference) Unity中的插件要记录的是SteamVR Unity Plugin v2这个Unity的VR开发插件。开始调查这个插件的契机是不知道SteamVR_Behaviour_Pose这个类的作用，而明白这个是插件的内容。 Unity＋HTC Vive開発メモ Unity標準のVR機能（UnityEngine.XR）メモ 上面的这个人的文章我看很厉害就直接先粘链接了。]]></content>
       <categories>
         <category>Unity</category>
-        <category>C#</category>
       </categories>
       <tags>
         <tag>C#</tag>
         <tag>笔记</tag>
+        <tag>plugins</tag>
         <tag>Unity2019.1.3</tag>
       </tags>
   </entry>
@@ -236,8 +248,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -321,8 +333,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -333,8 +345,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -364,8 +376,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -409,8 +421,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -421,8 +433,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -433,8 +445,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -445,8 +457,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -457,8 +469,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -505,8 +517,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
