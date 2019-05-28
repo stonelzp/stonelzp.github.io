@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="C#,笔记,plugins,Unity2019.1.3," />
+  <meta name="keywords" content="C#,笔记,Unity2019.1.3,plugins," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
-<meta name="keywords" content="C#,笔记,plugins,Unity2019.1.3">
+<meta name="keywords" content="C#,笔记,Unity2019.1.3,plugins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity知识点记录">
 <meta property="og:url" content="http://stonelzp.github.io/unity-learning-note/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-27T03:50:32.195Z">
+<meta property="og:updated_time" content="2019-05-28T02:28:11.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity知识点记录">
 <meta name="twitter:description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-27T12:50:32+09:00">
-                2019-05-27
+              <time title="更新于" itemprop="dateModified" datetime="2019-05-28T11:28:11+09:00">
+                2019-05-28
               </time>
             
           </span>
@@ -440,6 +440,12 @@
 <h3 id="operator-1"><a href="#operator-1" class="headerlink" title="$ operator"></a>$ operator</h3><ul>
 <li><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/tokens/interpolated" target="_blank" rel="noopener">$ - 字符串内插（C# 参照）</a></li>
 </ul>
+<h3 id="gt-operator"><a href="#gt-operator" class="headerlink" title="=&gt; operator"></a>=&gt; operator</h3><p>看见的第一眼以为是lambda表达式，但是后面接着出现的是是变量而不是表达式。</p>
+<ul>
+<li><a href="http://var.blog.jp/archives/67192510.html" target="_blank" rel="noopener">C# の =&gt; プロパティ</a></li>
+</ul>
+<p>相当于<code>{get;}</code>但是又不是简单的get。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">◆ private A a =&gt; new A();</span><br><span class="line">◆ ＝ private A a &#123; get &#123; return new A(); &#125; &#125; </span><br><span class="line">◆ ≠ private A a &#123; get; &#125; = new A();</span><br></pre></td></tr></table></figure>
 <h3 id="where关键字"><a href="#where关键字" class="headerlink" title="where关键字"></a>where关键字</h3><ul>
 <li><a href="https://docs.microsoft.com/ja-jp/dotnet/csharp/language-reference/keywords/where-generic-type-constraint" target="_blank" rel="noopener">where (generic type constraint) (C# Reference)</a></li>
 </ul>
@@ -453,6 +459,7 @@
 <li><a href="https://qiita.com/rawr/items/5d49960a4e4d3823722f" target="_blank" rel="noopener">C# 今更ですが、await / async</a></li>
 <li><a href="https://qiita.com/acple@github/items/8f63aacb13de9954c5da" target="_blank" rel="noopener">Taskを極めろ！async/await完全攻略</a></li>
 </ul>
+<h2 id="3-Unity语法"><a href="#3-Unity语法" class="headerlink" title="3.Unity语法"></a>3.Unity语法</h2><h3 id="1-Instantiate"><a href="#1-Instantiate" class="headerlink" title="1.Instantiate"></a>1.Instantiate</h3><p>根据Prefab生成实例。</p>
 <h2 id="3-LINQ-Linq"><a href="#3-LINQ-Linq" class="headerlink" title="3.LINQ (Linq)"></a>3.LINQ (Linq)</h2><ul>
 <li><a href="https://qiita.com/nskydiving/items/c9c47c1e48ea365f8995" target="_blank" rel="noopener">はじめての LINQ - Qiita</a></li>
 </ul>
@@ -473,7 +480,7 @@
 <li><a href="https://docs.microsoft.com/ja-jp/dotnet/csharp/programming-guide/statements-expressions-operators/lambda-expressions" target="_blank" rel="noopener">Lambda expressions (C# Programming Guide)</a></li>
 <li><a href="https://docs.microsoft.com/ja-jp/dotnet/csharp/language-reference/operators/lambda-operator" target="_blank" rel="noopener">=&gt; operator (C# Reference)</a></li>
 </ul>
-<h1 id="Unity中的插件"><a href="#Unity中的插件" class="headerlink" title="Unity中的插件"></a>Unity中的插件</h1><p>要记录的是<br>SteamVR Unity Plugin v2这个Unity的VR开发插件。开始调查这个插件的契机是不知道<code>SteamVR_Behaviour_Pose</code>这个类的作用，而明白这个是插件的内容。</p>
+<h1 id="Unity中的插件"><a href="#Unity中的插件" class="headerlink" title="Unity中的插件"></a>Unity中的插件</h1><h2 id="SteamVR-Unity"><a href="#SteamVR-Unity" class="headerlink" title="SteamVR Unity"></a>SteamVR Unity</h2><p>要记录的是<br>SteamVR Unity Plugin v2这个Unity的VR开发插件。开始调查这个插件的契机是不知道<code>SteamVR_Behaviour_Pose</code>这个类的作用，而明白这个是插件的内容。</p>
 <ul>
 <li><p><a href="https://framesynthesis.jp/tech/unity/htcvive/" target="_blank" rel="noopener">Unity＋HTC Vive開発メモ</a></p>
 </li>
@@ -481,7 +488,7 @@
 </li>
 </ul>
 <p>上面的这个人的文章我看很厉害就直接先粘链接了。</p>
-
+<h3 id="SteamVR-Behaviour-Pose"><a href="#SteamVR-Behaviour-Pose" class="headerlink" title="SteamVR_Behaviour_Pose"></a>SteamVR_Behaviour_Pose</h3>
       
     </div>
     
@@ -531,9 +538,9 @@
           
             <a href="/tags/笔记/" rel="tag"><i class="fa fa-tag"></i> 笔记</a>
           
-            <a href="/tags/plugins/" rel="tag"><i class="fa fa-tag"></i> plugins</a>
-          
             <a href="/tags/Unity2019-1-3/" rel="tag"><i class="fa fa-tag"></i> Unity2019.1.3</a>
+          
+            <a href="/tags/plugins/" rel="tag"><i class="fa fa-tag"></i> plugins</a>
           
         </div>
       
@@ -639,7 +646,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -661,7 +668,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -710,7 +717,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#更新内容"><span class="nav-number">1.</span> <span class="nav-text">更新内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unity的使用"><span class="nav-number">2.</span> <span class="nav-text">Unity的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Unity-C-中的一些比较重要的使用"><span class="nav-number">2.1.</span> <span class="nav-text">1.Unity C# 中的一些比较重要的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-MenuItem"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.MenuItem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Unity-C-中的序列化-Serialization"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.Unity C# 中的序列化(Serialization)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MessagePack"><span class="nav-number">2.1.3.</span> <span class="nav-text">3.MessagePack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-FindObjectOfType"><span class="nav-number">2.1.4.</span> <span class="nav-text">4.FindObjectOfType</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-C-语法"><span class="nav-number">2.2.</span> <span class="nav-text">2.C# 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#？类型声明"><span class="nav-number">2.2.1.</span> <span class="nav-text">？类型声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator"><span class="nav-number">2.2.2.</span> <span class="nav-text">?? operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">$ operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#where关键字"><span class="nav-number">2.2.4.</span> <span class="nav-text">where关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#await-async"><span class="nav-number">2.2.5.</span> <span class="nav-text">await/async</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-LINQ-Linq"><span class="nav-number">2.3.</span> <span class="nav-text">3.LINQ (Linq)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reactive-Extensions-Rx"><span class="nav-number">2.4.</span> <span class="nav-text">4.Reactive Extensions (Rx)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-UniRx"><span class="nav-number">2.5.</span> <span class="nav-text">5.UniRx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Lambda"><span class="nav-number">2.6.</span> <span class="nav-text">6.Lambda</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unity中的插件"><span class="nav-number">3.</span> <span class="nav-text">Unity中的插件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#更新内容"><span class="nav-number">1.</span> <span class="nav-text">更新内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unity的使用"><span class="nav-number">2.</span> <span class="nav-text">Unity的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Unity-C-中的一些比较重要的使用"><span class="nav-number">2.1.</span> <span class="nav-text">1.Unity C# 中的一些比较重要的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-MenuItem"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.MenuItem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Unity-C-中的序列化-Serialization"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.Unity C# 中的序列化(Serialization)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MessagePack"><span class="nav-number">2.1.3.</span> <span class="nav-text">3.MessagePack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-FindObjectOfType"><span class="nav-number">2.1.4.</span> <span class="nav-text">4.FindObjectOfType</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-C-语法"><span class="nav-number">2.2.</span> <span class="nav-text">2.C# 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#？类型声明"><span class="nav-number">2.2.1.</span> <span class="nav-text">？类型声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator"><span class="nav-number">2.2.2.</span> <span class="nav-text">?? operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">$ operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gt-operator"><span class="nav-number">2.2.4.</span> <span class="nav-text">=&gt; operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#where关键字"><span class="nav-number">2.2.5.</span> <span class="nav-text">where关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#await-async"><span class="nav-number">2.2.6.</span> <span class="nav-text">await/async</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Unity语法"><span class="nav-number">2.3.</span> <span class="nav-text">3.Unity语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Instantiate"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.Instantiate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-LINQ-Linq"><span class="nav-number">2.4.</span> <span class="nav-text">3.LINQ (Linq)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reactive-Extensions-Rx"><span class="nav-number">2.5.</span> <span class="nav-text">4.Reactive Extensions (Rx)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-UniRx"><span class="nav-number">2.6.</span> <span class="nav-text">5.UniRx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Lambda"><span class="nav-number">2.7.</span> <span class="nav-text">6.Lambda</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unity中的插件"><span class="nav-number">3.</span> <span class="nav-text">Unity中的插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SteamVR-Unity"><span class="nav-number">3.1.</span> <span class="nav-text">SteamVR Unity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SteamVR-Behaviour-Pose"><span class="nav-number">3.1.1.</span> <span class="nav-text">SteamVR_Behaviour_Pose</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
