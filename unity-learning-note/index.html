@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-28T02:28:11.679Z">
+<meta property="og:updated_time" content="2019-06-01T06:04:05.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity知识点记录">
 <meta name="twitter:description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-28T11:28:11+09:00">
-                2019-05-28
+              <time title="更新于" itemprop="dateModified" datetime="2019-06-01T15:04:05+09:00">
+                2019-06-01
               </time>
             
           </span>
@@ -402,7 +402,8 @@
       
 
       
-        <h1 id="更新内容"><a href="#更新内容" class="headerlink" title="更新内容"></a>更新内容</h1><h1 id="Unity的使用"><a href="#Unity的使用" class="headerlink" title="Unity的使用"></a>Unity的使用</h1><p>这次终于不是自己单枪匹马的干，而是真的项目中使用Unity引擎来做开发了。</p>
+        <h1 id="更新内容"><a href="#更新内容" class="headerlink" title="更新内容"></a>更新内容</h1><p>(2019/05/29) 更新MenuItem的详细使用</p>
+<h1 id="Unity的使用"><a href="#Unity的使用" class="headerlink" title="Unity的使用"></a>Unity的使用</h1><p>这次终于不是自己单枪匹马的干，而是真的项目中使用Unity引擎来做开发了。</p>
 <p>先附上官方文档：</p>
 <ul>
 <li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank" rel="noopener">Unity User Manual (2019.1)</a></li>
@@ -410,6 +411,16 @@
 <h2 id="1-Unity-C-中的一些比较重要的使用"><a href="#1-Unity-C-中的一些比较重要的使用" class="headerlink" title="1.Unity C# 中的一些比较重要的使用"></a>1.Unity C# 中的一些比较重要的使用</h2><h3 id="1-MenuItem"><a href="#1-MenuItem" class="headerlink" title="1.MenuItem"></a>1.MenuItem</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#if UNITY_EDITOR</span><br><span class="line">        [UnityEditor.MenuItem(&quot;Project/Operation&quot;)</span><br><span class="line">        public static void OperationRun()&#123;&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
 <p>或者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">using UnityEditor;</span><br><span class="line">using UnityEngine;</span><br><span class="line"></span><br><span class="line">    [MenuItem(&quot;Project/Operation&quot;)]</span><br><span class="line">    public static void OperationRun()&#123;&#125;</span><br></pre></td></tr></table></figure></p>
 <p>上面的用法，貌似也可以被叫做<strong>Debug Menu</strong> ,感觉用处相当大。</p>
+<p>便利的调用一些比较麻烦的函数，触发条件和时机需要自己掌控等等，总而言之，这个很重要。</p>
+<ul>
+<li><a href="https://anchan828.github.io/editor-manual/web/part1-menuitem.html" target="_blank" rel="noopener">第8章　MenuItem</a></li>
+</ul>
+<p>但是要注意添加的方法都是static的方法，调用非静态函数的方法，我知道的有两个:</p>
+<ul>
+<li>1.向静态函数中传递对象引用。</li>
+<li>2.在静态函数遍历所有对象找到那个想要的对象并调用对象函数，这限于Unity中debug场景，毕竟可以遍历场景中的所有对象。使用<code>FindObjectofType</code>之类的函数。</li>
+</ul>
+<p>其他要注意的是，这个功能算是对UnityEditor的扩展功能，使用的时候不要忘记：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#if UNITY_EDITOR</span><br><span class="line">using UnityEditor</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">加上编译选项才安全。</span><br></pre></td></tr></table></figure></p>
 <h3 id="2-Unity-C-中的序列化-Serialization"><a href="#2-Unity-C-中的序列化-Serialization" class="headerlink" title="2.Unity C# 中的序列化(Serialization)"></a>2.Unity C# 中的序列化(Serialization)</h3><ul>
 <li><a href="https://zhuanlan.zhihu.com/p/27990334" target="_blank" rel="noopener">Unity与C#的序列化与反序列化</a></li>
 <li><a href="https://dev.twsiyuan.com/2018/06/how-to-save-and-load-gamesaves-in-unity.html" target="_blank" rel="noopener">Unity 遊戲存檔機制淺談，從序列化 (Serialization) 到儲存裝置 (Storage)</a></li>
