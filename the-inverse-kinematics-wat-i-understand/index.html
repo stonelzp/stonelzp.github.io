@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="在程序中人物模型出现很自然的运动的时候，大部分情况下我都觉得应该是动画的运动。由动作设计师准备好的动画，工程师将动画拆分组合这样的。然而实际上貌似并不是。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-28T07:46:12.558Z">
+<meta property="og:updated_time" content="2019-06-22T05:12:39.123Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我所理解的Unity-IK">
 <meta name="twitter:description" content="在程序中人物模型出现很自然的运动的时候，大部分情况下我都觉得应该是动画的运动。由动作设计师准备好的动画，工程师将动画拆分组合这样的。然而实际上貌似并不是。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-28T16:46:12+09:00">
-                2019-05-28
+              <time title="更新于" itemprop="dateModified" datetime="2019-06-22T14:12:39+09:00">
+                2019-06-22
               </time>
             
           </span>
@@ -418,11 +418,21 @@
 <li><a href="https://www.cnblogs.com/ghl_carmack/archive/2012/11/12/2765658.html" target="_blank" rel="noopener">游戏中反向运动学(ik)的研究与简介 - 风恋残雪 - 博客园</a><br>话说这个大佬的文章，我应该常常关注的。<h3 id="IK使用"><a href="#IK使用" class="headerlink" title="IK使用"></a>IK使用</h3>在上面提到的官方文档中有大致的使用方法。具体的使用之后整理</li>
 </ul>
 <h3 id="VR-Final-IK"><a href="#VR-Final-IK" class="headerlink" title="VR - Final IK"></a>VR - Final IK</h3><p>这个算是主角了，这篇文章的目的就是熟悉并使用这个Asset。（好贵）</p>
+<p>主要还是看人家的官方视频：</p>
+<ul>
+<li><p><a href="https://www.youtube.com/watch?v=7__IafZGwvI&amp;list=PLVxSIA1OaTOu8Nos3CalXbJ2DrKnntMv6" target="_blank" rel="noopener">FINAL IK TUTORIAL</a></p>
+</li>
+<li><p><a href="http://www.root-motion.com/finalikdox/html/index.html" target="_blank" rel="noopener">Final IK Document</a></p>
+</li>
+<li><p><a href="https://qiita.com/_karukaru_/items/b74bb5bdf08f5de32d0e" target="_blank" rel="noopener">Final IK の VRIK の Solver にある各値の説明</a></p>
+</li>
+</ul>
+<p>这个东西怎么说呢，我试着用了用，方便是方便，源码是C#的，读起来也不是很费力。但是最后我也就是用了FinalIk里的InteractionSystem，其他的都放弃了。想要在自己的代码里引用他的脚本文件会出error，然后一大堆的初始化内容需要重写，在Unity的Editor里直接拖拽就很方便，自己在代码里写就各种null。</p>
 <p>搜了一下感觉这篇很有意思，先保存一下。</p>
 <ul>
 <li><a href="https://atl-hiroo.recruit-tech.co.jp/2018/01/unity_vive_virtual_idle/" target="_blank" rel="noopener">UnityとHTC VIVEでバーチャルアイドルに変身（ATL客員研究員寄稿記事） | Advanced Technology Lab.</a></li>
 </ul>
-
+<h2 id="Leap-Motion"><a href="#Leap-Motion" class="headerlink" title="Leap Motion"></a>Leap Motion</h2>
       
     </div>
     
@@ -490,6 +500,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ue4-trace-fnctions/" rel="prev" title="UE4中的TraceFunctions">
+                UE4中的TraceFunctions <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -570,7 +584,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -581,7 +595,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -641,7 +655,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Root-Motion"><span class="nav-number">1.</span> <span class="nav-text">Root Motion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inverse-Kinematics"><span class="nav-number">2.</span> <span class="nav-text">Inverse Kinematics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IK使用"><span class="nav-number">2.1.</span> <span class="nav-text">IK使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VR-Final-IK"><span class="nav-number">2.2.</span> <span class="nav-text">VR - Final IK</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Root-Motion"><span class="nav-number">1.</span> <span class="nav-text">Root Motion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inverse-Kinematics"><span class="nav-number">2.</span> <span class="nav-text">Inverse Kinematics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IK使用"><span class="nav-number">2.1.</span> <span class="nav-text">IK使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VR-Final-IK"><span class="nav-number">2.2.</span> <span class="nav-text">VR - Final IK</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Leap-Motion"><span class="nav-number">3.</span> <span class="nav-text">Leap Motion</span></a></li></ol></div>
             
 
           </div>
