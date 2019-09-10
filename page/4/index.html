@@ -296,7 +296,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/为Actor添加Input事件/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++中的强制类型转换-cast/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -315,7 +315,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/为Actor添加Input事件/" itemprop="url">为Actor添加Input事件</a></h1>
+                <a class="post-title-link" href="/C++中的强制类型转换-cast/" itemprop="url">C++中的强制类型转换-cast</a></h1>
         
 
         <div class="post-meta">
@@ -327,8 +327,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T16:57:48+09:00">
-                2018-08-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-18T19:20:58+09:00">
+                2019-02-18
               </time>
             
 
@@ -343,8 +343,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-16T17:24:28+09:00">
-                2018-08-16
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-05T15:29:12+09:00">
+                2019-03-05
               </time>
             
           </span>
@@ -362,8 +362,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
-                    <span itemprop="name">UnrealEngine4</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -400,10 +400,10 @@
 
       
         
-          <p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
+          <p>实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:<code>stati_cast</code>,<code>dynamic_cast</code>,<code>const_cast</code>,<code>reinterpret_cast</code>。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/为Actor添加Input事件/#more" rel="contents">
+            <a class="btn" href="/C++中的强制类型转换-cast/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -458,7 +458,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4-ConstructorHelpers-FObjectFinder/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++中的文字编码与文字存储类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -477,7 +477,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/UE4-ConstructorHelpers-FObjectFinder/" itemprop="url">UE4-ConstructorHelpers::FObjectFinder</a></h1>
+                <a class="post-title-link" href="/C++中的文字编码与文字存储类型/" itemprop="url">C++中的文字编码与文字存储类型</a></h1>
         
 
         <div class="post-meta">
@@ -489,8 +489,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-10T15:38:38+09:00">
-                2018-08-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-14T15:25:34+09:00">
+                2019-02-14
               </time>
             
 
@@ -505,8 +505,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-10T16:16:47+09:00">
-                2018-08-10
+              <time title="更新于" itemprop="dateModified" datetime="2019-03-12T16:09:59+09:00">
+                2019-03-12
               </time>
             
           </span>
@@ -524,8 +524,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
-                    <span itemprop="name">UnrealEngine4</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -562,10 +562,10 @@
 
       
         
-          <p>先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。</p>
+          <p>在准备把函数名字输出的时候遇到了输出乱码的问题。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TCHAR* text = <span class="string">"DLL内容テスト。"</span>;</span><br><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"TEXT: %s"</span>), text);</span><br></pre></td></tr></table></figure></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/UE4-ConstructorHelpers-FObjectFinder/#more" rel="contents">
+            <a class="btn" href="/C++中的文字编码与文字存储类型/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -620,7 +620,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/SSH原理知识普及/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/use-dll-in-ue4-unity/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -639,7 +639,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/SSH原理知识普及/" itemprop="url">SSH原理知识普及</a></h1>
+                <a class="post-title-link" href="/use-dll-in-ue4-unity/" itemprop="url">初识DLL-在UE4与Unity中使用DLL</a></h1>
         
 
         <div class="post-meta">
@@ -651,8 +651,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-06T13:06:40+09:00">
-                2018-08-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-28T16:02:05+09:00">
+                2019-01-28
               </time>
             
 
@@ -667,8 +667,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-06T13:09:37+09:00">
-                2018-08-06
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-17T20:01:45+09:00">
+                2019-07-17
               </time>
             
           </span>
@@ -686,8 +686,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Web/" itemprop="url" rel="index">
-                    <span itemprop="name">Web</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -724,10 +724,10 @@
 
       
         
-          <p>SSH的原理与运用。</p>
+          关于DLL的制作与使用，和一些注意事项。与之相关的一些知识点。
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/SSH原理知识普及/#more" rel="contents">
+            <a class="btn" href="/use-dll-in-ue4-unity/">
               阅读全文 &raquo;
             </a>
           </div>
@@ -782,7 +782,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4中读取Texture2D的像素值/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++中得到函数名字/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -801,7 +801,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/UE4中读取Texture2D的像素值/" itemprop="url">UE4中读取Texture2D的像素值</a></h1>
+                <a class="post-title-link" href="/C++中得到函数名字/" itemprop="url">C++中得到函数名字</a></h1>
         
 
         <div class="post-meta">
@@ -813,8 +813,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-03T14:52:11+09:00">
-                2018-08-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-28T15:22:04+09:00">
+                2019-01-28
               </time>
             
 
@@ -829,148 +829,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-08T16:30:59+09:00">
-                2018-08-08
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>目的是在UE中获取到一张Texture2D图片的所有像素值，并将这些像素值进行某些处理并保存到另外一个Texture中。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/UE4中读取Texture2D的像素值/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    <div>
-      
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4的函数库/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="stone">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="StoneのBLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/UE4的函数库/" itemprop="url">UE4的函数库</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T17:47:44+09:00">
-                2018-08-02
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-09T15:55:29+09:00">
-                2018-08-09
+              <time title="更新于" itemprop="dateModified" datetime="2019-01-28T15:59:51+09:00">
+                2019-01-28
               </time>
             
           </span>
@@ -988,8 +848,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
-                    <span itemprop="name">UnrealEngine4</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -1026,10 +886,10 @@
 
       
         
-          <p>在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。</p>
+          <p>应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/UE4的函数库/#more" rel="contents">
+            <a class="btn" href="/C++中得到函数名字/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1084,7 +944,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++中的static关键字/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/EffectiveC++-Chapter01-Accustoming-Yourself-to-C++/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -1103,7 +963,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/C++中的static关键字/" itemprop="url">C++中的static关键字</a></h1>
+                <a class="post-title-link" href="/EffectiveC++-Chapter01-Accustoming-Yourself-to-C++/" itemprop="url">EffectiveC++-Chapter01-Accustoming-Yourself-to-C++</a></h1>
         
 
         <div class="post-meta">
@@ -1115,8 +975,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T11:41:29+09:00">
-                2018-08-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-10T12:16:23+09:00">
+                2019-01-10
               </time>
             
 
@@ -1131,8 +991,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-02T11:45:59+09:00">
-                2018-08-02
+              <time title="更新于" itemprop="dateModified" datetime="2019-01-24T18:26:36+09:00">
+                2019-01-24
               </time>
             
           </span>
@@ -1150,8 +1010,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
+                  <a href="/categories/Effective-C/" itemprop="url" rel="index">
+                    <span itemprop="name">Effective C++</span>
                   </a>
                 </span>
 
@@ -1188,10 +1048,10 @@
 
       
         
-          <p>static 关键字可用于声明变量、函数、类数据成员和类函数。</p>
+          <p>Effective C++的第一章内容总结。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/C++中的static关键字/#more" rel="contents">
+            <a class="btn" href="/EffectiveC++-Chapter01-Accustoming-Yourself-to-C++/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1246,7 +1106,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4的Plugin使用/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/EffectiveC++-导读/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -1265,7 +1125,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/UE4的Plugin使用/" itemprop="url">UE4的Plugin使用</a></h1>
+                <a class="post-title-link" href="/EffectiveC++-导读/" itemprop="url">EffectC++-导读</a></h1>
         
 
         <div class="post-meta">
@@ -1277,8 +1137,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T10:39:13+09:00">
-                2018-08-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-07T11:21:44+09:00">
+                2019-01-07
               </time>
             
 
@@ -1293,8 +1153,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-02T11:39:06+09:00">
-                2018-08-02
+              <time title="更新于" itemprop="dateModified" datetime="2019-01-07T13:32:01+09:00">
+                2019-01-07
               </time>
             
           </span>
@@ -1312,8 +1172,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
-                    <span itemprop="name">UnrealEngine4</span>
+                  <a href="/categories/Effective-C/" itemprop="url" rel="index">
+                    <span itemprop="name">Effective C++</span>
                   </a>
                 </span>
 
@@ -1350,11 +1210,10 @@
 
       
         
-          <p>制作UE4的插件相当于给UE4引擎添加新的功能模块。UE4的功能模块组成是由Module组成的，关于Module具体是什么，中文翻译就是模块，自己的理解中可以说是文件的单位了。</p>
-<p>新建的插件代表着跟UE4本来的功能模块不是从属于一个Module，所以需要为自己制作的插件制作一个属性为Public的公开接口以供UE4引擎调用。</p>
+          <p>Effective C++ 的导读章节的内容整理，知识点备忘吧。应该会将以后的章节归档到一起。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/UE4的Plugin使用/#more" rel="contents">
+            <a class="btn" href="/EffectiveC++-导读/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1409,7 +1268,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/c++-const-modifier/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++编程思想手抄/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -1428,7 +1287,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/c++-const-modifier/" itemprop="url">C++中的const修饰符</a></h1>
+                <a class="post-title-link" href="/C++编程思想手抄/" itemprop="url">C++编程思想手抄</a></h1>
         
 
         <div class="post-meta">
@@ -1440,8 +1299,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T18:53:41+09:00">
-                2018-08-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-01T16:27:36+09:00">
+                2018-11-01
               </time>
             
 
@@ -1456,8 +1315,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-22T19:44:23+09:00">
-                2019-05-22
+              <time title="更新于" itemprop="dateModified" datetime="2018-12-28T17:10:45+09:00">
+                2018-12-28
               </time>
             
           </span>
@@ -1513,10 +1372,10 @@
 
       
         
-          const有许多的用处，可以让程序易读，亦或者避免不必要的错误，这里记录主要的用法和相关的知识点。
+          <p>好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去发现这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/c++-const-modifier/">
+            <a class="btn" href="/C++编程思想手抄/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1571,7 +1430,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4中的静态库与动态库/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4中的Casting/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -1590,7 +1449,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/UE4中的静态库与动态库/" itemprop="url">UE4中的静态库与动态库</a></h1>
+                <a class="post-title-link" href="/UE4中的Casting/" itemprop="url">UE4中的Casting</a></h1>
         
 
         <div class="post-meta">
@@ -1602,8 +1461,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T15:50:34+09:00">
-                2018-08-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-09T12:05:00+09:00">
+                2018-10-09
               </time>
             
 
@@ -1618,8 +1477,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T15:56:06+09:00">
-                2018-08-01
+              <time title="更新于" itemprop="dateModified" datetime="2018-10-09T12:18:57+09:00">
+                2018-10-09
               </time>
             
           </span>
@@ -1675,11 +1534,10 @@
 
       
         
-          <p>库(Library)是什么,库是写好的现有的，成熟的，可以复用的代码。现实中每个程序都要依赖很多基础的底层库，不可能每个人的代码都从零开始，因此库的存在意义非同寻常。</p>
-<p>本质上来说库是一种可执行代码的二进制形式，可以被操作系统载入内存执行。库有两种：静态库（.a、.lib）和动态库（.so、.dll）。所谓静态、动态是指链接。</p>
+          <p>关于<strong>Cast To</strong>节点在Blueprint中能够做什么的问题。下面是官方文档中的说明。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/UE4中的静态库与动态库/#more" rel="contents">
+            <a class="btn" href="/UE4中的Casting/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1734,7 +1592,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4中的异步处理/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/git-rebases使用方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -1753,7 +1611,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/UE4中的异步处理/" itemprop="url">UE4中的异步处理</a></h1>
+                <a class="post-title-link" href="/git-rebases使用方法/" itemprop="url">git-rebases使用方法</a></h1>
         
 
         <div class="post-meta">
@@ -1765,8 +1623,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T15:13:28+09:00">
-                2018-08-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T15:12:42+09:00">
+                2018-08-30
               </time>
             
 
@@ -1781,8 +1639,166 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-01T15:26:37+09:00">
-                2018-08-01
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-30T15:15:44+09:00">
+                2018-08-30
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>git rebase的使用简介</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4-Error-Message整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/UE4-Error-Message整理/" itemprop="url">UE4:Error_Message整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T17:28:14+09:00">
+                2018-08-16
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-08-16T17:42:58+09:00">
+                2018-08-16
               </time>
             
           </span>
@@ -1838,10 +1854,10 @@
 
       
         
-          <p>能够熟练的使用UE4中的异步处理应该能够很好的利用程序运行的资源，和计算。除此之外还有并行的处理。目的是要理清UE4中的线程的同步异步，并行操作和标准C++中的线程同步异步，并行操作。</p>
+          <p>整理在学习UE4的过程中遇到的一些BUG。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/UE4中的异步处理/#more" rel="contents">
+            <a class="btn" href="/UE4-Error-Message整理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1887,7 +1903,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1937,7 +1953,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1948,7 +1964,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1959,7 +1975,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

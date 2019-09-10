@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="关于DLL的制作与使用，和一些注意事项。与之相关的一些知识点。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-23T06:26:14.301Z">
+<meta property="og:updated_time" content="2019-07-17T11:01:45.707Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识DLL-在UE4与Unity中使用DLL">
 <meta name="twitter:description" content="关于DLL的制作与使用，和一些注意事项。与之相关的一些知识点。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-23T15:26:14+09:00">
-                2019-05-23
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-17T20:01:45+09:00">
+                2019-07-17
               </time>
             
           </span>
@@ -431,9 +431,129 @@
 </li>
 </ul>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">int</span><span class="params">(*_getFunc)</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;</span><br><span class="line">_getFunc m_getFuncFromDll;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> * v_dllHandle;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> ULOGBlueprintFunctionLibrary::DLLFunc(<span class="keyword">int</span> a, <span class="keyword">int</span> b）</span><br><span class="line">&#123;</span><br><span class="line">    FString dllfilepath = FPaths::Combine(*FPaths::ProjectPluginsDir(), TEXT(<span class="string">"DLLLibrary"</span>), TEXT(<span class="string">"DLLName.dll"</span>));</span><br><span class="line">    <span class="keyword">if</span>(FPaths::FileExists(dllfilepath))</span><br><span class="line">    &#123;</span><br><span class="line">        v_dllHandle = FPlatformProcess::GetDllHandle(*dllfilepath);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(v_dllHandle != <span class="literal">NULL</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            FString procName = <span class="string">"FunctionName"</span>;</span><br><span class="line">            m_getFuncFromDll = (_getFunc)FPlatformProcess::GetDllExport(v_dllHandle, *procName);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(m_getFuncFromDll != <span class="literal">NULL</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                m_getFuncFromDll(a,b);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用的方法就像述。</p>
+<p>使用的方法就像上述。</p>
 <h1 id="DEBUG-DLL"><a href="#DEBUG-DLL" class="headerlink" title="DEBUG DLL"></a>DEBUG DLL</h1><p>关于DLL的DEBUG的问题，直接在工程里面DEBUG的方法我没有头绪。目前的方法是：</p>
 <p>选中Build的模式为<code>Release，x64</code>然后编译。在工程文件夹中找到编译完毕的dll文件导入到调用的工程里面进行调用测试。</p>
+<h1 id="UE4中打包第三方库"><a href="#UE4中打包第三方库" class="headerlink" title="UE4中打包第三方库"></a>UE4中打包第三方库</h1><p>你看上面使用动态链接库的方法多么简单啊，只要找到<em>dll</em>就可以对这个库进行使用了。按照上面的方法，无论在UE4Editor上运行几次，你都会满意的没有话说。</p>
+<p>是的，在UE4的Editor上运行的话。</p>
+<p>当你觉得差不多了咱们打包一下游戏吧。</p>
+<p><em>File -&gt; Package Project -&gt; Windows -&gt;Windows(64-bit)</em></p>
+<p>打完包了都不知道发什么了什么，知道发现dll的内容根本没法调用。是的，上面的一顿操作，当你打包整个工程之后会发现，准备好的dll并没有被一起打包进工程里。</p>
+<p>原因就在于UE4并没有提供自动打包第三方库的功能，需要手动打包。敢情上面的dll的一顿操作只是针对Editor模式好用，当你准备打包应用程序的时候就不行了。算了，不生气。</p>
+<h2 id="UE4的编译工具-Build-Tools"><a href="#UE4的编译工具-Build-Tools" class="headerlink" title="UE4的编译工具(Build Tools)"></a>UE4的编译工具(Build Tools)</h2><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/BuildTools/index.html" target="_blank" rel="noopener">Build Tools</a></li>
+</ul>
+<p>为什么UE4不能把第三方库内容自动打包呢？这就要从UE4引擎的编译模式来说起了。</p>
+<p>从官网的内容来看的话，BuildTools分为三个Topics</p>
+<h3 id="1-UnrealBuildTool"><a href="#1-UnrealBuildTool" class="headerlink" title="1.UnrealBuildTool"></a>1.UnrealBuildTool</h3><blockquote>
+<p>UnrealBuildTool (UBT) is a custom tool that manages the process of building Unreal Engine 4 (UE4) source code across a variety of build configurations. Read  BuildConfiguration.cs to explore various user-configurable build options.</p>
+</blockquote>
+<p>这个应该非常重要的概念了，也经常见到这个工具，但是具体的内容日后再挖。</p>
+<ul>
+<li><a href="https://ericlemes.com/2018/11/23/understanding-unreal-build-tool/" target="_blank" rel="noopener">Understanding Unreal Build Tool</a><h4 id="Topics1：-Targets"><a href="#Topics1：-Targets" class="headerlink" title="Topics1： Targets"></a>Topics1： Targets</h4></li>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/BuildTools/UnrealBuildTool/TargetFiles/index.html" target="_blank" rel="noopener">Targets</a></li>
+</ul>
+<p>UnrealBuildTool(以后简称UBT)</p>
+<h4 id="Topics2-Modules"><a href="#Topics2-Modules" class="headerlink" title="Topics2: Modules"></a>Topics2: Modules</h4><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/BuildTools/UnrealBuildTool/ModuleFiles/index.html" target="_blank" rel="noopener">Modules</a></li>
+<li><a href="http://historia.co.jp/archives/3097/" target="_blank" rel="noopener">UE4 モジュールについて</a></li>
+<li><a href="http://papersloth.hatenablog.com/entry/2018/03/05/221735" target="_blank" rel="noopener">UE4 Moduleについて</a></li>
+<li><a href="https://qiita.com/go_astrayer/items/5d001a9cde182488f9f3" target="_blank" rel="noopener">一つの UE4 プロジェクトで複数のゲームモジュールを扱う</a></li>
+<li><a href="https://www.romsuke.com/entry/2019/01/10/212704" target="_blank" rel="noopener">【UE4】モジュール追加</a></li>
+<li><a href="https://qiita.com/takayashiki2/items/db995c558024c3db8223" target="_blank" rel="noopener">ModuleRules(XXX.build.csファイル)について</a></li>
+</ul>
+<h4 id="Topics3-Build-Configuration"><a href="#Topics3-Build-Configuration" class="headerlink" title="Topics3: Build Configuration"></a>Topics3: Build Configuration</h4><h4 id="Topics4-IWYU"><a href="#Topics4-IWYU" class="headerlink" title="Topics4: IWYU"></a>Topics4: IWYU</h4><h4 id="Topics5-Project-Files-for-IDEs"><a href="#Topics5-Project-Files-for-IDEs" class="headerlink" title="Topics5: Project Files for IDEs"></a>Topics5: Project Files for IDEs</h4><h4 id="Topics6-Versioning-of-Binaries"><a href="#Topics6-Versioning-of-Binaries" class="headerlink" title="Topics6: Versioning of Binaries"></a>Topics6: Versioning of Binaries</h4><h3 id="2-UnrealHeadTool"><a href="#2-UnrealHeadTool" class="headerlink" title="2.UnrealHeadTool"></a>2.UnrealHeadTool</h3><h3 id="3-AutomationTool"><a href="#3-AutomationTool" class="headerlink" title="3.AutomationTool"></a>3.AutomationTool</h3><h2 id="打包第三方库"><a href="#打包第三方库" class="headerlink" title="打包第三方库"></a>打包第三方库</h2><p>上面的是对于UE4编译系统的理解，而真正需要做的是具体是什么呢?</p>
+<p>针对之前的内容我大致的总结了一下，慢慢补充:</p>
+<p><strong>将DLL（第三方库）和项目一起打包</strong></p>
+<ol>
+<li><code>.uplugin</code>中的<code>&quot;Modules&quot;</code>模块的<code>&quot;Type&quot;</code>从<code>&quot;Developer&quot;</code>更改为<code>&quot;Runtime&quot;</code><ol>
+<li>就我自己的观察结果来看，这个属性不更改的话，打包之后（Package化）连Plugin的尸体都不会给留，在打包后的工程中找不到想要的DLL</li>
+</ol>
+</li>
+<li><p>指定平台编译（不是必要条件但是要是用错了平台的话肯定是要吃苦头的）</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// uplugin文件</span><br><span class="line">&quot;Modules&quot;: [</span><br><span class="line">&#123;</span><br><span class="line">&quot;Name&quot;: &quot;USBCamDirectShow&quot;,</span><br><span class="line">&quot;Type&quot;: &quot;Runtime&quot;,</span><br><span class="line">&quot;LoadingPhase&quot;: &quot;Default&quot;,</span><br><span class="line">&quot;WhitelistPlatforms&quot;: [&quot;Win64&quot;, &quot;Win32&quot;]　←これを追加</span><br><span class="line">&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>工程文件结构补充(Module分布),Win64平台</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Project</span><br><span class="line">   |- Binaries</span><br><span class="line">        |- ...</span><br><span class="line">   |- Plugins</span><br><span class="line">        |- PluginNameA</span><br><span class="line">               |- Binaries</span><br><span class="line">                   |- ThirdParty</span><br><span class="line">                       |- PluginNameALibrary</span><br><span class="line">                   |- Win64</span><br><span class="line">               |- Source</span><br><span class="line">                  |- PluginNameA</span><br><span class="line">                        |- Private</span><br><span class="line">                        |- Public</span><br><span class="line">                        |- PluginNameA.Build.cs</span><br><span class="line">                  |- ThirdParty</span><br><span class="line">                       |- PluginNameALibrary</span><br><span class="line">                            |- PluginNameALibrary.Build.cs</span><br><span class="line">                            |- PluginNameALibrary.tps</span><br><span class="line">                            |- LibrarySource</span><br><span class="line">               |- PluginNameA.uplugin</span><br><span class="line">               |- ...</span><br><span class="line">   |- Source</span><br><span class="line">       |- Project</span><br><span class="line">           |- Project.h</span><br><span class="line">           |- Project.cpp</span><br><span class="line">           |- ProjectBuild.cs</span><br><span class="line">           |- ...</span><br><span class="line">       |- Project.Target.cs</span><br><span class="line">       |- ProjectEditor.Target.cs</span><br><span class="line">   |- Project.sln</span><br><span class="line">   |- Project.uproject</span><br><span class="line">   |- ...</span><br></pre></td></tr></table></figure>
+<p> 我只列出了比较重要的内容，对于理解打包第三方库来说的。相比于默认的（创建工程的时候）文件结构来说，唯一不同的地方是在<code>Plugins</code>的文件夹下面的插件中的<code>Binaries</code>和<code>Source</code>文件夹出现了<code>ThirdParty</code>文件夹。当然这个文件夹也不是我创建的。那么我也不是凭空就知道正确的结构。要点就在于UE4提供了第三方库的插件使用模板。</p>
+<ol>
+<li>有效使用UE4提供的第三方库的插件使用模板。可以参考下面的第二个链接。<code>Edit -&gt; Plugins -&gt; NewPlugin</code>打开创建新的插件窗口。拉到最下边有一个<strong>Third Party Library</strong>的模板，创建使用。当然这还只是开始。不过这个时候已经有了雏形，大体的插件文件结构已经构建完成，不需要再去额外的创建文件，只要适当的修改文件就好了。</li>
+</ol>
+</li>
+<li><p>确保第三方库（DLL）的路径。下面是第三方库的编译设置文件(Build.cs)中的内容</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">// 位于上述目录结构中的PluginAnameLibrary.Build.cs</span><br><span class="line">// Fill out your copyright notice in the Description page of Project Settings.</span><br><span class="line"></span><br><span class="line">using System.IO;</span><br><span class="line">using UnrealBuildTool;</span><br><span class="line"></span><br><span class="line">public class test1Library : ModuleRules</span><br><span class="line">&#123;</span><br><span class="line">    Type = ModuleType.External;</span><br><span class="line"></span><br><span class="line">    if (Target.Platform == UnrealTargetPlatform.Win64)</span><br><span class="line">    &#123;</span><br><span class="line">        // Add the import library</span><br><span class="line">        PublicLibraryPaths.Add(Path.Combine(ModuleDirectory, &quot;x64&quot;, &quot;Release&quot;));</span><br><span class="line">        PublicAdditionalLibraries.Add(&quot;ExampleLibrary.lib&quot;);</span><br><span class="line"></span><br><span class="line">        // Delay-load the DLL, so we can load it from the right place first</span><br><span class="line">        PublicDelayLoadDLLs.Add(&quot;ExampleLibrary.dll&quot;);</span><br><span class="line">        // RuntimeDependencies.Add(new RuntimeDependency(Path.Combine(ModuleDirectory,  &quot;x64&quot;, &quot;Release&quot;, &quot;ExampleLibrary.dll&quot;)));</span><br><span class="line">        // RuntimeDependencies.Add(dll_path);</span><br><span class="line">        string dll_runtimePath = Path.Combine(ModuleDirectory, &quot;..&quot;, &quot;..&quot;, &quot;..&quot;, &quot;Binaries&quot;, &quot;ThirdParty&quot;, &quot;test1Library&quot;, &quot;Win64&quot;, &quot;ExampleLibrary.dll&quot;);</span><br><span class="line">        RuntimeDependencies.Add(dll_runtimePath);</span><br><span class="line">    &#125;</span><br><span class="line">    else if(Target.Platform == UnrealTargetPlatform.Mac)</span><br><span class="line">    &#123;</span><br><span class="line">        PublicDelayLoadDLLs.Add(Path.Combine(ModuleDirectory, &quot;Mac&quot;, &quot;Release&quot;, &quot;libExampleLibrary.dylib&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 第一眼看上去全是懵的，这都是啥？直到现在我也没有能全理解。但是大体的内容我猜的就是保证第三方库的位置。按照代码中的路径依次填充准备好的dll文件，虽然lib文件也设置了，但是估计也不会用到，用的时候再说，此次首要目的是打包dll文件。至于其他的平台的设置，根据要求把。这里重要的是加入了<code>RuntimeDependencies</code>这个依赖项。</p>
+<ol>
+<li>这个依赖项的内容或许会在上面的<strong>UnrealBuildTool</strong>章节中详细展开，或者下面的<strong>各种验证</strong>章节中展开。</li>
+<li>这一部分主要是对dll进行配置，添加依赖项，保证dll在打包过后依然存在，同时也可以在这个<strong>Module</strong>(Module的概念参考上面，我的理解就是<strong>每一个Module都需要一个Build.cs文件</strong>)里加入dll的源码或者dll的源文件，但是如果加了源文件并且使用了源码的话，那么使用dll的意义应该也不存在了吧。</li>
+</ol>
+</li>
+<li><p>插件源码配置。这个部分是对dll的内容进行调用的，或者说为dll的调用提供接口。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// 文件结构</span><br><span class="line">Source</span><br><span class="line">   |- PluginModule</span><br><span class="line">         |- Private</span><br><span class="line">         |- Public</span><br><span class="line">         |- PluginModule.Build.cs</span><br><span class="line">   |- ThirdParty</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何制作一个扩展插件。这个需求我不知道要如何来描述为好，总之就是上面的插件Module为我们提供了调用接口后，我要如何在另外一个Module中调用这个接口。即如何在工程的主Module中使用扩展的插件Module中的接口。</p>
+<ul>
+<li><p><a href="https://wiki.unrealengine.com/An_Introduction_to_UE4_Plugins" target="_blank" rel="noopener">An Introduction to UE4 Plugins</a></p>
+<p>这个是一个神一样的Wiki，手把手教你制作一个plugin或者说是扩展的Module。跟这篇我完全不知道在讲什么的<a href="https://wiki.unrealengine.com/Linking_Static_Libraries_Using_The_Build_System" target="_blank" rel="noopener">Linking Static Libraries Using The Build System</a>的这篇Wiki比起来真是一个天上一个地上。不少老外都在diss这篇。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>当我差不多理解了上面的内容，也成功的让我的dll在打包后也成功输出了。但我还是想吐槽一句，UE4 的编译系统（UBT）这个东西让我这个初学者感觉到了恶心。为什么，为什么我找不到这个东西具体的Manual？还要去看各种UE4引擎的源码去猜呢？</p>
+<ul>
+<li><a href="https://tubezgames.com/2017/01/ue4-plugin-build/" target="_blank" rel="noopener">【UE4】プラグインのTypeをRuntimeにしたのにShippingでパッケージ化するとロードされないとき</a></li>
+<li><a href="http://historia.co.jp/archives/6717/" target="_blank" rel="noopener">［UE4］プラグインをパッケージ化しよう！</a></li>
+</ul>
+<h3 id="各种验证，各种现象"><a href="#各种验证，各种现象" class="headerlink" title="各种验证，各种现象"></a>各种验证，各种现象</h3><h4 id="RunTimeDependencies-Add-String-path"><a href="#RunTimeDependencies-Add-String-path" class="headerlink" title="RunTimeDependencies.Add(String path)"></a>RunTimeDependencies.Add(String path)</h4><p>这个东西加进去的，首先要保证路径正确由函数名字就可以明白这个是为dll库添加运行时依赖的，也就是确保运行时按照这个路径下能找到dll文件。但是这里有需要注意的问题。这个依赖项的作用，据我简单实验观察得到的结果是</p>
+<ul>
+<li><strong>被路径指定的文件在打包后会被一起打包</strong></li>
+</ul>
+<p>这非常重要。因为非常头疼的事情就是在打包的时候，dll并没有被带上。自己copy进去？我没有实验过不知道好不好用，但是肯定是会被打的。</p>
+<p>比如说上面的例子中按照该路径添加了这个依赖，那么在打包后，这个路径就会被保存下来，当然文件也会存在，而之后的代码中按照原本的路径来取得dll也是没有问题的。</p>
+<p>那么这里就有了路径留哪个文件夹的问题。<strong>Binaries？Source？</strong></p>
+<p>个人倾向于Binaries文件夹，毕竟dll算是2进制文件，放到这个文件夹里不会产生歧义。但是第三方库的生成往往不是UE4的工作，而是VS中编译好（参考上面）生成。我只好在binaries文件夹的相应路径中复制一份。（Source里更倾向于放置源码，放进去源码的话貌似也可以使用，毕竟都一样嘛）</p>
+<p><strong>这个依赖非常关键，它让你的dll在工程打包的时候能够一起被打包。</strong></p>
+<p>在我写下这么多文字的时候，就隐隐约约的察觉到了一个问题。我是因为写好的插件直接就放在了一个叫<code>Plugins</code>的文件夹里面了，与这个插件相对的Build.cs文件是一点都没有写。上面提到的又是扩展插件又是Module的，在一个Module里面提供dll的调用接口，为什么我现在工作的Module里不能提供？</p>
+<p>肯定是可以的。原因应该就是我没有给自己的Plugin文件写任何的编译依赖，导致没有没打包。若是被打包进工程，能找到dll的话肯定能使用了啊。</p>
+<p>关键就是上面的这个依赖项的添加。</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/1364966-packaging-plugin-with-third-party-dll" target="_blank" rel="noopener">Packaging Plugin with third party Dll</a></li>
+<li><a href="https://answers.unrealengine.com/questions/218616/how-do-i-add-thirdparty-library.html" target="_blank" rel="noopener">How do I add thirdparty library?</a></li>
+<li><a href="https://answers.unrealengine.com/questions/197667/how-do-you-statically-link-an-external-dlldylib-to.html" target="_blank" rel="noopener">How do you statically link an external DLL/dylib to your project?</a></li>
+<li><a href="http://www.valentinkraft.de/including-the-point-cloud-library-into-unreal-tutorial/" target="_blank" rel="noopener">UNREAL ENGINE: INCLUDING A THIRD-PARTY LIBRARY (ON THE EXAMPLE OF THE POINT CLOUD LIBRARY AND BOOST) [TUTORIAL] [DOWNLOAD]</a></li>
+<li><a href="https://answers.unrealengine.com/questions/427772/adding-dll-path-for-plugin.html?sort=oldest" target="_blank" rel="noopener">Adding third party DLL path for plugin</a></li>
+</ul>
+<p>为了搞懂如何打包第三方库，以及做了各种的实验所参考的文章。</p>
+<ul>
+<li><a href="https://usagi.hatenablog.jp/entry/2018/03/14/082509" target="_blank" rel="noopener">UE4: バイナリー配布や実行時リンク向けのライブラリーを UE4 プロジェクトへ組み入れる方法を mecab で解説</a></li>
+<li><a href="https://www.parallelcube.com/2018/03/01/using-thirdparty-libraries-in-our-ue4-mobile-project/" target="_blank" rel="noopener">Using thirdparty libraries in our UE4 mobile/desktop project</a></li>
+<li><a href="https://qiita.com/T_Sumisaki/items/b5f01fc7c61330c0a38f" target="_blank" rel="noopener">UE4のカスタムプラグイン作成時におけるThirdPartyライブラリの取り込み方</a></li>
+<li><a href="https://www.slideshare.net/GerkeMaxPreussner/plugins-thirdparty-sdks-in-ue4" target="_blank" rel="noopener">Plug-ins &amp; Third-Party SDKs in UE4</a></li>
+<li><a href="https://qiita.com/BlackMa9/items/38701d6b4122b966975c" target="_blank" rel="noopener">UE4でのPlugin開発記録メモ(FMessageDialogでダイアログ表示編)</a></li>
+</ul>
+<p>还有就是感谢UE4的源码了，我翻了许多源码内的各种插件的使用，终于脑海里有了大概的印象。</p>
+<h4 id="IpluginManager-Get"><a href="#IpluginManager-Get" class="headerlink" title="IpluginManager::Get()"></a>IpluginManager::Get()</h4><p>这个类是干什么的以后补上，我见到的是用它来取得Plugins的路径：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FString BaseDir = IPluginManager::Get().FindPlugin(<span class="string">"PluginName"</span>)-&gt;GetBaseDir();</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是使用这个类的时候除了要补上头文件<code>#include IPluginManager.h</code>之外，还要把依赖加进Module里面。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PrivateDependencyModuleNames.AddRange(new string[] &#123; &quot;Projects&quot; &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>要不然项目编译不会通过。</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/745481/ipluginmanagerget-linker-error-not-finding-impleme.html" target="_blank" rel="noopener">IPluginManager::Get() Linker error - Not finding implementation</a></li>
+</ul>
+<h4 id="C-SYstem-IO-SetAttributes"><a href="#C-SYstem-IO-SetAttributes" class="headerlink" title="C# SYstem.IO.SetAttributes"></a>C# SYstem.IO.SetAttributes</h4><ul>
+<li><a href="https://docs.microsoft.com/ja-jp/dotnet/api/system.io.file.setattributes?view=netframework-4.8" target="_blank" rel="noopener">File.SetAttributes(String, FileAttributes) Method</a></li>
+</ul>
+<h4 id="Json数据解析"><a href="#Json数据解析" class="headerlink" title="Json数据解析"></a>Json数据解析</h4><ul>
+<li><a href="https://orfeasel.com/parsing-json-files/" target="_blank" rel="noopener">Parsing Json files</a></li>
+</ul>
+<h4 id="各种路径获取"><a href="#各种路径获取" class="headerlink" title="各种路径获取"></a>各种路径获取</h4><ul>
+<li><a href="https://wiki.unrealengine.com/Packaged_Game_Paths,_Obtain_Directories_Based_on_Executable_Location" target="_blank" rel="noopener">Packaged Game Paths, Obtain Directories Based on Executable Location</a></li>
+</ul>
+<h5 id="获取绝对路径"><a href="#获取绝对路径" class="headerlink" title="获取绝对路径"></a>获取绝对路径</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FString RelativePath = FPaths::GameContentDir();</span><br><span class="line"> </span><br><span class="line"> FString FullPath = IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead(*RelativePath);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/580005/getting-full-path-of-project-directory.html" target="_blank" rel="noopener">Getting full path of project directory</a></li>
+</ul>
+<h4 id="文件夹创建"><a href="#文件夹创建" class="headerlink" title="文件夹创建"></a>文件夹创建</h4><ul>
+<li><a href="https://wiki.unrealengine.com/File_Management,_Create_Folders,_Delete_Files,_and_More" target="_blank" rel="noopener">File Management, Create Folders, Delete Files, and More</a></li>
+</ul>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="DLL中头文件的引入"><a href="#DLL中头文件的引入" class="headerlink" title="DLL中头文件的引入"></a>DLL中头文件的引入</h2><p>在使用<strong>plog</strong> 源码的时候尝试引入头文件的地方：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// for example</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;plog/Util.h&gt;</span></span></span><br></pre></td></tr></table></figure></p>
 <p>上面的引入会出错，而把尖括号换成双引号后就好了。</p>
 <p>关于这两者的区别：</p>
@@ -616,7 +736,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -627,7 +747,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -638,7 +758,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -687,7 +807,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#新建DLL工程"><span class="nav-number">1.</span> <span class="nav-text">新建DLL工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导出函数"><span class="nav-number">2.</span> <span class="nav-text">导出函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#导出函数的时候遇到的问题"><span class="nav-number">2.1.</span> <span class="nav-text">导出函数的时候遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4Editor中调用DLL"><span class="nav-number">3.</span> <span class="nav-text">UE4Editor中调用DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG-DLL"><span class="nav-number">4.</span> <span class="nav-text">DEBUG DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL中头文件的引入"><span class="nav-number">5.1.</span> <span class="nav-text">DLL中头文件的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数名字前面加上-amp"><span class="nav-number">5.2.</span> <span class="nav-text">函数名字前面加上&amp;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类构造函数初始化列表"><span class="nav-number">5.3.</span> <span class="nav-text">C++类构造函数初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的函数指针"><span class="nav-number">5.4.</span> <span class="nav-text">C++中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-运算符重载"><span class="nav-number">5.5.</span> <span class="nav-text">C++运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的流"><span class="nav-number">5.6.</span> <span class="nav-text">C++中的流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stringstream"><span class="nav-number">5.6.1.</span> <span class="nav-text">stringstream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-c-str-函数"><span class="nav-number">5.6.2.</span> <span class="nav-text">st(), c_str()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解char-与char-的差别"><span class="nav-number">5.7.</span> <span class="nav-text">深入理解char*与char[]的差别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于类中静态成员的理解"><span class="nav-number">5.8.</span> <span class="nav-text">关于类中静态成员的理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-“C”"><span class="nav-number">5.9.</span> <span class="nav-text">extern “C”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mutex-lock"><span class="nav-number">5.10.</span> <span class="nav-text">mutex::lock</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#新建DLL工程"><span class="nav-number">1.</span> <span class="nav-text">新建DLL工程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#导出函数"><span class="nav-number">2.</span> <span class="nav-text">导出函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#导出函数的时候遇到的问题"><span class="nav-number">2.1.</span> <span class="nav-text">导出函数的时候遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4Editor中调用DLL"><span class="nav-number">3.</span> <span class="nav-text">UE4Editor中调用DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DEBUG-DLL"><span class="nav-number">4.</span> <span class="nav-text">DEBUG DLL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中打包第三方库"><span class="nav-number">5.</span> <span class="nav-text">UE4中打包第三方库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的编译工具-Build-Tools"><span class="nav-number">5.1.</span> <span class="nav-text">UE4的编译工具(Build Tools)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-UnrealBuildTool"><span class="nav-number">5.1.1.</span> <span class="nav-text">1.UnrealBuildTool</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Topics1：-Targets"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">Topics1： Targets</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topics2-Modules"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">Topics2: Modules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topics3-Build-Configuration"><span class="nav-number">5.1.1.3.</span> <span class="nav-text">Topics3: Build Configuration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topics4-IWYU"><span class="nav-number">5.1.1.4.</span> <span class="nav-text">Topics4: IWYU</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topics5-Project-Files-for-IDEs"><span class="nav-number">5.1.1.5.</span> <span class="nav-text">Topics5: Project Files for IDEs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topics6-Versioning-of-Binaries"><span class="nav-number">5.1.1.6.</span> <span class="nav-text">Topics6: Versioning of Binaries</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-UnrealHeadTool"><span class="nav-number">5.1.2.</span> <span class="nav-text">2.UnrealHeadTool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-AutomationTool"><span class="nav-number">5.1.3.</span> <span class="nav-text">3.AutomationTool</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包第三方库"><span class="nav-number">5.2.</span> <span class="nav-text">打包第三方库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#各种验证，各种现象"><span class="nav-number">5.2.1.</span> <span class="nav-text">各种验证，各种现象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RunTimeDependencies-Add-String-path"><span class="nav-number">5.2.1.1.</span> <span class="nav-text">RunTimeDependencies.Add(String path)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IpluginManager-Get"><span class="nav-number">5.2.1.2.</span> <span class="nav-text">IpluginManager::Get()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-SYstem-IO-SetAttributes"><span class="nav-number">5.2.1.3.</span> <span class="nav-text">C# SYstem.IO.SetAttributes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Json数据解析"><span class="nav-number">5.2.1.4.</span> <span class="nav-text">Json数据解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#各种路径获取"><span class="nav-number">5.2.1.5.</span> <span class="nav-text">各种路径获取</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取绝对路径"><span class="nav-number">5.2.1.5.1.</span> <span class="nav-text">获取绝对路径</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件夹创建"><span class="nav-number">5.2.1.6.</span> <span class="nav-text">文件夹创建</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DLL中头文件的引入"><span class="nav-number">6.1.</span> <span class="nav-text">DLL中头文件的引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数名字前面加上-amp"><span class="nav-number">6.2.</span> <span class="nav-text">函数名字前面加上&amp;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-类构造函数初始化列表"><span class="nav-number">6.3.</span> <span class="nav-text">C++类构造函数初始化列表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的函数指针"><span class="nav-number">6.4.</span> <span class="nav-text">C++中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-运算符重载"><span class="nav-number">6.5.</span> <span class="nav-text">C++运算符重载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的流"><span class="nav-number">6.6.</span> <span class="nav-text">C++中的流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stringstream"><span class="nav-number">6.6.1.</span> <span class="nav-text">stringstream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#st-c-str-函数"><span class="nav-number">6.6.2.</span> <span class="nav-text">st(), c_str()函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深入理解char-与char-的差别"><span class="nav-number">6.7.</span> <span class="nav-text">深入理解char*与char[]的差别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于类中静态成员的理解"><span class="nav-number">6.8.</span> <span class="nav-text">关于类中静态成员的理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extern-“C”"><span class="nav-number">6.9.</span> <span class="nav-text">extern “C”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mutex-lock"><span class="nav-number">6.10.</span> <span class="nav-text">mutex::lock</span></a></li></ol></li></ol></div>
             
 
           </div>

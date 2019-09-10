@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-04T03:19:47.077Z">
+<meta property="og:updated_time" content="2019-07-17T11:04:21.714Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UniRx从入门到放弃">
 <meta name="twitter:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-06-04T12:19:47+09:00">
-                2019-06-04
+              <time title="更新于" itemprop="dateModified" datetime="2019-07-17T20:04:21+09:00">
+                2019-07-17
               </time>
             
           </span>
@@ -405,6 +405,14 @@
 <li><a href="https://qiita.com/toRisouP/items/2f1643e344c741dd94f8" target="_blank" rel="noopener">UniRx入門 その1</a></li>
 </ul>
 <p>这个作者还有一些其他的入门文章有时间也可以观摩一下:<a href="https://qiita.com/toRisouP/items/00b8a5bb8e7b68e0686c" target="_blank" rel="noopener">UniRx入門シリーズ 目次はこちら</a></p>
+<ul>
+<li><a href="https://qiita.com/Marimoiro/items/2ad8a1b422a3fe98f938" target="_blank" rel="noopener">UniRxを導入するメリット ～こういう時にUniRxは使えるよ～</a></li>
+</ul>
+<p>超级有用的一篇知乎文章：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/35189325" target="_blank" rel="noopener">又见Rx——Rx via UniRx</a></li>
+</ul>
+<p>里面的那个讲Rx的视频真的很厉害。</p>
 <h3 id="SubscribeOnMainThread-amp-ObserveOnMainThread"><a href="#SubscribeOnMainThread-amp-ObserveOnMainThread" class="headerlink" title="SubscribeOnMainThread &amp; ObserveOnMainThread"></a>SubscribeOnMainThread &amp; ObserveOnMainThread</h3><p>这个是做什么的</p>
 <ul>
 <li><a href="https://github.com/neuecc/UniRx/issues/282" target="_blank" rel="noopener">How to use SubscribeOnMainThread? It seems never working #282</a></li>
@@ -418,7 +426,10 @@
 <p>从名字上也能大致了解，就是为了让Subscribe中的内容在MainThread中执行。因为涉及到Unity的GameObject的操作都要在主线程中进行。</p>
 <p>按理说我应该试着使用这两个方法，再去了解这个方法应不应该这样用，也就是试错。</p>
 <p>但是我听前辈说这两个方法不太靠得住（意思应该就是使用的时候可能会报错，因为在子线程中动Unity的GameObject，或者Unity的一些东西，编译就会报错，会好好的报出错误信息的），最靠谱的方式是用<code>await UniTask.Yield()</code>。至于具体怎么用，在后面的地方专门展开。</p>
-<h3 id="ObserveEveryValueChanged"><a href="#ObserveEveryValueChanged" class="headerlink" title="ObserveEveryValueChanged"></a>ObserveEveryValueChanged</h3>
+<h3 id="ObserveEveryValueChanged"><a href="#ObserveEveryValueChanged" class="headerlink" title="ObserveEveryValueChanged"></a>ObserveEveryValueChanged</h3><h1 id="Reactive-Programming-重要"><a href="#Reactive-Programming-重要" class="headerlink" title="Reactive Programming(重要)"></a>Reactive Programming(重要)</h1><ul>
+<li><a href="https://egghead.io/courses/introduction-to-reactive-programming" target="_blank" rel="noopener">Introduction to Reactive Programming</a></li>
+</ul>
+
       
     </div>
     
@@ -572,7 +583,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">63</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -583,7 +594,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -594,7 +605,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -643,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.2.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.2.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.2.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.2.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
             
 
           </div>
