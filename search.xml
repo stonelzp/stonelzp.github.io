@@ -2,8 +2,15 @@
 <search>
   <entry>
     <title><![CDATA[Unity-异步处理]]></title>
-    <url>%2FUnity-%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86%2F</url>
+    <url>%2Funity-async%2F</url>
     <content type="text"><![CDATA[主要为了理解async/await关键字的意义。 async/awaitと同時実行制御]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+        <tag>async</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[Unity-第三方库介绍和使用]]></title>
