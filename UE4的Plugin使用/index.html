@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="UE4," />
+  <meta name="keywords" content="UE4,Plugins," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="制作UE4的插件相当于给UE4引擎添加新的功能模块。UE4的功能模块组成是由Module组成的，关于Module具体是什么，中文翻译就是模块，自己的理解中可以说是文件的单位了。 新建的插件代表着跟UE4本来的功能模块不是从属于一个Module，所以需要为自己制作的插件制作一个属性为Public的公开接口以供UE4引擎调用。">
-<meta name="keywords" content="UE4">
+<meta name="keywords" content="UE4,Plugins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UE4的Plugin使用">
 <meta property="og:url" content="http://stonelzp.github.io/UE4的Plugin使用/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="制作UE4的插件相当于给UE4引擎添加新的功能模块。UE4的功能模块组成是由Module组成的，关于Module具体是什么，中文翻译就是模块，自己的理解中可以说是文件的单位了。 新建的插件代表着跟UE4本来的功能模块不是从属于一个Module，所以需要为自己制作的插件制作一个属性为Public的公开接口以供UE4引擎调用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-02T02:39:06.442Z">
+<meta property="og:updated_time" content="2019-09-20T08:52:34.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4的Plugin使用">
 <meta name="twitter:description" content="制作UE4的插件相当于给UE4引擎添加新的功能模块。UE4的功能模块组成是由Module组成的，关于Module具体是什么，中文翻译就是模块，自己的理解中可以说是文件的单位了。 新建的插件代表着跟UE4本来的功能模块不是从属于一个Module，所以需要为自己制作的插件制作一个属性为Public的公开接口以供UE4引擎调用。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-02T11:39:06+09:00">
-                2018-08-02
+              <time title="更新于" itemprop="dateModified" datetime="2019-09-20T17:52:34+09:00">
+                2019-09-20
               </time>
             
           </span>
@@ -420,6 +420,15 @@
 <li><a href="https://blog.csdn.net/qq_20309931/article/details/53584075" target="_blank" rel="noopener">Unreal Engine 4 C++ 插件介绍</a></li>
 <li><a href="https://blog.csdn.net/yangxuan0261/article/details/52098104" target="_blank" rel="noopener">ue4插件开发</a></li>
 </ul>
+<h1 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h1><p>顺着文章名字找过来，结果发现内容跟我想象的不太一样。那么就分为两部分，上面是介绍UE4插件的使用方式。这一部分是介绍UE4中用到的插件。</p>
+<h2 id="Impostor-Bake"><a href="#Impostor-Bake" class="headerlink" title="Impostor Bake"></a>Impostor Bake</h2><ul>
+<li><p><a href="https://80.lv/articles/impostor-baker-for-ue4/" target="_blank" rel="noopener">Impostor Baker for UE4</a></p>
+</li>
+<li><p><a href="https://shaderbits.com/blog/octahedral-impostors/" target="_blank" rel="noopener">Octahedral Impostors</a></p>
+</li>
+<li><a href="https://github.com/ictusbrucks/ImpostorBaker" target="_blank" rel="noopener">Github</a></li>
+</ul>
+<p>这个插件在工程中使用过不过不太清楚是做什么的，不是我使用的部分，只是看到了。（需要整理）</p>
 
       
     </div>
@@ -467,6 +476,8 @@
         <div class="post-tags">
           
             <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+            <a href="/tags/Plugins/" rel="tag"><i class="fa fa-tag"></i> Plugins</a>
           
         </div>
       
@@ -572,7 +583,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-count">65</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -594,7 +605,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -643,7 +654,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Plugin的Public公开权限"><span class="nav-number">1.</span> <span class="nav-text">Plugin的Public公开权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#头文件的位置"><span class="nav-number">1.1.</span> <span class="nav-text">头文件的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加Export用的宏"><span class="nav-number">1.2.</span> <span class="nav-text">添加Export用的宏</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Plugin的Public公开权限"><span class="nav-number">1.</span> <span class="nav-text">Plugin的Public公开权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#头文件的位置"><span class="nav-number">1.1.</span> <span class="nav-text">头文件的位置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加Export用的宏"><span class="nav-number">1.2.</span> <span class="nav-text">添加Export用的宏</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Plugins"><span class="nav-number">2.</span> <span class="nav-text">Plugins</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impostor-Bake"><span class="nav-number">2.1.</span> <span class="nav-text">Impostor Bake</span></a></li></ol></li></ol></div>
             
 
           </div>
