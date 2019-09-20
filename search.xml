@@ -35,6 +35,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[Unity-DoTween-曲线的魅力]]></title>
+    <url>%2FUnity-DoTween-%E6%9B%B2%E7%BA%BF%E7%9A%84%E9%AD%85%E5%8A%9B%2F</url>
+    <content type="text"><![CDATA[因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。 首先是曲线的基础： 一から学ぶベジェ曲線 虽然是随便搜也能搜到，暂且记下来吧。 ease Easing functions specify the rate of change of a parameter over time 相当实用的网站，大佬教我搜ease的时候搜到的。 DoTween其实应该把这个放到Unity-插件的内容里的，感觉和曲线息息相关的插件，就放到了这里。 DOCUMENTATION DoPath/DoLocalPath这个是我所需要的，我使用的地方。 关于这个插件有很多的使用，有免费版和Pro版。我看到有人整理的我就先上个链接-HowTo_DOTween.md 我自己的话充其量用了上面的路径功能，换了换set ease的条件。还有一些RX的使用，Onstart(),OnComplete()。]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+      <tags>
+        <tag>DoTween</tag>
+        <tag>Curve</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UE4-枚举的使用]]></title>
     <url>%2Fue4-enum%2F</url>
     <content type="text"><![CDATA[介绍关于枚举的使用。 UE4 C++とUnreal C++の列挙型の扱い]]></content>
