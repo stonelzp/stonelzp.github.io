@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-20T09:40:33.795Z">
+<meta property="og:updated_time" content="2020-01-14T07:42:36.056Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UniRx从入门到放弃">
 <meta name="twitter:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-09-20T18:40:33+09:00">
-                2019-09-20
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-14T16:42:36+09:00">
+                2020-01-14
               </time>
             
           </span>
@@ -442,6 +442,12 @@
 </ul>
 <h3 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h3><ul>
 <li><a href="https://qiita.com/toRisouP/items/3cf1c9be3c37e7609a2f" target="_blank" rel="noopener">UniRx オペレータ逆引き</a></li>
+</ul>
+<h4 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h4><ul>
+<li><a href="http://neue.cc/2011/09/17_343.html" target="_blank" rel="noopener">Rxにおける並行非同期実行とリソース処理の問題</a></li>
+</ul>
+<h4 id="Do"><a href="#Do" class="headerlink" title="Do"></a>Do</h4><ul>
+<li><a href="http://light11.hatenadiary.com/entry/2018/11/03/195828" target="_blank" rel="noopener">【Unity】【UniRx】Observable.DoXxx()系のメソッドの挙動まとめ</a></li>
 </ul>
 <h1 id="Reactive-Programming-重要"><a href="#Reactive-Programming-重要" class="headerlink" title="Reactive Programming(重要)"></a>Reactive Programming(重要)</h1><ul>
 <li><a href="https://egghead.io/courses/introduction-to-reactive-programming" target="_blank" rel="noopener">Introduction to Reactive Programming</a></li>
@@ -600,7 +606,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -622,7 +628,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -671,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.2.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.2.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable"><span class="nav-number">1.2.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.2.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.2.5.</span> <span class="nav-text">Operators</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.2.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.2.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable"><span class="nav-number">1.2.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.2.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.2.5.</span> <span class="nav-text">Operators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Do"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">Do</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
             
 
           </div>
@@ -691,7 +697,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-04T10:34:16.864Z">
+<meta property="og:updated_time" content="2019-11-26T10:29:45.997Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git学习笔记">
 <meta name="twitter:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-07-04T19:34:16+09:00">
-                2019-07-04
+              <time title="更新于" itemprop="dateModified" datetime="2019-11-26T19:29:45+09:00">
+                2019-11-26
               </time>
             
           </span>
@@ -416,6 +416,13 @@
 <p>最近就发生了我提交了迷之代码的尴尬事情，查看历史的提交记录，追溯到我，场面一度非常尴尬。</p>
 <ul>
 <li><a href="https://qiita.com/shibukk/items/8c9362a5bd399b9c56be" target="_blank" rel="noopener">忘れやすい人のための git diff チートシート</a></li>
+</ul>
+<h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
+<p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
+<p>文件路径奇葩带空格又不是我的错，我只是导入一个插件而已。至于解决方案，那就是使用命令行工具来提交啊。关键时候还得是Bash。</p>
+<p>参考了下面的文章：</p>
+<ul>
+<li>[<a href="https://github.com/git-lfs/git-lfs/issues/2668" target="_blank" rel="noopener">[:space:]] seam to prevent Git lfs to work with SourceTree</a></li>
 </ul>
 
       
@@ -569,7 +576,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -591,7 +598,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -640,7 +647,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SourceTree"><span class="nav-number">3.</span> <span class="nav-text">SourceTree</span></a></li></ol></div>
             
 
           </div>
@@ -660,7 +667,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

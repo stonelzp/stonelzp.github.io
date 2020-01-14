@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-22T07:10:42.732Z">
+<meta property="og:updated_time" content="2019-12-11T11:06:10.076Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity-Editor扩展">
 <meta name="twitter:description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-22T16:10:42+09:00">
-                2019-08-22
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-11T20:06:10+09:00">
+                2019-12-11
               </time>
             
           </span>
@@ -400,6 +400,72 @@
       
         <p>编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)</p>
 <a id="more"></a>
+<p>由于是Editor的扩展功能在实际的项目中要注意不要把Editor的功能打包在项目的功能里面。</p>
+<h2 id="Unity-Editor扩展"><a href="#Unity-Editor扩展" class="headerlink" title="Unity Editor扩展"></a>Unity Editor扩展</h2><p>Unity编辑器扩展好多内容啊，只能记下我遇见的了。有时间要找找一些感觉用的上的。</p>
+<p>参考公司大佬的写法，我做了一个当我准备关掉Editor的时候会弹出来一个MessageBox的功能。没啥实际的功能，就是为了提醒。</p>
+<h3 id="实现需求"><a href="#实现需求" class="headerlink" title="实现需求"></a>实现需求</h3><p><a href="https://docs.unity3d.com/ScriptReference/EditorApplication-wantsToQuit.html" target="_blank" rel="noopener">EditorApplication.wantsToQuit</a>就是实现这个功能的主角。</p>
+<p>实现这个功能的代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[InitializeOnLoad]</span><br><span class="line">public class EditorReminder</span><br><span class="line">&#123;</span><br><span class="line">    [InitializeOnLoadMethod]</span><br><span class="line">    public static void ValidateReminder()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        EditorApplication.wantsToQuit += EditorWantToQuitReminder;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static bool EditorWantToQuitReminder()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        bool.TryParse(EditorUserSettings.GetConfigValue(&quot;EnableReminder&quot;), out var enable);</span><br><span class="line">        if(!enable)</span><br><span class="line">        &#123;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return EditorUtility.DisplayDialog(&quot;Reminder&quot;, &quot;Have you released all your locks on GitHub?&quot;, &quot;Yes, quit!&quot;, &quot;No, wait a second.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>几行就能实现这个功能，真的好简单啊（站着说话不腰疼）。</p>
+<h3 id="InitializeOnLoad"><a href="#InitializeOnLoad" class="headerlink" title="InitializeOnLoad"></a>InitializeOnLoad</h3><blockquote>
+<p><strong><a href="https://docs.unity3d.com/Manual/RunningEditorCodeOnLaunch.html" target="_blank" rel="noopener">Running Editor Script Code on Launch</a></strong></p>
+<p>Sometimes, it is useful to be able to run some editor script code in a project as soon as Unity launches without requiring action from the user. You can do this by applying the InitializeOnLoad attribute to a class which has a static constructor. A static constructor is a function with the same name as the class, declared static and without a return type or parameters (see <a href="http://docs.go-mono.com/index.aspx?link=ecmaspec%3a17.11" target="_blank" rel="noopener">here</a> for more information):-</p>
+</blockquote>
+<p>官方文档上说对于有一个静态构造函数的类前可以加上<strong>InitializeOnLoad</strong>这个attribute，但是上面的那个例子我并没有显式的去声明一个静态的构造函数。而且执行下来也没什么问题，难道说有一个静态构造函数会好一些吗。</p>
+<blockquote>
+<p>A static constructor is always guaranteed to be called before any static function or instance of the class is used, but the InitializeOnLoad attribute ensures that it is called as the editor launches.</p>
+</blockquote>
+<p>就是这样使用的。</p>
+<h3 id="InitializeOnLoadMethod"><a href="#InitializeOnLoadMethod" class="headerlink" title="InitializeOnLoadMethod"></a>InitializeOnLoadMethod</h3><p><a href="https://docs.unity3d.com/ScriptReference/InitializeOnLoadMethodAttribute.html" target="_blank" rel="noopener">InitializeOnLoadMethodAttribute</a></p>
+<blockquote>
+<p>Allow an editor class method to be initialized when Unity loads without action from the user.</p>
+</blockquote>
+<p>项目被加载到Unity中的时候带有这个属性的静态函数就会被自动调用。</p>
+<h3 id="EditorApplication"><a href="#EditorApplication" class="headerlink" title="EditorApplication"></a>EditorApplication</h3><p><a href="https://docs.unity3d.com/ScriptReference/EditorApplication.html" target="_blank" rel="noopener">EditorApplication</a></p>
+<h4 id="wantsToQuit"><a href="#wantsToQuit" class="headerlink" title="wantsToQuit"></a>wantsToQuit</h4><p>就是我用的那个啦，连用法都是抄的官方文档的。</p>
+<blockquote>
+<p>Unity raises this event when the editor application wants to quit.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">using UnityEngine;</span><br><span class="line">using UnityEditor;</span><br><span class="line"></span><br><span class="line">// Ensure class initializer is called whenever scripts recompile</span><br><span class="line">[InitializeOnLoad]</span><br><span class="line">public class EditorWantsToQuitExample</span><br><span class="line">&#123;</span><br><span class="line">    static bool WantsToQuit()</span><br><span class="line">    &#123;</span><br><span class="line">        Debug.Log(&quot;Editor prevented from quitting.&quot;);</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static EditorWantsToQuitExample()</span><br><span class="line">    &#123;</span><br><span class="line">        EditorApplication.wantsToQuit += WantsToQuit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>想要在Editor退出前做点什么？那么用这个吧。</p>
+<h4 id="quitting"><a href="#quitting" class="headerlink" title="quitting"></a>quitting</h4><p>想要在Editor退出的时候做点什么那么用这个。</p>
+<h3 id="EditorUtility"><a href="#EditorUtility" class="headerlink" title="EditorUtility"></a>EditorUtility</h3><p><strong><a href="https://docs.unity3d.com/ScriptReference/EditorUtility.html" target="_blank" rel="noopener">EditorUtility</a></strong></p>
+<p>一些通用的函数库，看名字就知道应该会很多</p>
+<h4 id="EditorUtility-DisplayDialog"><a href="#EditorUtility-DisplayDialog" class="headerlink" title="EditorUtility.DisplayDialog"></a>EditorUtility.DisplayDialog</h4><p><strong><a href="https://docs.unity3d.com/ScriptReference/EditorUtility.DisplayDialog.html" target="_blank" rel="noopener">EditorUtility.DisplayDialog</a></strong></p>
+<p>弹出一个窗口？</p>
+<h4 id="EditorUtility-DisplayDialogComplex"><a href="#EditorUtility-DisplayDialogComplex" class="headerlink" title="EditorUtility.DisplayDialogComplex"></a>EditorUtility.DisplayDialogComplex</h4><p>弹出一个更复杂的窗口？（貌似是支持三个按钮）</p>
+<h3 id="MenuItem"><a href="#MenuItem" class="headerlink" title="MenuItem"></a>MenuItem</h3><p><strong><a href="https://docs.unity3d.com/ScriptReference/MenuItem.html" target="_blank" rel="noopener">MenuItem</a></strong></p>
+<p>这个属性可以让在Editor上的菜单栏添加项目，可以用来做什么呢？那可太多了，比如说需要方便切换的项目设定，亦或者想要方便调用一个函数（啊这个好像可以直接在想要调用的GameObject上右键调用，使用另外一个Attribute）。总而言之，就是方便。</p>
+<p>需要注意的是<strong>只有静态函数才能使用这个MenuItem属性</strong>。</p>
+<p>这个光看官方文档不靠谱，讲的太少了，看我总结的？我总结的也没什么好看的，看这个</p>
+<ul>
+<li><a href="http://kan-kikuchi.hatenablog.com/entry/MenuItem" target="_blank" rel="noopener">メニューを追加するための属性「MenuItem」は意外と多機能【Unity】【エディタ拡張】【属性】</a></li>
+</ul>
+<p>还能设定快捷键，厉害了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[MenuItem(menuRoot + &quot;EnableReminder&quot;)]</span><br><span class="line">private static void EnableReminder()</span><br><span class="line">&#123;</span><br><span class="line">    var path = menuRoot + &quot;EnableReminder&quot;;</span><br><span class="line">    var enable = Menu.GetChecked(path);</span><br><span class="line"></span><br><span class="line">    Menu.SetChecked(path, !enable);</span><br><span class="line">    EditorUserSettings.SetConfigValue(&quot;EnableReminder&quot;, (!enable).ToString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用的话就是这么用的。我靠<strong>EditorUserSettings</strong>又是什么？</p>
+<h3 id="EditorUserSettings"><a href="#EditorUserSettings" class="headerlink" title="EditorUserSettings"></a>EditorUserSettings</h3><ul>
+<li><a href="http://kan-kikuchi.hatenablog.com/entry/EditorUserSettings" target="_blank" rel="noopener">プロジェクト内でデータを保存【Unity】【エディタ拡張】</a></li>
+</ul>
+<p>挺神奇的一个功能，用来保存本地设定相当理想的功能，但是貌似只有Get和Set两个方法写入的内容没法删除，别瞎写好么，我第一印象。</p>
+<p>##先记下，后整理</p>
+<ul>
+<li><a href="http://baba-s.hatenablog.com/entry/2017/12/04/090000#Unity-%E3%82%A8%E3%83%87%E3%82%A3%E3%82%BF%E3%82%92%E7%B5%82%E4%BA%86%E3%81%97%E3%81%9F%E6%99%82" target="_blank" rel="noopener">【Unity】エディタ拡張で使用できるコールバックを40個まとめて紹介</a></li>
+</ul>
+<h2 id="Editor扩展实例"><a href="#Editor扩展实例" class="headerlink" title="Editor扩展实例"></a>Editor扩展实例</h2><h3 id="Editor扩展的模板写法"><a href="#Editor扩展的模板写法" class="headerlink" title="Editor扩展的模板写法"></a>Editor扩展的模板写法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">using UnityEditor;</span><br><span class="line">using UnityEngine;</span><br><span class="line"></span><br><span class="line">namespace EditorExtension</span><br><span class="line">&#123;</span><br><span class="line">    [CustomEditor(typeof(ExtensionClass), true)]</span><br><span class="line">    public class ExtensionClassInspector ： Editor</span><br><span class="line">    &#123;</span><br><span class="line">        protected ExtensionClass extensionClass = null;</span><br><span class="line">        protected SerializedProperty attributeA;</span><br><span class="line">        protected SerializedProoerty attributeB;</span><br><span class="line">        ......</span><br><span class="line"></span><br><span class="line">        private void OnEnable()</span><br><span class="line">        &#123;</span><br><span class="line">            extensionClass = target as ExtensionClass;</span><br><span class="line"></span><br><span class="line">            attributeA = serializedObject.FindObject(&quot;ExtensionClass_AttributeAName&quot;);</span><br><span class="line">            attributeB = serializedObject.FindObject(&quot;ExtensionClass_AttributeBName&quot;);</span><br><span class="line">            ......</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public override void OnInspectorGUI()</span><br><span class="line">        &#123;</span><br><span class="line">            serializedObject.Update();</span><br><span class="line"></span><br><span class="line">            EditorGUILayout.PropertyField(attributeA);</span><br><span class="line">            EditorGUILayout.PropertyField(attributeB);</span><br><span class="line">            ......</span><br><span class="line"></span><br><span class="line">            serializedObject.ApplyModifiedProperties();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最普通的格式就是上面那样，这是对Inspector格式的扩展，内容都是最基础的。需要注意的是在对<code>OnInspectorGUI</code>函数进行重写的时候，最开始要<strong>Update()</strong>，最后要<strong>ApplyModifiedProperties()</strong>。</p>
+<h4 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 在上面的例子中的话</span><br><span class="line">EditorGUILayout.PropertyField(attributeA);</span><br><span class="line"></span><br><span class="line">EditorGUI.indentLevel++;</span><br><span class="line">EditorGUILayout.PropertyField(attributeB);</span><br><span class="line">EditorGUI.indentLevel--;</span><br></pre></td></tr></table></figure>
+<h4 id="Inspector变量名设定"><a href="#Inspector变量名设定" class="headerlink" title="Inspector变量名设定"></a>Inspector变量名设定</h4><p>在Inspector不指定变量名字的话就会使用默认的变量名字，但是也可以自己设置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EditorGUILayout.PropertyField(attributeA, new GUIContent(&quot;NameA&quot;));</span><br></pre></td></tr></table></figure>
+<p>这里的话就不自觉的产生了<strong>EditorGUILayout</strong>是什么的想法，还有其它的作用吧</p>
+<ol>
+<li>EditorGUILayout</li>
+<li>GUIContent</li>
+</ol>
+<h4 id="类型判断"><a href="#类型判断" class="headerlink" title="类型判断"></a>类型判断</h4><p>在<code>OnInspectorGUI</code>函数中也想要使用条件判断，这个时候不知道变量的类型不好办，上面的代码中表示的，变量类型都是<strong>SerializedProperty</strong>，条件语句对这个变量类型并不知晓。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(attributeA.boolValue) return;</span><br><span class="line"></span><br><span class="line">switch(attributeB.intValue) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>等等类型，基本数据类型应该都会有覆盖到，不太清楚。</p>
+<h4 id="Inspector在运行时添加不可交互内容"><a href="#Inspector在运行时添加不可交互内容" class="headerlink" title="Inspector在运行时添加不可交互内容"></a>Inspector在运行时添加不可交互内容</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if(EditorAppliation.isPlaying)</span><br><span class="line">&#123;</span><br><span class="line">    EditorGUILayout.BeginVertical(GUI.skin.box);</span><br><span class="line">    EditorGUILayout.LabelField(&quot;Running status&quot;);</span><br><span class="line"></span><br><span class="line">    //</span><br><span class="line">    EditorGUI.BeginDisabledGroup(true);</span><br><span class="line">    EditorGUILayout.PropertyField(flag1);</span><br><span class="line">    EditorGUILayout.PropertyField(flag2);</span><br><span class="line">    EditorGUI.EndDisabledGroup();</span><br><span class="line"></span><br><span class="line">    EditorGUILayout.BeginHorizontal();</span><br><span class="line">    GUILayout.FlexibleSpace();</span><br><span class="line"></span><br><span class="line">    if (GUILayout.Button(&quot;buttonA&quot;, GUILayout.Width(100)))</span><br><span class="line">    &#123;</span><br><span class="line">        (target as ExtensionClass)?.SampleFunctionA();</span><br><span class="line">    &#125;</span><br><span class="line">    EditorGUILayout.EndHorizontal();</span><br><span class="line"></span><br><span class="line">    EditorGUILayout.EndVertical();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我只是拿来用而已…..出现了好多我不会用的控件。还需要学习啊。</p>
 <h3 id="Inspector中显示List元素"><a href="#Inspector中显示List元素" class="headerlink" title="Inspector中显示List元素"></a>Inspector中显示List元素</h3><ul>
 <li><a href="http://light11.hatenadiary.com/entry/2019/04/13/232549" target="_blank" rel="noopener">【Unity】【エディタ拡張】配列やリストのInspector表示を改良する</a></li>
 </ul>
@@ -419,7 +485,16 @@
 </ul>
 <p>方法很简单，但是这里遇见了一个问题，因为使用了Inspector扩展，Inspector上不显示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// EditorGUILayout.PropertyField(pathAnchors);</span><br><span class="line">EditorGUILayout.PropertyField(pathAnchors, true);</span><br></pre></td></tr></table></figure></p>
 <p>加上一个true的参数就好了，原因我也不知道，之后在调查吧。</p>
-<h3 id="SerializedObject"><a href="#SerializedObject" class="headerlink" title="SerializedObject"></a>SerializedObject</h3><ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Serializable]</span><br><span class="line">public class AreaPathAnchor</span><br><span class="line">&#123;</span><br><span class="line">    public List&lt;GameObject&gt; List = new List&lt;GameObject&gt;();</span><br><span class="line"></span><br><span class="line">    public AreaPathAnchor(List&lt;GameObject&gt; list)</span><br><span class="line">    &#123;</span><br><span class="line">        List = list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[SerializeField]</span><br><span class="line">private List&lt;AreaPathAnchor&gt; pathAnchors = new List&lt;AreaPathAnchor&gt;();</span><br></pre></td></tr></table></figure>
+<p>Inspector扩展中对应的代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public override void OnInspectorGUI()</span><br><span class="line">&#123;</span><br><span class="line">    EditorGUILayout.PropertyField(pathAnchors, true);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Inspector中加入HDRColor选择-未整理"><a href="#Inspector中加入HDRColor选择-未整理" class="headerlink" title="Inspector中加入HDRColor选择(未整理)"></a>Inspector中加入HDRColor选择(未整理)</h3><p>其实这个属性也不需要刻意的去扩展，只要在属性前加上限定Unity就会自动处理了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ColorUsage(false,true)] private Color color1;</span><br></pre></td></tr></table></figure></p>
+<p>像这样子。</p>
+<p>关于这个属性的更详细的说明之后再整理。</p>
+<ul>
+<li><a href="https://docs.unity3d.com/ScriptReference/ColorUsageAttribute-ctor.html" target="_blank" rel="noopener">ColorUsageAttribute Constructor</a></li>
+<li><a href="https://nopitech.com/2019/01/29/post-962/" target="_blank" rel="noopener">マテリアルのEmissionを操作</a></li>
+</ul>
+<h2 id="SerializedObject"><a href="#SerializedObject" class="headerlink" title="SerializedObject"></a>SerializedObject</h2><ul>
 <li><a href="http://light11.hatenadiary.com/entry/2018/03/15/225709" target="_blank" rel="noopener">【Unity】【エディタ拡張】SerializedObjectの勘所をまとめてみる</a></li>
 </ul>
 
@@ -576,7 +651,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -598,7 +673,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -647,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中显示List元素"><span class="nav-number">1.</span> <span class="nav-text">Inspector中显示List元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中显示多元List"><span class="nav-number">2.</span> <span class="nav-text">Inspector中显示多元List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SerializedObject"><span class="nav-number">3.</span> <span class="nav-text">SerializedObject</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-Editor扩展"><span class="nav-number">1.</span> <span class="nav-text">Unity Editor扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现需求"><span class="nav-number">1.1.</span> <span class="nav-text">实现需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InitializeOnLoad"><span class="nav-number">1.2.</span> <span class="nav-text">InitializeOnLoad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InitializeOnLoadMethod"><span class="nav-number">1.3.</span> <span class="nav-text">InitializeOnLoadMethod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditorApplication"><span class="nav-number">1.4.</span> <span class="nav-text">EditorApplication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wantsToQuit"><span class="nav-number">1.4.1.</span> <span class="nav-text">wantsToQuit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#quitting"><span class="nav-number">1.4.2.</span> <span class="nav-text">quitting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditorUtility"><span class="nav-number">1.5.</span> <span class="nav-text">EditorUtility</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EditorUtility-DisplayDialog"><span class="nav-number">1.5.1.</span> <span class="nav-text">EditorUtility.DisplayDialog</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EditorUtility-DisplayDialogComplex"><span class="nav-number">1.5.2.</span> <span class="nav-text">EditorUtility.DisplayDialogComplex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MenuItem"><span class="nav-number">1.6.</span> <span class="nav-text">MenuItem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditorUserSettings"><span class="nav-number">1.7.</span> <span class="nav-text">EditorUserSettings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Editor扩展实例"><span class="nav-number">2.</span> <span class="nav-text">Editor扩展实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Editor扩展的模板写法"><span class="nav-number">2.1.</span> <span class="nav-text">Editor扩展的模板写法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缩进"><span class="nav-number">2.1.1.</span> <span class="nav-text">缩进</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inspector变量名设定"><span class="nav-number">2.1.2.</span> <span class="nav-text">Inspector变量名设定</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类型判断"><span class="nav-number">2.1.3.</span> <span class="nav-text">类型判断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inspector在运行时添加不可交互内容"><span class="nav-number">2.1.4.</span> <span class="nav-text">Inspector在运行时添加不可交互内容</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中显示List元素"><span class="nav-number">2.2.</span> <span class="nav-text">Inspector中显示List元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中显示多元List"><span class="nav-number">2.3.</span> <span class="nav-text">Inspector中显示多元List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中加入HDRColor选择-未整理"><span class="nav-number">2.4.</span> <span class="nav-text">Inspector中加入HDRColor选择(未整理)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SerializedObject"><span class="nav-number">3.</span> <span class="nav-text">SerializedObject</span></a></li></ol></div>
             
 
           </div>
@@ -667,7 +742,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

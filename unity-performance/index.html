@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="我知道这只是早晚的事儿。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-04T11:03:54.386Z">
+<meta property="og:updated_time" content="2020-01-10T09:38:05.286Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity-Performance提升">
 <meta name="twitter:description" content="我知道这只是早晚的事儿。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-07-04T20:03:54+09:00">
-                2019-07-04
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-10T18:38:05+09:00">
+                2020-01-10
               </time>
             
           </span>
@@ -403,6 +403,97 @@
 <ul>
 <li><a href="https://www.slideshare.net/UnityTechnologiesJapan/unity-111054310" target="_blank" rel="noopener">【CEDEC2018】一歩先のUnityでのパフォーマンス/メモリ計測、デバッグ術</a></li>
 </ul>
+<h2 id="UI部分"><a href="#UI部分" class="headerlink" title="UI部分"></a>UI部分</h2><p>大佬总是跟我说不要用Canvas，当然是指游戏运行中的某种情况，貌似公司的大佬对于UI的效率很是关心。因为我也不懂太多关于UI的渲染问题所以只能先记下。</p>
+<ul>
+<li><a href="https://unity3d.com/jp/how-to/unity-ui-optimization-tips" target="_blank" rel="noopener">Unity UI の最適化に関するヒント</a></li>
+<li><a href="https://www.youtube.com/watch?v=_wxitgdx-UI&amp;index=7&amp;list=PLX2vGYjWbI0Rzo8D-vUCFVb_hHGxXWd9j" target="_blank" rel="noopener">Unite Europe 2017 - Squeezing Unity: Tips for raising performance</a></li>
+</ul>
+<p>上面的视频我看了两遍都没看完，中途都困得不行了…但是确实很重要，一定要整理。</p>
+<h3 id="Unity中UI需要了解"><a href="#Unity中UI需要了解" class="headerlink" title="Unity中UI需要了解"></a>Unity中UI需要了解</h3><p>摘取上面的视频中的内容</p>
+<blockquote>
+<p><strong>The Absolute Basics</strong></p>
+<ul>
+<li>Canvases generate meshes &amp; draw them<ul>
+<li>Drawing happens once per frame</li>
+<li>Generation happens when “something changes”</li>
+</ul>
+</li>
+<li>“Something changes” = “1 or more UI elements change”<ul>
+<li>Change one UI element, dirty the whole canvas</li>
+<li>Yes, one.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>What’s a rebuild? Theoretically…</strong></p>
+<ul>
+<li>Three steps:<ul>
+<li>Recalculate layouts of auto-layouted elements</li>
+<li>Regenerate meshes for all <em>enabled</em> elements<ul>
+<li><em>Yes, meshed are still created when alpha=0!</em></li>
+</ul>
+</li>
+<li>Regenerate materials to help batch meshed</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>What’s a rebuild? In Reality…</strong></p>
+<ul>
+<li>Usually, all system are dirtied instead of individually</li>
+<li>Notable exceptions:<ul>
+<li>Color property</li>
+<li>fill* properties on Image</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>After all that…</strong></p>
+<ul>
+<li>Canvas takes meshes, divides them into batches<ul>
+<li>Sorts the meshes by depth (hierarchy order)</li>
+<li><em>Yes, this involves a sort() operation!</em></li>
+</ul>
+</li>
+<li>AllUI os transparent. No matter what.<ul>
+<li>Overdraw is   a problem!</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>The Vicious Cycle</strong></p>
+<ul>
+<li>Sort means performance drops faster-than-linear as number of drawable elements rises.</li>
+<li>Higher number of elements means a higher chance any given element will change.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Slice up your canvases!</strong></p>
+<ul>
+<li>Add more canvases.</li>
+<li>Each canvas owns its own set of UI elements<ul>
+<li>Elements on different canvases will not batch.</li>
+</ul>
+</li>
+<li>Main tool for constraining size of UI batches.</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>Nesting Canvases</strong></p>
+<ul>
+<li>Canvases can be created within other canvases</li>
+<li>Child canvases inherit rendering settings.<ul>
+<li>Maintain own geometry.</li>
+<li>Perform own batching.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>后半段我开始听不太懂了……</p>
 
       
     </div>
@@ -526,8 +617,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -546,7 +646,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -568,7 +668,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -608,6 +708,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UI部分"><span class="nav-number">1.</span> <span class="nav-text">UI部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Unity中UI需要了解"><span class="nav-number">1.1.</span> <span class="nav-text">Unity中UI需要了解</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -621,7 +737,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
