@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[VR-脚步声检测功能实现]]></title>
+    <url>%2Fvr-footstep-detection%2F</url>
+    <content type="text"><![CDATA[也算是业务相关吧，业务要求要只用VR头戴设备检测脚步声，这里我根据公司前辈的工作内容进行了一些改良，主要是利用VR设备移动的时候的前后上下的加速度和速度来判定脚步。准确率正常情况下有90%以上吧。 这里我主要的灵感来源是这篇文章 CSS3人行走动作图解和动画实现 根据这种分解的例子找到判定的条件。 代码实现的话有时间贴上，并说明。]]></content>
+      <categories>
+        <category>VR</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+        <tag>Unity</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Assembly-C#中的程序集]]></title>
     <url>%2Fassembly-c%23%2F</url>
     <content type="text"><![CDATA[在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。 Assembly-程序集 .NET 中的程序集官方文档说明 程序集构成了 .NET 应用程序的部署、版本控制、重用、激活范围和安全权限的基本单元。 程序集是为协同工作而生成的类型和资源的集合，这些类型和资源构成了一个逻辑功能单元。 程序集采用可执行文件 (.exe) 或动态链接库文件 (.dll) 的形式，是 .NET 应用程序的构建基块 。 它们向公共语言运行时提供了注意类型实现代码所需的信息。 就像一个应用程序一样，在Windows中这个应用程序会有exe文件和若干dll文件。还有一些其他的我不知道的文件，这些都是程序集的一部分。这就是一个程序集，准确与否我也不确定。反正上面的我理解就是这个意思。 关于Assembly的一些要点的话在上面的链接中可以确认，有时间再整理一下吧。 Reflection-C#中的反射机制 反射 (C#)官网的说明跟没有说明一样，还是得参考其他的文章的使用。因为具体要怎么使用，为什么要使用反射对我来说还是一个疑问，使用反射有什么好处呢？]]></content>
@@ -100,8 +112,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -112,8 +124,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -489,8 +501,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -501,8 +513,8 @@
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
         <tag>编程</tag>
       </tags>
   </entry>
@@ -514,8 +526,8 @@
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
         <tag>编程</tag>
       </tags>
   </entry>
@@ -527,8 +539,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -574,8 +586,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -617,8 +629,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -663,8 +675,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -675,8 +687,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -687,8 +699,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -699,8 +711,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -711,8 +723,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -759,8 +771,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
