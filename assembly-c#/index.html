@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="C#,async," />
+  <meta name="keywords" content="C#,笔记," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="主要为了理解async/await关键字的意义。">
-<meta name="keywords" content="C#,async">
+<meta name="description" content="在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。">
+<meta name="keywords" content="C#,笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Unity-异步处理">
-<meta property="og:url" content="http://stonelzp.github.io/unity-async/index.html">
+<meta property="og:title" content="Assembly-C#中的程序集">
+<meta property="og:url" content="http://stonelzp.github.io/assembly-c#/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="主要为了理解async/await关键字的意义。">
+<meta property="og:description" content="在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-20T09:53:03.108Z">
+<meta property="og:updated_time" content="2020-01-17T10:40:31.319Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Unity-异步处理">
-<meta name="twitter:description" content="主要为了理解async/await关键字的意义。">
+<meta name="twitter:title" content="Assembly-C#中的程序集">
+<meta name="twitter:description" content="在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/unity-async/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/assembly-c#/"/>
 
 
 
 
 
-  <title>Unity-异步处理 | StoneのBLOG</title>
+  <title>Assembly-C#中的程序集 | StoneのBLOG</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/unity-async/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/assembly-c#/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Unity-异步处理</h1>
+          <h1 class="post-title" itemprop="name headline">Assembly-C#中的程序集</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-20T18:48:04+09:00">
-                2019-09-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-17T19:15:37+09:00">
+                2020-01-17
               </time>
             
 
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-09-20T18:53:03+09:00">
-                2019-09-20
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-17T19:40:31+09:00">
+                2020-01-17
               </time>
             
           </span>
@@ -361,8 +361,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Unity/" itemprop="url" rel="index">
-                    <span itemprop="name">Unity</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C#</span>
                   </a>
                 </span>
 
@@ -398,10 +398,18 @@
       
 
       
-        <p>主要为了理解async/await关键字的意义。</p>
+        <p>在接触Unity的过程中，一直不清楚<code>Assembly</code>这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对<strong>反射</strong>这个概念进行一次透彻的了解。</p>
 <a id="more"></a>
-<ul>
-<li><a href="https://ufcpp.wordpress.com/2012/11/12/asyncawaitと同時実行制御/" target="_blank" rel="noopener">async/awaitと同時実行制御</a></li>
+<h1 id="Assembly-程序集"><a href="#Assembly-程序集" class="headerlink" title="Assembly-程序集"></a>Assembly-程序集</h1><ul>
+<li><a href="https://docs.microsoft.com/zh-cn/dotnet/standard/assembly/" target="_blank" rel="noopener">.NET 中的程序集</a>官方文档说明<blockquote>
+<p>程序集构成了 .NET 应用程序的部署、版本控制、重用、激活范围和安全权限的基本单元。 程序集是为协同工作而生成的类型和资源的集合，这些类型和资源构成了一个逻辑功能单元。 程序集采用可执行文件 (.exe) 或动态链接库文件 (.dll) 的形式，是 .NET 应用程序的构建基块 。 它们向公共语言运行时提供了注意类型实现代码所需的信息。</p>
+</blockquote>
+</li>
+</ul>
+<p>就像一个应用程序一样，在Windows中这个应用程序会有<code>exe</code>文件和若干<code>dll</code>文件。还有一些其他的我不知道的文件，这些都是程序集的一部分。这就是一个程序集，准确与否我也不确定。反正上面的我理解就是这个意思。</p>
+<p>关于Assembly的一些要点的话在上面的链接中可以确认，有时间再整理一下吧。</p>
+<h1 id="Reflection-C-中的反射机制"><a href="#Reflection-C-中的反射机制" class="headerlink" title="Reflection-C#中的反射机制"></a>Reflection-C#中的反射机制</h1><ul>
+<li><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/reflection" target="_blank" rel="noopener">反射 (C#)</a><br>官网的说明跟没有说明一样，还是得参考其他的文章的使用。因为具体要怎么使用，为什么要使用反射对我来说还是一个疑问，使用反射有什么好处呢？</li>
 </ul>
 
       
@@ -434,7 +442,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://stonelzp.github.io/unity-async/" title="Unity-异步处理">http://stonelzp.github.io/unity-async/</a>
+    <a href="http://stonelzp.github.io/assembly-c#/" title="Assembly-C#中的程序集">http://stonelzp.github.io/assembly-c#/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -451,7 +459,7 @@
           
             <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C#</a>
           
-            <a href="/tags/async/" rel="tag"><i class="fa fa-tag"></i> async</a>
+            <a href="/tags/笔记/" rel="tag"><i class="fa fa-tag"></i> 笔记</a>
           
         </div>
       
@@ -464,8 +472,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/unity-serialization/" rel="next" title="Unity-Serialization理解">
-                <i class="fa fa-chevron-left"></i> Unity-Serialization理解
+              <a href="/unity-make-object-rotating/" rel="next" title="Unity-使物体旋转的功能脚本">
+                <i class="fa fa-chevron-left"></i> Unity-使物体旋转的功能脚本
               </a>
             
           </div>
@@ -473,10 +481,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/ue4-fucking-moment/" rel="prev" title="UE4-踩坑指南">
-                UE4-踩坑指南 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -528,8 +532,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -609,6 +622,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Assembly-程序集"><span class="nav-number">1.</span> <span class="nav-text">Assembly-程序集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reflection-C-中的反射机制"><span class="nav-number">2.</span> <span class="nav-text">Reflection-C#中的反射机制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

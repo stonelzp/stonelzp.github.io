@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Assembly-C#中的程序集]]></title>
+    <url>%2Fassembly-c%23%2F</url>
+    <content type="text"><![CDATA[在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。 Assembly-程序集 .NET 中的程序集官方文档说明 程序集构成了 .NET 应用程序的部署、版本控制、重用、激活范围和安全权限的基本单元。 程序集是为协同工作而生成的类型和资源的集合，这些类型和资源构成了一个逻辑功能单元。 程序集采用可执行文件 (.exe) 或动态链接库文件 (.dll) 的形式，是 .NET 应用程序的构建基块 。 它们向公共语言运行时提供了注意类型实现代码所需的信息。 就像一个应用程序一样，在Windows中这个应用程序会有exe文件和若干dll文件。还有一些其他的我不知道的文件，这些都是程序集的一部分。这就是一个程序集，准确与否我也不确定。反正上面的我理解就是这个意思。 关于Assembly的一些要点的话在上面的链接中可以确认，有时间再整理一下吧。 Reflection-C#中的反射机制 反射 (C#)官网的说明跟没有说明一样，还是得参考其他的文章的使用。因为具体要怎么使用，为什么要使用反射对我来说还是一个疑问，使用反射有什么好处呢？]]></content>
+      <categories>
+        <category>C#</category>
+      </categories>
+      <tags>
+        <tag>C#</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Unity-使物体旋转的功能脚本]]></title>
     <url>%2Funity-make-object-rotating%2F</url>
     <content type="text"><![CDATA[记一个使物体旋转的功能脚本，感觉这个功能时不时的会遇到，每次写的时候都挺绕的，不如记下来。 实现功能实现：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122using UnityEngine;using System;namespace Clown.Utility&#123; [Serializable, AddComponentMenu(&quot;Clown/Utility/Make Object Rotating&quot;)] public class MakeObjectRotating : MonoBehaviour &#123; [SerializeField] private bool clockWise = false; [SerializeField] private bool rotateAxisY = true; [SerializeField] private bool rotateAxisX = false; [SerializeField] private bool rotateAxisZ = false; [SerializeField] private float rotateSpeed = 0.0f; [SerializeField] private bool hasEnterTime = false; [SerializeField] private float enterTime = 4.0f; [SerializeField] private bool hasExitTime = false; [SerializeField] private float exitTime = 2.0f; bool isRotating = false; float speed = 0.0f; bool rotatingSwitch = false; public void OnEnable() &#123; rotatingSwitch = true; &#125; private void Update() &#123; var angles = transform.rotation.eulerAngles; var anglesY = angles.y; var anglesX = angles.x; var anglesZ = angles.z; if (isRotating) &#123; if (!rotatingSwitch) &#123; if (hasExitTime) &#123; speed -= (rotateSpeed / exitTime * Time.deltaTime); if (speed &lt; 0.0f) &#123; speed = 0.0f; isRotating = false; return; &#125; anglesY -= rotateAxisY ? (speed * Time.deltaTime) : 0f; anglesX -= rotateAxisX ? (speed * Time.deltaTime) : 0f; anglesZ -= rotateAxisZ ? (speed * Time.deltaTime) : 0f; &#125; else &#123; isRotating = false; speed = 0.0f; return; &#125; &#125; else &#123; anglesY -= rotateAxisY ? (rotateSpeed * Time.deltaTime) : 0f; anglesX -= rotateAxisX ? (rotateSpeed * Time.deltaTime) : 0f; anglesZ -= rotateAxisZ ? (rotateSpeed * Time.deltaTime) : 0f; &#125; &#125; else &#123; if(!rotatingSwitch) &#123; enabled = false; return; &#125; if (hasEnterTime) &#123; speed += (rotateSpeed / enterTime * Time.deltaTime); if (speed &gt; rotateSpeed) &#123; speed = rotateSpeed; isRotating = true; &#125; anglesY -= rotateAxisY ? (speed * Time.deltaTime) : 0f; anglesX -= rotateAxisX ? (speed * Time.deltaTime) : 0f; anglesZ -= rotateAxisZ ? (speed * Time.deltaTime) : 0f; &#125; else &#123; isRotating = true; anglesY -= rotateAxisY ? (rotateSpeed * Time.deltaTime) : 0f; anglesX -= rotateAxisX ? (rotateSpeed * Time.deltaTime) : 0f; anglesZ -= rotateAxisZ ? (rotateSpeed * Time.deltaTime) : 0f; &#125; &#125; angles.y = anglesY; angles.x = anglesX; angles.z = anglesZ; transform.rotation = Quaternion.Euler(angles); &#125; public void SetValueToRotate(bool val) &#123; rotatingSwitch = val; &#125; &#125;&#125; 使用的话，就在合适的时间调用SetValueToRotate或者OnEnable函数就好了，当然使用条件不一样注意一下，我就不写了。 这里我想着应该可以再优化一下代码结构的，但是想想值不值得还是两说，暂时也没有什么非常棒的想法。 这里还有就是我本来想把全部都写在项目文件里的，之前我只是实现了Y轴的旋转，因为项目面基本上不会出现其他轴的旋转了我就没有把全部实现都提交，也许会减轻一些处理吧，心理上的。 这里再贴一下Editor扩展的实现：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960using UnityEditor;using Project.Utility;[CustomEditor(typeof(MakeObjectRotating))]public class MakeObjectRotationInspector : Editor&#123; protected SerializedProperty clockWise; protected SerializedProperty rotateAxisY; protected SerializedProperty rotateAxisX; protected SerializedProperty rotateAxisZ; protected SerializedProperty rotateSpeed; protected SerializedProperty hasEnterTime; protected SerializedProperty enterTime; protected SerializedProperty hasExitTime; protected SerializedProperty exitTime; private void OnEnable() &#123; clockWise = serializedObject.FindProperty(&quot;clockWise&quot;); rotateAxisY = serializedObject.FindProperty(&quot;rotateAxisY&quot;); rotateAxisX = serializedObject.FindProperty(&quot;rotateAxisX&quot;); rotateAxisZ = serializedObject.FindProperty(&quot;rotateAxisZ&quot;); rotateSpeed = serializedObject.FindProperty(&quot;rotateSpeed&quot;); hasEnterTime = serializedObject.FindProperty(&quot;hasEnterTime&quot;); enterTime = serializedObject.FindProperty(&quot;enterTime&quot;); hasExitTime = serializedObject.FindProperty(&quot;hasExitTime&quot;); exitTime = serializedObject.FindProperty(&quot;exitTime&quot;); &#125; public override void OnInspectorGUI() &#123; // base.OnInspectorGUI(); serializedObject.Update(); EditorGUILayout.PropertyField(clockWise); EditorGUILayout.PropertyField(rotateAxisY); EditorGUILayout.PropertyField(rotateAxisX); EditorGUILayout.PropertyField(rotateAxisZ); EditorGUILayout.PropertyField(rotateSpeed); EditorGUILayout.PropertyField(hasEnterTime); if (hasEnterTime.boolValue) &#123; EditorGUI.indentLevel++; EditorGUILayout.PropertyField(enterTime); EditorGUI.indentLevel--; &#125; EditorGUILayout.PropertyField(hasExitTime); if (hasExitTime.boolValue) &#123; EditorGUI.indentLevel++; EditorGUILayout.PropertyField(exitTime); EditorGUI.indentLevel--; &#125; serializedObject.ApplyModifiedProperties(); &#125;&#125;]]></content>
@@ -260,8 +272,8 @@
         <category>Unity</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C#</tag>
+        <tag>笔记</tag>
         <tag>plugins</tag>
         <tag>Unity2019.1.3</tag>
       </tags>
@@ -489,9 +501,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -502,9 +514,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -515,8 +527,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
