@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-25T05:40:40.679Z">
+<meta property="og:updated_time" content="2020-01-21T15:54:45.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity-Serialization理解">
 <meta name="twitter:description" content="这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-11-25T14:40:40+09:00">
-                2019-11-25
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-22T00:54:45+09:00">
+                2020-01-22
               </time>
             
           </span>
@@ -405,6 +405,41 @@
 <p>序列化又称串行化，是.NET运行时环境用来支持用户定义类型的流化的机制。其目的是以某种存储形式使自定义对象持久化，或者将这种对象从一个地方传输到另一个地方。</p>
 </blockquote>
 <p>Unity中非常多非常多的场景中使用了序列化，参考一下这篇文章<a href="https://blogs.unity3d.com/2014/06/24/serialization-in-unity/" target="_blank" rel="noopener">Serialization in Unity</a>，深入理解一下Unity中的序列化。</p>
+<p>下面我就对这篇文章的内容进行整理，主要是做笔记。</p>
+<h3 id="Serialization-in-Unity"><a href="#Serialization-in-Unity" class="headerlink" title="Serialization in Unity"></a>Serialization in Unity</h3><p>先是比较重要的内容摘抄一下。</p>
+<ul>
+<li><strong>Storing data stroed in your scripts.</strong><ul>
+<li>保存你脚本中保存的数据。是大多数人最熟知的功能。</li>
+</ul>
+</li>
+<li><strong>Inspector window.</strong><ul>
+<li>Inspector窗口不是经过C#的API来了解内部的数据结构或者属性，它要求对象序列化数据然后显示序列化之后的数据内容。</li>
+</ul>
+</li>
+<li><strong>Prefab.</strong><ul>
+<li>prefab是一个或多个对象和组件的被序列化的数据流(serialized data stream)。一个prefab实例(instance)实际上是一组应该被应用到这个被序列化数据实例的修改内容(A prefab instance is a list of modifications that should be made on the serialized data for this instance.)。Prefab这个概念实际上只存在于Editor阶段，当Unity开始Build工程的时候就会把这些修改应用到这些被序列化的数据流上，并且当这些修改被实例化，被实例化的数据对象并不会知道它们曾经是Editor编辑器中的Prefab。</li>
+</ul>
+</li>
+<li><p><strong>Instantiation.</strong></p>
+<ul>
+<li><p>当你调用<code>Instantiate()</code>函数，对prefab，scene中的gameobject，或者是其它的能被序列化的数据(everything that derives from UnityEngine.Object can be serialized)的操作结果，我们将会序列化对象，然后创建一个新的对象，然后反序列化对象数据到新的对象数据中。</p>
+<blockquote>
+<p>(We then run the same serialization code again in a different variant, where we use it to report which other UnityEngine.Object’s are being referenced. We then check for all referenced UnityEngine.Object’s if they are part of the data being Instantiated(). If the reference is pointing to something “external” (like a texture) we keep that reference as it is, if it is pointing to something “internal” (like a child gameobject), we patch the reference to the corresponding copy).</p>
+</blockquote>
+<p>  这里我直接贴了英文原文，感觉翻译不出人家的意思。要注意的是：</p>
+<ul>
+<li>Variant: 在unity编辑器中偶尔会看见这个名字，在我prefab中嵌套另一个prefab的时候印象最深。按照上面的说法，这个是用来通知被引用的UnityEngine.Object’s，然后同样对这些对象执行上述的序列化代码。</li>
+<li>如果引用的内容是外部数据(“external”)将会保留原有的引用。</li>
+<li>如果引用的内容是内部数据(“internal”)将会将引用替换为原有数据的副本。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Saving.</strong><ul>
+<li>a</li>
+</ul>
+</li>
+</ul>
 <ul>
 <li><a href="http://light11.hatenadiary.com/entry/2018/03/15/225709" target="_blank" rel="noopener">【Unity】【エディタ拡張】SerializedObjectの勘所をまとめてみる</a></li>
 </ul>
@@ -631,7 +666,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Serialization-序列化"><span class="nav-number">1.</span> <span class="nav-text">Serialization 序列化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Serialization-序列化"><span class="nav-number">1.</span> <span class="nav-text">Serialization 序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serialization-in-Unity"><span class="nav-number">1.1.</span> <span class="nav-text">Serialization in Unity</span></a></li></ol></li></ol></div>
             
 
           </div>
