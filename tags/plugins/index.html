@@ -82,7 +82,7 @@
 <meta name="description" content="爱自己，对爱你的人来说，是最大的安慰">
 <meta property="og:type" content="website">
 <meta property="og:title" content="StoneのBLOG">
-<meta property="og:url" content="http://stonelzp.github.io/tags/plugins/index.html">
+<meta property="og:url" content="http://stonelzp.github.io/tags/Plugins/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="爱自己，对爱你的人来说，是最大的安慰">
 <meta property="og:locale" content="zh-Hans">
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/tags/plugins/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/tags/Plugins/"/>
 
 
 
 
 
-  <title>标签: plugins | StoneのBLOG</title>
+  <title>标签: Plugins | StoneのBLOG</title>
   
 
 
@@ -288,7 +288,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>plugins<small>标签</small>
+        <h1>Plugins<small>标签</small>
         </h1>
       </div>
 
@@ -300,37 +300,9 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/unity-plugins/" itemprop="url">
+            <a class="post-title-link" href="/UE4的Plugin使用/" itemprop="url">
               
-                <span itemprop="name">Unity-第三方库介绍和使用</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-20T18:11:14+09:00"
-              content="2019-09-20" >
-          09-20
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/visual-studio-plugins/" itemprop="url">
-              
-                <span itemprop="name">VS中有用的插件</span>
+                <span itemprop="name">UE4的Plugin使用</span>
               
             </a>
         
@@ -338,37 +310,9 @@
 
       <div class="post-meta">
         <time class="post-time" itemprop="dateCreated"
-              datetime="2019-05-25T13:13:59+09:00"
-              content="2019-05-25" >
-          05-25
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/unity-learning-note/" itemprop="url">
-              
-                <span itemprop="name">Unity知识点记录</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-05-23T17:13:44+09:00"
-              content="2019-05-23" >
-          05-23
+              datetime="2018-08-02T10:39:13+09:00"
+              content="2018-08-02" >
+          08-02
         </time>
       </div>
 
@@ -432,7 +376,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">72</span>
+                  <span class="site-state-item-count">73</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -454,7 +398,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -936,6 +880,74 @@
               })
               searchResultList += "</ul>";
               resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+resultContent.innerHTML = searchResultList;
             }
           }
 
