@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[VPN使用中的问题记录]]></title>
     <url>%2Fhow-to-use-vpn%2F</url>
-    <content type="text"><![CDATA[最近回国有点需要便购买了VPN的服务，这篇文章目的是为了记录我使用VPN的过程中遇到的一些问题，应该以后也会频繁用到做个备忘，以应付一些相似的问题。 VPN选择Git设定GitHub网页登录GitHub命令行远程连接]]></content>
+    <content type="text"><![CDATA[最近回国有点需要便购买了VPN的服务，这篇文章目的是为了记录我使用VPN的过程中遇到的一些问题，应该以后也会频繁用到做个备忘，以应付一些相似的问题。 VPN选择千针网络 感觉是灰色地带就不介绍太多，只是做个备忘。 Git设定在设置好了VPN之后，准备打开GitHub遇见了打不开登录界面的问题，这就很难受了，本来主要的目的就是为了使用GitHub。 GitHub网页登录打不开GitHub，明明已经设置好了，谷歌也好youtube也好都能打开，GitHub就是打不开。后来才解决。 需要打开VPN代理的全局模式(Global Mode)，这样就可以了。 但是这个模式估计是所有的网站都要跑流量的但是我不确定，注意一下为好。 GitHub命令行远程连接还有就是使用VPN的话命令行那里也是不能直接和GitHub通信的，不能push不能pull，需要为Git设置代理。 设置全局代理1git config --global http.proxy 127.0.0.1:1087 查看全局代理1git config --global http.proxy 取消全局代理1git config --global --unset http.proxy 代理地址和端口依设定而异，反正就是那个意思。 估计到我回日本的时候需要执行取消全局代理的操作。 还有本地和全局的区分，但是也就是把--global换成--local的区别。 其它遇到的问题vim-markdown我之前有设置过MarkdownPreview类似的预览插件，在用Vim打开一个MD扩展文件的时候就会自动打开浏览器页面预览，但是当我使用VPN的时候，预览页面就加载不出来了，貌似是端口被占用？我想查一下但是忘了之前使用什么设置的这个插件，也不知道怎么修改预览的端口号，反正关了VPN就好用了。]]></content>
       <categories>
         <category>工具</category>
       </categories>

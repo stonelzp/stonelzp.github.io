@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="最近回国有点需要便购买了VPN的服务，这篇文章目的是为了记录我使用VPN的过程中遇到的一些问题，应该以后也会频繁用到做个备忘，以应付一些相似的问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-21T16:09:35.310Z">
+<meta property="og:updated_time" content="2020-01-22T05:26:39.409Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="VPN使用中的问题记录">
 <meta name="twitter:description" content="最近回国有点需要便购买了VPN的服务，这篇文章目的是为了记录我使用VPN的过程中遇到的一些问题，应该以后也会频繁用到做个备忘，以应付一些相似的问题。">
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-01-22T01:09:35+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-22T14:26:39+09:00">
                 2020-01-22
               </time>
             
@@ -400,7 +400,21 @@
       
         <p>最近回国有点需要便购买了VPN的服务，这篇文章目的是为了记录我使用VPN的过程中遇到的一些问题，应该以后也会频繁用到做个备忘，以应付一些相似的问题。</p>
 <a id="more"></a>
-<h2 id="VPN选择"><a href="#VPN选择" class="headerlink" title="VPN选择"></a>VPN选择</h2><h2 id="Git设定"><a href="#Git设定" class="headerlink" title="Git设定"></a>Git设定</h2><h3 id="GitHub网页登录"><a href="#GitHub网页登录" class="headerlink" title="GitHub网页登录"></a>GitHub网页登录</h3><h3 id="GitHub命令行远程连接"><a href="#GitHub命令行远程连接" class="headerlink" title="GitHub命令行远程连接"></a>GitHub命令行远程连接</h3>
+<h2 id="VPN选择"><a href="#VPN选择" class="headerlink" title="VPN选择"></a>VPN选择</h2><p><strong>千针网络</strong></p>
+<p>感觉是灰色地带就不介绍太多，只是做个备忘。</p>
+<h2 id="Git设定"><a href="#Git设定" class="headerlink" title="Git设定"></a>Git设定</h2><p>在设置好了VPN之后，准备打开GitHub遇见了打不开登录界面的问题，这就很难受了，本来主要的目的就是为了使用GitHub。</p>
+<h3 id="GitHub网页登录"><a href="#GitHub网页登录" class="headerlink" title="GitHub网页登录"></a>GitHub网页登录</h3><p>打不开GitHub，明明已经设置好了，谷歌也好youtube也好都能打开，GitHub就是打不开。后来才解决。</p>
+<p>需要打开VPN代理的<strong>全局模式(Global Mode)</strong>，这样就可以了。</p>
+<p>但是这个模式估计是所有的网站都要跑流量的但是我不确定，注意一下为好。</p>
+<h3 id="GitHub命令行远程连接"><a href="#GitHub命令行远程连接" class="headerlink" title="GitHub命令行远程连接"></a>GitHub命令行远程连接</h3><p>还有就是使用VPN的话命令行那里也是不能直接和GitHub通信的，不能push不能pull，需要为Git设置代理。</p>
+<p><strong>设置全局代理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy 127.0.0.1:1087</span><br></pre></td></tr></table></figure></p>
+<p><strong>查看全局代理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy</span><br></pre></td></tr></table></figure></p>
+<p><strong>取消全局代理</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global --unset http.proxy</span><br></pre></td></tr></table></figure></p>
+<p>代理地址和端口依设定而异，反正就是那个意思。</p>
+<p>估计到我回日本的时候需要执行取消全局代理的操作。</p>
+<p>还有<strong>本地</strong>和<strong>全局</strong>的区分，但是也就是把<code>--global</code>换成<code>--local</code>的区别。</p>
+<h2 id="其它遇到的问题"><a href="#其它遇到的问题" class="headerlink" title="其它遇到的问题"></a>其它遇到的问题</h2><h3 id="vim-markdown"><a href="#vim-markdown" class="headerlink" title="vim-markdown"></a>vim-markdown</h3><p>我之前有设置过MarkdownPreview类似的预览插件，在用Vim打开一个MD扩展文件的时候就会自动打开浏览器页面预览，但是当我使用VPN的时候，预览页面就加载不出来了，貌似是端口被占用？我想查一下但是忘了之前使用什么设置的这个插件，也不知道怎么修改预览的端口号，反正关了VPN就好用了。</p>
+
       
     </div>
     
@@ -621,7 +635,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VPN选择"><span class="nav-number">1.</span> <span class="nav-text">VPN选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git设定"><span class="nav-number">2.</span> <span class="nav-text">Git设定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub网页登录"><span class="nav-number">2.1.</span> <span class="nav-text">GitHub网页登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub命令行远程连接"><span class="nav-number">2.2.</span> <span class="nav-text">GitHub命令行远程连接</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VPN选择"><span class="nav-number">1.</span> <span class="nav-text">VPN选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git设定"><span class="nav-number">2.</span> <span class="nav-text">Git设定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub网页登录"><span class="nav-number">2.1.</span> <span class="nav-text">GitHub网页登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub命令行远程连接"><span class="nav-number">2.2.</span> <span class="nav-text">GitHub命令行远程连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它遇到的问题"><span class="nav-number">3.</span> <span class="nav-text">其它遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vim-markdown"><span class="nav-number">3.1.</span> <span class="nav-text">vim-markdown</span></a></li></ol></li></ol></div>
             
 
           </div>
