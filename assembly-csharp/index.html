@@ -82,14 +82,14 @@
 <meta name="description" content="在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。">
 <meta name="keywords" content="C#,笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Assembly-C#中的程序集">
-<meta property="og:url" content="http://stonelzp.github.io/assembly-c#/index.html">
+<meta property="og:title" content="Assembly-CSharp中的程序集">
+<meta property="og:url" content="http://stonelzp.github.io/assembly-csharp/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-17T10:40:31.319Z">
+<meta property="og:updated_time" content="2020-01-23T12:55:12.449Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Assembly-C#中的程序集">
+<meta name="twitter:title" content="Assembly-CSharp中的程序集">
 <meta name="twitter:description" content="在接触Unity的过程中，一直不清楚Assembly这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对反射这个概念进行一次透彻的了解。">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/assembly-c#/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/assembly-csharp/"/>
 
 
 
 
 
-  <title>Assembly-C#中的程序集 | StoneのBLOG</title>
+  <title>Assembly-CSharp中的程序集 | StoneのBLOG</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/assembly-c#/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/assembly-csharp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Assembly-C#中的程序集</h1>
+          <h1 class="post-title" itemprop="name headline">Assembly-CSharp中的程序集</h1>
         
 
         <div class="post-meta">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-01-17T19:40:31+09:00">
-                2020-01-17
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-23T21:55:12+09:00">
+                2020-01-23
               </time>
             
           </span>
@@ -409,8 +409,38 @@
 <p>就像一个应用程序一样，在Windows中这个应用程序会有<code>exe</code>文件和若干<code>dll</code>文件。还有一些其他的我不知道的文件，这些都是程序集的一部分。这就是一个程序集，准确与否我也不确定。反正上面的我理解就是这个意思。</p>
 <p>关于Assembly的一些要点的话在上面的链接中可以确认，有时间再整理一下吧。</p>
 <h1 id="Reflection-C-中的反射机制"><a href="#Reflection-C-中的反射机制" class="headerlink" title="Reflection-C#中的反射机制"></a>Reflection-C#中的反射机制</h1><ul>
-<li><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/reflection" target="_blank" rel="noopener">反射 (C#)</a><br>官网的说明跟没有说明一样，还是得参考其他的文章的使用。因为具体要怎么使用，为什么要使用反射对我来说还是一个疑问，使用反射有什么好处呢？</li>
+<li><p><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/concepts/reflection" target="_blank" rel="noopener">反射 (C#)</a><br>官网的说明跟没有说明一样，还是得参考其他的文章的使用。因为具体要怎么使用，为什么要使用反射对我来说还是一个疑问，使用反射有什么好处呢？</p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/41282759" target="_blank" rel="noopener">C#反射机制</a></p>
+</li>
 </ul>
+<blockquote>
+<p>反射是.NET中的重要机制,通过反射,可以在运行时获得程序或程序集中每一个类型(包括类、结构、委托、接口和枚举等)的成员和成员的信息。有了反射,即可对每一个类型了如指掌。另外我还可以直接创建对象,即使这个对象的类型在编译时还不知道。</p>
+</blockquote>
+<p>运行时能够获取程序或程序集中的的成员情报。利用这些情报可以做很多的事情。</p>
+<p>话是这么说我还不太清楚直接使用DLL中的情报有什么不同。就我的经验是不知道DLL中的开发的接口的时候也是无从下手，是不是使用反射就可以某种意义上了解DLL的实现和开放的接口或者函数，利于处理。当然EXE也是一样。</p>
+<h2 id="反射的使用"><a href="#反射的使用" class="headerlink" title="反射的使用"></a>反射的使用</h2><p><a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection?view=netframework-4.8" target="_blank" rel="noopener">System.Reflection 命名空间</a></p>
+<blockquote>
+<p>System.Reflection 命名空间包含通过检查托管代码中程序集、模块、成员、参数和其他实体的元数据来检索其相关信息的类型。 这些类型还可用于操作加载类型的实例，例如挂钩事件或调用方法。 若要动态创建类型，请使用 <a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection.emit?view=netframework-4.8" target="_blank" rel="noopener">System.Reflection.Emit</a> 命名空间。</p>
+</blockquote>
+<h3 id="反射相关类"><a href="#反射相关类" class="headerlink" title="反射相关类"></a>反射相关类</h3><h4 id="System-Type类"><a href="#System-Type类" class="headerlink" title="System.Type类"></a>System.Type类</h4><p>通过这个类可以访问任何给定数据类型的信息。</p>
+<p><strong>获取给定类型的Type引用有3种常用方式</strong></p>
+<ul>
+<li><p>使用C# <code>typeof</code>运算符</p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Type t = <span class="keyword">typeof</span>(<span class="keyword">string</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用对象<code>GetType()</code>方法</p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> s = <span class="string">"grayworm"</span>;</span><br><span class="line">Type t = s.GetType();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还可以调用Type类的静态方法<code>GetType()</code></p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Type t = Type.GetType(<span class="string">"System.String"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>官方文档说明：<a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.type?view=netframework-4.8" target="_blank" rel="noopener">Type 类</a></p>
+<h4 id="System-Reflection-Assembly类"><a href="#System-Reflection-Assembly类" class="headerlink" title="System.Reflection.Assembly类"></a>System.Reflection.Assembly类</h4><p>它可以用于访问给定程序集的信息，或者把这个程序集加载到程序中。</p>
+<p>官方文档：<a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.reflection.assembly?view=netframework-4.8" target="_blank" rel="noopener">Assembly类</a></p>
+<p>在官方文档中似乎例举了一些使用方法，暂时我并没有什么需要使用这个反射机制。但是貌似Unity中也会使用这个特性。下次当我决定使用一些DLL等的外部链接库的时候再好好研究并实现这些个特性。</p>
+<p>不是往后推，后面对于自己的项目肯定会加入一个Log收集的动态链接库，那个时候一定要把两种链接方式都总结一下。</p>
 
       
     </div>
@@ -442,7 +472,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://stonelzp.github.io/assembly-c#/" title="Assembly-C#中的程序集">http://stonelzp.github.io/assembly-c#/</a>
+    <a href="http://stonelzp.github.io/assembly-csharp/" title="Assembly-CSharp中的程序集">http://stonelzp.github.io/assembly-csharp/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -636,7 +666,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Assembly-程序集"><span class="nav-number">1.</span> <span class="nav-text">Assembly-程序集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reflection-C-中的反射机制"><span class="nav-number">2.</span> <span class="nav-text">Reflection-C#中的反射机制</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Assembly-程序集"><span class="nav-number">1.</span> <span class="nav-text">Assembly-程序集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reflection-C-中的反射机制"><span class="nav-number">2.</span> <span class="nav-text">Reflection-C#中的反射机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#反射的使用"><span class="nav-number">2.1.</span> <span class="nav-text">反射的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#反射相关类"><span class="nav-number">2.1.1.</span> <span class="nav-text">反射相关类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#System-Type类"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">System.Type类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-Reflection-Assembly类"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">System.Reflection.Assembly类</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
