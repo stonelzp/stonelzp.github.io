@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[看起来很厉害的文章]]></title>
+    <url>%2Fsome-articles%2F</url>
+    <content type="text"><![CDATA[公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。 更新履历 2020/01/25 添加Explaining how fighting games use delay-based and rollback netcode文章 感觉可以整理成一个文章链接的合集，那些我想看但是看不懂的那种 文章 Explaining how fighting games use delay-based and rollback netcode]]></content>
+      <categories>
+        <category>备忘</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[UE4-DeferredDecal的使用和理解]]></title>
     <url>%2Fue4-how-to-use-deferred-decal%2F</url>
     <content type="text"><![CDATA[这次说一下UE4中的Decal的特效，我是没有遇到要我自己写Decal相关特效的任务的，只是觉得知道为好。 这个是Deferred Decal是UE4中的功能，我最先是在尝试优化程序的过程中了解到这个概念的，优化的部分在另一篇UE4-Performance提升–Forced by DBuffer的部分总有提到。 Deferred Decal UE4 Deferred Decal 更新履历 2020/01/23 最近实在是重心想要放在Unity上，UE4的内容手头又没有电脑能够验证，所以文章的更新暂时先搁置一下，就是鸽一下。]]></content>
@@ -373,14 +384,15 @@
   </entry>
   <entry>
     <title><![CDATA[UE4-Material学习]]></title>
-    <url>%2Fue4-material-learning%2F</url>
-    <content type="text"><![CDATA[关于UE4中的材质，也有好多能说的，这里记录一些遇到的关于材质的知识点作为知识储备。 MaterialMaterial nodeShadowPassSwitchMaterial Parameter Collections Material Parameter Collections 材质应用 UE4 : 水彩 Post Process Material マテリアルとマテリアルインスタンスの仕組みと問題点の共有 (Epic Games Japan: 篠山範明) #UE4DD 猫でも分かるUE4のポストプロセスを使った演出・絵作り]]></content>
+    <url>%2Fue4-material-shader-learning%2F</url>
+    <content type="text"><![CDATA[关于UE4中的材质，也有好多能说的，这里记录一些遇到的关于材质的知识点作为知识储备。 更新履历 2020/01/24 添加shader部分的标题 Fake ight shader MaterialMaterial nodeShadowPassSwitchMaterial Parameter Collections Material Parameter Collections 材质应用 UE4 : 水彩 Post Process Material マテリアルとマテリアルインスタンスの仕組みと問題点の共有 (Epic Games Japan: 篠山範明) #UE4DD 猫でも分かるUE4のポストプロセスを使った演出・絵作り Shader学习在UE中也有很多Shader的知识学习，这里因为没有另起文章，而且还未整理 Fake light shader 在公司的学习会听到的这个名词，感觉很在意，就先记下了。Fake dynamic lighting material for mobile devices. 先记下文章的链接之后整理。]]></content>
       <categories>
         <category>UnrealEngine4</category>
       </categories>
       <tags>
         <tag>UE4</tag>
         <tag>Material</tag>
+        <tag>Shader</tag>
       </tags>
   </entry>
   <entry>
@@ -622,8 +634,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -773,7 +785,7 @@
   <entry>
     <title><![CDATA[UE4中的粒子特效]]></title>
     <url>%2FUE4%E4%B8%AD%E7%9A%84%E7%B2%92%E5%AD%90%E7%89%B9%E6%95%88%2F</url>
-    <content type="text"><![CDATA[主要是用来记录学习虚幻引擎4的粒子的过程 Particles with Unreal Engine 4先是在UE4提供的官方教程中整理基础的知识点。官方Youtube视频。 Particle Particle Particle System Emitter Actor Particle System Component Cascade Emitter Emitter Module tips: 在Emitter(粒子发射器)的各个Module中，按住alt键拖动可以复制Module 按住shift可以共享Module，即只需要修改一个其他的都会被修改 Type Data Distributions]]></content>
+    <content type="text"><![CDATA[主要是用来记录学习虚幻引擎4的粒子的过程 粒子系统Particles with Unreal Engine 4先是在UE4提供的官方教程中整理基础的知识点。官方Youtube视频。 Particle Particle Particle System Emitter Actor Particle System Component Cascade Emitter Emitter Module tips: 在Emitter(粒子发射器)的各个Module中，按住alt键拖动可以复制Module 按住shift可以共享Module，即只需要修改一个其他的都会被修改 Type Data Distributions GPU粒子CPU粒子 利用 Unreal Engine 4 的 CPU 粒子最大限度地提升视觉效果]]></content>
       <categories>
         <category>工具</category>
       </categories>
@@ -796,8 +808,8 @@
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>

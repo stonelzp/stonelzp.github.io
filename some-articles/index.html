@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="C++,UE4," />
+  <meta name="keywords" content="笔记," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。">
-<meta name="keywords" content="C++,UE4">
+<meta name="description" content="公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。">
+<meta name="keywords" content="笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++中得到函数名字">
-<meta property="og:url" content="http://stonelzp.github.io/C++中得到函数名字/index.html">
+<meta property="og:title" content="看起来很厉害的文章">
+<meta property="og:url" content="http://stonelzp.github.io/some-articles/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。">
+<meta property="og:description" content="公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-28T06:59:51.444Z">
+<meta property="og:updated_time" content="2020-01-24T15:43:05.698Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++中得到函数名字">
-<meta name="twitter:description" content="应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。">
+<meta name="twitter:title" content="看起来很厉害的文章">
+<meta name="twitter:description" content="公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://stonelzp.github.io/C++中得到函数名字/"/>
+  <link rel="canonical" href="http://stonelzp.github.io/some-articles/"/>
 
 
 
 
 
-  <title>C++中得到函数名字 | StoneのBLOG</title>
+  <title>看起来很厉害的文章 | StoneのBLOG</title>
   
 
 
@@ -297,7 +297,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++中得到函数名字/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/some-articles/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="stone">
@@ -314,7 +314,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">C++中得到函数名字</h1>
+          <h1 class="post-title" itemprop="name headline">看起来很厉害的文章</h1>
         
 
         <div class="post-meta">
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-28T15:22:04+09:00">
-                2019-01-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-25T00:37:49+09:00">
+                2020-01-25
               </time>
             
 
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-01-28T15:59:51+09:00">
-                2019-01-28
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-25T00:43:05+09:00">
+                2020-01-25
               </time>
             
           </span>
@@ -361,8 +361,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C++</span>
+                  <a href="/categories/备忘/" itemprop="url" rel="index">
+                    <span itemprop="name">备忘</span>
                   </a>
                 </span>
 
@@ -398,23 +398,14 @@
       
 
       
-        <p>应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。</p>
+        <p>公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。</p>
 <a id="more"></a>
-<p>在Python中就有这种库，直接能得到函数的调信息名字全部打印出来。但是在C++中就没有现成的库。</p>
-<p>自己创建一个库？对我来说还是太早了。</p>
-<h2 id="在C-中得到函数名字"><a href="#在C-中得到函数名字" class="headerlink" title="在C++中得到函数名字"></a>在C++中得到函数名字</h2><ul>
-<li><p><code>__func__</code>可以得到函数名字。在函数里面调用输出就好。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FString fun_name = FString(UTF8_TO_CHAR(__func__));</span><br><span class="line"></span><br><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"Function name is : %s), *fun_name);</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>__FUNCTION__</code>可以得到类名加函数名。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FString func_name = FString(UTF8_TO_CHAR(__FUNCTION__));</span><br><span class="line"></span><br><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"Function name is : %s), *func_name);</span></span><br></pre></td></tr></table></figure>
-</li>
+<h1 id="更新履历"><a href="#更新履历" class="headerlink" title="更新履历"></a>更新履历</h1><ul>
+<li>2020/01/25 添加<a href="https://arstechnica.com/gaming/2019/10/explaining-how-fighting-games-use-delay-based-and-rollback-netcode/" target="_blank" rel="noopener">Explaining how fighting games use delay-based and rollback netcode</a>文章</li>
 </ul>
-<p>以上是在UE4引擎中输出的结果，也有试过<code>__PRETTY_FUNCTION__</code>来输出但是出现了编译错误。</p>
-<p>参考文章：</p>
-<ul>
-<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Function-Names.html" target="_blank" rel="noopener">6.49 Function Name as Strings</a></li>
-<li><a href="https://codeyarns.com/2018/08/22/how-to-get-function-name-in-c/" target="_blank" rel="noopener">How to get function name in C++</a></li>
+<p>感觉可以整理成一个文章链接的合集，那些我想看但是看不懂的那种</p>
+<h2 id="文章"><a href="#文章" class="headerlink" title="文章"></a>文章</h2><ul>
+<li><a href="https://arstechnica.com/gaming/2019/10/explaining-how-fighting-games-use-delay-based-and-rollback-netcode/" target="_blank" rel="noopener">Explaining how fighting games use delay-based and rollback netcode</a></li>
 </ul>
 
       
@@ -447,7 +438,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://stonelzp.github.io/C++中得到函数名字/" title="C++中得到函数名字">http://stonelzp.github.io/C++中得到函数名字/</a>
+    <a href="http://stonelzp.github.io/some-articles/" title="看起来很厉害的文章">http://stonelzp.github.io/some-articles/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -462,9 +453,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
-          
-            <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+            <a href="/tags/笔记/" rel="tag"><i class="fa fa-tag"></i> 笔记</a>
           
         </div>
       
@@ -477,8 +466,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/EffectiveC++-Chapter01-Accustoming-Yourself-to-C++/" rel="next" title="EffectiveC++-Chapter01-Accustoming-Yourself-to-C++">
-                <i class="fa fa-chevron-left"></i> EffectiveC++-Chapter01-Accustoming-Yourself-to-C++
+              <a href="/ue4-how-to-use-deferred-decal/" rel="next" title="UE4-DeferredDecal的使用和理解">
+                <i class="fa fa-chevron-left"></i> UE4-DeferredDecal的使用和理解
               </a>
             
           </div>
@@ -486,10 +475,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/use-dll-in-ue4-unity/" rel="prev" title="初识DLL-在UE4与Unity中使用DLL">
-                初识DLL-在UE4与Unity中使用DLL <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -641,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在C-中得到函数名字"><span class="nav-number">1.</span> <span class="nav-text">在C++中得到函数名字</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#更新履历"><span class="nav-number">1.</span> <span class="nav-text">更新履历</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文章"><span class="nav-number">1.1.</span> <span class="nav-text">文章</span></a></li></ol></li></ol></div>
             
 
           </div>
