@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[游戏中的渲染]]></title>
+    <url>%2Frendering-in-the-development-of-the-game%2F</url>
+    <content type="text"><![CDATA[游戏中的渲染是一个很大的概念，以至于我都不知道该怎么分类。于是便将其制作成了一个分类。因为在游戏的制作过程中关于渲染的知识无处不在，我在优化游戏的部分也记录了很多关于渲染流程的部分，但还是不够。 关于渲染，我所理解的是： 了解渲染流程 和渲染相关的技术 优化渲染 我知道上面的肯定不是准确的，暂时先记着。 渲染流程我在最适化的文章中有提到一些渲染流程的知识，但是那只是非常宽泛的概念具体做了哪些事情不去实现一遍渲染流程我应该是不会了解的。更加具体的内容我也只能一点点更新了。好了废话就说到这里了，之后关于渲染的相关内容就整理到这篇文章里。 渲染网格创建这篇文章的初衷就是为了这篇文章： 实时模型 — 超越多边形计算 这里面有提到GPU处理多边形数据的内容 多边形数据存储 绘制多边形 这里有些在意的是动画处理的时候顶点着色器的动作是什么样的 顶点缓存 顶点参数 这里的内容不是特别明确，主要是使用的场合有什么区别 为了准确照亮表面，通常每个顶点都存储一条法线，即从表面向外指出的一个矢量。让所有多边形共享一个由同一条法线定义的顶点，可以使形状看起来非常平滑。这便是所谓的平滑着色。如果每个三角形都有自己的法线，那么多边形之间的边缘将凹凸不平，而表面光滑平坦，这就是它为什么被称作平面着色。 评估形状 感觉之前在哪篇文章中有读到过，GPU并不是单个的像素一个一个处理，而是一块一块的像素进行处理，也就是说这个一块里面未必会全是我们想要绘制的，优化网格的形状，尽可能避免长而细的网格会有效降低GPU绘制资源的浪费。 GPU 的速度很快，主要因为它能并行执行许多操作。GPU 营销材料通常强调它们拥有的管道数量，这决定了 GPU 所能同时执行的操作量。GPU 绘制多边形时，它会分配许多管道来填充一方块像素。通常是维度大约为 8 × 8 像素的一个四方形。GPU 持续执行直至填满所有像素。显然，三角形不是四方形，因此四方形中的部分像素位于三角形内部，部分像素位于三角形外部。硬件将分配给四方形中的所有像素，甚至是哪些落在多边形外部的像素。计算完四方形中的所有顶点后，硬件就会舍弃三角形外部的像素。 过度绘制 场景中不可避免的出现一些重复绘制，比如说有遮挡的部分的片元在大多数无意识的情况下被绘制两次甚至更多次，在这片元的位置遮挡物与被遮挡物没有意识的情况下都会被绘制一遍。 一些引擎采用高级算法以避免绘制最终图像中所没有的对象，但非常困难。相比 GPU 进行绘制，CPU 通常需要更长的时间来确定不需要绘制的内容。一些情况下我们想要删除被遮挡的部分的网格（比如说两个静态模型重合的部分），但是这个时候有需要我们的判断，因为减少多边形换取部分过度绘制和添加多边形避免过度绘制，在时间的维度上总是此消彼长的关系。在这类场景中，您需要执行判断调用。有时候值得通过减少多边形来换取部分过度绘制。有时候值得添加多边形以避免过度绘制。出现各种情况也只能具体问题具体分析。 使用绘制调用（DrawCall） 这里我发现了一个我之前从未注意到的问题：CPU每帧能发出多少DrawCall命令？GPU每帧能处理多少多边形？在固定帧数的情况下，那么每一帧的时间是固定的，如果在这一帧固定时间里，GPU能够胜任CPU的绘制调用，那么为网格增加多边形数量就是免费的。反之同理。 GPU 的速度非常快，CPU 很难跟上它们。由于 GPU 基本上只执行一项操作，因此它们更容易加快执行速度。显卡，顾名思义，就是计算多个像素，因此能够构建并行计算许多像素的硬件。但 GPU 仅调用 CPU 让其绘制的内容。如果 CPU 不能快速反馈 GPU，GPU 就会闲置。每次 CPU 让 GPU 绘制某一内容就称为绘制调用。基本绘制调用包括绘制一个网格，包含一个着色器和一组纹理。绘制调用的构成及其成本可能因引擎和架构的不同而有很大差异。有些引擎能够以单次绘制调用的形式批处理许多网格，但所有网格都需要有相同的着色器或满足其他限制条件。Vulkan、DirectX 12 等新 KPI 经过专门设计，可通过优化程序与显卡驱动程序之间的通信来解决这一问题，从而增加每帧发出的绘制调用数量。]]></content>
+      <categories>
+        <category>Rendering</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+        <tag>rendering</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[看起来很厉害的文章]]></title>
     <url>%2Fsome-articles%2F</url>
     <content type="text"><![CDATA[公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。 更新履历 2020/01/25 添加Explaining how fighting games use delay-based and rollback netcode文章 感觉可以整理成一个文章链接的合集，那些我想看但是看不懂的那种 文章 Explaining how fighting games use delay-based and rollback netcode]]></content>
@@ -147,8 +159,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -159,8 +171,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -235,7 +247,7 @@
   <entry>
     <title><![CDATA[Unity-Shader学习]]></title>
     <url>%2Funity-shader-learning%2F</url>
-    <content type="text"><![CDATA[关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。 PostProcessing不知道该起什么名字为好。 Post Processing Stack v2这个是一个Unity中方便添加PostProcessing特效的插件。 对这个插件有一个大体上的了解可以参照这篇文章： Unity ルックデヴ講座 Post Processing Stack v2編 但是当你想要添加自己的自定义特效的话，就不够用了。 Post Processing Stack v2にカスタムエフェクトを追加する方法 使用这个插件添加自定义Post Processing Shader的话，就要写点代码了，不光是Shader的。 Renderer PipelineLWRP 【 Unity道場 1月 ~LWRPとシェーダー~】軽量レンダーパイプライン、Light Weight Renderer Pipeline…とは Scriptable Render Pipeline Unity Scriptable Render Pipeline 使用PostProcessingStack的实例使用PostProcess制作受伤效果感觉上就像是受到伤害的时候摄像机中心到边缘向红色渐变的效果。 首先是我使用的Unity版本是Unity2019.2.12f1。 参考的就除了上面贴出来的链接之外，还有最重要的官方文档了PostProcessing-Writing Custom Effects Custom effects need a minimum of two files: a C# and a HLSL source files (note that HLSL gets cross-compiled to GLSL, Metal and others API by Unity so it doesn’t mean it’s restricted to DirectX). C123456789101112131415161718192021using System;using UnityEngine;using UnityEngine.Rendering.PostProcessing; [Serializable][PostProcess(typeof(GrayscaleRenderer), PostProcessEvent.AfterStack, &quot;Custom/Grayscale&quot;)]public sealed class Grayscale : PostProcessEffectSettings&#123; [Range(0f, 1f), Tooltip(&quot;Grayscale effect intensity.&quot;)] public FloatParameter blend = new FloatParameter &#123; value = 0.5f &#125;;&#125; public sealed class GrayscaleRenderer : PostProcessEffectRenderer&lt;Grayscale&gt;&#123; public override void Render(PostProcessRenderContext context) &#123; var sheet = context.propertySheets.Get(Shader.Find(&quot;Hidden/Custom/Grayscale&quot;)); sheet.properties.SetFloat(&quot;_Blend&quot;, settings.blend); context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0); &#125;&#125; Important: this code has to be stored in a file named Grayscale.cs. Because of how serialization works in Unity, you have to make sure that the file is named after your settings class name or it won’t be serialized properly. 这里要注意的是脚本名字要一致。 Setting The settings class holds the data for our effect. These are all the user-facing fields you’ll see in the volume inspector. 之前用的时候就会觉得为什么还要做个这个类，原来是为了保存为PostProcess准备的预设数据，所以有Serializable属性。 1234567[Serializable][PostProcess(typeof(GrayscaleRenderer), PostProcessEvent.AfterStack, &quot;Custom/Grayscale&quot;)]public sealed class Grayscale : PostProcessEffectSettings&#123; [Range(0f, 1f), Tooltip(&quot;Grayscale effect intensity.&quot;)] public FloatParameter blend = new FloatParameter &#123; value = 0.5f &#125;;&#125; ……我觉得官网说的比我清楚多了，干脆贴上英文得了。 看英文，看英文。Writing Custom Effects Renderer Our renderer extends PostProcessEffectRenderer, with T being the settings type to attach to this renderer. 123456789public sealed class GrayscaleRenderer : PostProcessEffectRenderer&lt;Grayscale&gt;&#123; public override void Render(PostProcessRenderContext context) &#123; var sheet = context.propertySheets.Get(Shader.Find(&quot;Hidden/Custom/Grayscale&quot;)); sheet.properties.SetFloat(&quot;_Blend&quot;, settings.blend); context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0); &#125;&#125; 看文档看文档。 Shader进入Shader的书写。 12345678910111213141516171819202122232425262728293031323334Shader &quot;Hidden/Custom/Grayscale&quot;&#123; HLSLINCLUDE #include &quot;Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl&quot; TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex); float _Blend; float4 Frag(VaryingsDefault i) : SV_Target &#123; float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord); float luminance = dot(color.rgb, float3(0.2126729, 0.7151522, 0.0721750)); color.rgb = lerp(color.rgb, luminance.xxx, _Blend.xxx); return color; &#125; ENDHLSL SubShader &#123; Cull Off ZWrite Off ZTest Always Pass &#123; HLSLPROGRAM #pragma vertex VertDefault #pragma fragment Frag ENDHLSL &#125; &#125;&#125; 看文档，看文档。关于shader里面的内容还有好多我不懂的。 Effect orderingCustom editorAdditional notes特效制作所以上面的使用说明看完之后，就是实现部分了。不知不觉就把上面的部分写到这一章节离了= =。 因为上面的实现都差不多，只记下Shader部分的： 123456789101112131415161718192021222324252627282930313233343536Shader &quot;Hidden/Custom/Damage&quot;&#123; HLSLINCLUDE#include &quot;Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl&quot; TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex); float _Range; float4 _Color; float4 Frag(VaryingsDefault i) : SV_Target &#123; float2 uv = i.texcoord; float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv); float radiusFactor = (1 - _Range) * (1 - _Range) / 4; float radius = saturate(((uv.x - 0.5) * (uv.x - 0.5) + (uv.y - 0.5) * (uv.y - 0.5)) / radiusFactor); return saturate(color * (1 - radius) + _Color * radius); &#125; ENDHLSL SubShader &#123; Cull Off ZWrite Off ZTest Always Pass &#123; HLSLPROGRAM #pragma vertex VertDefault #pragma fragment Frag ENDHLSL &#125; &#125;&#125; 这些都是要做的准备工作，最后要把这个PostProcess应用到Camer上。 Camera上添加PostProcessLayer组件，指定PostProcessEffect的layer New一个GameObject，添加PostProcessVolume组件，可以是子物体 GameObject的Layer需要指定上面提到的layer 这些是有可能会忘的，其他的就很简单了。别忘了New一个新的Profile。参数的话可以参照Class PostProcessVolume 使用PostPerocess制作向纯色渐变的效果说起来上面的效果也只是这个效果的拓展，这个效果是我从巨佬那里偷学来的。 关于Shader的一些文章 Cg Programming/Unity/Translucent Bodies Toon Shader 【Unity】良い感じに見える（屋内向け）ライティングの設定手順 Unity Post Processing Stackで作る光芒エフェクト 【Unity】【シェーダ】ブルームを独自実装する 原先在知乎上看到的文章，这回有大图看： Unite 2018 | 《崩坏3》：在Unity中实现高品质的卡通渲染（上） Dark and Stormy]]></content>
+    <content type="text"><![CDATA[关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。 PostProcessing不知道该起什么名字为好。 Post Processing Stack v2这个是一个Unity中方便添加PostProcessing特效的插件。 对这个插件有一个大体上的了解可以参照这篇文章： Unity ルックデヴ講座 Post Processing Stack v2編 但是当你想要添加自己的自定义特效的话，就不够用了。 Post Processing Stack v2にカスタムエフェクトを追加する方法 使用这个插件添加自定义Post Processing Shader的话，就要写点代码了，不光是Shader的。 Renderer PipelineLWRP 【 Unity道場 1月 ~LWRPとシェーダー~】軽量レンダーパイプライン、Light Weight Renderer Pipeline…とは Scriptable Render Pipeline Unity Scriptable Render Pipeline 使用PostProcessingStack的实例使用PostProcess制作受伤效果感觉上就像是受到伤害的时候摄像机中心到边缘向红色渐变的效果。 首先是我使用的Unity版本是Unity2019.2.12f1。 参考的就除了上面贴出来的链接之外，还有最重要的官方文档了PostProcessing-Writing Custom Effects Custom effects need a minimum of two files: a C# and a HLSL source files (note that HLSL gets cross-compiled to GLSL, Metal and others API by Unity so it doesn’t mean it’s restricted to DirectX). C123456789101112131415161718192021using System;using UnityEngine;using UnityEngine.Rendering.PostProcessing; [Serializable][PostProcess(typeof(GrayscaleRenderer), PostProcessEvent.AfterStack, &quot;Custom/Grayscale&quot;)]public sealed class Grayscale : PostProcessEffectSettings&#123; [Range(0f, 1f), Tooltip(&quot;Grayscale effect intensity.&quot;)] public FloatParameter blend = new FloatParameter &#123; value = 0.5f &#125;;&#125; public sealed class GrayscaleRenderer : PostProcessEffectRenderer&lt;Grayscale&gt;&#123; public override void Render(PostProcessRenderContext context) &#123; var sheet = context.propertySheets.Get(Shader.Find(&quot;Hidden/Custom/Grayscale&quot;)); sheet.properties.SetFloat(&quot;_Blend&quot;, settings.blend); context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0); &#125;&#125; Important: this code has to be stored in a file named Grayscale.cs. Because of how serialization works in Unity, you have to make sure that the file is named after your settings class name or it won’t be serialized properly. 这里要注意的是脚本名字要一致。 Setting The settings class holds the data for our effect. These are all the user-facing fields you’ll see in the volume inspector. 之前用的时候就会觉得为什么还要做个这个类，原来是为了保存为PostProcess准备的预设数据，所以有Serializable属性。 1234567[Serializable][PostProcess(typeof(GrayscaleRenderer), PostProcessEvent.AfterStack, &quot;Custom/Grayscale&quot;)]public sealed class Grayscale : PostProcessEffectSettings&#123; [Range(0f, 1f), Tooltip(&quot;Grayscale effect intensity.&quot;)] public FloatParameter blend = new FloatParameter &#123; value = 0.5f &#125;;&#125; ……我觉得官网说的比我清楚多了，干脆贴上英文得了。 看英文，看英文。Writing Custom Effects Renderer Our renderer extends PostProcessEffectRenderer, with T being the settings type to attach to this renderer. 123456789public sealed class GrayscaleRenderer : PostProcessEffectRenderer&lt;Grayscale&gt;&#123; public override void Render(PostProcessRenderContext context) &#123; var sheet = context.propertySheets.Get(Shader.Find(&quot;Hidden/Custom/Grayscale&quot;)); sheet.properties.SetFloat(&quot;_Blend&quot;, settings.blend); context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0); &#125;&#125; 看文档看文档。 Shader进入Shader的书写。 12345678910111213141516171819202122232425262728293031323334Shader &quot;Hidden/Custom/Grayscale&quot;&#123; HLSLINCLUDE #include &quot;Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl&quot; TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex); float _Blend; float4 Frag(VaryingsDefault i) : SV_Target &#123; float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord); float luminance = dot(color.rgb, float3(0.2126729, 0.7151522, 0.0721750)); color.rgb = lerp(color.rgb, luminance.xxx, _Blend.xxx); return color; &#125; ENDHLSL SubShader &#123; Cull Off ZWrite Off ZTest Always Pass &#123; HLSLPROGRAM #pragma vertex VertDefault #pragma fragment Frag ENDHLSL &#125; &#125;&#125; 看文档，看文档。关于shader里面的内容还有好多我不懂的。 Effect orderingCustom editorAdditional notes特效制作所以上面的使用说明看完之后，就是实现部分了。不知不觉就把上面的部分写到这一章节离了= =。 因为上面的实现都差不多，只记下Shader部分的： 123456789101112131415161718192021222324252627282930313233343536Shader &quot;Hidden/Custom/Damage&quot;&#123; HLSLINCLUDE#include &quot;Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl&quot; TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex); float _Range; float4 _Color; float4 Frag(VaryingsDefault i) : SV_Target &#123; float2 uv = i.texcoord; float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv); float radiusFactor = (1 - _Range) * (1 - _Range) / 4; float radius = saturate(((uv.x - 0.5) * (uv.x - 0.5) + (uv.y - 0.5) * (uv.y - 0.5)) / radiusFactor); return saturate(color * (1 - radius) + _Color * radius); &#125; ENDHLSL SubShader &#123; Cull Off ZWrite Off ZTest Always Pass &#123; HLSLPROGRAM #pragma vertex VertDefault #pragma fragment Frag ENDHLSL &#125; &#125;&#125; 这些都是要做的准备工作，最后要把这个PostProcess应用到Camer上。 Camera上添加PostProcessLayer组件，指定PostProcessEffect的layer New一个GameObject，添加PostProcessVolume组件，可以是子物体 GameObject的Layer需要指定上面提到的layer 这些是有可能会忘的，其他的就很简单了。别忘了New一个新的Profile。参数的话可以参照Class PostProcessVolume 使用PostPerocess制作向纯色渐变的效果说起来上面的效果也只是这个效果的拓展，这个效果是我从巨佬那里偷学来的。 关于Shader的一些文章 Cg Programming/Unity/Translucent Bodies Toon Shader 【Unity】良い感じに見える（屋内向け）ライティングの設定手順 Unity Post Processing Stackで作る光芒エフェクト 【Unity】【シェーダ】ブルームを独自実装する 原先在知乎上看到的文章，这回有大图看： Unite 2018 | 《崩坏3》：在Unity中实现高品质的卡通渲染（上） Dark and Stormy 一个关于Shader的WIKI，据说关于Unity的Shader讲得很详细。（但是貌似不翻墙看不到。） Cg Programming]]></content>
       <categories>
         <category>Unity</category>
       </categories>
@@ -537,8 +549,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -622,8 +634,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -665,8 +677,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -711,8 +723,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -723,8 +735,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -735,8 +747,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -747,8 +759,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -759,8 +771,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -807,8 +819,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
         <tag>编程</tag>
       </tags>
   </entry>
