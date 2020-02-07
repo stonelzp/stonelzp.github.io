@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="DoTween,Curve," />
+  <meta name="keywords" content="Plugins,DoTween,Curve," />
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。">
-<meta name="keywords" content="DoTween,Curve">
+<meta name="keywords" content="Plugins,DoTween,Curve">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unity-DoTween-曲线的魅力">
 <meta property="og:url" content="http://stonelzp.github.io/Unity-DoTween-曲线的魅力/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-20T09:59:26.243Z">
+<meta property="og:updated_time" content="2020-02-07T08:32:46.071Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity-DoTween-曲线的魅力">
 <meta name="twitter:description" content="因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-09-20T18:59:26+09:00">
-                2019-09-20
+              <time title="更新于" itemprop="dateModified" datetime="2020-02-07T17:32:46+09:00">
+                2020-02-07
               </time>
             
           </span>
@@ -416,6 +416,16 @@
 <h3 id="DoPath-DoLocalPath"><a href="#DoPath-DoLocalPath" class="headerlink" title="DoPath/DoLocalPath"></a>DoPath/DoLocalPath</h3><p>这个是我所需要的，我使用的地方。</p>
 <p>关于这个插件有很多的使用，有免费版和Pro版。我看到有人整理的我就先上个链接<br>-<a href="https://gist.github.com/anzfactory/da73149ba91626ba796d598578b163cc" target="_blank" rel="noopener">HowTo_DOTween.md</a></p>
 <p>我自己的话充其量用了上面的路径功能，换了换set ease的条件。还有一些<strong>RX</strong>的使用，<code>Onstart()</code>,<code>OnComplete()</code>。</p>
+<h3 id="DoTween停止操作"><a href="#DoTween停止操作" class="headerlink" title="DoTween停止操作"></a>DoTween停止操作</h3><p>unity的Scene之间移动的时候需要停止DoTween的动作，当然tween的本体在切换Scene的时候不会被destory的。于是就出现了一个奇怪的现象。</p>
+<p><strong>Tween的object把setActive(false)执行之后仍然继续活动</strong></p>
+<p>这就奇了怪了，我的猜测是在Unity中跟gameobject相关的操作都是在主线程中运行，但是Tween的操作是子线程，但是反过来一想又不太对，Tween操作transform的移动不应该是主线程中吗，反正不太清楚，出现了这个问题，我的解决方案是：</p>
+<p>先执行<code>Complete()</code>，再<code>setActive(false)</code>。</p>
+<p>这里有一个疑问，我在使用Complete之前有尝试过Kill这个方法，但是，反正就是未能解决我遇到的问题，保险起见我是在执行Kill之前又添加了Complete的操作，虽然感觉不太好，但还是那么做了…</p>
+<p>参考文章：<a href="https://qiita.com/kagigi/items/bdf4d42835add07b0077#complete-or-kill%E3%81%99%E3%82%8B%E3%81%BE%E3%81%A7%E6%AE%8B%E3%82%8A%E7%B6%9A%E3%81%91%E3%82%8B%E5%95%8F%E9%A1%8C" target="_blank" rel="noopener">DOTweenをふわっとまとめてみた</a></p>
+<h2 id="Unity-DoTween-Shortcut"><a href="#Unity-DoTween-Shortcut" class="headerlink" title="Unity DoTween Shortcut"></a>Unity DoTween Shortcut</h2><blockquote>
+<p>DOTween includes shortcuts for some known Unity objects, like Transform, Rigidbody and Material. You can start a tween directly from a reference to these objects (which will also automatically set the object itself as the tween target), like:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; transform.DOMove(new Vector3(2,3,4), 1);</span><br><span class="line">&gt; rigidbody.DOMove(new Vector3(2,3,4), 1);</span><br><span class="line">&gt; material.DOColor(Color.green, 1);</span><br><span class="line"></span><br><span class="line">Dotween提供的这种快捷的方式很好理解，但是这种方式的实现就很厉害，值得学习。比如说这个transform的DOMove方法的shortcut实现：</span><br><span class="line">```csharp</span><br><span class="line">public static TweenerCore&lt;Vector3, Vector3, VectorOptions&gt; DoMove(this Transform target, Vector3 endValue, float duration, bool snapping = false);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>C#该学的东西还是有很多很多啊，学无止境啊。</p>
 
       
     </div>
@@ -461,6 +471,8 @@
     <footer class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/Plugins/" rel="tag"><i class="fa fa-tag"></i> Plugins</a>
           
             <a href="/tags/DoTween/" rel="tag"><i class="fa fa-tag"></i> DoTween</a>
           
@@ -641,7 +653,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ease"><span class="nav-number">1.</span> <span class="nav-text">ease</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DoTween"><span class="nav-number">2.</span> <span class="nav-text">DoTween</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DoPath-DoLocalPath"><span class="nav-number">2.1.</span> <span class="nav-text">DoPath/DoLocalPath</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ease"><span class="nav-number">1.</span> <span class="nav-text">ease</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DoTween"><span class="nav-number">2.</span> <span class="nav-text">DoTween</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DoPath-DoLocalPath"><span class="nav-number">2.1.</span> <span class="nav-text">DoPath/DoLocalPath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DoTween停止操作"><span class="nav-number">2.2.</span> <span class="nav-text">DoTween停止操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-DoTween-Shortcut"><span class="nav-number">3.</span> <span class="nav-text">Unity DoTween Shortcut</span></a></li></ol></div>
             
 
           </div>
