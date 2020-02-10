@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-16T09:56:20.326Z">
+<meta property="og:updated_time" content="2020-02-10T10:21:12.523Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Unity-Editor扩展">
 <meta name="twitter:description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
@@ -342,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-01-16T18:56:20+09:00">
-                2020-01-16
+              <time title="更新于" itemprop="dateModified" datetime="2020-02-10T19:21:12+09:00">
+                2020-02-10
               </time>
             
           </span>
@@ -449,6 +449,20 @@
 </ul>
 <h4 id="MenuItem参数说明"><a href="#MenuItem参数说明" class="headerlink" title="MenuItem参数说明"></a>MenuItem参数说明</h4><p>在菜单栏里添加自定义项的话当然需要对其参数有所了解，直接进入源码查看即可，这里我顺便贴一下注释:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//</span><br><span class="line">// Summary:</span><br><span class="line">//     Creates a menu item and invokes the static function following it, when the menu</span><br><span class="line">//     item is selected.</span><br><span class="line">//</span><br><span class="line">// Parameters:</span><br><span class="line">//   itemName:</span><br><span class="line">//     The itemName is the menu item represented like a pathname. For example the menu</span><br><span class="line">//     item could be &quot;GameObject/Do Something&quot;.</span><br><span class="line">//</span><br><span class="line">//   isValidateFunction:</span><br><span class="line">//     If isValidateFunction is true, this is a validation function and will be called</span><br><span class="line">//     before invoking the menu function with the same itemName.</span><br><span class="line">//</span><br><span class="line">//   priority:</span><br><span class="line">//     The order by which the menu items are displayed.</span><br><span class="line">public MenuItem(string itemName, bool isValidateFunction, int priority);</span><br></pre></td></tr></table></figure></p>
 <p>这里关于<code>isValidateFunxtion</code>的说明就是增加一个验证函数，比如说我只想在游戏运行的时候执行某个操作，在Editor未运行的时候调用这个函数没有意义那就加上一个验证函数。</p>
+<hr>
+<ul>
+<li>2020/02/10 更新内容</li>
+</ul>
+<p>过了好久终于有机会亲自尝试一下这个功能，同时对一些疑问进行了验证。</p>
+<p>1.首先是这个MenuItem的<code>isValidateFunction</code>为True的情况下的执行情况：</p>
+<p>按照源码中的注释所说，标注了这个属性的函数(以下称为<em>验证函数</em>)会在具有相同<code>itemName</code>的函数之前执行，在我实际添加了执行log的结果来看，这个函数确实会在前面执行，但是执行的时机却很迷惑。</p>
+<p>单纯的情况下，在执行无<code>isValidateFunction</code>同名<code>itemName</code>函数之前，这个验证函数被执行了两次。哪怕是点开MenuItem执行其他的功能函数，甚至什么都不执行点击其他位置关掉点开MenuItem弹出来的菜单，这个验证函数都会被执行一次。</p>
+<p>看来这个验证函数还跟Unity的Editor的运行有关，比如说关掉MenuItem的窗口会刷新一下状态，执行一遍所有的验证函数（我猜的）什么的。</p>
+<p>2.验证函数的返回值的影响</p>
+<p>细心的我发现，与被调用的函数不同，验证函数会有一个布尔类型的返回值，对于这个返回值我测试得到的结果是：</p>
+<p>当返回值是true的时候，就是平常一样正常的调用。</p>
+<p>返回值是false的时候，被调用的函数(具有相同的<code>itemName</code>)的MenuItem就变灰色了，不能点击调用。</p>
+<hr>
 <p>关于<code>priority</code>的含义就是可以自定义菜单选项的顺序，这里要注意的是想要在弹出来的菜单中看到分割线的话，优先级的数值是10起跳的。摘一段官网的文字:</p>
 <blockquote>
 <p>Note: The understanding of ten or greater is considered to create a divider in the menu. However, as per the example above, the difference between script function need to have the priority separated by 11 or more. This is why the example before has a value of 100 and one of 111. Changing 111 to 110 does not have a divider.</p>
