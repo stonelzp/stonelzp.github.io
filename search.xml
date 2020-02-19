@@ -1209,6 +1209,7 @@
 </ul>
 <h4 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h4><p><strong>观察者模式</strong>(Observer Pattern)，即经常提到的设计模式的一种。实现<strong>事件的发行和订阅的一种设计模式</strong>。</p>
 <p>UniRx中登场的就是<code>Observer</code>和<code>Subject</code>这两个重要的概念。</p>
+<p><img src="Observer-Pattern.png" alt="Observerパターン" title="ObserverParttern"></p>
 <ul>
 <li>Observer<ul>
 <li>观察者，监听者(Listener)，Message Receiver</li>
