@@ -186,8 +186,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -198,8 +198,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -318,7 +318,7 @@
   <entry>
     <title><![CDATA[UniRx从入门到放弃]]></title>
     <url>%2Funirx-learning-note%2F</url>
-    <content type="text"><![CDATA[时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。 理解UniRx我来了，我表示我并没有理解UniRx，只知道是个什么东西远远不够。当出现Operator的使用的时候，我发现我根本不理解。 UniRx(ユニアールエックス)の基本的な使い方と具体的な利用例【Unity】【UniRx】 UniRx 学习 Reactive ExtensionUniRx大体上的印象我是从这篇文章终于算是稍微理解了一些： UniRx入門 その1 这个作者还有一些其他的入门文章有时间也可以观摩一下:UniRx入門シリーズ 目次はこちら UniRxを導入するメリット ～こういう時にUniRxは使えるよ～ 超级有用的一篇知乎文章： 又见Rx——Rx via UniRx 里面的那个讲Rx的视频真的很厉害。 UniRx中遇见的PlayerLoop所以说PlayerLoop是个什么东西我还没搞懂，只不过在读源码的时候发现了这么几行：123// UniRx用var playerLoop = ScriptBehaviourUpdateOrder.CurrentPlayerLoop;PlayerLoopHelper.Initialize(ref playerLoop); 有时候大佬的两行代码我的用一天来理解。首先我不知道UniRx怎么用，其次为什么要在这里这么用。几番调查锁定了这两行代码的用意。 【Unity2018】Entity Component System(ECS)とUniRx.Asyncを和解させる 在使用Unity的ECS和UniRx的时候，两者的PlayerLoop会冲突，读源码就会大概理解(接受？)这个情况。 ECSを使っているプロジェクトにUniRxをぶちこむと、ECSとUniRxのPlayerLoopが喧嘩してUniRxが勝ちます（ECSが動かなくなります） ECS:1234567891011121314// GameBootstrap.csnamespace Unity.Entities&#123;#if !UNITY_DISABLE_AUTOMATIC_SYSTEM_BOOTSTRAP static class AutomaticWorldBootstrap &#123; [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)] static void Initialize() &#123; DefaultWorldInitialization.Initialize("Default World", false); &#125; &#125;#endif&#125; 123456789101112131415161718192021// ScriptBehaviourUpdateOrder.csprivate static void SetPlayerLoop(PlayerLoopSystem playerLoop)&#123; PlayerLoop.SetPlayerLoop(playerLoop); currentPlayerLoop = playerLoop;&#125;public static void UpdatePlayerLoop(params World[] worlds)&#123; var defaultLoop = PlayerLoop.GetDefaultPlayerLoop(); if (worlds?.Length &gt; 0) &#123; var ecsLoop = InsertWorldManagersInPlayerLoop(defaultLoop, worlds.Where(x =&gt; x != null).ToArray()); SetPlayerLoop(ecsLoop); &#125; else &#123; SetPlayerLoop(defaultLoop); &#125;&#125; UniRx:1234567891011121314151617181920212223242526272829303132// PlayerLoopHelper.cspublic static void Initialize(ref PlayerLoopSystem playerLoop)&#123; yielders = new ContinuationQueue[7]; runners = new PlayerLoopRunner[7]; var copyList = playerLoop.subSystemList.ToArray(); copyList[0].subSystemList = InsertRunner(copyList[0], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldInitialization), yielders[0] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerInitialization), runners[0] = new PlayerLoopRunner()); copyList[1].subSystemList = InsertRunner(copyList[1], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldEarlyUpdate), yielders[1] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerEarlyUpdate), runners[1] = new PlayerLoopRunner()); copyList[2].subSystemList = InsertRunner(copyList[2], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldFixedUpdate), yielders[2] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerFixedUpdate), runners[2] = new PlayerLoopRunner()); copyList[3].subSystemList = InsertRunner(copyList[3], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldPreUpdate), yielders[3] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreUpdate), runners[3] = new PlayerLoopRunner()); copyList[4].subSystemList = InsertRunner(copyList[4], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldUpdate), yielders[4] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerUpdate), runners[4] = new PlayerLoopRunner()); copyList[5].subSystemList = InsertRunner(copyList[5], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldPreLateUpdate), yielders[5] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreLateUpdate), runners[5] = new PlayerLoopRunner()); copyList[6].subSystemList = InsertRunner(copyList[6], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldPostLateUpdate), yielders[6] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerPostLateUpdate), runners[6] = new PlayerLoopRunner()); playerLoop.subSystemList = copyList; PlayerLoop.SetPlayerLoop(playerLoop);&#125;[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]static void Init()&#123; // capture default(unity) sync-context. unitySynchronizationContetext = SynchronizationContext.Current; mainThreadId = Thread.CurrentThread.ManagedThreadId; if (runners != null) return; // already initialized var playerLoop = PlayerLoop.GetDefaultPlayerLoop(); Initialize(ref playerLoop);&#125; 这里我把代码一起粘贴出来是因为这里面有好多我知识点的盲区，有代码能加快一些理解。 最终结论就是加上最上面的两行使得ECS和UniRx的PlayerLoop不冲突，不会造成一方失效的问题。也就是这一步并不是UniRx要做的设定而是为了让两者共存而做的设定。 那么通过这个问题我发现的一些知识盲区： ECS是什么？ PlayerLoop是什么，为什么游戏开始之前要指定PlayerLoop的设定？ 调查了一下发现这个问题是真的很复杂，需要展开另一篇关于Unity的ECS的内容来加深理解了。 UniRx-各种用法SubscribeOnMainThread &amp; ObserveOnMainThread这个是做什么的 How to use SubscribeOnMainThread? It seems never working #282 SubscribeOnMainThread means that you are subscribing (therefore starting the task [for cold observables]) in main thread whereas ObserveOnMainThread means that you are observing (listening) onNext messages in main thread. When you are using Observable.Start method, the task will be run on the ThreadPool by default. So use it with the ObserveOnMainThread to access Unity API in the Subscribe method. 从名字上也能大致了解，就是为了让Subscribe中的内容在MainThread中执行。因为涉及到Unity的GameObject的操作都要在主线程中进行。 按理说我应该试着使用这两个方法，再去了解这个方法应不应该这样用，也就是试错。 但是我听前辈说这两个方法不太靠得住（意思应该就是使用的时候可能会报错，因为在子线程中动Unity的GameObject，或者Unity的一些东西，编译就会报错，会好好的报出错误信息的），最靠谱的方式是用await UniTask.Yield()。至于具体怎么用，在后面的地方专门展开。 ObserveEveryValueChangedObservable Observable Disposables这个也是一个很重要的概念。 Disposables Operators UniRx オペレータ逆引き Switch Rxにおける並行非同期実行とリソース処理の問題 Do 【Unity】【UniRx】Observable.DoXxx()系のメソッドの挙動まとめ Reactive Programming(重要) Introduction to Reactive Programming]]></content>
+    <content type="text"><![CDATA[时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。 理解UniRx我来了，我表示我并没有理解UniRx，只知道是个什么东西远远不够。当出现Operator的使用的时候，我发现我根本不理解。 UniRx(ユニアールエックス)の基本的な使い方と具体的な利用例【Unity】【UniRx】 UniRx 学习 Reactive ExtensionUniRx 2020/02/17更新 又是我们的老朋友，UniRX，这次我来彻彻底底的更新UniRX的内容了，因为发现要是还不好好的整理，深入理解UniRX的使用和原理，连热度都蹭不上了。 在逐渐接触到UniRx的过程中，更为准确的是接触现在项目的过程中，我对UniRX，Observable，UniTask这三者之间的界限越来越模糊，什么时间什么场合该使用哪个完全不清楚。 从Observer模式理解UniRx主要参考文章： ObserverパターンからはじめるUniRx 观察者模式观察者模式(Observer Pattern)，即经常提到的设计模式的一种。实现事件的发行和订阅的一种设计模式。 UniRx中登场的就是Observer和Subject这两个重要的概念。 Observer 观察者，监听者(Listener)，Message Receiver Subject 观察对象，Event发行方 记录着所有Observer的订阅 两者的关系就是Subject管理着所有订阅的Observer，Subject向Observer发送消息。 简单的观察者模式实现 IMyObserver&lt;T&gt;接口 接收消息的接口 12345678910namespace My&#123; interface IMyObserver&lt;T&gt; &#123; /// &lt;summary&gt; ///收到消息的时候执行 /// &lt;/summary&gt; void OnReceived(T value); &#125;&#125; Observer的具体实现 收到消息则打印消息 12345678910namespace My&#123; class PrintObserver&lt;T&gt; : IMyObserver&lt;T&gt; &#123; public voi OnReceived(T value) &#123; UnityEngine.Debug.Log(value.ToString()); &#125; &#125;&#125; MySubject&lt;T&gt;类的实现 实现登记功能的类 123456789101112131415161718192021222324252627282930313233343536class MySubject&lt;T&gt; : IDisposable&#123; private List&lt;IMyObserver&lt;T&gt;&gt; _observers = new List&lt;IMyObserver&lt;T&gt;&gt;; /// &lt;summary&gt; /// Observer登记（订阅） /// &lt;/summary&gt; public void RegisterObserver(IMyObserver&lt;T&gt; observer) &#123; _observers.Add(observer); &#125; /// &lt;summary&gt; /// Observer解除登记（取消订阅） /// &lt;/summary&gt; public void UnRegisterObserver(IMyObserver&lt;T&gt; observer) &#123; _observers.Remove(observer); &#125; /// &lt;summary&gt; /// 消息发行 ///&lt;/summary&gt; pblic void SendMessage(T value) &#123; foreach (var myObserver in _observers) &#123; myObserver.OnReceived(value); &#125; &#125; public void Dispose() &#123; _observers.Clear(); &#125;&#125; 使用测试 这里可以生成多个Observer来举例，这里只列出一个 123456789101112131415// 生成Subjectvar mySubject = new MySubject&lt;string&gt;();// Observer生成var observer = new PrintObserver&lt;string&gt;()// 登记Observer到Sbject上mySubject.RegisterObserver(observer);// 送信mySubject.SendMessage("Hello!");mySubject.SendMessage("World!");// 解除所有登记mySubject.Dispose(); 结果是依次输出两个字符串。 向UniRx进行转变 UniRx.IObserver\&lt;T> IMyObserve\&lt;T> -&gt; UniRx.IObserver\&lt;T> 123456789namespace UniRx&#123; public interface IObserver&lt;T&gt; &#123; void OnCompleted(); void OnError(Exception error); void OnNext(T value); &#125;&#125; 这里我省略了IMyObserver接口的部分，图片更为直观但是…参考上面的。 注意.NET4.6的时候变成了System.IObservable\&lt;T> OnReceived(T value) -&gt; OnNext(T value) PrintObserver -&gt; IObserver\&lt;T> 1234567891011121314151617class PrintObserver&lt;T&gt; : IObserver&lt;T&gt;&#123; public void OnCompleted() &#123; UnityEngine.Debug.Log("OnCompleted"); &#125; public void OnError(Exception error) &#123; UnityEngine.Debug.LogError(error); &#125; public void OnNext(T value) &#123; UnityEngine.Debug.Log(value.ToString()); &#125;&#125; 大体上的印象我是从这篇文章终于算是稍微理解了一些： UniRx入門 その1 这个作者还有一些其他的入门文章有时间也可以观摩一下:UniRx入門シリーズ 目次はこちら UniRxを導入するメリット ～こういう時にUniRxは使えるよ～ 超级有用的一篇知乎文章： 又见Rx——Rx via UniRx 里面的那个讲Rx的视频真的很厉害。 UniRx中遇见的PlayerLoop所以说PlayerLoop是个什么东西我还没搞懂，只不过在读源码的时候发现了这么几行：123// UniRx用var playerLoop = ScriptBehaviourUpdateOrder.CurrentPlayerLoop;PlayerLoopHelper.Initialize(ref playerLoop); 有时候大佬的两行代码我的用一天来理解。首先我不知道UniRx怎么用，其次为什么要在这里这么用。几番调查锁定了这两行代码的用意。 【Unity2018】Entity Component System(ECS)とUniRx.Asyncを和解させる 在使用Unity的ECS和UniRx的时候，两者的PlayerLoop会冲突，读源码就会大概理解(接受？)这个情况。 ECSを使っているプロジェクトにUniRxをぶちこむと、ECSとUniRxのPlayerLoopが喧嘩してUniRxが勝ちます（ECSが動かなくなります） ECS:1234567891011121314// GameBootstrap.csnamespace Unity.Entities&#123;#if !UNITY_DISABLE_AUTOMATIC_SYSTEM_BOOTSTRAP static class AutomaticWorldBootstrap &#123; [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)] static void Initialize() &#123; DefaultWorldInitialization.Initialize("Default World", false); &#125; &#125;#endif&#125; 123456789101112131415161718192021// ScriptBehaviourUpdateOrder.csprivate static void SetPlayerLoop(PlayerLoopSystem playerLoop)&#123; PlayerLoop.SetPlayerLoop(playerLoop); currentPlayerLoop = playerLoop;&#125;public static void UpdatePlayerLoop(params World[] worlds)&#123; var defaultLoop = PlayerLoop.GetDefaultPlayerLoop(); if (worlds?.Length &gt; 0) &#123; var ecsLoop = InsertWorldManagersInPlayerLoop(defaultLoop, worlds.Where(x =&gt; x != null).ToArray()); SetPlayerLoop(ecsLoop); &#125; else &#123; SetPlayerLoop(defaultLoop); &#125;&#125; UniRx:1234567891011121314151617181920212223242526272829303132// PlayerLoopHelper.cspublic static void Initialize(ref PlayerLoopSystem playerLoop)&#123; yielders = new ContinuationQueue[7]; runners = new PlayerLoopRunner[7]; var copyList = playerLoop.subSystemList.ToArray(); copyList[0].subSystemList = InsertRunner(copyList[0], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldInitialization), yielders[0] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerInitialization), runners[0] = new PlayerLoopRunner()); copyList[1].subSystemList = InsertRunner(copyList[1], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldEarlyUpdate), yielders[1] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerEarlyUpdate), runners[1] = new PlayerLoopRunner()); copyList[2].subSystemList = InsertRunner(copyList[2], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldFixedUpdate), yielders[2] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerFixedUpdate), runners[2] = new PlayerLoopRunner()); copyList[3].subSystemList = InsertRunner(copyList[3], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldPreUpdate), yielders[3] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreUpdate), runners[3] = new PlayerLoopRunner()); copyList[4].subSystemList = InsertRunner(copyList[4], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldUpdate), yielders[4] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerUpdate), runners[4] = new PlayerLoopRunner()); copyList[5].subSystemList = InsertRunner(copyList[5], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldPreLateUpdate), yielders[5] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerPreLateUpdate), runners[5] = new PlayerLoopRunner()); copyList[6].subSystemList = InsertRunner(copyList[6], typeof(UniTaskLoopRunners.UniTaskLoopRunnerYieldPostLateUpdate), yielders[6] = new ContinuationQueue(), typeof(UniTaskLoopRunners.UniTaskLoopRunnerPostLateUpdate), runners[6] = new PlayerLoopRunner()); playerLoop.subSystemList = copyList; PlayerLoop.SetPlayerLoop(playerLoop);&#125;[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]static void Init()&#123; // capture default(unity) sync-context. unitySynchronizationContetext = SynchronizationContext.Current; mainThreadId = Thread.CurrentThread.ManagedThreadId; if (runners != null) return; // already initialized var playerLoop = PlayerLoop.GetDefaultPlayerLoop(); Initialize(ref playerLoop);&#125; 这里我把代码一起粘贴出来是因为这里面有好多我知识点的盲区，有代码能加快一些理解。 最终结论就是加上最上面的两行使得ECS和UniRx的PlayerLoop不冲突，不会造成一方失效的问题。也就是这一步并不是UniRx要做的设定而是为了让两者共存而做的设定。 那么通过这个问题我发现的一些知识盲区： ECS是什么？ PlayerLoop是什么，为什么游戏开始之前要指定PlayerLoop的设定？ 调查了一下发现这个问题是真的很复杂，需要展开另一篇关于Unity的ECS的内容来加深理解了。 UniRx-各种用法SubscribeOnMainThread &amp; ObserveOnMainThread这个是做什么的 How to use SubscribeOnMainThread? It seems never working #282 SubscribeOnMainThread means that you are subscribing (therefore starting the task [for cold observables]) in main thread whereas ObserveOnMainThread means that you are observing (listening) onNext messages in main thread. When you are using Observable.Start method, the task will be run on the ThreadPool by default. So use it with the ObserveOnMainThread to access Unity API in the Subscribe method. 从名字上也能大致了解，就是为了让Subscribe中的内容在MainThread中执行。因为涉及到Unity的GameObject的操作都要在主线程中进行。 按理说我应该试着使用这两个方法，再去了解这个方法应不应该这样用，也就是试错。 但是我听前辈说这两个方法不太靠得住（意思应该就是使用的时候可能会报错，因为在子线程中动Unity的GameObject，或者Unity的一些东西，编译就会报错，会好好的报出错误信息的），最靠谱的方式是用await UniTask.Yield()。至于具体怎么用，在后面的地方专门展开。 ObserveEveryValueChangedObservable Observable Disposables这个也是一个很重要的概念。 Disposables Operators UniRx オペレータ逆引き Switch Rxにおける並行非同期実行とリソース処理の問題 Do 【Unity】【UniRx】Observable.DoXxx()系のメソッドの挙動まとめ Reactive Programming(重要) Introduction to Reactive Programming]]></content>
       <categories>
         <category>C#</category>
       </categories>
@@ -576,8 +576,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -661,8 +661,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -704,8 +704,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -750,8 +750,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -762,8 +762,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -774,8 +774,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -786,8 +786,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -798,8 +798,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -846,8 +846,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
         <tag>编程</tag>
       </tags>
   </entry>
