@@ -95,7 +95,9 @@
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/ISubject-Interface.png">
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/SubjectClass.png">
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/IObservable-Action.png">
-<meta property="og:updated_time" content="2020-02-25T02:41:17.886Z">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Unirx-Operator.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Unirx-Observable.png">
+<meta property="og:updated_time" content="2020-02-25T05:21:14.416Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UniRx从入门到放弃">
 <meta name="twitter:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
@@ -349,7 +351,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-02-25T11:41:17+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-02-25T14:21:14+09:00">
                 2020-02-25
               </time>
             
@@ -528,7 +530,32 @@
 <li><span style="color:orange">Scheduler</span></li>
 </ul>
 <h4 id="Operator"><a href="#Operator" class="headerlink" title="Operator"></a>Operator</h4><p>UniRx中有很多的操作符，关于操作符</p>
-<p>= <strong>操作符继承了IObserverT>和IObservable&lt;T>两个接口并实现功能</strong></p>
+<ul>
+<li><strong>操作符继承了IObserverT>和IObservable&lt;T>两个接口并实现功能</strong></li>
+<li><strong>在Subject -&gt; Observer 之间进行消息的处理</strong></li>
+<li>顺便一提这个叫做装饰模式(Decrator Pattern)</li>
+</ul>
+<p>…这个是突然说是装饰模式我也不是特别理解，我所知道的装饰模式是动态的为类添加功能的模式，听起来挺符合的。</p>
+<p><img src="Unirx-Operator.png" alt="Operator"></p>
+<h4 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h4><p>这个我也不知道该怎么翻译，调度器？</p>
+<ul>
+<li><strong>管理消息的执行时机，执行线程的</strong><ul>
+<li>UniRx基本上使用的是Unity的WaitForSeconds来计量时间(MainThreadScheduler)</li>
+<li>不想使用WaitForSeconds也可以指定其它的Scheduler来切换</li>
+</ul>
+</li>
+</ul>
+<p>使用的例子暂时还没有遇见，暂时先空着。</p>
+<h4 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h4><p>这里是理解UniRx的关键，各种设计模式，操作符，Lambda，什么的</p>
+<ul>
+<li>发行的消息，经过Operator的处理，到达最后的Observer</li>
+<li><strong>这个消息被运送的路径，构成，组织结构，被叫做Observable</strong><ul>
+<li>也会被叫做流(Stream)</li>
+</ul>
+</li>
+</ul>
+<p><img src="Unirx-Observable.png" alt="Observable"></p>
+<p>这张图片是我这篇文章里最想放的图片，非常直观的了解UniRx的动作方式。</p>
 <hr>
 <p>大体上的印象我是从这篇文章终于算是稍微理解了一些：</p>
 <ul>
@@ -576,7 +603,7 @@
 <p>从名字上也能大致了解，就是为了让Subscribe中的内容在MainThread中执行。因为涉及到Unity的GameObject的操作都要在主线程中进行。</p>
 <p>按理说我应该试着使用这两个方法，再去了解这个方法应不应该这样用，也就是试错。</p>
 <p>但是我听前辈说这两个方法不太靠得住（意思应该就是使用的时候可能会报错，因为在子线程中动Unity的GameObject，或者Unity的一些东西，编译就会报错，会好好的报出错误信息的），最靠谱的方式是用<code>await UniTask.Yield()</code>。至于具体怎么用，在后面的地方专门展开。</p>
-<h3 id="ObserveEveryValueChanged"><a href="#ObserveEveryValueChanged" class="headerlink" title="ObserveEveryValueChanged"></a>ObserveEveryValueChanged</h3><h3 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h3><ul>
+<h3 id="ObserveEveryValueChanged"><a href="#ObserveEveryValueChanged" class="headerlink" title="ObserveEveryValueChanged"></a>ObserveEveryValueChanged</h3><h3 id="Observable-1"><a href="#Observable-1" class="headerlink" title="Observable"></a>Observable</h3><ul>
 <li><a href="http://reactivex.io/documentation/observable.html" target="_blank" rel="noopener">Observable</a></li>
 </ul>
 <h3 id="Disposables"><a href="#Disposables" class="headerlink" title="Disposables"></a>Disposables</h3><p>这个也是一个很重要的概念。</p>
@@ -818,7 +845,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从Observer模式理解UniRx"><span class="nav-number">1.2.1.</span> <span class="nav-text">从Observer模式理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的观察者模式实现"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">简单的观察者模式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向UniRx进行转变"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">向UniRx进行转变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UniRx构成的三大要素"><span class="nav-number">1.2.2.</span> <span class="nav-text">UniRx构成的三大要素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Operator"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Operator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx中遇见的"><span class="nav-number">1.3.</span> <span class="nav-text">UniRx中遇见的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerLoop"><span class="nav-number">1.3.1.</span> <span class="nav-text">PlayerLoop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx-各种用法"><span class="nav-number">1.4.</span> <span class="nav-text">UniRx-各种用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.4.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.4.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable"><span class="nav-number">1.4.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.4.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.4.5.</span> <span class="nav-text">Operators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Do"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">Do</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从Observer模式理解UniRx"><span class="nav-number">1.2.1.</span> <span class="nav-text">从Observer模式理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的观察者模式实现"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">简单的观察者模式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向UniRx进行转变"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">向UniRx进行转变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UniRx构成的三大要素"><span class="nav-number">1.2.2.</span> <span class="nav-text">UniRx构成的三大要素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Operator"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">Observable</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx中遇见的"><span class="nav-number">1.3.</span> <span class="nav-text">UniRx中遇见的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerLoop"><span class="nav-number">1.3.1.</span> <span class="nav-text">PlayerLoop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx-各种用法"><span class="nav-number">1.4.</span> <span class="nav-text">UniRx-各种用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.4.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.4.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.4.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.4.5.</span> <span class="nav-text">Operators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Do"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">Do</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
             
 
           </div>
