@@ -1420,8 +1420,11 @@
   </entry>
   <entry>
     <title>VS中有用的插件</title>
-    <url>/visual-studio-plugins/</url>
+    <url>/how-to-visual-studio/</url>
     <content><![CDATA[<p>我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。<br><a id="more"></a></p>
+<h1 id="VS中的DEBUG"><a href="#VS中的DEBUG" class="headerlink" title="VS中的DEBUG"></a>VS中的DEBUG</h1><p>如何使用VS进行Debug是非常重要的，致命的是我至今未能完全掌握，不要总是依靠Log的输出自己猜了。</p>
+<h2 id="在UE4中使用VS进行调试"><a href="#在UE4中使用VS进行调试" class="headerlink" title="在UE4中使用VS进行调试"></a>在UE4中使用VS进行调试</h2><p>首先要把UE4的源码下载，然后按照官方的指示操作生成VS的工程文件。</p>
+<p>打开文件之后开始build，这里我遇见的一个问题是当我编译成功之后，不知道该怎么运行了。</p>
 <h2 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h2><h3 id="VsVim"><a href="#VsVim" class="headerlink" title="VsVim"></a>VsVim</h3><h3 id="Productivity-Power-Tools"><a href="#Productivity-Power-Tools" class="headerlink" title="Productivity Power Tools"></a>Productivity Power Tools</h3><ul>
 <li><a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2017" target="_blank" rel="noopener">Productivity Power Tools 2017/2019</a></li>
 </ul>
@@ -1435,7 +1438,7 @@
         <category>工具</category>
       </categories>
       <tags>
-        <tag>plugins</tag>
+        <tag>Plugins</tag>
       </tags>
   </entry>
   <entry>
