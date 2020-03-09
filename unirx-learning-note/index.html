@@ -97,7 +97,27 @@
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/IObservable-Action.png">
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Unirx-Operator.png">
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Unirx-Observable.png">
-<meta property="og:updated_time" content="2020-02-25T05:21:14.416Z">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/LINQtoAsynchronous.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Async-Await.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Synchronous-Asynchronous.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Async-Await-Rx-Conclusion.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task3.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task4.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnderstandAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncAwait-Callback.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OptimizationForAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterClass.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterClassUse.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/MultilpleAwaitOptimization1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/MultilpleAwaitOptimization2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTask.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnityIsSingleThread.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnityWithSynchronizationContext.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OverheadOfTask.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OverheadOfUniTask.png">
+<meta property="og:updated_time" content="2020-03-09T15:48:27.536Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UniRx从入门到放弃">
 <meta name="twitter:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
@@ -351,8 +371,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-02-25T14:21:14+09:00">
-                2020-02-25
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-10T00:48:27+09:00">
+                2020-03-10
               </time>
             
           </span>
@@ -556,6 +576,39 @@
 </ul>
 <p><img src="Unirx-Observable.png" alt="Observable"></p>
 <p>这张图片是我这篇文章里最想放的图片，非常直观的了解UniRx的动作方式。</p>
+<h3 id="深入理解UniTask中的async-await"><a href="#深入理解UniTask中的async-await" class="headerlink" title="深入理解UniTask中的async/await"></a>深入理解UniTask中的async/await</h3><p>关于Unity中的UniTask，对我来说一直都是一个盲点，看到大佬的代码的时候会出现，关键是在C#中也是有这个关键字的，和UniRx使用的时候就开始乱套了，该怎么用。这里我可能会整理两篇文章，先理解，再入门。</p>
+<ul>
+<li><a href="https://learning.unity3d.jp/1493/" target="_blank" rel="noopener">Deep Dive async/await in Unity with UniTask(UniRx.Async)</a></li>
+</ul>
+<p>这篇是UniRx的制作人neueccさん在UnityBlog的稿子。除了UniRx之外还有他的<strong>MessagePack-CSharp</strong>的知识点啊文章啊值得我去理解和整理。别总是说什么自己不做web端的东西啊什么的，时代变了。</p>
+<p>下面就开始对这个稿子的总结记录(汉化？)</p>
+<h4 id="Rx-vs-async-await"><a href="#Rx-vs-async-await" class="headerlink" title="Rx vs async/await"></a>Rx vs async/await</h4><p>首先是Observable可以做什么？<br><img src="LINQtoAsynchronous.png" alt="Rx-Observable"></p>
+<blockquote>
+<p>注: コレクション操作</p>
+<p>この操作は、指定した配列に対して、連結、相違、フラット、交差、結合、一意、順序、フィルタ、日付フィルタなどのコレクション操作を実行するときに使用します。</p>
+</blockquote>
+<p>图片中的内容我也不敢贸然翻译，反正就我个人的理解，UniRx中的Observable从LINQ到异步处理，都能胜任。能做到很多的事情是强项同时也是缺点。</p>
+<p><strong>async/await</strong>的语法则是能让异步处理的写法跟同步处理的写法很相似。<br><img src="Async-Await.png" alt="Async-Await"></p>
+<p><img src="Synchronous-Asynchronous.png" alt="Synchronous-Asynchronous"></p>
+<p>正如上面也提到过的，<code>IObservable&lt;T&gt;</code>的功能很强大，从Event到异步处理都可以胜任，但是实现也只是一个操作符，让人无法准确的区分实现的功能，可读性变差也是非常不好的。按照作者的说法就是，对于<code>IObservable&lt;T&gt;</code>的实现来说，无论是Event(无限多个)还是异步处理(长度1)，使用相同的Operator来实现功能都是可能的，即实现的代码相同但是功能不同，功能非常强大。但是在应用层面上的使用就会出现问题。</p>
+<p>比如说Event(的Observable流)使用Where等的关键字(这里只听懂了Where关键词)是可以的，但是异步处理使用Where等关键字就不可以。因为异步处理的返回结果是0，就会什么都不会返回（这里没能理解准确的意思）。异步处理的长度不能增加不能减少，这种情况下就希望能够区分处理。必要的时候可以互相转换就足够。</p>
+<p>Rx可以用简单的写法实现复杂的功能，就使得源码的解读像是解密一样，stream的流向不是单方向，复杂度也会提升。这里我深有体会，操作符中用了<code>Repeat</code>，数据的流向就不知道跑去了哪里，简直就是灾难。所以如何写的简明易懂也是非常必要的。</p>
+<p>总结起来就是：<strong>异步处理使用async/await，事件(Event)使用Rx。</strong><br><img src="Async-Await-Rx-Conclusion.png" alt="Conclusion"></p>
+<h5 id="理解并正确使用async-await"><a href="#理解并正确使用async-await" class="headerlink" title="理解并正确使用async/await"></a>理解并正确使用async/await</h5><p>首先是<strong>async/await不是多线程！！</strong></p>
+<p>原本一个我很早之前知道的但是忘记了的就是，游戏是没有多线程的使用的，但是我现在不是很确定这一个概念是否准确，只是隐隐约约这么感觉。</p>
+<p><img src="Csharp-Task1.png" alt="Task"><br><img src="Csharp-Task2.png" alt="Task"><br><img src="Csharp-Task3.png" alt="Task"><br><img src="Csharp-Task4.png" alt="Task"></p>
+<p>贴了好多图片，但是我感觉图片的内容总结的很好…所以就还是贴图片了。</p>
+<p>最后引出了我们主角<strong>UniTask</strong>,这是为Unity量身打造的Task系统，结合async/await来使用，效率非常的高。</p>
+<p>async/await是如何工作的<br><img src="UnderstandAsyncAwait.png" alt="理解Async/await"></p>
+<p>按照作者所说，那个<strong>CPS</strong>的名字看起似乎很了不起，实际上也没什么，<strong>就是Callback的连锁</strong>。当await的内容执行完就执行回调。被作者叫做<em>自动回调制造机</em>。<br><img src="AsyncAwait-Callback.png" alt="自动回调制造机"></p>
+<p>同时对于async/await的处理进行了优化，虽然是异步的写法但是在实际的运行中也有可能是同步执行。<br><img src="OptimizationForAsyncAwait.png" alt="对异步处理的优化"></p>
+<p>具体的话Awaiter是怎么是实现的呢？我在别的文章看到过貌似，就是这个Awaiter实现异步处理的类是可以自己实现的，它提供了一些接口和类来实现。<code>IsCompleted</code>的标志位则是用来控制同步还是异步处理，避免了重复执行的时候产生的额外的Delegate调用。<br><img src="AwaiterClass.png" alt="Awaiter的实现"><br><img src="AwaiterClassUse.png" alt="Awaiter实现的伪代码"></p>
+<p>除此之外，对于有复数的await调用的情况下也有一些优化:<br><img src="MultilpleAwaitOptimization1.png" alt="复数Await的优化1"></p>
+<p>这里有复数个await，看起来会有三个Action continuation(Delegate)组成的，但实际上一个continuation都不会生成。根据作者的描述是说在async类型的方法中会有一个状态机(AsyncStateMachine)，所有的continuation都会由<code>this.MoveNext()</code>方法表示，通过推进状态机的状态，来完成所有的continuation。节省了为每一个continuation生成Delegate的开销。<br><img src="MultilpleAwaitOptimization2.png" alt="复数Await的优化2"></p>
+<p>那么UniTask又是什么？UniTask是作者设计用来代替Task的，当然是为Unity而特化的类。C#原本的Task系统有许多Unity开发用不到或者很重的操作。<br><img src="UniTask.png" alt="UniTask"></p>
+<p><strong>Unity是单线程运作的（基本上）。</strong>Unity是由C++的引擎层和C#的脚本层构成，C#的部分基本上都是使用的单线程处理。在使用C#的Task的时候很容易就使用了多线程的操作。所以出于各种Unity自身的特殊性，作者从特殊性和性能的方面强推使用UniTask的功能。<br><img src="UnityIsSingleThread.png" alt="Unity的特殊性"></p>
+<p>async/await(Task)有能把多线程的功能统合到单线程的功能(SynchronizationContext),但是在Unity的情况下，多线程是基本上不会用到甚至是不推荐用的情况下，就会算是额外的开销。<br><img src="UnityWithSynchronizationContext.png" alt="Unity With SynchronizationContext"></p>
+<p>关于Task中的一些调用知识，算是轻微的拓展。通过观察两者的调用情况可以发现，UniTask中舍弃了ExecutionContext和SynchronziationContext两种Capture。<br><img src="OverheadOfTask.png" alt="Overhead of Task"><br><img src="OverheadOfUniTask.png" alt="Overhead of UniTask"></p>
 <hr>
 <p>大体上的印象我是从这篇文章终于算是稍微理解了一些：</p>
 <ul>
@@ -845,7 +898,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从Observer模式理解UniRx"><span class="nav-number">1.2.1.</span> <span class="nav-text">从Observer模式理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的观察者模式实现"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">简单的观察者模式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向UniRx进行转变"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">向UniRx进行转变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UniRx构成的三大要素"><span class="nav-number">1.2.2.</span> <span class="nav-text">UniRx构成的三大要素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Operator"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">Observable</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx中遇见的"><span class="nav-number">1.3.</span> <span class="nav-text">UniRx中遇见的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerLoop"><span class="nav-number">1.3.1.</span> <span class="nav-text">PlayerLoop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx-各种用法"><span class="nav-number">1.4.</span> <span class="nav-text">UniRx-各种用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.4.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.4.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.4.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.4.5.</span> <span class="nav-text">Operators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Do"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">Do</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从Observer模式理解UniRx"><span class="nav-number">1.2.1.</span> <span class="nav-text">从Observer模式理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的观察者模式实现"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">简单的观察者模式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向UniRx进行转变"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">向UniRx进行转变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UniRx构成的三大要素"><span class="nav-number">1.2.2.</span> <span class="nav-text">UniRx构成的三大要素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Operator"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">Observable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深入理解UniTask中的async-await"><span class="nav-number">1.2.3.</span> <span class="nav-text">深入理解UniTask中的async/await</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Rx-vs-async-await"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Rx vs async/await</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#理解并正确使用async-await"><span class="nav-number">1.2.3.1.1.</span> <span class="nav-text">理解并正确使用async/await</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx中遇见的"><span class="nav-number">1.3.</span> <span class="nav-text">UniRx中遇见的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerLoop"><span class="nav-number">1.3.1.</span> <span class="nav-text">PlayerLoop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx-各种用法"><span class="nav-number">1.4.</span> <span class="nav-text">UniRx-各种用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.4.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.4.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.4.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.4.5.</span> <span class="nav-text">Operators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Do"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">Do</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
             
 
           </div>
