@@ -117,7 +117,30 @@
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnityWithSynchronizationContext.png">
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OverheadOfTask.png">
 <meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OverheadOfUniTask.png">
-<meta property="og:updated_time" content="2020-03-09T15:48:27.536Z">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/GameloopBasedAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskVsCoroutine1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskVsCoroutine2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskTracker.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskConclusion.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskConclusion1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Pending.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Succeeded.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Faulted.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Cancled.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException3.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException4.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/PainpointOfAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OperationCanceledException.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/CanceledTokenSource.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/SuppressCancellationThrow.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncEventHandling1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncEventHandling2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncEventHandling3.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/ReusablePromise.png">
+<meta property="og:updated_time" content="2020-03-11T07:32:55.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UniRx从入门到放弃">
 <meta name="twitter:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
@@ -371,8 +394,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-03-10T00:48:27+09:00">
-                2020-03-10
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-11T16:32:55+09:00">
+                2020-03-11
               </time>
             
           </span>
@@ -609,6 +632,43 @@
 <p><strong>Unity是单线程运作的（基本上）。</strong>Unity是由C++的引擎层和C#的脚本层构成，C#的部分基本上都是使用的单线程处理。在使用C#的Task的时候很容易就使用了多线程的操作。所以出于各种Unity自身的特殊性，作者从特殊性和性能的方面强推使用UniTask的功能。<br><img src="UnityIsSingleThread.png" alt="Unity的特殊性"></p>
 <p>async/await(Task)有能把多线程的功能统合到单线程的功能(SynchronizationContext),但是在Unity的情况下，多线程是基本上不会用到甚至是不推荐用的情况下，就会算是额外的开销。<br><img src="UnityWithSynchronizationContext.png" alt="Unity With SynchronizationContext"></p>
 <p>关于Task中的一些调用知识，算是轻微的拓展。通过观察两者的调用情况可以发现，UniTask中舍弃了ExecutionContext和SynchronziationContext两种Capture。<br><img src="OverheadOfTask.png" alt="Overhead of Task"><br><img src="OverheadOfUniTask.png" alt="Overhead of UniTask"></p>
+<p>async/await是基于Gameloop的。需要使用Unity中的Coroutine的时候，UniTask中也提供了一些替换Task中的操作的功能，由于没有多余的Allocation，效率会好一些。<br><img src="GameloopBasedAsyncAwait.png" alt="基于Gameloop"></p>
+<p>对比使用Unity中的Coroutine，UniTask减少了很多Allocation。<br><img src="UniTaskVsCoroutine1.png" alt="Vs Coroutine"><br><img src="UniTaskVsCoroutine2.png" alt="Vs Coroutine"></p>
+<p>UniTask Tracker可以用来观察UniTask的状态。使用不当会发生Leak（类似于内存泄漏？），根据情况多多使用是好的。<br><img src="UniTaskTracker.png" alt="UniTask Tracker"></p>
+<p>最后是作者的总结：</p>
+<ul>
+<li><strong>出于性能的选择 UniTask + async/await</strong><ul>
+<li>UniTask是为了Unity而特化的工具，相比于Task性能好好很多是肯定的</li>
+<li>No ExecutionContext, No SynchronizationContext</li>
+<li>UniTask相比于Coroutne有更少的Allocation</li>
+<li>在异步处理的方面的性能要强于UniRx(Observable)</li>
+</ul>
+</li>
+<li><strong>出于自由的选择 UniTask + async/await</strong><ul>
+<li>单线程是使用的前提，不用担心掉进多线程的坑</li>
+<li>提供丰富的功能，在绝大多数情况下可以替换Coroutine</li>
+<li>有UniTask Tracker可以简单回避Leak(泄漏)</li>
+<li>和Task,Rx混合使用没有问题</li>
+</ul>
+</li>
+</ul>
+<p><img src="UniTaskConclusion.png" alt="UniTask-Conclusion"><br><img src="UniTaskConclusion1.png" alt="UniTask-Conclusion"></p>
+<p><strong>State of UniTask</strong>。UniTask内部有四个状态。由UniTaskCompletionSource生成的情况下，可以使用TrySetResult/TrySetException/TrySetCancled来切换状态。<br><img src="AwaiterStatus.png" alt="AwaiterStatus"></p>
+<p>各个状态的时间段：<br><img src="AwaiterStatus-Pending.png" alt="Pending"><br><img src="AwaiterStatus-Succeeded.png" alt="Succeeded"><br><img src="AwaiterStatus-Faulted.png" alt="Faulted"><br><img src="AwaiterStatus-Cancled.png" alt="Cancled"></p>
+<p>异常处理,当捕获到异常之后都会一层一层的向调用的上级上抛，在哪里停止呢？作者提供了<code>Forget()</code>的方法用来终结UniTask的异常处理。<br><img src="UniTaskException1.png" alt="UniTask的异常处理"><br><img src="UniTaskException2.png" alt="UniTask的异常处理"><br><img src="UniTaskException3.png" alt="UniTask的异常处理"><br><img src="UniTaskException4.png" alt="UniTask的异常处理"></p>
+<p>这里有一个问题就是<code>Observable.Empty/Never</code>可以用来做什么？</p>
+<p><strong>async中的Cancellation</strong>，async/await的痛点，就作者的话来说就是麻烦。取消很麻烦。</p>
+<ul>
+<li>相比于Rx的IDisposable返回值，async/awai没有了IDisposable的Allocation，但是有了CancellationToken这个参数</li>
+</ul>
+<p>具体的说来(参照下面的图片)，就是需要在异步函数的最后一个参数那里添加<code>CancellationToken cancellationToken = default</code>这个参数，按照作者所说，算是一个半强制的操作，如果说取消的这个操作保证绝对没有的话，不写这个参数也是可以的，但是基本上是推荐带上这个参数的。<br><img src="PainpointOfAsyncAwait.png" alt="async/await的痛点"></p>
+<p>那么由谁来发送这个OperationCanceledExcrption呢？取消就代表着<code>OperationCanceledException</code>，可以通过<code>cancellationToken.IsCancelationRequested</code>来检查是否被取消，但是，<strong>在在代码中去使用这个东西来检查是不需要的</strong>。因为在(Unity)用户代码中都是一些同步处理，而实际上抛出这个<code>OperationCanceledException</code>异常的是异步处理，也就是说来源都是<code>= asyncOperation.ConfigureAwait(token), UniTask.Delay(token), etc...</code>，而我们所要做的就是把这个Token传递给这些异步处理的当中就OK了。<br><img src="OperationCanceledException.png" alt="取消 = OperationCanceledException"></p>
+<p>在Unity中的MonoBehaviour/OnDestory便利的使用：<br><img src="CanceledTokenSource.png" alt="CanceledTokenSource in MonoBehaviour"></p>
+<p>异常处理是会拖累性能的，针对特殊情况，比如说同时大量的Cancle异常发生，针对同一个事件大量的对象对此发出异常事件的情况，我们可以使用提供的<code>UniTask.SuppressCancellationThrow</code>来抑制这一层例外的大量发射的情况，但是这个方法只能抑制这一层的情况。只会在特殊情况下使用这个，记着吧。<br><img src="SuppressCancellationThrow.png" alt="异常的高代价"></p>
+<p><strong>Async Eventhandling</strong>。而实际上async/await不单单可以实现异步处理，也是可以用来做Event(事件)的实现的。但是原则上还是推荐EventHandling由Rx为主实现。async/await的EventHandling实现还是作为一个可以实现的一个方式，但是不做推荐。<br><img src="AsyncEventHandling1.png" alt="AsyncTrigger/AsyncUGUI"><br><img src="AsyncEventHandling2.png" alt="AsyncTrigger/AsyncUGUI"><br><img src="AsyncEventHandling3.png" alt="什么时候使用"></p>
+<p>作者出于性能的考虑，一些本地的变量可以被重复使用。如下面的代码，我没有实际上试过，但是那个变量<code>i</code>貌似应该有些问题。<br><img src="ReusablePromise.png" alt="UniTask的一部分再利用"></p>
+<p>还有一些别的使用可以参考UniTask(async/await?)的ReadMe文档。(当然我是还没找啦)</p>
+<p>最后总结一下，用作者的意思就是恐れず、どんどん使いましょう、と。</p>
 <hr>
 <p>大体上的印象我是从这篇文章终于算是稍微理解了一些：</p>
 <ul>
