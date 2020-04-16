@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Unity中的CSharp</title>
+    <url>/stonelzp.github.io/csharp-in-unity/</url>
+    <content><![CDATA[<p>跟CSharp打交道也很久了，但是有很多的东西我都从来未接触过，甚至是一些比较基础的用法我都不知道。这篇文章虽然带有Unity，但主要还是为了记录CSharp的使用，嘛，毕竟我主要的CSharp的使用场景就是Unity。</p>
+<a id="more"></a>
+<p>在另外的一篇文章，<strong>Unity知识点记录</strong>中也有一些零星的CSharp使用的记载，但是Unity相关的内容比较多。</p>
+<h4 id="函数传参时new一个参数"><a href="#函数传参时new一个参数" class="headerlink" title="函数传参时new一个参数"></a>函数传参时new一个参数</h4><p>函数传参的时候，这个参数未必是上面已经预备好的，而是想要一个新的参数或者类，</p>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// sample code</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">Data</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    flaot b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Data data = <span class="keyword">new</span> Data();</span><br><span class="line">    SampleFunction(data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这种最常见的用法。但是当我们<code>Data</code>的类并未提前预备好，我们就必须new一个。<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SampleFunction(<span class="keyword">new</span> Data());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>那么这里问题又来了，我们想new一个Data类之后顺便还想把变量值加入，这个时候想到的就是为Data类添加一个构造函数。</p>
+<p>但是实际上我读大佬的代码的时候，就不需要：<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SampleFunction(<span class="keyword">new</span> Data()&#123; a = sample_a, b = sample_b&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就不需要额外创建一个构造函数了，说实话，这应该是非常基础的用法，但是我完全没有印象，就连写的途中，变量赋值之间用的是逗号而不是分号而纠结了一会儿，还以为是VS中的自动补齐工具出问题了。</p>
+<p>记住，应该会经常使用的，很方便的写法。感觉有时间需要了解一下这个写法的机制。</p>
+]]></content>
+      <categories>
+        <category>Unity</category>
+        <category>CSharp</category>
+      </categories>
+      <tags>
+        <tag>csharp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Unity-DOTS学习记录</title>
     <url>/stonelzp.github.io/unity-dots/</url>
     <content><![CDATA[<p>DOTS(Data Oriented Technology Stack)，Unity推出的一个新的Unity内核，个人的理解就是一种个以往的Unity完全不同的方式去制作内容。其代价就是不是那么好理解，但是带来了更高的性能（我也不知道）。</p>
@@ -618,8 +640,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -639,8 +661,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4010,8 +4032,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4045,9 +4067,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4084,9 +4106,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4255,8 +4277,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -4335,8 +4357,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4382,8 +4404,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4497,8 +4519,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4603,8 +4625,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4637,8 +4659,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4758,8 +4780,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4801,8 +4823,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4889,8 +4911,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5261,9 +5283,9 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
