@@ -49,13 +49,20 @@
     <content><![CDATA[<p>跟CSharp打交道也很久了，但是有很多的东西我都从来未接触过，甚至是一些比较基础的用法我都不知道。这篇文章虽然带有Unity，但主要还是为了记录CSharp的使用，嘛，毕竟我主要的CSharp的使用场景就是Unity。</p>
 <a id="more"></a>
 <p>在另外的一篇文章，<strong>Unity知识点记录</strong>中也有一些零星的CSharp使用的记载，但是Unity相关的内容比较多。</p>
-<h4 id="函数传参时new一个参数"><a href="#函数传参时new一个参数" class="headerlink" title="函数传参时new一个参数"></a>函数传参时new一个参数</h4><p>函数传参的时候，这个参数未必是上面已经预备好的，而是想要一个新的参数或者类，</p>
+<h3 id="C-的一些基础用法"><a href="#C-的一些基础用法" class="headerlink" title="C#的一些基础用法"></a>C#的一些基础用法</h3><h4 id="函数传参时new一个参数"><a href="#函数传参时new一个参数" class="headerlink" title="函数传参时new一个参数"></a>函数传参时new一个参数</h4><p>函数传参的时候，这个参数未必是上面已经预备好的，而是想要一个新的参数或者类，</p>
 <figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// sample code</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">Data</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    flaot b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Data data = <span class="keyword">new</span> Data();</span><br><span class="line">    SampleFunction(data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上面这种最常见的用法。但是当我们<code>Data</code>的类并未提前预备好，我们就必须new一个。<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SampleFunction(<span class="keyword">new</span> Data());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>那么这里问题又来了，我们想new一个Data类之后顺便还想把变量值加入，这个时候想到的就是为Data类添加一个构造函数。</p>
 <p>但是实际上我读大佬的代码的时候，就不需要：<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    SampleFunction(<span class="keyword">new</span> Data()&#123; a = sample_a, b = sample_b&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这样就不需要额外创建一个构造函数了，说实话，这应该是非常基础的用法，但是我完全没有印象，就连写的途中，变量赋值之间用的是逗号而不是分号而纠结了一会儿，还以为是VS中的自动补齐工具出问题了。</p>
 <p>记住，应该会经常使用的，很方便的写法。感觉有时间需要了解一下这个写法的机制。</p>
+<p><span style="color:red">重温了这篇文章发现自己最近刚好用到这个地方，但是很巧我就没有这么用，还是傻傻的创建了构造函数，我真是最近散漫惯了。</span></p>
+<h4 id="获取一个枚举类型里的所有类型"><a href="#获取一个枚举类型里的所有类型" class="headerlink" title="获取一个枚举类型里的所有类型"></a>获取一个枚举类型里的所有类型</h4><p>需求就是像标题所说，至于为什么要这么做，就应该会有很多理由，比如用枚举设定事件类型的时候想要知道这些类型有那些或者有多少。</p>
+<p>就用<code>Enum.GetNames(Type)</code>这个函数来获取。</p>
+<ul>
+<li><a href="https://docs.microsoft.com/zh-cn/dotnet/api/system.enum.getnames?view=netframework-4.8" target="_blank" rel="noopener">Enum.GetNames(Type) 方法</a></li>
+</ul>
+<p>但其实这里还有更重要的地方，那就是CSharp中的<strong>属性</strong>，在别的文章中更详细的展开了，这里想只贴上实现的代码，以供日后参考。</p>
 ]]></content>
       <categories>
         <category>Unity</category>
@@ -911,6 +918,14 @@
 <p>第一次见到的弹出新窗口的使用<code>(FoldoutUsage)GetWindow(typeof(FoldoutUsage))</code>，和<code>Selection.activeTransform</code>的使用。</p>
 <p>至于这段代码的效果就是，调用这个方法后弹出一个窗口，里面包含着你选定物体的Transform，然后可以折叠，但是只能选一个，多选没有用。</p>
 <p>都是比较重要的知识。</p>
+<h3 id="UnityEditor-Inspector-script-field"><a href="#UnityEditor-Inspector-script-field" class="headerlink" title="UnityEditor Inspector script field"></a>UnityEditor Inspector script field</h3><p>当我选择注释掉<code>base.OnInspectorGUI()</code>这一行的时候，那个显示脚本名称的ScriptField就消失了，虽然看起来更清楚了但是有的时候还是会有混淆，这里讲如何恢复这个<em>ScriptField</em>。</p>
+<p>首先是参考了下面两篇文章：</p>
+<ul>
+<li><a href="https://answers.unity.com/questions/550829/how-to-add-a-script-field-in-custom-inspector.html" target="_blank" rel="noopener">How to add a “Script” field in custom inspector?</a></li>
+<li><a href="http://sokuhatiku.hateblo.jp/entry/2016/12/13/174513" target="_blank" rel="noopener">UnityのEditor拡張で「Script」フィールドを設置する方法</a></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[CustomEditor(typeof(SampleClass))]</span><br><span class="line">public class SampleClassInspector : Editor</span><br><span class="line">&#123;</span><br><span class="line">    MonoScript script = null;</span><br><span class="line"></span><br><span class="line">    private void OnEnable()</span><br><span class="line">    &#123;</span><br><span class="line">        script = MonoScript.FromMonoBehaviour((SampleClass)target);</span><br><span class="line">    &#125;</span><br><span class="line">    public override void OnInspectorGUI()</span><br><span class="line">    &#123;</span><br><span class="line">        serializedObject.Update();</span><br><span class="line">        // base.OnInspectorGUI();</span><br><span class="line">        EditorGUI.BeginDisabledGroup(true);</span><br><span class="line">        EditorGUILayout.ObjectField(&quot;Script&quot;, script, typeof(MonoScript), false);</span><br><span class="line">        EditorGUI.EndDisabledGroup();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码实现就是那样，至于参数，等遇到之后再追加说明吧。</p>
 <h2 id="SerializedObject"><a href="#SerializedObject" class="headerlink" title="SerializedObject"></a>SerializedObject</h2><ul>
 <li><a href="http://light11.hatenadiary.com/entry/2018/03/15/225709" target="_blank" rel="noopener">【Unity】【エディタ拡張】SerializedObjectの勘所をまとめてみる</a></li>
 </ul>
