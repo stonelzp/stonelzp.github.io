@@ -5056,7 +5056,14 @@
     <title>UE4中需要了解的基础概念</title>
     <url>/stonelzp.github.io/ue4-basic-knowledge/</url>
     <content><![CDATA[<p>为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。<br><a id="more"></a></p>
-<h1 id="UE4中常见的知识点"><a href="#UE4中常见的知识点" class="headerlink" title="UE4中常见的知识点"></a>UE4中常见的知识点</h1><h3 id="C-与C-的不同之处"><a href="#C-与C-的不同之处" class="headerlink" title="C++与C#的不同之处"></a>C++与C#的不同之处</h3><p>时隔多年见到C++的第一个违和感是头文件，为什么需要写头文件这个问题我找了一些别人写的代码发现了一下几个规则：</p>
+<h1 id="UE4中常见的知识点"><a href="#UE4中常见的知识点" class="headerlink" title="UE4中常见的知识点"></a>UE4中常见的知识点</h1><h2 id="更新历史"><a href="#更新历史" class="headerlink" title="更新历史"></a>更新历史</h2><ul>
+<li>~2020/06 入社现在的公司之前<ul>
+<li>在之前的公司陆陆续续更新了好多东西，有些杂乱倒也还好，今后准备更新更多UE4的内容</li>
+</ul>
+</li>
+<li>2020/06/03 更新一些使用VisualStudio的UE4SetUp内容</li>
+</ul>
+<h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C++部分"></a>C++部分</h2><h3 id="C-与C-的不同之处"><a href="#C-与C-的不同之处" class="headerlink" title="C++与C#的不同之处"></a>C++与C#的不同之处</h3><p>时隔多年见到C++的第一个违和感是头文件，为什么需要写头文件这个问题我找了一些别人写的代码发现了一下几个规则：</p>
 <ul>
 <li><p>在C++的头文件中<code>SampleCode.h</code>中一般都会预先定义一些东西</p>
 <ul>
@@ -5207,7 +5214,7 @@
 <li><a href="https://stackoverflow.com/questions/21499143/how-to-get-syntax-highlighting-for-alternate-file-extension-for-visual-studio-20" target="_blank" rel="noopener">How to get syntax highlighting for alternate file extension for Visual Studio 2010 or 2013?
 </a></li>
 </ul>
-<h3 id="UE4中使用的一些Tip"><a href="#UE4中使用的一些Tip" class="headerlink" title="UE4中使用的一些Tip"></a>UE4中使用的一些Tip</h3><h4 id="1-快速制作封闭空间"><a href="#1-快速制作封闭空间" class="headerlink" title="1. 快速制作封闭空间"></a>1. 快速制作封闭空间</h4><p>快速挖空一个几何体的制作顺序：</p>
+<h2 id="UnrealEngine部分"><a href="#UnrealEngine部分" class="headerlink" title="UnrealEngine部分"></a>UnrealEngine部分</h2><h3 id="UE4中使用的一些Tip"><a href="#UE4中使用的一些Tip" class="headerlink" title="UE4中使用的一些Tip"></a>UE4中使用的一些Tip</h3><h4 id="1-快速制作封闭空间"><a href="#1-快速制作封闭空间" class="headerlink" title="1. 快速制作封闭空间"></a>1. 快速制作封闭空间</h4><p>快速挖空一个几何体的制作顺序：</p>
 <ul>
 <li>Modes panel -&gt; Geometry -&gt; Box -&gt; 设置尺寸</li>
 <li>Details panel -&gt; Brush settings -&gt; Hollow 属性check</li>
@@ -5269,6 +5276,11 @@
 <p>完整的使用方法大概就是这样，应该有一篇文章介绍的很详细的但是关掉了页面不太好找了。</p>
 <h4 id="3-像Unity一样保存场景中的参照"><a href="#3-像Unity一样保存场景中的参照" class="headerlink" title="3.像Unity一样保存场景中的参照"></a>3.像Unity一样保存场景中的参照</h4><p>在Unity中把scene中的参照直接拖进脚本的声明公共变量以达到快速参照的目的，在UE4中也有类似的用法。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">USampleClass</span> :</span> <span class="keyword">public</span> UActorComponent</span><br><span class="line">&#123;</span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    USampleClass();</span><br><span class="line"></span><br><span class="line">    UPROPERTY(EditAnywhere, Category = <span class="string">"Edit"</span>)</span><br><span class="line">    AActor * targrtActor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>为属性添加UPROPERTY()宏让变量暴露给编辑器，然后在该脚本的Detail面板上wei该变量找到场景中的Actor参照。虽然不能拖拽了。</p>
+<hr>
+<p><span style="color: blue">Tips更新(2020/06/03)</span></p>
+<p>上面是C++中编程的场景，在UE的蓝图中保存参照的时候非常简单，直接将Actor从场景中拖到蓝图里就自动出现对象的引用了。但是在使用的过程中还是会有一些不便，比如说还要调整窗口的大小进行拖拽。</p>
+<p>我在浏览官网的时候偶然发现的一个功能，<strong>就是在进入蓝图之前先选中Actor，复数的Actor也是可以的（当然这里应该不仅限于Actor），然后打开蓝图之后就会出现Call Function On Selected Actors这样的选项</strong>。嗯，这应该会有些用处。</p>
+<hr>
 <h4 id="4-获取Actor上的Component"><a href="#4-获取Actor上的Component" class="headerlink" title="4.获取Actor上的Component"></a>4.获取Actor上的Component</h4><p>不知道是不是UE4中获取Actor上的组件就这么麻烦还是我没找到，组件的获取并不是那么单纯的事情。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 获取名为targetActor身上的脚本组件（</span></span><br><span class="line"></span><br><span class="line">TArray&lt;USampleActorComponent*&gt; Comps;</span><br><span class="line">targetActor_p-&gt;GetComponents&lt;USampleActorComponent&gt;(Comps);</span><br><span class="line"><span class="comment">// 这样Comps[0]的内容应该就是想要的组件的参照了</span></span><br></pre></td></tr></table></figure></p>
 <h4 id="5-在UEC-中实现代理"><a href="#5-在UEC-中实现代理" class="headerlink" title="5.在UEC++中实现代理"></a>5.在UEC++中实现代理</h4><p>我在现实中都没怎么用到过得代理，我竟然一次用了这么多。在UE4中代理的制作感觉好简单好方便。之前有一个是在C++中声明代理，但是实现是在蓝图中的，叫Multi-Cast-Delegate好像。这次完全是在C++中声明在C++中实现代理。</p>
 <p>再来复述一下代理的情况：一个类想要做一件事儿，但是这件事跟这个类的关系是只想知道这件事做了而已，具体做的内容完全不关心，这件事情的实现是另一个类的分工。这个时候只要在自己的类里面声明一个代理，当想要执行的时候通知那个类就行。就像是事件一样。</p>
@@ -5292,10 +5304,10 @@
 <p>然后声明一个Handle<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在.h文件中声明一个Timer Handle供我们使用，一个Handle就是一个定时的名字应该</span></span><br><span class="line">FTimerHandle timer_handle;</span><br></pre></td></tr></table></figure></p>
 <p>最后开始定时：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">timer.SetTimer(timer_handle, <span class="keyword">this</span>, &amp;USampleActorComponent::TimerMethodWnted, <span class="number">1.0</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
 <p>参数的意思应该一目了然了。</p>
-<h1 id="UE4知识拓展"><a href="#UE4知识拓展" class="headerlink" title="UE4知识拓展"></a>UE4知识拓展</h1><p>主要用来记录一些常见但是需要理解的优先级不高或者不太常用的知识点的拓展。</p>
-<h2 id="1-Metadata-Specifiers"><a href="#1-Metadata-Specifiers" class="headerlink" title="1.Metadata Specifiers"></a>1.Metadata Specifiers</h2><p>在UE4中的宏<code>UFUNCTION()</code>等等中会看到一些<code>meta</code>修饰符，有各自的用处。</p>
+<h2 id="UE4知识拓展"><a href="#UE4知识拓展" class="headerlink" title="UE4知识拓展"></a>UE4知识拓展</h2><p>主要用来记录一些常见但是需要理解的优先级不高或者不太常用的知识点的拓展。</p>
+<h3 id="Metadata-Specifiers"><a href="#Metadata-Specifiers" class="headerlink" title="Metadata Specifiers"></a>Metadata Specifiers</h3><p>在UE4中的宏<code>UFUNCTION()</code>等等中会看到一些<code>meta</code>修饰符，有各自的用处。</p>
 <p><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Reference/Metadata" target="_blank" rel="noopener">Metadata Specifiers</a></p>
-<h3 id="CallableWithoutWorldContext"><a href="#CallableWithoutWorldContext" class="headerlink" title="CallableWithoutWorldContext"></a>CallableWithoutWorldContext</h3><p>想要记录下这个meta的原因是，我想得到当前调用函数所在的Blueprint的名字。在C++中直接使用<code>__Function__</code>写个宏就可以直接得到调用函数的名字，但是在Blueprint中，没有宏当参数这么便利的方法，得顺便把self当参数传进去。</p>
+<h4 id="CallableWithoutWorldContext"><a href="#CallableWithoutWorldContext" class="headerlink" title="CallableWithoutWorldContext"></a>CallableWithoutWorldContext</h4><p>想要记录下这个meta的原因是，我想得到当前调用函数所在的Blueprint的名字。在C++中直接使用<code>__Function__</code>写个宏就可以直接得到调用函数的名字，但是在Blueprint中，没有宏当参数这么便利的方法，得顺便把self当参数传进去。</p>
 <p>这就导致我想输出蓝图名字的时候，无论如何都得额外做一个把self传进去的操作。</p>
 <p>但是有一天我发现，为什么UE4自带的<code>Print</code>函数就没有传这样的参，而且还把调用蓝图的名字输出来了。看代码就知道了。</p>
 <p>在下面的源代码中可以找到UE4自带的Print函数声明定义：</p>
@@ -5309,12 +5321,16 @@
 <p><strong>WorldContext=”WorldContextObject”, CallableWithoutWorldContext</strong> 这部分。</p>
 <p>受这个启发，这个让我们可以不用传入额外的参数（self），并且使用<code>GetNameSafe</code>函数得到名字。</p>
 <p>顺便一提，Keywords关键字可以设置搜索的关键字。细节上面的官方文档中有。</p>
-<h2 id="2-Wildcard-类型"><a href="#2-Wildcard-类型" class="headerlink" title="2.Wildcard 类型"></a>2.Wildcard 类型</h2><p><code>Wildcard</code>这个数据类型是UE4的Editor的可以适配所有类型的Pin的类型。</p>
+<h3 id="Wildcard-类型"><a href="#Wildcard-类型" class="headerlink" title="Wildcard 类型"></a>Wildcard 类型</h3><p><code>Wildcard</code>这个数据类型是UE4的Editor的可以适配所有类型的Pin的类型。</p>
 <p>可以用来作为一些宏的Event的类型指定，就像为函数提供一个delegate一样，UE4的蓝图的宏也可以使用类似的特性。</p>
 <ul>
 <li><a href="http://papersloth.hatenablog.com/entry/2019/10/23/024329" target="_blank" rel="noopener">UE4 Blueprintでdelegateを引数で使用する方法</a></li>
 </ul>
 <p>这篇文章的知识点随着时间的推移开始变得有些杂乱了，该考虑一下重新整理文章内容了。</p>
+<h3 id="从UE4的源码中对工程进行设置"><a href="#从UE4的源码中对工程进行设置" class="headerlink" title="从UE4的源码中对工程进行设置"></a>从UE4的源码中对工程进行设置</h3><p><span style="color:blue">2020/06/03更新</span></p>
+<p>参照官网上的步骤下载并配置源码版UnrealEngine，这其中有一个我漏掉的步骤，就是把UE4设置为启动工程</p>
+<p>即在工程项目的SolutionExplorer中找到项目右键，会出现<strong>Set as StartUp Project</strong>,对，要执行这一步操作，然后在Build界面中选择<strong>Build UE4</strong>，因为这里不选直接使用默认的编译的话，会把全体都编译，有时间可以这么搞，没时间还是别这么搞，真的费时间。</p>
+<p>这样按理说就可以使用编译好的引擎打开想要工作的项目了。</p>
 <h1 id="道听途说"><a href="#道听途说" class="headerlink" title="道听途说"></a>道听途说</h1><h4 id="1-关于C-中的资源释放"><a href="#1-关于C-中的资源释放" class="headerlink" title="1.关于C++中的资源释放"></a>1.关于C++中的资源释放</h4><p>一般在c++中应该是资源的获取与申请（<code>new</code>等等的操作）与资源的释放都是需要程序员手动操作的。但是如果使用了UE管理的资源，比如继承了UE中的类库等等的操作，那么释放这些资源的操作，在UE中会自动释放而不需要程序员的额外操作，反而要是操作了还会出问题。</p>
 <p>当然这个问题只是道听途说，未能够验证。</p>
 <p>当然需要仔细调查了啊</p>
