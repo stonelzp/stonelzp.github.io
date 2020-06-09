@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-16T09:54:53.119Z">
+<meta property="og:updated_time" content="2020-06-09T15:02:28.902Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的函数回调实现">
 <meta name="twitter:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-05-16T18:54:53+09:00">
-                2019-05-16
+              <time title="更新于" itemprop="dateModified" datetime="2020-06-10T00:02:28+09:00">
+                2020-06-10
               </time>
             
           </span>
@@ -447,6 +447,26 @@
 <p><strong>Event的默认实现</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File: CallbackExample.cpp</span></span><br><span class="line"><span class="comment">// Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//static FVector TheVector事先声明的属性</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VectorInputEvent_Implementation(<span class="keyword">const</span> FVector&amp; VecValue)-&gt;<span class="keyword">void</span>&#123;</span><br><span class="line">    TheVector = VecValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VecArrayInputFuncion_Implementation(<span class="keyword">const</span> TArray&lt;FVector&gt;&amp; VecValues)-&gt; TArray&lt;<span class="keyword">float</span>&gt;&#123;</span><br><span class="line">    TArray&lt;<span class="keyword">float</span>&gt; Result;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; Val : VecValue)</span><br><span class="line">        Result.Emplace(FVector::Dist(TheVector, Val));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>以上的代码实装完成之后，继承了上面的<code>CallbackExample</code>类的Blueprint就可以在Blueprint Editor中对上述UE C++中的事件与函数进行重写了。</p>
 <p>以上，是对UE中的代理与事件，在可用范围内的总结与实现。但是对于在什么情况下使用这一点上仍然有许多疑问。</p>
+<hr>
+<p>2020/06/09 更新</p>
+<p>不知道我当时写下这篇文章的时候为什么没有对上面的<code>_Implementation</code>后缀产生大大的问号，定义了一个函数之后，函数的实现部分的函数名字竟然需要添加后缀，让人大呼这是什么抛瓦。</p>
+<p>应为时间有限，就快速记录一下。</p>
+<p>像上面那样函数的定义和实现都是在同一个文件的<code>.h</code>,<code>.cpp</code>中实现的，就是说：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleA::Execute_Implementation(<span class="keyword">int</span> value) <span class="keyword">const</span>&#123; &#125;</span><br><span class="line"><span class="comment">// auto SampleA::Execute_Implementation(int value) const&#123;// default Implementation &#125;   // 类型推断还能这么用的吗</span></span><br></pre></td></tr></table></figure></p>
+<p>这样的是好像也没有什么太大的问题，好像也很容易理解，但是当这个类似于事件的提供移到子类的时候，就有些让人摸不到头脑了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp </span></span><br><span class="line"><span class="comment">// 这里应该没有实现，但是这个函数是有默认实现的，没错，蓝图那边有默认实现，如果我们没有这个C++的_Implementation实现，那么就是蓝图的默认实现被调用，但是我们对C++的_Implementation进行了实现，那么就是C++这部分实现会被调用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.h</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleB</span> :</span> <span class="keyword">public</span> SampleA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 没有这个子类的声明会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Execute_Implementation</span><span class="params">(ine value)</span> <span class="keyword">const</span> override</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleB::Execute_Implementation(ine value) <span class="keyword">const</span>&#123; <span class="comment">// 函数实现&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果是继承来的<code>Execute</code>就需要这样的样子，总之就是，带有</p>
+<ul>
+<li>UFUNCTION(BlueprintImplementableEvent, Category = “Foo”)</li>
+<li>UFUNCTION(BlueprintNativeEvent, Category = “Foo”)</li>
+</ul>
+<p>的可能都要这么实现。</p>
+<ul>
+<li><a href="https://www.epicgames.com/unrealtournament/forums/unreal-tournament-development/ut-development-programming/11600-what-s-the-deal-with-appending-_implementation-to-functions" target="_blank" rel="noopener">What’s the deal with appending ‘_Implementation’ to functions?</a></li>
+</ul>
+<blockquote>
+<p>FUNCTION_Implementation is for the UnrealEngine framework. Calling FUNCTION will also call the _Implementation part. FUNCTION is only a wrapper generated by the UHT. CPP includes the generated classes/headers. </p>
+</blockquote>
+<hr>
 <h2 id="UE-C-之间简单的函数回调实现"><a href="#UE-C-之间简单的函数回调实现" class="headerlink" title="UE C++之间简单的函数回调实现"></a>UE C++之间简单的函数回调实现</h2><p>说实话，函数回调跟代理的概念我还是没太理清。在许多的实际应用上，有些操作你叫它代理也行，叫它函数回调也行。用自己的感受就好比是参考系不同一样。就像上面举的函数回调的例子来说：</p>
 <p>函数回调就是类A想要在类B在运行中达成某种条件的时候调用类A提供的函数。这个时候类A是主参考系。</p>
 <p>代理就是类B在运行中达成某种条件的时候想要通知类A，但是不知道方法，而且觉得这个方法还是由类A决定为好，于是就提供给类A一个纸条(代理)，类A要实现代理内容。这个时候类B就是主参考系了。</p>
@@ -624,7 +644,7 @@
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">80</span>
+                  <span class="site-state-item-count">81</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -635,7 +655,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/stonelzp.github.io/categories/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -646,7 +666,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/stonelzp.github.io/tags/index.html">
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

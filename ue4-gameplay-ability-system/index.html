@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/stonelzp.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/stonelzp.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/stonelzp.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/stonelzp.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/stonelzp.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/stonelzp.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="UE4,ActionRPG,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中Action RPG这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。">
+<meta name="keywords" content="UE4,ActionRPG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4-GameplayAbilitySystem学习">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-gameplay-ability-system/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中Action RPG这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-09T14:00:28.987Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4-GameplayAbilitySystem学习">
+<meta name="twitter:description" content="这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中Action RPG这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/stonelzp.github.io/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/ue4-gameplay-ability-system/">
+
+
+
+
+
+  <title>UE4-GameplayAbilitySystem学习 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/stonelzp.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/stonelzp.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/stonelzp.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/stonelzp.github.io/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/stonelzp.github.io/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/stonelzp.github.io/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/stonelzp.github.io/ue4-gameplay-ability-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/stonelzp.github.io/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UE4-GameplayAbilitySystem学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-05T12:27:01+09:00">
+                2020-06-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-06-09T23:00:28+09:00">
+                2020-06-09
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/stonelzp.github.io/categories/Unreal-Engine/" itemprop="url" rel="index">
+                    <span itemprop="name">Unreal Engine</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中<strong>Action RPG</strong>这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。</p>
+<a id="more"></a>
+<p>这里涉及到一个相当大的概念，<strong>GamePlay</strong>，这个应该是UE4模式的游戏架构，理解的话需要花费很多精力，大量的名词我都闻所未闻，只能一点点的啃了。</p>
+<h1 id="GamePlay-Guide"><a href="#GamePlay-Guide" class="headerlink" title="GamePlay Guide"></a>GamePlay Guide</h1><p>这是官网的标题，暂时我不会整理，先从别的部分一点点入手</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/index.html" target="_blank" rel="noopener">Gameplay Guide-Overviews and examples of gameplay functionality for programmers and visual scripters.</a></li>
+</ul>
+<p>UE4官网的文章都是有中文的，但是还是放着吧，机翻翻译的我不知所云。</p>
+<h2 id="Gameplay-Ability-System"><a href="#Gameplay-Ability-System" class="headerlink" title="Gameplay Ability System"></a>Gameplay Ability System</h2><p>官网上对于GAS的介绍，也是这篇文章要搞明白的部分。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/GameplayAbilitySystem/index.html" target="_blank" rel="noopener">Gameplay Ability System-High-level view of the Gameplay Ability System</a></li>
+</ul>
+<h1 id="ActionRPG"><a href="#ActionRPG" class="headerlink" title="ActionRPG"></a>ActionRPG</h1><p>这里我要逐步理解GAS的组成，剖析这个项目的源码。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Resources/SampleGames/ARPG/index.html" target="_blank" rel="noopener">Action RPG Game - A sample game that shows how to use the Ability System plugin.</a></li>
+</ul>
+<h1 id="GameplayAbilities-and-you"><a href="#GameplayAbilities-and-you" class="headerlink" title="GameplayAbilities and you"></a>GameplayAbilities and you</h1><p>这是一篇本应在UnrealEngineforums上的文章，但是不知道为什么页面被关闭了，但是我找到了GitHub上有人转载了</p>
+<ul>
+<li><a href="https://github.com/michaeltchapman/MCGameplayAbilities/wiki/GameplayAbilities-and-You" target="_blank" rel="noopener">GameplayAbilities and you</a></li>
+</ul>
+<p>这是一篇相当晦涩难懂的文章，当然也包含了全是英文这个原因，但是也总好于上面的ActionRPG只有一个工程，其他的啥也没有的要好。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>关于GameplayAbility(一下简称GA)，在这篇文章或者官网中有介绍，或者上面的部分有提到这里不再赘述。</p>
+<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p>所以让我直接开始正题，如何一步一步按照文章的步骤来初步理解GA的。</p>
+<h3 id="Setting-up-the-Project"><a href="#Setting-up-the-Project" class="headerlink" title="Setting up the Project"></a>Setting up the Project</h3><p>第一步是建立我们的项目，首先我是使用的UE4.25版本，创建了一个完全空白的项目。这里文章中要求的是让我们导入<strong>C++ Third persion</strong>，就是那个第三人称的控制器。而在这里我遇见了一个挑战。</p>
+<p>如何导入第三人称控制器。由于我创建的是初始的空白项目。</p>
+<p>ContentBrows -&gt; Add New -&gt; Add Feature or Content Pack to the Project -&gt; C++ Feature -&gt; Third Person</p>
+<p>就这样导入项目了，但是下一个问题又来了，导入项目的ThirdPerson编译错误。</p>
+<p>绕了一大圈，最终发现是在项目源码的Build.cs中缺少了<strong>HeadMountedDisplay</strong>这个Module。至于为什么会缺少这个module的原因我猜测是</p>
+<ul>
+<li>BlankProject确实是没有这个Module的</li>
+<li>在我禁用SteamVRPlugin的时候自动给我删除掉了</li>
+</ul>
+<p>当然我还是觉得第一种可能性是比较大的，而我也没想到这个第三人称的控制器需要用到VR相关的Module。最后的调整，编译无错的版本是这样的：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PublicDependencyModuleNames.AddRange(<span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"Core"</span>, <span class="string">"CoreUObject"</span>, <span class="string">"Engine"</span>, <span class="string">"InputCore"</span>, <span class="string">"HeadMountedDisplay"</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="创建第一个GamePlayAbility-blueprint"><a href="#创建第一个GamePlayAbility-blueprint" class="headerlink" title="创建第一个GamePlayAbility blueprint"></a>创建第一个GamePlayAbility blueprint</h4><p>这个就是创建一个GA蓝图，继承GameplayAbility蓝图类，这一步超级简单，然后打开创建的蓝图，会看到ActivateAbility的节点，在后面添加一个print节点，打印HelloWorld。</p>
+<h3 id="Setting-up-our-Charactor"><a href="#Setting-up-our-Charactor" class="headerlink" title="Setting up our Charactor"></a>Setting up our Charactor</h3><p>哦对，在我们建立项目之后应该启用<strong>GameplayAbilityPlugin</strong>，以便于我们在项目中引用它。</p>
+<p>在我们的Build.cs中添加GameplayAbility的Module，最终的感觉像这样：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PublicDependencyModuleNames.AddRange(<span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"Core"</span>, <span class="string">"CoreUObject"</span>, <span class="string">"Engine"</span>, <span class="string">"InputCore"</span>, <span class="string">"HeadMountedDisplay"</span>, <span class="string">"GameplayAbilities"</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>找到第三人称控制器的源码，我们将在源码中添加一些修饰。我自己的项目则是<strong>TP_ThirdPersonCharacter.h</strong>文件。</p>
+<p>首先我们要为Charactor添加AbilitySystemComponent组件，在别的地方应该也有提到，这个组件是Actor必须的，非常关键的，对于GameplayAbilitySystem来说。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Camera boom positioning the camera behind the character */</span></span><br><span class="line">UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = <span class="string">"true"</span>)) <span class="class"><span class="keyword">class</span> <span class="title">USpringArmComponent</span>* <span class="title">CameraBoom</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Follow camera */</span> UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = <span class="string">"true"</span>)) <span class="class"><span class="keyword">class</span> <span class="title">UCameraComponent</span>* <span class="title">FollowCamera</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Our ability system */</span> UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = <span class="string">"true"</span>)) <span class="class"><span class="keyword">class</span> <span class="title">UAbilitySystemComponent</span>* <span class="title">AbilitySystem</span>;</span></span><br></pre></td></tr></table></figure>
+<p>因为我添加的代码跟文章中的差不多，所以直接复制粘贴了。</p>
+<p>这之后，也是非常重要的，我们需要继承<code>IAbilitySystemInterface</code>接口并实现里面的方法。</p>
+<blockquote>
+<p>This interface here gives other actors an easy way to both know we have an ability system, and a way to get it without doing something dumb and inefficient like iterating through our components for an ability system.</p>
+</blockquote>
+<p>AbilitySystem貌似就是通过这个接口来确定Actor的AbilitySystem能否正常工作。实现的效果像这样：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"AbilitySystemInterface.h"</span> <span class="comment">//We add this include 别忘了添加头文件</span></span></span><br><span class="line">UCLASS(config=Game) <span class="class"><span class="keyword">class</span> <span class="title">AGameplayAbilitiesTutCharacter</span> :</span> <span class="keyword">public</span> ACharacter, <span class="keyword">public</span> IAbilitySystemInterface <span class="comment">//We add this parent.继承接口</span></span><br><span class="line"></span><br><span class="line"><span class="function">UAbilitySystemComponent* <span class="title">GetAbilitySystemComponent</span><span class="params">()</span> <span class="keyword">const</span> override <span class="comment">//We add this function, overriding it from IAbilitySystemInterface. 接口的方法实现</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">return</span> AbilitySystem; &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>之后我们需要对AbilitySystemComponnent进行创建，在头文件中只是声明了一下。实现的就像这样：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"TP_ThirdPersonCharacter.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"AbilitySystemComponent.h"</span></span></span><br><span class="line"><span class="comment">// 省略了与文章无关的头文件</span></span><br><span class="line"><span class="comment">//////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// ATP_ThirdPersonCharacter</span></span><br><span class="line"></span><br><span class="line">ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="comment">// 省略一些源码</span></span><br><span class="line">    <span class="comment">// Create a follow camera</span></span><br><span class="line">    FollowCamera = CreateDefaultSubobject&lt;UCameraComponent&gt;(TEXT(<span class="string">"FollowCamera"</span>));</span><br><span class="line">    FollowCamera-&gt;SetupAttachment(CameraBoom, USpringArmComponent::SocketName); <span class="comment">// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation</span></span><br><span class="line">    FollowCamera-&gt;bUsePawnControlRotation = <span class="literal">false</span>; <span class="comment">// Camera does not rotate relative to arm</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Our ability system component 创建组件</span></span><br><span class="line">    AbilitySystem = CreateDefaultSubobject&lt;UAbilitySystemComponent&gt;(TEXT(<span class="string">"AbilitySystem"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) </span></span><br><span class="line">    <span class="comment">// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Once you have compiled, you can open your character blueprint(which inherits from your C++ character) and lo and behold, right under the character’s movement component you should see an AbilitySystemComponent.</p>
+</blockquote>
+<p>就像上面说的那样，当你编译之后就能在Map中的第三人称控制器的蓝图中找到我们创建的AbilitySystemComponent组件。</p>
+<p>So far so good.</p>
+<p>但是目前为止，我们还有很长的路。现在我们什么都没实现。</p>
+<blockquote>
+<p>That’s because the ability system doesn’t have any abilities to activate yet, nor does it have any inputs assigned to them, anyway, so trying to activate an ability you do not have is, obviously, a quite useless effort. We will work on fixing both things. You must do both things in C++.</p>
+</blockquote>
+<p>上面这句话有两个：</p>
+<ul>
+<li>需要一个ability去激活ability system</li>
+<li>需要绑定输入(inputs)到它们身上</li>
+</ul>
+<h3 id="Binding-to-Character-input"><a href="#Binding-to-Character-input" class="headerlink" title="Binding to Character input"></a>Binding to Character input</h3><p>首先，我们需要将我们的AbilitySystem绑定到Character’s input。我们想把我们的abilitysystem绑定到UInputComponent上。</p>
+<blockquote>
+<p>We want to call AbilitySystem-&gt;BindAbilityActivationToInputComponent within the SetupPlayerInputComponent. It takes two parameters: The UInputComponent pointer at hand and a struct called FGameplayAbiliyInputBinds. This is not a typo! It is not called FGameplayAbilityInputBinds, but FGameplayAbiliyInputBinds!</p>
+</blockquote>
+<p>所以说FGameplayAbiliyInputBinds是什么？注意这里我还真拼错了一次。</p>
+<blockquote>
+<p>The constructor for FGameplayAbiliyInputBinds takes at least 3 parameters: The first two are strings, and represent the input names that will be used to define “Confirm” and “Cancel”-input commands. You do not necessarily need these depending on your game, but abilities can be set up to listen to these while they’re active, and targeting actors (basically, actors that return an ability viable targets/locations to aim at for an ability, if an ability requests one) will use these too, so generally it can’t hurt to have these even if you will never use them. The third parameter is the name of an arbitrary UEnum of all things. This is one of the witchcraft-ier aspects of the system: <strong>The ability system component will look into the enum whose name you’ve given and will map its ability slots to the names of the elements contained within the enum</strong>.</p>
+</blockquote>
+<p>顾名思义，应该就是负责存储对应Ability和键位映射的结构数据或者中间数据，FGameplayAbiliyInputBinds的构造函数至少有三个参数，前两个参数是字符串，代表着定义”Confirm”和”Cancel”两个输入命令(input commands)的输入名字。根据游戏的需要可能这并不是必须的。</p>
+<p>这里我没怎么明白这前两个参数的具体意思，文章中说的<em>abilities can be set up to listen to these while they’re active, and targeting actors (basically, actors that return an ability viable targets/locations to aim at for an ability, if an ability requests one) will use these too</em>这里我也不是非常清楚，谁是谁，说的是谁我都不知道。</p>
+<p>第三个参数是一个自定义的UENUM枚举，他说这里是这个GAS的神奇的地方，而我只觉得想骂人。</p>
+<p>AbilitySystemComponent会取出自定义的枚举类型的名字，然后映射他的<strong>ability slots</strong>到这个枚举类型中所包含的名字上。下面是这个自定义枚举的举例实现：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Example for an enum the FGameplayAbiliyInputBinds may use to map input to ability slots.</span></span><br><span class="line"><span class="comment">//It's very important that this enum is UENUM, because the code will look for UENUM by the given name and crash if the UENUM can't be found. BlueprintType is there so we can use these in blueprints, too. Just in case. Can be neat to define ability packages.</span></span><br><span class="line">UENUM(BlueprintType) <span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">AbilityInput</span> :</span> uint8</span><br><span class="line">&#123;</span><br><span class="line">    UseAbility1 UMETA(DisplayName = "Use Spell 1"), //This maps the first ability(input ID should be 0 in int) to the action mapping(which you define in the project settings) by the name of "UseAbility1". "Use Spell 1" is the blueprint name of the element.</span><br><span class="line">    UseAbility2 UMETA(DisplayName = "Use Spell 2"), //Maps ability 2(input ID 1) to action mapping UseAbility2. "Use Spell 2" is mostly used for when the enum is a blueprint variable.</span><br><span class="line">    UseAbility3 UMETA(DisplayName = "Use Spell 3"),</span><br><span class="line">    UseAbility4 UMETA(DisplayName = "Use Spell 4"),</span><br><span class="line">    WeaponAbility UMETA(DisplayName = "Use Weapon"), //This finally maps the fifth ability(here designated to be your weaponability, or auto-attack, or whatever) to action mapping "WeaponAbility".</span><br><span class="line"></span><br><span class="line">    <span class="comment">//You may also do something like define an enum element name that is not actually mapped to an input, for example if you have a passive ability that isn't supposed to have an input. This isn't usually necessary though as you usually grant abilities via input ID,</span></span><br><span class="line">    <span class="comment">//which can be negative while enums cannot. In fact, a constant called "INDEX_NONE" exists for the exact purpose of rendering an input as unavailable, and it's simply defined as -1.</span></span><br><span class="line">    <span class="comment">//Because abilities are granted by input ID, which is an int, you may use enum elements to describe the ID anyway however, because enums are fancily dressed up ints.</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>我直接复制粘贴了。将上面的Enum实现放到头文件，然后回到cpp文件中对键位进行绑定。</p>
+<p>回到Cpp文件中的<code>SetupPlayerInputComponent</code>函数中,用户输入键位进行绑定。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AbilitySystem-&gt;BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbiliyInputBinds(<span class="string">"ConfirmInput"</span>, <span class="string">"CancelInput"</span>, <span class="string">"AbilityInput"</span>));</span><br></pre></td></tr></table></figure></p>
+<p>所以到这一步为止，如果编译没有出错误的话，我们已经成功的将<strong>ability system’s sbility activation</strong>()绑定到了用户输入(player input)上。</p>
+<h3 id="Giving-the-Character-an-Ability"><a href="#Giving-the-Character-an-Ability" class="headerlink" title="Giving the Character an Ability"></a>Giving the Character an Ability</h3><p>最后一步是给我们的AbilitySystem一个Ability，就如已经预备好的一样，我们要将这个Ability放到已经映射到PlayerInput的第一个ability slot上。</p>
+<p>这里使用了蓝图的一个类似Unity的Inspector中拖拽搞定Reference的功能，我之前也有实现过，只不过拖拽是不支持的，可以在下拉菜单中选择自己定义好的蓝图而已，而这里则是选择我们一开始创建的那个GameplayAbility蓝图。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)</span><br><span class="line">TSubclassOf&lt;<span class="class"><span class="keyword">class</span> <span class="title">UGameplayAbility</span>&gt; <span class="title">Ability</span>;</span></span><br></pre></td></tr></table></figure>
+<p>随后我们将在BeginPlay中调用AbilitySystem的GiveAbility函数，看名字就知道是干什么得了。但是需要注意的是我们必须，或者说只能在Server端执行Ability的赋予，这里应该是GAS的要求或者说实现，因为GAS是支持多人通信的系统，就文章所说如果在Client中赋予Ability的话，会崩溃，UE4和你都会崩溃（这是我加的）。</p>
+<p>GiveAbility需要一个FGameplayAbilitySpec作为参数，FGameplayAbilitySpec是围绕着GameplayAbility的数据（类型），包含着level和input ID。</p>
+<blockquote>
+<p>GiveAbility requests an FGameplayAbilitySpec as parameters. An FGameplayAbilitySpec is the data surrounding a GameplayAbility, notably which level (the system has built-in support for a level variable, quite good for RPGs/MOBAs as mentioned) and which input ID it is.</p>
+</blockquote>
+<ul>
+<li>level: 系统已经内置的关卡变量，对RPGs/MOBAs类的游戏非常友好。也就是关卡的标志，或许我以后会经常用到。</li>
+<li>input ID: 这里终于跟上面连起来了，那个自定义的ENUM已经跟我们的AbilitySystem的AbilitySlots进行了绑定，这个Input ID则是可以对AbilitySlot进行指定（这是目前为止自己的理解）</li>
+</ul>
+<p>FGameplayAbilitySpec需要一个GameplayAbility对象作为参数，我们可以使用Ability的默认对象（class’s default object），就文章的作者而已：</p>
+<blockquote>
+<p>There is very little reason to use anything other than the default object of a GameplayAbility class as far as I’ve understood it from going through the source. </p>
+</blockquote>
+<p>关于默认对象的描述贴一段来自官网的内容：</p>
+<blockquote>
+<p><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Objects/index.html" target="_blank" rel="noopener">Objects</a></p>
+<p>The UCLASS Macro</p>
+<p>The UCLASS macro gives the UObject a reference to a UCLASS that describes its Unreal-based type. Each UCLASS maintains one Object called the ‘Class Default Object’, or CDO for short. The CDO is essentially a default ‘template’ Object, generated by the class constructor and unmodified thereafter. Both the UCLASS and the CDO can be retrieved for a given Object instance, though they should generally be considered read-only. The UCLASS for an Object instance can be accessed at any time using the GetClass() function.</p>
+</blockquote>
+<p>我们还要调用<strong>AbilitySystem-&gt;InitAbilityActorInfo</strong>函数，来告诉AbilitySystem谁是Owner谁是Avatar。</p>
+<blockquote>
+<p>Finally, while on the topic of BeginPlay, we should also call AbilitySystem-&gt;InitAbilityActorInfo. It tells the AbilitySystem what its Owner (the actor responsible for the AbilitySystem) and Avatar (the actor through which the AbilitySystem acts, uses Abilities from etc.) is. In our case our character is both.</p>
+</blockquote>
+<ul>
+<li>Owner: AbilitySystem的持有Actor</li>
+<li>Avatar:使用这个AbilitySystem的Ability的Actor？这里我不是太明白。</li>
+</ul>
+<p>BeginPlay中的实现效果：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">BeginPlay</span><span class="params">()</span> override</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line"><span class="keyword">void</span> ATP_ThirdPersonCharacter::BeginPlay()</span><br><span class="line">&#123;</span><br><span class="line">    Super::BeginPlay();</span><br><span class="line">    <span class="keyword">if</span> (AbilitySystem) &#123;</span><br><span class="line">    <span class="keyword">if</span> (HasAuthority() &amp;&amp; Ability) &#123;</span><br><span class="line">    AbilitySystem-&gt;GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), <span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    AbilitySystem-&gt;InitAbilityActorInfo(<span class="keyword">this</span>,<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有需要注意的是，我们必须要保证每当controller改变的时候，AbilitySystemComponent’s ActorInfo struct的内容被更新。这里贴上原作者的话:</p>
+<blockquote>
+<p>You also need to make sure that the AbilitySystemComponent’s ActorInfo struct is being updated each time the controller changes. On the surface much of the system will work without that, but in a multiplayer enviroment especially(where pawns may be spawned before the client controller possesses them) you will experience crashes and behaviour that can be difficult to debug should you not properly set the ActorInfo up.</p>
+</blockquote>
+<p>这里有我不太明白的地方，就下面的源码来看这个Controller指的是哪个Controller我都不知道，这里是知识盲区。实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">PossessedBy</span><span class="params">(AController * NewController)</span> override</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line"><span class="keyword">void</span> AGameplayAbilitiesTutCharacter::PossessedBy(AController * NewController)</span><br><span class="line">&#123;</span><br><span class="line">   Super::PossessedBy(NewController);</span><br><span class="line">   AbilitySystem-&gt;RefreshAbilityActorInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里扫一下盲，关于PossessedBy函数的定义：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Pawn.h</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Called when this Pawn is possessed. Only called on the server (or in standalone).</span></span><br><span class="line"><span class="comment">    * @param NewController The controller possessing this pawn</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">PossessedBy</span><span class="params">(AController* NewController)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>以上都编译好了之后，还有两步，一是把我们一开始创建好的GameplayAbility蓝图（输出HelloWorld）指定到我们预备好的AbilitySlot上。</p>
+<p>在打开的Map中找到我们使用的第三人称控制器（ThirdPersonCharacter），在它的Details面板使用我们设置的Category-Abilities检索，便会找到我们准备好的AbilitySlot1，在这里我们指定我们制作的打印HelloWorld的GameplayAbility蓝图。</p>
+<p>第二步是指定PlayerInput的映射，我们已经把Ability映射到了PlayerInput上了，但是没有指定哪一个Ability到哪一个键位，这个时候回想起那个我们制作的不知道干什么的UENUM枚举类型。</p>
+<p>去Edit-&gt;Project Settings中找到Input，添加Action Mappings。</p>
+<p>添加一个新的<strong>Action Mappings</strong>，名字指定为”UseAbility1”,这个名字跟你声明的Enum枚举类型里定义的变量名对应，注意是变量名字。然后指定键位，我这里指定的是Enter键。</p>
+<p>好了以上就是我跟着做的过程的全部内容，运行游戏，然后按下Enter键，就会发现左上角打印出了HelloWorld！。</p>
+<p>虽然只能触发一次。</p>
+<p>这里文章还提到如果出现了问题，比如说UE4崩溃，或者AbilityActor is invalid之类的错误的话提供下面的解决方案：</p>
+<blockquote>
+<p>Note that if it crashes and spits out an error message talking about AbilityActorInfo being invalid, try adding this code just before the HasAuthority() check and seeing if it fixes the problem:</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FGameplayAbilityActorInfo* ActorInfo = <span class="keyword">new</span> FGameplayAbilityActorInfo();</span><br><span class="line">ActorInfo-&gt;InitFromActor(<span class="keyword">this</span>, <span class="keyword">this</span>, AbilitySystem); AbilitySystem-&gt;AbilityActorInfo = TSharedPtr&lt;FGameplayAbilityActorInfo&gt;(actorInfo);</span><br></pre></td></tr></table></figure>
+<p>然后我们枯燥的部分终于告一段落了。</p>
+<h2 id="The-Essentials-要点"><a href="#The-Essentials-要点" class="headerlink" title="The Essentials (要点)"></a>The Essentials (要点)</h2><p>在解决了漫长的Setup设置之后，是对GAS的各种基础概念进行认知。但是这篇文章从现在开始的部分真的对我来说是晦涩难懂，每一句话太长了，让我陷入了不会英语的自责。。。</p>
+<p>我只能一点点的理解。</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/ue4-gameplay-ability-system/" title="UE4-GameplayAbilitySystem学习">http://stonelzp.github.io/ue4-gameplay-ability-system/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/stonelzp.github.io/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+            <a href="/stonelzp.github.io/tags/ActionRPG/" rel="tag"><i class="fa fa-tag"></i> ActionRPG</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/stonelzp.github.io/csharp-attribute/" rel="next" title="CSharp-Attribute的理解与使用">
+                <i class="fa fa-chevron-left"></i> CSharp-Attribute的理解与使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/stonelzp.github.io/uploads/avatar.gif" alt="stone">
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/stonelzp.github.io/archives/">
+              
+                  <span class="site-state-item-count">81</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/stonelzp.github.io/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/stonelzp.github.io/tags/index.html">
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/stonelzp.github.io/images/cc-by.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#GamePlay-Guide"><span class="nav-number">1.</span> <span class="nav-text">GamePlay Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gameplay-Ability-System"><span class="nav-number">1.1.</span> <span class="nav-text">Gameplay Ability System</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ActionRPG"><span class="nav-number">2.</span> <span class="nav-text">ActionRPG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GameplayAbilities-and-you"><span class="nav-number">3.</span> <span class="nav-text">GameplayAbilities and you</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">3.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Getting-Started"><span class="nav-number">3.2.</span> <span class="nav-text">Getting Started</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Setting-up-the-Project"><span class="nav-number">3.2.1.</span> <span class="nav-text">Setting up the Project</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建第一个GamePlayAbility-blueprint"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">创建第一个GamePlayAbility blueprint</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Setting-up-our-Charactor"><span class="nav-number">3.2.2.</span> <span class="nav-text">Setting up our Charactor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binding-to-Character-input"><span class="nav-number">3.2.3.</span> <span class="nav-text">Binding to Character input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Giving-the-Character-an-Ability"><span class="nav-number">3.2.4.</span> <span class="nav-text">Giving the Character an Ability</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Essentials-要点"><span class="nav-number">3.3.</span> <span class="nav-text">The Essentials (要点)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/stonelzp.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/stonelzp.github.io/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,6 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-GameplayAbilitySystem学习</title>
+    <url>/stonelzp.github.io/ue4-gameplay-ability-system/</url>
+    <content><![CDATA[<p>这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中<strong>Action RPG</strong>这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。</p>
+<a id="more"></a>
+<p>这里涉及到一个相当大的概念，<strong>GamePlay</strong>，这个应该是UE4模式的游戏架构，理解的话需要花费很多精力，大量的名词我都闻所未闻，只能一点点的啃了。</p>
+<h1 id="GamePlay-Guide"><a href="#GamePlay-Guide" class="headerlink" title="GamePlay Guide"></a>GamePlay Guide</h1><p>这是官网的标题，暂时我不会整理，先从别的部分一点点入手</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/index.html" target="_blank" rel="noopener">Gameplay Guide-Overviews and examples of gameplay functionality for programmers and visual scripters.</a></li>
+</ul>
+<p>UE4官网的文章都是有中文的，但是还是放着吧，机翻翻译的我不知所云。</p>
+<h2 id="Gameplay-Ability-System"><a href="#Gameplay-Ability-System" class="headerlink" title="Gameplay Ability System"></a>Gameplay Ability System</h2><p>官网上对于GAS的介绍，也是这篇文章要搞明白的部分。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/GameplayAbilitySystem/index.html" target="_blank" rel="noopener">Gameplay Ability System-High-level view of the Gameplay Ability System</a></li>
+</ul>
+<h1 id="ActionRPG"><a href="#ActionRPG" class="headerlink" title="ActionRPG"></a>ActionRPG</h1><p>这里我要逐步理解GAS的组成，剖析这个项目的源码。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Resources/SampleGames/ARPG/index.html" target="_blank" rel="noopener">Action RPG Game - A sample game that shows how to use the Ability System plugin.</a></li>
+</ul>
+<h1 id="GameplayAbilities-and-you"><a href="#GameplayAbilities-and-you" class="headerlink" title="GameplayAbilities and you"></a>GameplayAbilities and you</h1><p>这是一篇本应在UnrealEngineforums上的文章，但是不知道为什么页面被关闭了，但是我找到了GitHub上有人转载了</p>
+<ul>
+<li><a href="https://github.com/michaeltchapman/MCGameplayAbilities/wiki/GameplayAbilities-and-You" target="_blank" rel="noopener">GameplayAbilities and you</a></li>
+</ul>
+<p>这是一篇相当晦涩难懂的文章，当然也包含了全是英文这个原因，但是也总好于上面的ActionRPG只有一个工程，其他的啥也没有的要好。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>关于GameplayAbility(一下简称GA)，在这篇文章或者官网中有介绍，或者上面的部分有提到这里不再赘述。</p>
+<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p>所以让我直接开始正题，如何一步一步按照文章的步骤来初步理解GA的。</p>
+<h3 id="Setting-up-the-Project"><a href="#Setting-up-the-Project" class="headerlink" title="Setting up the Project"></a>Setting up the Project</h3><p>第一步是建立我们的项目，首先我是使用的UE4.25版本，创建了一个完全空白的项目。这里文章中要求的是让我们导入<strong>C++ Third persion</strong>，就是那个第三人称的控制器。而在这里我遇见了一个挑战。</p>
+<p>如何导入第三人称控制器。由于我创建的是初始的空白项目。</p>
+<p>ContentBrows -&gt; Add New -&gt; Add Feature or Content Pack to the Project -&gt; C++ Feature -&gt; Third Person</p>
+<p>就这样导入项目了，但是下一个问题又来了，导入项目的ThirdPerson编译错误。</p>
+<p>绕了一大圈，最终发现是在项目源码的Build.cs中缺少了<strong>HeadMountedDisplay</strong>这个Module。至于为什么会缺少这个module的原因我猜测是</p>
+<ul>
+<li>BlankProject确实是没有这个Module的</li>
+<li>在我禁用SteamVRPlugin的时候自动给我删除掉了</li>
+</ul>
+<p>当然我还是觉得第一种可能性是比较大的，而我也没想到这个第三人称的控制器需要用到VR相关的Module。最后的调整，编译无错的版本是这样的：<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">PublicDependencyModuleNames.AddRange(<span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"Core"</span>, <span class="string">"CoreUObject"</span>, <span class="string">"Engine"</span>, <span class="string">"InputCore"</span>, <span class="string">"HeadMountedDisplay"</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="创建第一个GamePlayAbility-blueprint"><a href="#创建第一个GamePlayAbility-blueprint" class="headerlink" title="创建第一个GamePlayAbility blueprint"></a>创建第一个GamePlayAbility blueprint</h4><p>这个就是创建一个GA蓝图，继承GameplayAbility蓝图类，这一步超级简单，然后打开创建的蓝图，会看到ActivateAbility的节点，在后面添加一个print节点，打印HelloWorld。</p>
+<h3 id="Setting-up-our-Charactor"><a href="#Setting-up-our-Charactor" class="headerlink" title="Setting up our Charactor"></a>Setting up our Charactor</h3><p>哦对，在我们建立项目之后应该启用<strong>GameplayAbilityPlugin</strong>，以便于我们在项目中引用它。</p>
+<p>在我们的Build.cs中添加GameplayAbility的Module，最终的感觉像这样：<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">PublicDependencyModuleNames.AddRange(<span class="keyword">new</span> <span class="keyword">string</span>[] &#123; <span class="string">"Core"</span>, <span class="string">"CoreUObject"</span>, <span class="string">"Engine"</span>, <span class="string">"InputCore"</span>, <span class="string">"HeadMountedDisplay"</span>, <span class="string">"GameplayAbilities"</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>找到第三人称控制器的源码，我们将在源码中添加一些修饰。我自己的项目则是<strong>TP_ThirdPersonCharacter.h</strong>文件。</p>
+<p>首先我们要为Charactor添加AbilitySystemComponent组件，在别的地方应该也有提到，这个组件是Actor必须的，非常关键的，对于GameplayAbilitySystem来说。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Camera boom positioning the camera behind the character */</span></span><br><span class="line">UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = <span class="string">"true"</span>)) <span class="class"><span class="keyword">class</span> <span class="title">USpringArmComponent</span>* <span class="title">CameraBoom</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Follow camera */</span> UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = <span class="string">"true"</span>)) <span class="class"><span class="keyword">class</span> <span class="title">UCameraComponent</span>* <span class="title">FollowCamera</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Our ability system */</span> UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = <span class="string">"true"</span>)) <span class="class"><span class="keyword">class</span> <span class="title">UAbilitySystemComponent</span>* <span class="title">AbilitySystem</span>;</span></span><br></pre></td></tr></table></figure>
+<p>因为我添加的代码跟文章中的差不多，所以直接复制粘贴了。</p>
+<p>这之后，也是非常重要的，我们需要继承<code>IAbilitySystemInterface</code>接口并实现里面的方法。</p>
+<blockquote>
+<p>This interface here gives other actors an easy way to both know we have an ability system, and a way to get it without doing something dumb and inefficient like iterating through our components for an ability system.</p>
+</blockquote>
+<p>AbilitySystem貌似就是通过这个接口来确定Actor的AbilitySystem能否正常工作。实现的效果像这样：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"AbilitySystemInterface.h"</span> <span class="comment">//We add this include 别忘了添加头文件</span></span></span><br><span class="line">UCLASS(config=Game) <span class="class"><span class="keyword">class</span> <span class="title">AGameplayAbilitiesTutCharacter</span> :</span> <span class="keyword">public</span> ACharacter, <span class="keyword">public</span> IAbilitySystemInterface <span class="comment">//We add this parent.继承接口</span></span><br><span class="line"></span><br><span class="line"><span class="function">UAbilitySystemComponent* <span class="title">GetAbilitySystemComponent</span><span class="params">()</span> <span class="keyword">const</span> override <span class="comment">//We add this function, overriding it from IAbilitySystemInterface. 接口的方法实现</span></span></span><br><span class="line"><span class="function"></span>&#123; <span class="keyword">return</span> AbilitySystem; &#125;;</span><br></pre></td></tr></table></figure></p>
+<p>之后我们需要对AbilitySystemComponnent进行创建，在头文件中只是声明了一下。实现的就像这样：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"TP_ThirdPersonCharacter.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"AbilitySystemComponent.h"</span></span></span><br><span class="line"><span class="comment">// 省略了与文章无关的头文件</span></span><br><span class="line"><span class="comment">//////////////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// ATP_ThirdPersonCharacter</span></span><br><span class="line"></span><br><span class="line">ATP_ThirdPersonCharacter::ATP_ThirdPersonCharacter()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line">    <span class="comment">// 省略一些源码</span></span><br><span class="line">    <span class="comment">// Create a follow camera</span></span><br><span class="line">    FollowCamera = CreateDefaultSubobject&lt;UCameraComponent&gt;(TEXT(<span class="string">"FollowCamera"</span>));</span><br><span class="line">    FollowCamera-&gt;SetupAttachment(CameraBoom, USpringArmComponent::SocketName); <span class="comment">// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation</span></span><br><span class="line">    FollowCamera-&gt;bUsePawnControlRotation = <span class="literal">false</span>; <span class="comment">// Camera does not rotate relative to arm</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Our ability system component 创建组件</span></span><br><span class="line">    AbilitySystem = CreateDefaultSubobject&lt;UAbilitySystemComponent&gt;(TEXT(<span class="string">"AbilitySystem"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) </span></span><br><span class="line">    <span class="comment">// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Once you have compiled, you can open your character blueprint(which inherits from your C++ character) and lo and behold, right under the character’s movement component you should see an AbilitySystemComponent.</p>
+</blockquote>
+<p>就像上面说的那样，当你编译之后就能在Map中的第三人称控制器的蓝图中找到我们创建的AbilitySystemComponent组件。</p>
+<p>So far so good.</p>
+<p>但是目前为止，我们还有很长的路。现在我们什么都没实现。</p>
+<blockquote>
+<p>That’s because the ability system doesn’t have any abilities to activate yet, nor does it have any inputs assigned to them, anyway, so trying to activate an ability you do not have is, obviously, a quite useless effort. We will work on fixing both things. You must do both things in C++.</p>
+</blockquote>
+<p>上面这句话有两个：</p>
+<ul>
+<li>需要一个ability去激活ability system</li>
+<li>需要绑定输入(inputs)到它们身上</li>
+</ul>
+<h3 id="Binding-to-Character-input"><a href="#Binding-to-Character-input" class="headerlink" title="Binding to Character input"></a>Binding to Character input</h3><p>首先，我们需要将我们的AbilitySystem绑定到Character’s input。我们想把我们的abilitysystem绑定到UInputComponent上。</p>
+<blockquote>
+<p>We want to call AbilitySystem-&gt;BindAbilityActivationToInputComponent within the SetupPlayerInputComponent. It takes two parameters: The UInputComponent pointer at hand and a struct called FGameplayAbiliyInputBinds. This is not a typo! It is not called FGameplayAbilityInputBinds, but FGameplayAbiliyInputBinds!</p>
+</blockquote>
+<p>所以说FGameplayAbiliyInputBinds是什么？注意这里我还真拼错了一次。</p>
+<blockquote>
+<p>The constructor for FGameplayAbiliyInputBinds takes at least 3 parameters: The first two are strings, and represent the input names that will be used to define “Confirm” and “Cancel”-input commands. You do not necessarily need these depending on your game, but abilities can be set up to listen to these while they’re active, and targeting actors (basically, actors that return an ability viable targets/locations to aim at for an ability, if an ability requests one) will use these too, so generally it can’t hurt to have these even if you will never use them. The third parameter is the name of an arbitrary UEnum of all things. This is one of the witchcraft-ier aspects of the system: <strong>The ability system component will look into the enum whose name you’ve given and will map its ability slots to the names of the elements contained within the enum</strong>.</p>
+</blockquote>
+<p>顾名思义，应该就是负责存储对应Ability和键位映射的结构数据或者中间数据，FGameplayAbiliyInputBinds的构造函数至少有三个参数，前两个参数是字符串，代表着定义”Confirm”和”Cancel”两个输入命令(input commands)的输入名字。根据游戏的需要可能这并不是必须的。</p>
+<p>这里我没怎么明白这前两个参数的具体意思，文章中说的<em>abilities can be set up to listen to these while they’re active, and targeting actors (basically, actors that return an ability viable targets/locations to aim at for an ability, if an ability requests one) will use these too</em>这里我也不是非常清楚，谁是谁，说的是谁我都不知道。</p>
+<p>第三个参数是一个自定义的UENUM枚举，他说这里是这个GAS的神奇的地方，而我只觉得想骂人。</p>
+<p>AbilitySystemComponent会取出自定义的枚举类型的名字，然后映射他的<strong>ability slots</strong>到这个枚举类型中所包含的名字上。下面是这个自定义枚举的举例实现：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//Example for an enum the FGameplayAbiliyInputBinds may use to map input to ability slots.</span></span><br><span class="line"><span class="comment">//It's very important that this enum is UENUM, because the code will look for UENUM by the given name and crash if the UENUM can't be found. BlueprintType is there so we can use these in blueprints, too. Just in case. Can be neat to define ability packages.</span></span><br><span class="line">UENUM(BlueprintType) <span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">AbilityInput</span> :</span> uint8</span><br><span class="line">&#123;</span><br><span class="line">    UseAbility1 UMETA(DisplayName = "Use Spell 1"), //This maps the first ability(input ID should be 0 in int) to the action mapping(which you define in the project settings) by the name of "UseAbility1". "Use Spell 1" is the blueprint name of the element.</span><br><span class="line">    UseAbility2 UMETA(DisplayName = "Use Spell 2"), //Maps ability 2(input ID 1) to action mapping UseAbility2. "Use Spell 2" is mostly used for when the enum is a blueprint variable.</span><br><span class="line">    UseAbility3 UMETA(DisplayName = "Use Spell 3"),</span><br><span class="line">    UseAbility4 UMETA(DisplayName = "Use Spell 4"),</span><br><span class="line">    WeaponAbility UMETA(DisplayName = "Use Weapon"), //This finally maps the fifth ability(here designated to be your weaponability, or auto-attack, or whatever) to action mapping "WeaponAbility".</span><br><span class="line"></span><br><span class="line">    <span class="comment">//You may also do something like define an enum element name that is not actually mapped to an input, for example if you have a passive ability that isn't supposed to have an input. This isn't usually necessary though as you usually grant abilities via input ID,</span></span><br><span class="line">    <span class="comment">//which can be negative while enums cannot. In fact, a constant called "INDEX_NONE" exists for the exact purpose of rendering an input as unavailable, and it's simply defined as -1.</span></span><br><span class="line">    <span class="comment">//Because abilities are granted by input ID, which is an int, you may use enum elements to describe the ID anyway however, because enums are fancily dressed up ints.</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>我直接复制粘贴了。将上面的Enum实现放到头文件，然后回到cpp文件中对键位进行绑定。</p>
+<p>回到Cpp文件中的<code>SetupPlayerInputComponent</code>函数中,用户输入键位进行绑定。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">AbilitySystem-&gt;BindAbilityActivationToInputComponent(PlayerInputComponent, FGameplayAbiliyInputBinds(<span class="string">"ConfirmInput"</span>, <span class="string">"CancelInput"</span>, <span class="string">"AbilityInput"</span>));</span><br></pre></td></tr></table></figure></p>
+<p>所以到这一步为止，如果编译没有出错误的话，我们已经成功的将<strong>ability system’s sbility activation</strong>()绑定到了用户输入(player input)上。</p>
+<h3 id="Giving-the-Character-an-Ability"><a href="#Giving-the-Character-an-Ability" class="headerlink" title="Giving the Character an Ability"></a>Giving the Character an Ability</h3><p>最后一步是给我们的AbilitySystem一个Ability，就如已经预备好的一样，我们要将这个Ability放到已经映射到PlayerInput的第一个ability slot上。</p>
+<p>这里使用了蓝图的一个类似Unity的Inspector中拖拽搞定Reference的功能，我之前也有实现过，只不过拖拽是不支持的，可以在下拉菜单中选择自己定义好的蓝图而已，而这里则是选择我们一开始创建的那个GameplayAbility蓝图。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)</span><br><span class="line">TSubclassOf&lt;<span class="class"><span class="keyword">class</span> <span class="title">UGameplayAbility</span>&gt; <span class="title">Ability</span>;</span></span><br></pre></td></tr></table></figure>
+<p>随后我们将在BeginPlay中调用AbilitySystem的GiveAbility函数，看名字就知道是干什么得了。但是需要注意的是我们必须，或者说只能在Server端执行Ability的赋予，这里应该是GAS的要求或者说实现，因为GAS是支持多人通信的系统，就文章所说如果在Client中赋予Ability的话，会崩溃，UE4和你都会崩溃（这是我加的）。</p>
+<p>GiveAbility需要一个FGameplayAbilitySpec作为参数，FGameplayAbilitySpec是围绕着GameplayAbility的数据（类型），包含着level和input ID。</p>
+<blockquote>
+<p>GiveAbility requests an FGameplayAbilitySpec as parameters. An FGameplayAbilitySpec is the data surrounding a GameplayAbility, notably which level (the system has built-in support for a level variable, quite good for RPGs/MOBAs as mentioned) and which input ID it is.</p>
+</blockquote>
+<ul>
+<li>level: 系统已经内置的关卡变量，对RPGs/MOBAs类的游戏非常友好。也就是关卡的标志，或许我以后会经常用到。</li>
+<li>input ID: 这里终于跟上面连起来了，那个自定义的ENUM已经跟我们的AbilitySystem的AbilitySlots进行了绑定，这个Input ID则是可以对AbilitySlot进行指定（这是目前为止自己的理解）</li>
+</ul>
+<p>FGameplayAbilitySpec需要一个GameplayAbility对象作为参数，我们可以使用Ability的默认对象（class’s default object），就文章的作者而已：</p>
+<blockquote>
+<p>There is very little reason to use anything other than the default object of a GameplayAbility class as far as I’ve understood it from going through the source. </p>
+</blockquote>
+<p>关于默认对象的描述贴一段来自官网的内容：</p>
+<blockquote>
+<p><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Objects/index.html" target="_blank" rel="noopener">Objects</a></p>
+<p>The UCLASS Macro</p>
+<p>The UCLASS macro gives the UObject a reference to a UCLASS that describes its Unreal-based type. Each UCLASS maintains one Object called the ‘Class Default Object’, or CDO for short. The CDO is essentially a default ‘template’ Object, generated by the class constructor and unmodified thereafter. Both the UCLASS and the CDO can be retrieved for a given Object instance, though they should generally be considered read-only. The UCLASS for an Object instance can be accessed at any time using the GetClass() function.</p>
+</blockquote>
+<p>我们还要调用<strong>AbilitySystem-&gt;InitAbilityActorInfo</strong>函数，来告诉AbilitySystem谁是Owner谁是Avatar。</p>
+<blockquote>
+<p>Finally, while on the topic of BeginPlay, we should also call AbilitySystem-&gt;InitAbilityActorInfo. It tells the AbilitySystem what its Owner (the actor responsible for the AbilitySystem) and Avatar (the actor through which the AbilitySystem acts, uses Abilities from etc.) is. In our case our character is both.</p>
+</blockquote>
+<ul>
+<li>Owner: AbilitySystem的持有Actor</li>
+<li>Avatar:使用这个AbilitySystem的Ability的Actor？这里我不是太明白。</li>
+</ul>
+<p>BeginPlay中的实现效果：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">BeginPlay</span><span class="params">()</span> override</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line"><span class="keyword">void</span> ATP_ThirdPersonCharacter::BeginPlay()</span><br><span class="line">&#123;</span><br><span class="line">    Super::BeginPlay();</span><br><span class="line">    <span class="keyword">if</span> (AbilitySystem) &#123;</span><br><span class="line">    <span class="keyword">if</span> (HasAuthority() &amp;&amp; Ability) &#123;</span><br><span class="line">    AbilitySystem-&gt;GiveAbility(FGameplayAbilitySpec(Ability.GetDefaultObject(), <span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    AbilitySystem-&gt;InitAbilityActorInfo(<span class="keyword">this</span>,<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有需要注意的是，我们必须要保证每当controller改变的时候，AbilitySystemComponent’s ActorInfo struct的内容被更新。这里贴上原作者的话:</p>
+<blockquote>
+<p>You also need to make sure that the AbilitySystemComponent’s ActorInfo struct is being updated each time the controller changes. On the surface much of the system will work without that, but in a multiplayer enviroment especially(where pawns may be spawned before the client controller possesses them) you will experience crashes and behaviour that can be difficult to debug should you not properly set the ActorInfo up.</p>
+</blockquote>
+<p>这里有我不太明白的地方，就下面的源码来看这个Controller指的是哪个Controller我都不知道，这里是知识盲区。实现如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">PossessedBy</span><span class="params">(AController * NewController)</span> override</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line"><span class="keyword">void</span> AGameplayAbilitiesTutCharacter::PossessedBy(AController * NewController)</span><br><span class="line">&#123;</span><br><span class="line">   Super::PossessedBy(NewController);</span><br><span class="line">   AbilitySystem-&gt;RefreshAbilityActorInfo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里扫一下盲，关于PossessedBy函数的定义：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Pawn.h</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Called when this Pawn is possessed. Only called on the server (or in standalone).</span></span><br><span class="line"><span class="comment">    * @param NewController The controller possessing this pawn</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">PossessedBy</span><span class="params">(AController* NewController)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>以上都编译好了之后，还有两步，一是把我们一开始创建好的GameplayAbility蓝图（输出HelloWorld）指定到我们预备好的AbilitySlot上。</p>
+<p>在打开的Map中找到我们使用的第三人称控制器（ThirdPersonCharacter），在它的Details面板使用我们设置的Category-Abilities检索，便会找到我们准备好的AbilitySlot1，在这里我们指定我们制作的打印HelloWorld的GameplayAbility蓝图。</p>
+<p>第二步是指定PlayerInput的映射，我们已经把Ability映射到了PlayerInput上了，但是没有指定哪一个Ability到哪一个键位，这个时候回想起那个我们制作的不知道干什么的UENUM枚举类型。</p>
+<p>去Edit-&gt;Project Settings中找到Input，添加Action Mappings。</p>
+<p>添加一个新的<strong>Action Mappings</strong>，名字指定为”UseAbility1”,这个名字跟你声明的Enum枚举类型里定义的变量名对应，注意是变量名字。然后指定键位，我这里指定的是Enter键。</p>
+<p>好了以上就是我跟着做的过程的全部内容，运行游戏，然后按下Enter键，就会发现左上角打印出了HelloWorld！。</p>
+<p>虽然只能触发一次。</p>
+<p>这里文章还提到如果出现了问题，比如说UE4崩溃，或者AbilityActor is invalid之类的错误的话提供下面的解决方案：</p>
+<blockquote>
+<p>Note that if it crashes and spits out an error message talking about AbilityActorInfo being invalid, try adding this code just before the HasAuthority() check and seeing if it fixes the problem:</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">FGameplayAbilityActorInfo* ActorInfo = <span class="keyword">new</span> FGameplayAbilityActorInfo();</span><br><span class="line">ActorInfo-&gt;InitFromActor(<span class="keyword">this</span>, <span class="keyword">this</span>, AbilitySystem); AbilitySystem-&gt;AbilityActorInfo = TSharedPtr&lt;FGameplayAbilityActorInfo&gt;(actorInfo);</span><br></pre></td></tr></table></figure>
+<p>然后我们枯燥的部分终于告一段落了。</p>
+<h2 id="The-Essentials-要点"><a href="#The-Essentials-要点" class="headerlink" title="The Essentials (要点)"></a>The Essentials (要点)</h2><p>在解决了漫长的Setup设置之后，是对GAS的各种基础概念进行认知。但是这篇文章从现在开始的部分真的对我来说是晦涩难懂，每一句话太长了，让我陷入了不会英语的自责。。。</p>
+<p>我只能一点点的理解。</p>
+]]></content>
+      <categories>
+        <category>Unreal Engine</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>ActionRPG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CSharp-Attribute的理解与使用</title>
     <url>/stonelzp.github.io/csharp-attribute/</url>
     <content><![CDATA[<p>这次要学习的是CSharp中的属性(Attribute)，经常听见，也在Unity中使用过，却不知其为何物。<strong>属性</strong>是能够为类或者成员添加额外的信息的东西。</p>
@@ -4125,9 +4265,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4164,9 +4304,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4335,8 +4475,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -4939,6 +5079,26 @@
 <p><strong>Event的默认实现</strong><br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// File: CallbackExample.cpp</span></span><br><span class="line"><span class="comment">// Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//static FVector TheVector事先声明的属性</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VectorInputEvent_Implementation(<span class="keyword">const</span> FVector&amp; VecValue)-&gt;<span class="keyword">void</span>&#123;</span><br><span class="line">    TheVector = VecValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VecArrayInputFuncion_Implementation(<span class="keyword">const</span> TArray&lt;FVector&gt;&amp; VecValues)-&gt; TArray&lt;<span class="keyword">float</span>&gt;&#123;</span><br><span class="line">    TArray&lt;<span class="keyword">float</span>&gt; Result;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; Val : VecValue)</span><br><span class="line">        Result.Emplace(FVector::Dist(TheVector, Val));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>以上的代码实装完成之后，继承了上面的<code>CallbackExample</code>类的Blueprint就可以在Blueprint Editor中对上述UE C++中的事件与函数进行重写了。</p>
 <p>以上，是对UE中的代理与事件，在可用范围内的总结与实现。但是对于在什么情况下使用这一点上仍然有许多疑问。</p>
+<hr>
+<p>2020/06/09 更新</p>
+<p>不知道我当时写下这篇文章的时候为什么没有对上面的<code>_Implementation</code>后缀产生大大的问号，定义了一个函数之后，函数的实现部分的函数名字竟然需要添加后缀，让人大呼这是什么抛瓦。</p>
+<p>应为时间有限，就快速记录一下。</p>
+<p>像上面那样函数的定义和实现都是在同一个文件的<code>.h</code>,<code>.cpp</code>中实现的，就是说：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleA::Execute_Implementation(<span class="keyword">int</span> value) <span class="keyword">const</span>&#123; &#125;</span><br><span class="line"><span class="comment">// auto SampleA::Execute_Implementation(int value) const&#123;// default Implementation &#125;   // 类型推断还能这么用的吗</span></span><br></pre></td></tr></table></figure></p>
+<p>这样的是好像也没有什么太大的问题，好像也很容易理解，但是当这个类似于事件的提供移到子类的时候，就有些让人摸不到头脑了。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp </span></span><br><span class="line"><span class="comment">// 这里应该没有实现，但是这个函数是有默认实现的，没错，蓝图那边有默认实现，如果我们没有这个C++的_Implementation实现，那么就是蓝图的默认实现被调用，但是我们对C++的_Implementation进行了实现，那么就是C++这部分实现会被调用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.h</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleB</span> :</span> <span class="keyword">public</span> SampleA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 没有这个子类的声明会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Execute_Implementation</span><span class="params">(ine value)</span> <span class="keyword">const</span> override</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleB::Execute_Implementation(ine value) <span class="keyword">const</span>&#123; <span class="comment">// 函数实现&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果是继承来的<code>Execute</code>就需要这样的样子，总之就是，带有</p>
+<ul>
+<li>UFUNCTION(BlueprintImplementableEvent, Category = “Foo”)</li>
+<li>UFUNCTION(BlueprintNativeEvent, Category = “Foo”)</li>
+</ul>
+<p>的可能都要这么实现。</p>
+<ul>
+<li><a href="https://www.epicgames.com/unrealtournament/forums/unreal-tournament-development/ut-development-programming/11600-what-s-the-deal-with-appending-_implementation-to-functions" target="_blank" rel="noopener">What’s the deal with appending ‘_Implementation’ to functions?</a></li>
+</ul>
+<blockquote>
+<p>FUNCTION_Implementation is for the UnrealEngine framework. Calling FUNCTION will also call the _Implementation part. FUNCTION is only a wrapper generated by the UHT. CPP includes the generated classes/headers. </p>
+</blockquote>
+<hr>
 <h2 id="UE-C-之间简单的函数回调实现"><a href="#UE-C-之间简单的函数回调实现" class="headerlink" title="UE C++之间简单的函数回调实现"></a>UE C++之间简单的函数回调实现</h2><p>说实话，函数回调跟代理的概念我还是没太理清。在许多的实际应用上，有些操作你叫它代理也行，叫它函数回调也行。用自己的感受就好比是参考系不同一样。就像上面举的函数回调的例子来说：</p>
 <p>函数回调就是类A想要在类B在运行中达成某种条件的时候调用类A提供的函数。这个时候类A是主参考系。</p>
 <p>代理就是类B在运行中达成某种条件的时候想要通知类A，但是不知道方法，而且觉得这个方法还是由类A决定为好，于是就提供给类A一个纸条(代理)，类A要实现代理内容。这个时候类B就是主参考系了。</p>
