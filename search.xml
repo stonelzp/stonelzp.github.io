@@ -19,6 +19,8 @@
 <ul>
 <li><a href="https://docs.unrealengine.com/en-US/Resources/SampleGames/ARPG/index.html" target="_blank" rel="noopener">Action RPG Game - A sample game that shows how to use the Ability System plugin.</a></li>
 </ul>
+<h2 id="ActionRPG内容分析"><a href="#ActionRPG内容分析" class="headerlink" title="ActionRPG内容分析"></a>ActionRPG内容分析</h2><h2 id="ActionRPG练习"><a href="#ActionRPG练习" class="headerlink" title="ActionRPG练习"></a>ActionRPG练习</h2><p>这一部分的内容是针对ActionRPG源码的练习，同时也是在公司练手的时候的练习。旨在熟悉GAS的使用。</p>
+<p>下一章节的<em>GameplayAbilities and you</em>中是对PlayerInput和Ability进行了绑定，而大多数情况我觉得用到的可能性很小。但是作为熟悉GAS的使用是足够了。下一步是对使用GameplayAbility作为事件的Trigger进行介绍。</p>
 <h1 id="GameplayAbilities-and-you"><a href="#GameplayAbilities-and-you" class="headerlink" title="GameplayAbilities and you"></a>GameplayAbilities and you</h1><p>这是一篇本应在UnrealEngineforums上的文章，但是不知道为什么页面被关闭了，但是我找到了GitHub上有人转载了</p>
 <ul>
 <li><a href="https://github.com/michaeltchapman/MCGameplayAbilities/wiki/GameplayAbilities-and-You" target="_blank" rel="noopener">GameplayAbilities and you</a></li>
@@ -131,6 +133,12 @@
 <p>然后我们枯燥的部分终于告一段落了。</p>
 <h2 id="The-Essentials-要点"><a href="#The-Essentials-要点" class="headerlink" title="The Essentials (要点)"></a>The Essentials (要点)</h2><p>在解决了漫长的Setup设置之后，是对GAS的各种基础概念进行认知。但是这篇文章从现在开始的部分真的对我来说是晦涩难懂，每一句话太长了，让我陷入了不会英语的自责。。。</p>
 <p>我只能一点点的理解。</p>
+<p>这个章节是对GAS中的一些要点，关键概念进行总结和理解。</p>
+<h3 id="GameplayAbilities"><a href="#GameplayAbilities" class="headerlink" title="GameplayAbilities"></a>GameplayAbilities</h3><h3 id="GameplayTasks"><a href="#GameplayTasks" class="headerlink" title="GameplayTasks"></a>GameplayTasks</h3><h3 id="GameplayEffects"><a href="#GameplayEffects" class="headerlink" title="GameplayEffects"></a>GameplayEffects</h3><h3 id="AttributeSet"><a href="#AttributeSet" class="headerlink" title="AttributeSet"></a>AttributeSet</h3><p>这里我先跨过前面的部分直接说AttributeSet。其实我是大概的看完了这个部分，然后又看了下面的文章才更新的这部分的内容的。</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/community/community-content-tools-and-tutorials/116578-comprehensive-gameplayabilities-analysis-series" target="_blank" rel="noopener">Comprehensive GameplayAbilities Analysis Series</a></li>
+</ul>
+<p>这篇文章对AttributeSet的内容讲解的稍微深了些，或者说配合代码讲解，本应是很好理解的，但是我只理解了一半。有时间，或者再加深一些理解之后再来总结这篇文章吧。</p>
 ]]></content>
       <categories>
         <category>Unreal Engine</category>
