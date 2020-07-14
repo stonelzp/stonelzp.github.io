@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="在UE4中踩了不少的坑，这篇主要是用来介绍自己在使用过程中由于粗心或者知识浅薄而掉进去的大坑。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-28T10:20:26.530Z">
+<meta property="og:updated_time" content="2020-07-14T08:58:07.164Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-踩坑指南">
 <meta name="twitter:description" content="在UE4中踩了不少的坑，这篇主要是用来介绍自己在使用过程中由于粗心或者知识浅薄而掉进去的大坑。">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-10-28T19:20:26+09:00">
-                2019-10-28
+              <time title="更新于" itemprop="dateModified" datetime="2020-07-14T17:58:07+09:00">
+                2020-07-14
               </time>
             
           </span>
@@ -406,6 +406,18 @@
 </blockquote>
 <p>自己作死用了这个节点，而且还用这个取出来的数据作为判断条件，这不是找死么。</p>
 <p>蓝图的话请使用<strong>GetObjectName</strong>节点。C++的话<strong>GetName()</strong>函数。</p>
+<h2 id="Can-not-see-the-detail-panel"><a href="#Can-not-see-the-detail-panel" class="headerlink" title="Can not see the detail panel"></a>Can not see the detail panel</h2><p>在蓝图的使用中会出现看不到Component的Detail面板的问题，解决方案是重新做一遍继承操作，好像蓝图继承C++父类的时候会发生这种问题。</p>
+<blockquote>
+<p>There’s a known bug that happens when you do this:</p>
+<p>Create C++ class,</p>
+<p>Create Blueprint based on it.</p>
+<p>Add component in C++.</p>
+<p>BUG: Component doesn’t have details in Blueprints!</p>
+<p>Solution:</p>
+<p>un-parent, and then re-parent the BP to the C++ class.</p>
+<p>fixed!</p>
+</blockquote>
+<p>解决来源： <a href="https://answers.unrealengine.com/questions/869223/cantt-see-details-in-blueprint.html" target="_blank" rel="noopener">Cant’t see details in Blueprint</a></p>
 
       
     </div>
@@ -629,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于蓝图"><span class="nav-number">1.</span> <span class="nav-text">关于蓝图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GetDisplayName"><span class="nav-number">1.1.</span> <span class="nav-text">GetDisplayName</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于蓝图"><span class="nav-number">1.</span> <span class="nav-text">关于蓝图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GetDisplayName"><span class="nav-number">1.1.</span> <span class="nav-text">GetDisplayName</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Can-not-see-the-detail-panel"><span class="nav-number">1.2.</span> <span class="nav-text">Can not see the detail panel</span></a></li></ol></li></ol></div>
             
 
           </div>
