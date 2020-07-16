@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="整理在学习UE4的过程中遇到的一些BUG。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-16T08:42:58.065Z">
+<meta property="og:image" content="http://stonelzp.github.io/UE4-Error-Message整理/Annotation%202020-07-16%20181212.jpg">
+<meta property="og:updated_time" content="2020-07-16T09:44:43.575Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4:Error_Message整理">
 <meta name="twitter:description" content="整理在学习UE4的过程中遇到的一些BUG。">
+<meta name="twitter:image" content="http://stonelzp.github.io/UE4-Error-Message整理/Annotation%202020-07-16%20181212.jpg">
 
 
 
@@ -340,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-08-16T17:42:58+09:00">
-                2018-08-16
+              <time title="更新于" itemprop="dateModified" datetime="2020-07-16T18:44:43+09:00">
+                2020-07-16
               </time>
             
           </span>
@@ -398,12 +400,19 @@
       
         <p>整理在学习UE4的过程中遇到的一些BUG。</p>
 <a id="more"></a>
-<h1 id="syntax-error-missing-‘-’-before-‘-’"><a href="#syntax-error-missing-‘-’-before-‘-’" class="headerlink" title="syntax error:missing ‘;’ before ‘*’"></a>syntax error:missing ‘;’ before ‘*’</h1><p>参考链接：</p>
+<h1 id="UE4中遇见的报错"><a href="#UE4中遇见的报错" class="headerlink" title="UE4中遇见的报错"></a>UE4中遇见的报错</h1><p>旨在记录UE4学习过程中遇见的各种报错。</p>
+<h2 id="class关键字的使用"><a href="#class关键字的使用" class="headerlink" title="class关键字的使用"></a>class关键字的使用</h2><p><code>syntax error:missing &#39;;&#39; before &#39;*&#39;</code> 这样完全不知到为什么的报错。</p>
+<p>参考链接：</p>
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/701590/syntax-error-missing-before-first-person-shooter-c.html" target="_blank" rel="noopener">syntax error: missing ‘;’ before ‘*’ (First Person Shooter C++ Tutorial)</a></li>
 </ul>
 <p>加了一个关键字<code>class</code>就解决了。虽然不知道是为什么。</p>
-<h1 id="LogMaterial-Warning-Material-Game-MagicCircle-Materials-MT-Smoke-MT-Smoke-missing-bUsedWithInstancedStaticMeshes-True-Default-Material-will-be-used-in-game"><a href="#LogMaterial-Warning-Material-Game-MagicCircle-Materials-MT-Smoke-MT-Smoke-missing-bUsedWithInstancedStaticMeshes-True-Default-Material-will-be-used-in-game" class="headerlink" title="LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game."></a>LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game.</h1><p># </p>
+<h2 id="bUsedWithInstancedStaticMeshes"><a href="#bUsedWithInstancedStaticMeshes" class="headerlink" title="bUsedWithInstancedStaticMeshes"></a>bUsedWithInstancedStaticMeshes</h2><p>时间太过于久远再加上自己的懒惰，这个错误到底是在说什么我也不清楚了。</p>
+<p><code>LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game.</code></p>
+<h2 id="包含头文件的问题"><a href="#包含头文件的问题" class="headerlink" title="包含头文件的问题"></a>包含头文件的问题</h2><p>就像下面的信息描述的，我使用了一个<code>TWeakObjectPtr</code>来进行值的初始化，于是便报错了，各种调查结果显示，是赋值的值的类型的头文件没有好好的包含进去，以至于找不到该类型。</p>
+<p><code>error C2664: &#39;FWeakObjectPtr &amp;FWeakObjectPtr::operator =(const FWeakObjectPtr &amp;)&#39;: cannot convert argument 1 from &#39;T *&#39; to &#39;const UObject *&#39;</code></p>
+<p><img src="Annotation 2020-07-16 181212.jpg" alt="Error description"></p>
+<p>参考的链接：<a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/42246-tweakobjectptr-with-custom-character-class" target="_blank" rel="noopener">TWeakObjectPtr with Custom Character Class</a></p>
 
       
     </div>
@@ -627,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#syntax-error-missing-‘-’-before-‘-’"><span class="nav-number">1.</span> <span class="nav-text">syntax error:missing ‘;’ before ‘*’</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LogMaterial-Warning-Material-Game-MagicCircle-Materials-MT-Smoke-MT-Smoke-missing-bUsedWithInstancedStaticMeshes-True-Default-Material-will-be-used-in-game"><span class="nav-number">2.</span> <span class="nav-text">LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game.</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中遇见的报错"><span class="nav-number">1.</span> <span class="nav-text">UE4中遇见的报错</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#class关键字的使用"><span class="nav-number">1.1.</span> <span class="nav-text">class关键字的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bUsedWithInstancedStaticMeshes"><span class="nav-number">1.2.</span> <span class="nav-text">bUsedWithInstancedStaticMeshes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含头文件的问题"><span class="nav-number">1.3.</span> <span class="nav-text">包含头文件的问题</span></a></li></ol></li></ol></div>
             
 
           </div>
