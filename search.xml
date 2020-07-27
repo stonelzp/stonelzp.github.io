@@ -4550,6 +4550,8 @@
 <p><code>error C2664: &#39;FWeakObjectPtr &amp;FWeakObjectPtr::operator =(const FWeakObjectPtr &amp;)&#39;: cannot convert argument 1 from &#39;T *&#39; to &#39;const UObject *&#39;</code></p>
 <p><img src="Annotation 2020-07-16 181212.jpg" alt="Error description"></p>
 <p>参考的链接：<a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/42246-tweakobjectptr-with-custom-character-class" target="_blank" rel="noopener">TWeakObjectPtr with Custom Character Class</a></p>
+<p><code>error C2440: &#39;initializing&#39; : cannot convert from &#39;initializer-list&#39;</code></p>
+<p>关于这个错误类型，涉及到一些初始化操作，但我的情况下还是头文件没有包含进去的问题，真是头大。</p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
