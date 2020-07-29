@@ -5036,9 +5036,23 @@
     <content><![CDATA[<p>对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。</p>
 <a id="more"></a>
 <h1 id="UE4的智能指针"><a href="#UE4的智能指针" class="headerlink" title="UE4的智能指针"></a>UE4的智能指针</h1><p>智能指针并不能使用<code>UPROPERTY()</code>，<code>TSharedRef</code>,<code>TSharedPtr</code>,<code>TWeakPtr</code>等等。</p>
+<p>上一次更新这篇文章是两年前，都两年了我还没深入了解UE4的智能指针，我也不知道我都干了些什么。</p>
+<p>我应该对UE4的智能指针进行分类探讨，根据自己遇到过的情况。</p>
+<h2 id="TWeakPtr"><a href="#TWeakPtr" class="headerlink" title="TWeakPtr"></a>TWeakPtr</h2><h2 id="TWeakObjectPtr"><a href="#TWeakObjectPtr" class="headerlink" title="TWeakObjectPtr"></a>TWeakObjectPtr</h2><p>关于<code>TWeakPtr</code>和<code>TweakObjectPtr</code>之间的区别：</p>
+<p><strong>TWeakObjectPtr</strong>是针对<code>UObjects</code>的弱指针引用，<strong>TWeakPtr</strong>则是针对除了<code>UObjects</code>的弱指针引用。</p>
+<blockquote>
+<p>TWeakObjectPtr is for weak pointers to UObjects, TWeakPtr for pointers to everything else.</p>
+<p>Since UObjects are garbage collected and shared pointers are reference counted, we cannot have the same weak pointer type for all, unfortunately.</p>
+</blockquote>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/298868/difference-between-tweakptr-and-tweakobjectptr.html" target="_blank" rel="noopener">Difference between TWeakPtr and TWeakObjectPtr?</a></li>
+</ul>
 <p>参考链接：</p>
 <ul>
-<li><a href="https://api.unrealengine.com/INT/Programming/UnrealArchitecture/SmartPointerLibrary/index.html" target="_blank" rel="noopener">Unreal Smart Pointer Library</a> <h1 id="C-的智能指针"><a href="#C-的智能指针" class="headerlink" title="C++的智能指针"></a>C++的智能指针</h1>指针的使用伴随着内存泄漏(memory leak)的问题，可能会发生内存泄漏的情况有：</li>
+<li><a href="https://api.unrealengine.com/INT/Programming/UnrealArchitecture/SmartPointerLibrary/index.html" target="_blank" rel="noopener">Unreal Smart Pointer Library</a> </li>
+</ul>
+<h1 id="C-的智能指针"><a href="#C-的智能指针" class="headerlink" title="C++的智能指针"></a>C++的智能指针</h1><p>指针的使用伴随着内存泄漏(memory leak)的问题，可能会发生内存泄漏的情况有：</p>
+<ul>
 <li>new或者malloc出来的内存因为程序员的疏忽忘记释放</li>
 <li>程序运行发生错误(throw)，未能执行内存释放程序</li>
 </ul>
@@ -5551,6 +5565,10 @@
 <p>参照官网上的步骤下载并配置源码版UnrealEngine，这其中有一个我漏掉的步骤，就是把UE4设置为启动工程</p>
 <p>即在工程项目的SolutionExplorer中找到项目右键，会出现<strong>Set as StartUp Project</strong>,对，要执行这一步操作，然后在Build界面中选择<strong>Build UE4</strong>，因为这里不选直接使用默认的编译的话，会把全体都编译，有时间可以这么搞，没时间还是别这么搞，真的费时间。</p>
 <p>这样按理说就可以使用编译好的引擎打开想要工作的项目了。</p>
+<h3 id="DefaultBuildSettings"><a href="#DefaultBuildSettings" class="headerlink" title="DefaultBuildSettings"></a>DefaultBuildSettings</h3><p>UE4自4.24版本之后更改了默认的编译设定，<code>BuildSettingsVersion.V2</code></p>
+<p>Here’s an example V1(legacy) target.cs file:<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Copyright 1998-2019 Epic Games, Inc. All Right Reserved.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnrealBuildTool;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AGobesTestEditorTarget</span> : <span class="title">TargetRules</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AGnoesTsetEditorTarget</span>(<span class="params"> TargetInfo Target </span>) : <span class="title">base</span>(<span class="params">Target</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Type = TargetType.Editor;</span><br><span class="line">        DefaultBuildSettings = BuildSettingsVersion.V1;</span><br><span class="line">        ExtraModuleNames.AddRange( <span class="keyword">new</span> String[] &#123; <span class="string">"AgonesTest"</span> &#125; );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Here’s an example V2 (new) target.cs:<br><figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Copyright 1998-2019 Epic Games, Inc. All Right Reserved.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnrealBuildTool;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AGobesTestEditorTarget</span> : <span class="title">TargetRules</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AGnoesTsetEditorTarget</span>(<span class="params"> TargetInfo Target </span>) : <span class="title">base</span>(<span class="params">Target</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Type = TargetType.Editor;</span><br><span class="line">        DefaultBuildSettings = BuildSettingsVersion.V2;</span><br><span class="line">        ExtraModuleNames.AddRange( <span class="keyword">new</span> String[] &#123; <span class="string">"AgonesTest"</span> &#125; );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有就是需要注意的是，当由之前的V1版本切换到V2版本之后会出现include文件路径不对的问题，换了一种编译方式，编译路径也不一样了。<br>然后就是自己的发现就是V2编译的路径变成了<strong>相对路径</strong>。</p>
 <h1 id="道听途说"><a href="#道听途说" class="headerlink" title="道听途说"></a>道听途说</h1><h4 id="1-关于C-中的资源释放"><a href="#1-关于C-中的资源释放" class="headerlink" title="1.关于C++中的资源释放"></a>1.关于C++中的资源释放</h4><p>一般在c++中应该是资源的获取与申请（<code>new</code>等等的操作）与资源的释放都是需要程序员手动操作的。但是如果使用了UE管理的资源，比如继承了UE中的类库等等的操作，那么释放这些资源的操作，在UE中会自动释放而不需要程序员的额外操作，反而要是操作了还会出问题。</p>
 <p>当然这个问题只是道听途说，未能够验证。</p>
 <p>当然需要仔细调查了啊</p>
