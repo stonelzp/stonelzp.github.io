@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/stonelzp.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/stonelzp.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/stonelzp.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/stonelzp.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/stonelzp.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/stonelzp.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="UE4,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4-多人游戏框架理解">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-multiplay-framework/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/SinglePlay.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Server.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client2.png">
+<meta property="og:updated_time" content="2020-08-07T04:16:18.346Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4-多人游戏框架理解">
+<meta name="twitter:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
+<meta name="twitter:image" content="http://stonelzp.github.io/ue4-multiplay-framework/SinglePlay.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/stonelzp.github.io/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/ue4-multiplay-framework/">
+
+
+
+
+
+  <title>UE4-多人游戏框架理解 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/stonelzp.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/stonelzp.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/stonelzp.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/stonelzp.github.io/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/stonelzp.github.io/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/stonelzp.github.io/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/stonelzp.github.io/ue4-multiplay-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/stonelzp.github.io/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UE4-多人游戏框架理解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T12:35:12+09:00">
+                2020-08-03
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-08-07T13:16:18+09:00">
+                2020-08-07
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/stonelzp.github.io/categories/UnrealEngine4/" itemprop="url" rel="index">
+                    <span itemprop="name">UnrealEngine4</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。</p>
+<a id="more"></a>
+<h1 id="UE4框架总览"><a href="#UE4框架总览" class="headerlink" title="UE4框架总览"></a>UE4框架总览</h1><p>首先是对UE4的框架进行认知，UE4是以什么样的模式来定义多人游戏的。首先是官方文档的描述</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Overview/index.html" target="_blank" rel="noopener">Networking Overview</a></li>
+</ul>
+<p>即<strong>Server/Client</strong>的构成，我目前所知U的就两种：</p>
+<ul>
+<li>Listen Server</li>
+<li>Dedicated Server</li>
+</ul>
+<p>下面的这篇是关于多人游戏设计的文章，总结了很多重要的知识。</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/online-multiplay-game-design" target="_blank" rel="noopener">Online MultiPlay Game Design</a></li>
+</ul>
+<h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
+</ul>
+<p>上面链接来自于官网。可能会经常听到说Actor的<em>owning Connection</em>(我反正之前没怎么听说过），我也不知道该怎么翻译，<strong>所属连接</strong>?反正叫OwningConnection就对了，每一个connection都有一个PlayerController，或者说PlayerController的创建正是为了这个connection的。想知道一个Actor是否属于这个connection，那么就查询这个Actor的outer owner是否是PlayerController，而且这个PlayerController和这个connection所拥有的PlayerController是同一个，如果是同一个PlayerController那么这个Actor就属于这个connection。</p>
+<p>Component在决定它的owning connection的时候有些特殊。它会向上遍历它的上级直到找到所属的Actor，然后像上面那样找到这个Actor的owning connection。这里原话是这样的我也不太确定自己理解的是否正确。</p>
+<blockquote>
+<p>Components are a little special in how they determine their owning connection. In this case, we first determine the components owner by walking the components outer chain until we find the owning actor, and then we continue as above by determining owning connection of this actor.</p>
+</blockquote>
+<p>理解OwningConnection对于一些功能非常重要：<br>RPCs需要知道并决定哪一个Client去执行run-on-clinet的命令，影响RPC Actor Repliation和connection relevancy * Actor property replication conditions等设定。</p>
+<p>这对RPC非常重要，因为当你尝试对一个Actor调用一个RPC函数的时候，除非这个函数的多播(multicast)，它需要知道是哪个一个client去执行这一条RPC指令，它会通过找到自己的owningconention来借由这个connection来发送这条RPC指令。</p>
+<p>ConnectionOwnership被用于Actor的Replication期间，决定了每个Actor所属的connection被更新。对于Actor来说，只有当<code>bOnlyRelevantToOwner</code>被设置为true的时候，connection才会为其所拥有的Actor接受属性更新( receive property update)。默认情况下，所有的PlayerController都设置了这个属性(bOnlyRelevantToOwner)，这就是为什么Client仅为他持有的PlayerController接收更新情报。这样做有很多原因，最主要的原因则是为了防止作弊和提高效率。</p>
+<p>ConnectionOwnership对于property replication involving conditions也很重要，但是我现在还不是很理解这句话。</p>
+<blockquote>
+<p>Connection ownership is important during property replication involving conditions that use the owner. For example. When COND_OnlyOwner is used, only the owners of that actor will receive these property updates.</p>
+</blockquote>
+<p>关于上面的property replication involving conditions,官方文档的说明;</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Properties/Conditions/index.html" target="_blank" rel="noopener">Conditional Property Replication</a></li>
+</ul>
+<p>貌似是对Actor的属性(Properties)进行进一步的细节设置Replication。</p>
+<p>最后，ConnectionOwnership对autonomous proxies的Actor(Role is ROLE_AutonomousProxy)很重要。对于这些Actor来说，如果它们的属性被Replicate到一个并不拥有这Actor的connect上的时候(这个connect并不拥有这些Actors)，它们就会被降格到ROLE_SimulatedProxy。</p>
+<p>在进行详细说明之前，我想对已经大概理解的内容进行巩固和深入理解。</p>
+<h2 id="PlayerController"><a href="#PlayerController" class="headerlink" title="PlayerController"></a>PlayerController</h2><p>这个部分是以PlayerController开头却是想引出UE4的GameplayFramework的内容的。刚开始的时候总是会遇见一些名词，GameMode，GameState什么的，之前完全不是很理解这些内容。</p>
+<p>在学习GameplayAbility的过程中又遇到了PlayerState这个东西，就觉得把这些很基础的内容串起来是很有必要的了。当然这些事情都有些好人帮我做了…</p>
+<p>我就直接贴上链接了</p>
+<ul>
+<li><a href="http://www.main-function.com/entry/2017/11/22/220527" target="_blank" rel="noopener">【UE4】GameMode、GameState、PlayerState、PlayerControllerの関連を確認してみる</a></li>
+</ul>
+<p>关于官网上对于GameplayFramework的介绍：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/QuickReference/index.html" target="_blank" rel="noopener">Gameplay Framework Quick Reference</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/GameMode/index.html" target="_blank" rel="noopener">Game Mode and Game State</a></li>
+</ul>
+<p>我先把别人的劳动成果窃取过来，实在对不住。</p>
+<h3 id="GameMode"><a href="#GameMode" class="headerlink" title="GameMode"></a>GameMode</h3><ul>
+<li>这个只存在于服务器(Server)上。</li>
+</ul>
+<h3 id="GameState"><a href="#GameState" class="headerlink" title="GameState"></a>GameState</h3><ul>
+<li>每个Machine都存在实例</li>
+<li>拥有一个PlayerArray变量，是用来保存PlayerState的</li>
+<li>没有Owner(GetOwner() == nullptr)</li>
+</ul>
+<h3 id="PlayerState"><a href="#PlayerState" class="headerlink" title="PlayerState"></a>PlayerState</h3><ul>
+<li>每台machine上，所有的Player都存在一个PlayerState</li>
+<li>Owner就是PlayerController (GetOwner()会返回PlayerController)</li>
+</ul>
+<h3 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
+<li>没有Owner (GetOwner() == nullptr)</li>
+<li>持有玩家操作的Pawn (GetControlledPawn取得)</li>
+</ul>
+<h3 id="Pawn"><a href="#Pawn" class="headerlink" title="Pawn"></a>Pawn</h3><p>实际操作生成的PlayerPawn。</p>
+<ul>
+<li>PossessedBy中指定PlayerController</li>
+</ul>
+<h3 id="SinglePlay的情况"><a href="#SinglePlay的情况" class="headerlink" title="SinglePlay的情况"></a>SinglePlay的情况</h3><p><img src="SinglePlay.png" alt="singleplay"></p>
+<h3 id="MultiPlay的情况"><a href="#MultiPlay的情况" class="headerlink" title="MultiPlay的情况"></a>MultiPlay的情况</h3><p><img src="MultiPlay-Server.png" alt="multiplay-server"></p>
+<p><img src="MultiPlay-Client1.png" alt="multiplay-client1"></p>
+<p><img src="MultiPlay-Client2.png" alt="multiplay-client2"></p>
+<p>后面还有一些检验正确性的部分，输出LOG什么的，我就省略了。</p>
+<h2 id="Instigator"><a href="#Instigator" class="headerlink" title="Instigator"></a>Instigator</h2><p>原意为”煽动者，始作俑者”，具体的我暂时还不是很清楚，是在Blueprint中遇到的：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetInstigator/index.html" target="_blank" rel="noopener">Get Instigator</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetInstigatorController/index.html" target="_blank" rel="noopener">Get Instigator Controller</a></li>
+</ul>
+<p>从官网的介绍貌似是可以取得负责造成Damage的Pawn对象。<a href="https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FActorSpawnParameters/Instigator/index.html" target="_blank" rel="noopener">Instigator</a></p>
+<p>具体的使用情况不明…</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/ue4-multiplay-framework/" title="UE4-多人游戏框架理解">http://stonelzp.github.io/ue4-multiplay-framework/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/stonelzp.github.io/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/stonelzp.github.io/ue4-gameplay-ability-system/" rel="next" title="UE4-GameplayAbilitySystem学习">
+                <i class="fa fa-chevron-left"></i> UE4-GameplayAbilitySystem学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/stonelzp.github.io/uploads/avatar.gif" alt="stone">
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/stonelzp.github.io/archives/">
+              
+                  <span class="site-state-item-count">82</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/stonelzp.github.io/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/stonelzp.github.io/tags/index.html">
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/stonelzp.github.io/images/cc-by.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4框架总览"><span class="nav-number">1.</span> <span class="nav-text">UE4框架总览</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些基础概念"><span class="nav-number">2.</span> <span class="nav-text">一些基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Owning-Connection"><span class="nav-number">2.1.</span> <span class="nav-text">Owning Connection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PlayerController"><span class="nav-number">2.2.</span> <span class="nav-text">PlayerController</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GameMode"><span class="nav-number">2.2.1.</span> <span class="nav-text">GameMode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GameState"><span class="nav-number">2.2.2.</span> <span class="nav-text">GameState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerState"><span class="nav-number">2.2.3.</span> <span class="nav-text">PlayerState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerController-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">PlayerController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pawn"><span class="nav-number">2.2.5.</span> <span class="nav-text">Pawn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SinglePlay的情况"><span class="nav-number">2.2.6.</span> <span class="nav-text">SinglePlay的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiPlay的情况"><span class="nav-number">2.2.7.</span> <span class="nav-text">MultiPlay的情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instigator"><span class="nav-number">2.3.</span> <span class="nav-text">Instigator</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/stonelzp.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/stonelzp.github.io/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

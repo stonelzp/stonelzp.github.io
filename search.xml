@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-多人游戏框架理解</title>
+    <url>/stonelzp.github.io/ue4-multiplay-framework/</url>
+    <content><![CDATA[<p>UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。</p>
+<a id="more"></a>
+<h1 id="UE4框架总览"><a href="#UE4框架总览" class="headerlink" title="UE4框架总览"></a>UE4框架总览</h1><p>首先是对UE4的框架进行认知，UE4是以什么样的模式来定义多人游戏的。首先是官方文档的描述</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Overview/index.html" target="_blank" rel="noopener">Networking Overview</a></li>
+</ul>
+<p>即<strong>Server/Client</strong>的构成，我目前所知U的就两种：</p>
+<ul>
+<li>Listen Server</li>
+<li>Dedicated Server</li>
+</ul>
+<p>下面的这篇是关于多人游戏设计的文章，总结了很多重要的知识。</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/online-multiplay-game-design" target="_blank" rel="noopener">Online MultiPlay Game Design</a></li>
+</ul>
+<h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
+</ul>
+<p>上面链接来自于官网。可能会经常听到说Actor的<em>owning Connection</em>(我反正之前没怎么听说过），我也不知道该怎么翻译，<strong>所属连接</strong>?反正叫OwningConnection就对了，每一个connection都有一个PlayerController，或者说PlayerController的创建正是为了这个connection的。想知道一个Actor是否属于这个connection，那么就查询这个Actor的outer owner是否是PlayerController，而且这个PlayerController和这个connection所拥有的PlayerController是同一个，如果是同一个PlayerController那么这个Actor就属于这个connection。</p>
+<p>Component在决定它的owning connection的时候有些特殊。它会向上遍历它的上级直到找到所属的Actor，然后像上面那样找到这个Actor的owning connection。这里原话是这样的我也不太确定自己理解的是否正确。</p>
+<blockquote>
+<p>Components are a little special in how they determine their owning connection. In this case, we first determine the components owner by walking the components outer chain until we find the owning actor, and then we continue as above by determining owning connection of this actor.</p>
+</blockquote>
+<p>理解OwningConnection对于一些功能非常重要：<br>RPCs需要知道并决定哪一个Client去执行run-on-clinet的命令，影响RPC Actor Repliation和connection relevancy * Actor property replication conditions等设定。</p>
+<p>这对RPC非常重要，因为当你尝试对一个Actor调用一个RPC函数的时候，除非这个函数的多播(multicast)，它需要知道是哪个一个client去执行这一条RPC指令，它会通过找到自己的owningconention来借由这个connection来发送这条RPC指令。</p>
+<p>ConnectionOwnership被用于Actor的Replication期间，决定了每个Actor所属的connection被更新。对于Actor来说，只有当<code>bOnlyRelevantToOwner</code>被设置为true的时候，connection才会为其所拥有的Actor接受属性更新( receive property update)。默认情况下，所有的PlayerController都设置了这个属性(bOnlyRelevantToOwner)，这就是为什么Client仅为他持有的PlayerController接收更新情报。这样做有很多原因，最主要的原因则是为了防止作弊和提高效率。</p>
+<p>ConnectionOwnership对于property replication involving conditions也很重要，但是我现在还不是很理解这句话。</p>
+<blockquote>
+<p>Connection ownership is important during property replication involving conditions that use the owner. For example. When COND_OnlyOwner is used, only the owners of that actor will receive these property updates.</p>
+</blockquote>
+<p>关于上面的property replication involving conditions,官方文档的说明;</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Properties/Conditions/index.html" target="_blank" rel="noopener">Conditional Property Replication</a></li>
+</ul>
+<p>貌似是对Actor的属性(Properties)进行进一步的细节设置Replication。</p>
+<p>最后，ConnectionOwnership对autonomous proxies的Actor(Role is ROLE_AutonomousProxy)很重要。对于这些Actor来说，如果它们的属性被Replicate到一个并不拥有这Actor的connect上的时候(这个connect并不拥有这些Actors)，它们就会被降格到ROLE_SimulatedProxy。</p>
+<p>在进行详细说明之前，我想对已经大概理解的内容进行巩固和深入理解。</p>
+<h2 id="PlayerController"><a href="#PlayerController" class="headerlink" title="PlayerController"></a>PlayerController</h2><p>这个部分是以PlayerController开头却是想引出UE4的GameplayFramework的内容的。刚开始的时候总是会遇见一些名词，GameMode，GameState什么的，之前完全不是很理解这些内容。</p>
+<p>在学习GameplayAbility的过程中又遇到了PlayerState这个东西，就觉得把这些很基础的内容串起来是很有必要的了。当然这些事情都有些好人帮我做了…</p>
+<p>我就直接贴上链接了</p>
+<ul>
+<li><a href="http://www.main-function.com/entry/2017/11/22/220527" target="_blank" rel="noopener">【UE4】GameMode、GameState、PlayerState、PlayerControllerの関連を確認してみる</a></li>
+</ul>
+<p>关于官网上对于GameplayFramework的介绍：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/QuickReference/index.html" target="_blank" rel="noopener">Gameplay Framework Quick Reference</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/GameMode/index.html" target="_blank" rel="noopener">Game Mode and Game State</a></li>
+</ul>
+<p>我先把别人的劳动成果窃取过来，实在对不住。</p>
+<h3 id="GameMode"><a href="#GameMode" class="headerlink" title="GameMode"></a>GameMode</h3><ul>
+<li>这个只存在于服务器(Server)上。</li>
+</ul>
+<h3 id="GameState"><a href="#GameState" class="headerlink" title="GameState"></a>GameState</h3><ul>
+<li>每个Machine都存在实例</li>
+<li>拥有一个PlayerArray变量，是用来保存PlayerState的</li>
+<li>没有Owner(GetOwner() == nullptr)</li>
+</ul>
+<h3 id="PlayerState"><a href="#PlayerState" class="headerlink" title="PlayerState"></a>PlayerState</h3><ul>
+<li>每台machine上，所有的Player都存在一个PlayerState</li>
+<li>Owner就是PlayerController (GetOwner()会返回PlayerController)</li>
+</ul>
+<h3 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
+<li>没有Owner (GetOwner() == nullptr)</li>
+<li>持有玩家操作的Pawn (GetControlledPawn取得)</li>
+</ul>
+<h3 id="Pawn"><a href="#Pawn" class="headerlink" title="Pawn"></a>Pawn</h3><p>实际操作生成的PlayerPawn。</p>
+<ul>
+<li>PossessedBy中指定PlayerController</li>
+</ul>
+<h3 id="SinglePlay的情况"><a href="#SinglePlay的情况" class="headerlink" title="SinglePlay的情况"></a>SinglePlay的情况</h3><p><img src="SinglePlay.png" alt="singleplay"></p>
+<h3 id="MultiPlay的情况"><a href="#MultiPlay的情况" class="headerlink" title="MultiPlay的情况"></a>MultiPlay的情况</h3><p><img src="MultiPlay-Server.png" alt="multiplay-server"></p>
+<p><img src="MultiPlay-Client1.png" alt="multiplay-client1"></p>
+<p><img src="MultiPlay-Client2.png" alt="multiplay-client2"></p>
+<p>后面还有一些检验正确性的部分，输出LOG什么的，我就省略了。</p>
+<h2 id="Instigator"><a href="#Instigator" class="headerlink" title="Instigator"></a>Instigator</h2><p>原意为”煽动者，始作俑者”，具体的我暂时还不是很清楚，是在Blueprint中遇到的：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetInstigator/index.html" target="_blank" rel="noopener">Get Instigator</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetInstigatorController/index.html" target="_blank" rel="noopener">Get Instigator Controller</a></li>
+</ul>
+<p>从官网的介绍貌似是可以取得负责造成Damage的Pawn对象。<a href="https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FActorSpawnParameters/Instigator/index.html" target="_blank" rel="noopener">Instigator</a></p>
+<p>具体的使用情况不明…</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-GameplayAbilitySystem学习</title>
     <url>/stonelzp.github.io/ue4-gameplay-ability-system/</url>
     <content><![CDATA[<p>这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中<strong>Action RPG</strong>这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。</p>
@@ -4285,9 +4378,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4324,9 +4417,9 @@
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4495,8 +4588,8 @@
         <category>编程</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
