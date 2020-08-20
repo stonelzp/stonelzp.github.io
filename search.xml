@@ -245,6 +245,9 @@
 <p>GASDocumentation/GDGameplayAbility.cpp<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> UGDGameplayAbility::OnAvatarSet(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span><br><span class="line">&#123;</span><br><span class="line">    Super::OnAvatarSet(ActorInfo, Spec);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(ActivateAbilityOnGranted)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">bool</span> ActivatedAbility = ActorInfo-&gt;AbilitySystemComponent-&gt;TryActivateAbility(Spec.Handle, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这里的<code>bAllowRemoteActivation</code>标志位被设置为false，这样设置的理由我目前还没有完全搞清楚。</p>
 <p>以上就是<code>OnAvatarSet</code>函数的使用理由和方法了。</p>
+<h3 id="WaitDelay"><a href="#WaitDelay" class="headerlink" title="WaitDelay"></a>WaitDelay</h3><p>这次我遇到的是一个<strong>WaitDelay</strong>的BlueprintNode，这里需要注意的是要与另外一个BPNode<strong>TaskWaitDelay</strong>区分开来。</p>
+<p><img src="WaitDelay.png" alt="WaitDelay"><br><img src="TaskWaitDelay.png" alt="TaskWaitDelay"></p>
+<p>区别是一个是面向GameplayTask的一个是面向AbilityTask的。目前只对WaitDelay即AbilityTask的内容进行理解。</p>
 ]]></content>
       <categories>
         <category>Unreal Engine</category>
