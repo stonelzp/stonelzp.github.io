@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Server.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client1.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client2.png">
-<meta property="og:updated_time" content="2020-08-07T04:16:18.346Z">
+<meta property="og:updated_time" content="2020-08-21T08:47:14.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-多人游戏框架理解">
 <meta name="twitter:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
@@ -345,8 +345,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-08-07T13:16:18+09:00">
-                2020-08-07
+              <time title="更新于" itemprop="dateModified" datetime="2020-08-21T17:47:14+09:00">
+                2020-08-21
               </time>
             
           </span>
@@ -466,6 +466,7 @@
 <h3 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
 <li>没有Owner (GetOwner() == nullptr)</li>
 <li>持有玩家操作的Pawn (GetControlledPawn取得)</li>
+<li>OnPossess(Overridable native function for when this controller possesses a pawn)</li>
 </ul>
 <h3 id="Pawn"><a href="#Pawn" class="headerlink" title="Pawn"></a>Pawn</h3><p>实际操作生成的PlayerPawn。</p>
 <ul>

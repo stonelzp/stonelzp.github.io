@@ -68,6 +68,7 @@
 <h3 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
 <li>没有Owner (GetOwner() == nullptr)</li>
 <li>持有玩家操作的Pawn (GetControlledPawn取得)</li>
+<li>OnPossess(Overridable native function for when this controller possesses a pawn)</li>
 </ul>
 <h3 id="Pawn"><a href="#Pawn" class="headerlink" title="Pawn"></a>Pawn</h3><p>实际操作生成的PlayerPawn。</p>
 <ul>
@@ -237,7 +238,7 @@
 </ul>
 <p>这是一个完整的关于GameplayAbilitySystem的框架的使用文章，这里面包含了很多的知识，也吃掉了我许多时间，实在是理解GAS的一个非常好非常重要的文章。</p>
 <p>由于理解本身就已经非常费时费力，当然更多的是自己的摸鱼和工作不力，但还是希望能好好理解UE4这个框架</p>
-<h2 id="一些小的知识点"><a href="#一些小的知识点" class="headerlink" title="一些小的知识点"></a>一些小的知识点</h2><h3 id="OnAvatarSet"><a href="#OnAvatarSet" class="headerlink" title="OnAvatarSet"></a>OnAvatarSet</h3><p>GameplayAbility.h<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UCLASS(Blueprintable)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GAMEPLAYABILITIES_API</span> <span class="title">UGameplayAbility</span> :</span> <span class="keyword">public</span> UObject, <span class="keyword">public</span> IGameplayTaskOwnerInterface</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/** Called when the avatar actor is set/changes */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnAvatarSet</span><span class="params">(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="GameplayAbilitySystem中重要的类，结构体"><a href="#GameplayAbilitySystem中重要的类，结构体" class="headerlink" title="GameplayAbilitySystem中重要的类，结构体"></a>GameplayAbilitySystem中重要的类，结构体</h2><h3 id="GameplayEffect"><a href="#GameplayEffect" class="headerlink" title="GameplayEffect"></a>GameplayEffect</h3><h4 id="FGameplayEffectContext"><a href="#FGameplayEffectContext" class="headerlink" title="FGameplayEffectContext"></a>FGameplayEffectContext</h4><h4 id="FGameplayEffectContextHandle"><a href="#FGameplayEffectContextHandle" class="headerlink" title="FGameplayEffectContextHandle"></a>FGameplayEffectContextHandle</h4><h2 id="一些小的知识点"><a href="#一些小的知识点" class="headerlink" title="一些小的知识点"></a>一些小的知识点</h2><h3 id="OnAvatarSet"><a href="#OnAvatarSet" class="headerlink" title="OnAvatarSet"></a>OnAvatarSet</h3><p>GameplayAbility.h<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UCLASS(Blueprintable)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GAMEPLAYABILITIES_API</span> <span class="title">UGameplayAbility</span> :</span> <span class="keyword">public</span> UObject, <span class="keyword">public</span> IGameplayTaskOwnerInterface</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/** Called when the avatar actor is set/changes */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnAvatarSet</span><span class="params">(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>GameplayAbility.cpp<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> UGameplayAbility::OnAvatarSet(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Projects may want to initiate passives or do other "BeginPlay" type of logic here</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这个是GameplayAbility自身所有的一个函数，在想要使用的时候需要对其重写。就像是对Actor的BeginPlay函数一样，对GameplayAbility来说就是OnAvatarSet函数。</p>
 <p>按照这篇文章的做法就是将被动属性的GameplayAbility的激活放在了一开始，就是这个函数里面。</p>
@@ -1511,6 +1512,29 @@
 <ul>
 <li><a href="https://qiita.com/shibukk/items/8c9362a5bd399b9c56be" target="_blank" rel="noopener">忘れやすい人のための git diff チートシート</a></li>
 </ul>
+<h3 id="关于忽略文件的变动"><a href="#关于忽略文件的变动" class="headerlink" title="关于忽略文件的变动"></a>关于忽略文件的变动</h3><p>有的时候会遇见一些Run-Time类型的文件，可以上传一个版本但是每次运行的时候总会变，每次都要commit就很不现实，于是便有了这个问题：</p>
+<p>如何停止对一个文件（或者文件夹中的文件）进行版本管理？</p>
+<p>找到的方法是：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/936249/how-to-stop-tracking-and-ignore-changes-to-a-file-in-git" target="_blank" rel="noopener">How to stop tracking and ignore changes to a file in Git?</a></li>
+</ul>
+<blockquote>
+<p>There are 3 options, you probably want #3</p>
+<ol>
+<li><p>This will keep the local file for you, but will delete it for anyone else when they pull.</p>
+<p><code>git rm --cached &lt;file-name&gt;</code> or <code>git rm -r --cached &lt;folder-name&gt;</code></p>
+</li>
+<li><p>This is for optimization, like a folder with a large number of files, e.g. SDKs that probably won’t ever change. It tells git to stop checking that huge folder every time for changes, locally, since it won’t have any. The assume-unchanged index will be reset and file(s) overwritten if there are upstream changes to the file/folder (when you pull).</p>
+<p> <code>git update-index --assume-unchanged &lt;path-name&gt;</code></p>
+</li>
+<li><p>This is to tell git you want your own independent version of the file or folder. For instance, you don’t want to overwrite (or delete) production/staging config files.</p>
+<p> <code>git update-index --skip-worktree &lt;path-name&gt;</code></p>
+</li>
+</ol>
+<p>It’s important to know that git update-index will not propagate with git, and each user will have to run it independently.</p>
+</blockquote>
+<p>我实际上使用的是第一种方法，但由于我是一个人开发的所以没有验证过是不是别人Pull的时候会删掉我取消Track的文件。</p>
+<p>但我感觉我实际上应该使用的是第二种方法，的确是使用了某个SDK，即Plugins，基本上不会再有改动，除非其他人对插件的内容进行了修改。</p>
 <h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
 <p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
 <p>文件路径奇葩带空格又不是我的错，我只是导入一个插件而已。至于解决方案，那就是使用命令行工具来提交啊。关键时候还得是Bash。</p>
@@ -5393,6 +5417,7 @@
 </ul>
 </li>
 <li>2020/06/03 更新一些使用VisualStudio的UE4SetUp内容</li>
+<li>2020/08/21 更新UE4中的修饰符(Specifiers)部分    </li>
 </ul>
 <h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C++部分"></a>C++部分</h2><h3 id="C-与C-的不同之处"><a href="#C-与C-的不同之处" class="headerlink" title="C++与C#的不同之处"></a>C++与C#的不同之处</h3><p>时隔多年见到C++的第一个违和感是头文件，为什么需要写头文件这个问题我找了一些别人写的代码发现了一下几个规则：</p>
 <ul>
@@ -5648,6 +5673,9 @@
 <p>最后开始定时：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">timer.SetTimer(timer_handle, <span class="keyword">this</span>, &amp;USampleActorComponent::TimerMethodWnted, <span class="number">1.0</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
 <p>参数的意思应该一目了然了。</p>
 <h2 id="UE4知识拓展"><a href="#UE4知识拓展" class="headerlink" title="UE4知识拓展"></a>UE4知识拓展</h2><p>主要用来记录一些常见但是需要理解的优先级不高或者不太常用的知识点的拓展。</p>
+<h3 id="Class-Specifiers"><a href="#Class-Specifiers" class="headerlink" title="Class Specifiers"></a>Class Specifiers</h3><p>关于UClass的修饰符</p>
+<p>Class Specifiers</p>
+<p>我迟早要整理这些修饰符的内容。</p>
 <h3 id="Metadata-Specifiers"><a href="#Metadata-Specifiers" class="headerlink" title="Metadata Specifiers"></a>Metadata Specifiers</h3><p>在UE4中的宏<code>UFUNCTION()</code>等等中会看到一些<code>meta</code>修饰符，有各自的用处。</p>
 <p><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Reference/Metadata" target="_blank" rel="noopener">Metadata Specifiers</a></p>
 <h4 id="CallableWithoutWorldContext"><a href="#CallableWithoutWorldContext" class="headerlink" title="CallableWithoutWorldContext"></a>CallableWithoutWorldContext</h4><p>想要记录下这个meta的原因是，我想得到当前调用函数所在的Blueprint的名字。在C++中直接使用<code>__Function__</code>写个宏就可以直接得到调用函数的名字，但是在Blueprint中，没有宏当参数这么便利的方法，得顺便把self当参数传进去。</p>
