@@ -26,7 +26,7 @@
 
   table {
     table-layout: fixed;
-    width: 1000px; /*表格宽度*/
+    /*width: 1000px;*/ /*表格宽度*/
     max-width: 1000px; /*表格最大宽度，避免表格过宽*/
     border: 1px solid #dedede; /*表格外边框设置*/
     margin: 15px auto; /*外边距*/
@@ -59,15 +59,8 @@
     width: 20%;
   }
   table th:nth-of-type(2){
-    width: 20%;
+    width: 80%;
   }
-  table th:nth-of-type(3){
-    width: 20%;
-  }
-  table th:nth-of-type(4){
-    width: 40%;
-  }
-
 </style>
 
 
