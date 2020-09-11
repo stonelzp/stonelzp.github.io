@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Server.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client1.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client2.png">
-<meta property="og:updated_time" content="2020-09-11T03:55:12.866Z">
+<meta property="og:updated_time" content="2020-09-11T04:13:53.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-多人游戏框架理解">
 <meta name="twitter:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
@@ -345,7 +345,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-09-11T12:55:12+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-09-11T13:13:53+09:00">
                 2020-09-11
               </time>
             
@@ -527,7 +527,33 @@
 <li>NetLoadOnClient = false , Replicates = false (default)</li>
 </ol>
 <h3 id="Network-Role-and-Authority"><a href="#Network-Role-and-Authority" class="headerlink" title="Network Role and Authority"></a>Network Role and Authority</h3><p>一个拥有Authority权限的Actor决定了它是Network中的控制角色，控制Actor的状态(state)并且会将ReplicationInfomation同步到其它远程。<strong>远程代理(remote Proxy)</strong> 是在远程上的机器的复制，它会接收来自于Authority权限的Actor的ReplicationInformation用来同步自己的状态。</p>
-<p><strong>Local Role</strong>和<strong>Romote Role</strong>变量用来指定这些Actor的Role：<br>|Network Role| Description|<br>|—|—|<br>|<strong>None</strong> | 代表着Actor在这个网络中不拥有role，不会被复制(replicate)|<br>|<strong>Authority</strong> | Actor具有Authority权限，会复制(replicate)自己到其他的远程代理(remote proxy)上。|<br>|<strong>Simulated Proxy</strong> | 是完全由另外一个远程上具有Authority权限的Actor复制的远程代理。Netwrok中大多数的Actor，像拾取物，子弹，可交互物体大多表现为远程客户端的SimulatedProxy角色。|<br>|<strong>Autonomous Proxy</strong> | 这种Actor是一种可以执行自己本地功能的远程代理(remote proxy)，但是会收到其他远程的AuthorityActor的校正，这种角色一般是直接控制玩家的角色准备的。比如Pawn |</p>
+<p><strong>Local Role</strong>和<strong>Romote Role</strong>变量用来指定这些Actor的Role：</p>
+<table>
+<thead>
+<tr>
+<th><div style="width:200px">Network Role</div></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>None</strong></td>
+<td>代表着Actor在这个网络中不拥有role，不会被复制(replicate)</td>
+</tr>
+<tr>
+<td><strong>Authority</strong></td>
+<td>Actor具有Authority权限，会复制(replicate)自己到其他的远程代理(remote proxy)上。</td>
+</tr>
+<tr>
+<td><strong>Simulated Proxy</strong></td>
+<td>是完全由另外一个远程上具有Authority权限的Actor复制的远程代理。Netwrok中大多数的Actor，像拾取物，子弹，可交互物体大多表现为远程客户端的SimulatedProxy角色。</td>
+</tr>
+<tr>
+<td><strong>Autonomous Proxy</strong></td>
+<td>这种Actor是一种可以执行自己本地功能的远程代理(remote proxy)，但是会收到其他远程的AuthorityActor的校正，这种角色一般是直接控制玩家的角色准备的。比如Pawn</td>
+</tr>
+</tbody>
+</table>
 <p>UE4的默认模式是<strong>server-authoritative</strong>，也就是服务器端拥有Authority权限，总是会从Server到Client这样replicate。</p>
 <p>更多的Actor的network roles信息可以参照<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Roles/index.html" target="_blank" rel="noopener">Actor Role and RemoteRole-The various aspects of replicating Actor objects.</a></p>
 <h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
