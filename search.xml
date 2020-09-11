@@ -9,7 +9,7 @@
 <ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Overview/index.html" target="_blank" rel="noopener">Networking Overview</a></li>
 </ul>
-<p>即<strong>Server/Client</strong>的构成，我目前所知U的就两种：</p>
+<p>即<strong>Server/Client</strong>的构成，我目前所知的就两种：</p>
 <ul>
 <li>Listen Server</li>
 <li>Dedicated Server</li>
@@ -18,6 +18,157 @@
 <ul>
 <li><a href="https://www.slideshare.net/EpicGamesJapan/online-multiplay-game-design" target="_blank" rel="noopener">Online MultiPlay Game Design</a></li>
 </ul>
+<p>下面让我开始真正的UE4多人框架理解之旅。</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>首先是一些基础的概念，暂时还不需要对实现进行深究，但至少要知道。</p>
+<p>首先是UE4中提供的几种网络模式和服务器类型。当然这些大多数是上面的官方文档的内容，我感觉用中文表达出来更方便我查找和回忆。</p>
+<h3 id="Network-Modes-and-Sever-Types"><a href="#Network-Modes-and-Sever-Types" class="headerlink" title="Network Modes and Sever Types"></a>Network Modes and Sever Types</h3><p>要以什么样的方式来开发，单人还是多人。在UE4的运行界面选定自己想要开始运行的网络模式。</p>
+<table>
+<thead>
+<tr>
+<th>Network Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standalone</strong></td>
+<td>就是以Server模式来运行，不接受任何来自别的客户端的连接</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>就是以Client模式来运行，不会执行服务器端的任何逻辑代码</td>
+</tr>
+<tr>
+<td><strong>Listen <br> Server</strong></td>
+<td>以Server模式来运行，也会接受来自其他客户端的网络连接(connections)而且存在一个本地玩家(Local Player)</td>
+</tr>
+<tr>
+<td><strong>Dedicated <br> Server</strong></td>
+<td>以Server模式来运行而且也会接受来自其他Client的连接，但是不存在本地玩家。所以这个模式下可以忽略画面，声音，用户输入，或者其他用户相关的特性，以此来提高Server的执行效率。这也是<strong>非常多的多人</strong> 游戏会采取的网络模式。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Actor-Replication"><a href="#Actor-Replication" class="headerlink" title="Actor Replication"></a>Actor Replication</h3><p><strong>Replication</strong>是我很早之前就接触到的名词，但是一直都很懵逼，不知道这个是干什么的。</p>
+<blockquote>
+<p><strong>Replication is the process of reproducing game state information between different machines in a network session.</strong></p>
+</blockquote>
+<p><strong>Replication</strong>(复制)是网络同步的一个非常非常重要的过程。恰当且正确的设置Replication，可以实现不同机器之间游戏状态的同步。默认情况下，Actor的Replication功能是关闭的，也就是说仅会在本地执行，不会将现在的状态同步到其他机器。可以很方便的通过C++设置<code>bReplicates = true</code>或者在Blueprint中把<strong>Replicates</strong>设置为<strong>true</strong>。</p>
+<p>关于一些常见的Replication特性，使用Actor的Replication可以做什么事情</p>
+<table>
+<thead>
+<tr>
+<th>Replication Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Creation <br> and <br> Destruction</strong></td>
+<td>如果一个具有权威(Authority)版本的并且被标记为Replicate(=true)的Actor于Server生成(Spawn)，它就会自动的生成一个远程代理(remote proxies)用来同步所有与之相连的客户端的数据。如果你销毁了这个Actor，它也会销毁这些代理。</td>
+</tr>
+<tr>
+<td><strong>Movement <br> Replication</strong></td>
+<td>如果Authoritative Actor的<strong>Replicate Movement</strong> 被激活(或者在C++中设置<code>bReplicateMovement</code>)，那么它的Location，Rotation，Velocity都会被同步。</td>
+</tr>
+<tr>
+<td><strong>Variable <br> Replication</strong></td>
+<td>Authoritive Actor中的变量如果被标记为<strong>Replicated</strong>，那么当该变量值被修改的时候，也会通过远程代理将修改同步到其它远程上。</td>
+</tr>
+<tr>
+<td><strong>Component <br> Replication</strong></td>
+<td>Actor的Components replicate同于其所属的的Actor，被标记为<strong>Replicated</strong>的变量同样会被复制，Component中的RPCs调用跟Actor类中的RPCs调用表现一致。</td>
+</tr>
+<tr>
+<td><strong>Remote <br> Procedure <br> Calls(RPCs)</strong></td>
+<td>RPCs是一种特殊的函数可以用来与特定的某个远程机器进行通信，不论是从哪一方调用。它可以被指定为<strong>Server(only runs on the server), Client(only runs on the Actor’s owning client), NetMulticast(runs on every machine conneted to the session, including the server)</strong>。</td>
+</tr>
+</tbody>
+</table>
+<p>这里举几个反例，几个常见的特性在，Actor，Pawns，Characters中不需要replicate的：</p>
+<ul>
+<li><strong>Skeletal Mesh</strong> and <strong>Static Mesh</strong> Components</li>
+<li><strong>Materials</strong></li>
+<li><strong>Animation Blueprints</strong></li>
+<li><strong>Particle Systems</strong></li>
+<li><strong>Sound Emitters</strong></li>
+<li><strong>Physics Objects</strong></li>
+</ul>
+<blockquote>
+<p>Each of these runs separately on all clients. However, if the variables that drive these visual elements are replicated, it will ensure that all client has the same information and therefore simulates them in approximately the same way.</p>
+</blockquote>
+<p>嘛，翻译过来总感觉不太对劲，大概就是那个意思。</p>
+<h4 id="Actor-Replication的方式"><a href="#Actor-Replication的方式" class="headerlink" title="Actor Replication的方式"></a>Actor Replication的方式</h4><p>关于Actor的Replication是一个很大的课题，知道UE4为Replication到底做到了哪一步很重要。官网中说</p>
+<blockquote>
+<p>As mentioned in the networking overview, Actors are the main workhorse for replication. The server will maintain a list of actors, and will update the client periodically so that the client will maintain a close approximation of each actor (that is marked to be replicated).</p>
+</blockquote>
+<p>这一段来自<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/index.html" target="_blank" rel="noopener">Actor Replication - The various aspects of replicating Actor objects and their components.</a></p>
+<p>大意是说Actor是Replicate的主要的推动者，服务器会维护一个需要Replicate的Actor列表，定期的更新客户端数据，方便客户端维护这些Actor的值。</p>
+<p>Actor的更新主要通过两种方式：</p>
+<ul>
+<li>Property updates</li>
+<li>RPCs (Remote Procedure Calls)</li>
+</ul>
+<p>两者之间的区别在于属性更新当属性的值改变的时候自动Replicate，而RPCs只有在被执行的时候会Replicate。</p>
+<p>这里官网中所说，自动进行属性值的更新并不代表完全没有任何代价，在判断属性值是否有被修改这个过程中还是存在着一点CPU的资源占用。取而代之的就是未修改的属性不会占用我们带宽(network bandwidth)。</p>
+<p>关于各种Replication的具体使用，在上面的链接中有一些介绍，暂时先等用到的时候再逐一整理了。</p>
+<h4 id="Replicates-NetLoadOnClient"><a href="#Replicates-NetLoadOnClient" class="headerlink" title="Replicates NetLoadOnClient"></a>Replicates NetLoadOnClient</h4><p>在设置Actor的Replication的时候会遇到一些标志位，<strong>Replicates</strong>, <strong>NetLoadOnClient</strong>等等，它们之间有什么影响进行了验证。当然一开始我也是不知道的，于是问了公司的前辈，没想到前辈虽然不太清楚但是用非常详细的方式帮我验证了，这就是我跟强者之间的差距吗…</p>
+<p>废话不多说直接上结论：</p>
+<p><strong>就初级功能而言，Replicates和NetLoadOnClient的效果是一样的，在Server中无论哪个被设置为true，Actor都会在各个客户端生成。</strong></p>
+<p>但是这也是仅针对初级功能而言：在游戏未运行的时候Server设置好，都会在Client中生成Actor，也就是说当你在UE4的Editor中把两个的任何一个设置为true，或者全部设置为true，都能观察到这个Actor在各个Client中都会被生成(以ListenServer模式运行)。当这两个都设置为false的时候，会发现这个只会在本地存在实例，不会被同步Spawn到其他远程上。</p>
+<p>但是<strong>NetloadOnClient</strong>默认是true的，所以一般情况下没有必要特意的设置为false，除非是特殊情况只想生成本地实例。NetLoadOnClient貌似只是负责游戏最开始Play的时候是否要进行Actor的Creation Replication，还有最后游戏结束的Actor的Destruction Replication。</p>
+<p>而<strong>Replicates</strong>则相当于更负责任的版本，除了Creation和Destruction的Replication之外，还会负责Variable的Replication。Actor的变量想要Replicate一定要把<strong>Replicates</strong>设置为true。</p>
+<p>还有一种特殊的情况是当Actor的生成是动态的情况，也就是游戏运行的是Runtime生成Actor的时候，这两个变量对Replication的影响。结论就是：<strong>只有Replicates设置为true的时候，Actor会在各个Client生成远程版本，即Replication成功</strong>。</p>
+<p>也就是说NetLoadOnClient对动态生成的Actor的Replication没有什么贡献。</p>
+<p>那既然<strong>Replicates</strong>就足够用了，那我可以不可以手贱把Replicates设置为true，同时吧NetLoadOnClient设置为false呢？</p>
+<p>答就是不要手贱，因为在Level.cpp中的Ulevel::InitializeNetworkActors()的处理中有这样的代码：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(!bIsServer)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(!Actor-&gt;bNetLoadOnClient)</span><br><span class="line">    &#123;</span><br><span class="line">        Actor-&gt;Destory(<span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br></pre></td></tr></table></figure></p>
+<p>不是Server的时候这个Actor直接会被Destroy掉，但是由于Replicates设置为true，Server又会让该Client重新Spawn这个Actor，就没必要。</p>
+<p>所以这两个标志位的情况应该是这样：</p>
+<ol>
+<li>NetLoadOnClient = true (default), Replicates = true</li>
+<li>NetLoadOnClient = true (default), Replicates = false (default)</li>
+<li>NetLoadOnClient = false , Replicates = false (default)</li>
+</ol>
+<h3 id="Network-Role-and-Authority"><a href="#Network-Role-and-Authority" class="headerlink" title="Network Role and Authority"></a>Network Role and Authority</h3><p>一个拥有Authority权限的Actor决定了它是Network中的控制角色，控制Actor的状态(state)并且会将ReplicationInfomation同步到其它远程。<strong>远程代理(remote Proxy)</strong> 是在远程上的机器的复制，它会接收来自于Authority权限的Actor的ReplicationInformation用来同步自己的状态。</p>
+<p><strong>Local Role</strong>和<strong>Romote Role</strong>变量用来指定这些Actor的Role：<br>|Network Role| Description|<br>|—|—|<br>|<strong>None</strong> | 代表着Actor在这个网络中不拥有role，不会被复制(replicate)|<br>|<strong>Authority</strong> | Actor具有Authority权限，会复制(replicate)自己到其他的远程代理(remote proxy)上。|<br>|<strong>Simulated Proxy</strong> | 是完全由另外一个远程上具有Authority权限的Actor复制的远程代理。Netwrok中大多数的Actor，像拾取物，子弹，可交互物体大多表现为远程客户端的SimulatedProxy角色。|<br>|<strong>Autonomous Proxy</strong> | 这种Actor是一种可以执行自己本地功能的远程代理(remote proxy)，但是会收到其他远程的AuthorityActor的校正，这种角色一般是直接控制玩家的角色准备的。比如Pawn |</p>
+<p>UE4的默认模式是<strong>server-authoritative</strong>，也就是服务器端拥有Authority权限，总是会从Server到Client这样replicate。</p>
+<p>更多的Actor的network roles信息可以参照<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Roles/index.html" target="_blank" rel="noopener">Actor Role and RemoteRole-The various aspects of replicating Actor objects.</a></p>
+<h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
+<h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
+<ul>
+<li><p>Set the Actor’s Replicated setting to True.</p>
+</li>
+<li><p>If the replicated Actor needs to move, set Replicates Movement to True.</p>
+</li>
+<li><p>When you spawn or destroy a replicated Actor, ensure that you do it on the server.</p>
+</li>
+<li><p>Set any variables that must be shared between machines to replicate. This usually applies to gameplay-essential variables.</p>
+</li>
+<li><p>Use Unreal Engine’s pre-made Movement Components whenever possible, as they are already built for replication.</p>
+</li>
+<li><p>If you are using a server-authoritative model, make sure any new actions that the player can perform are triggered by Server functions.</p>
+</li>
+</ul>
+<h4 id="Networking-Tips"><a href="#Networking-Tips" class="headerlink" title="Networking Tips"></a>Networking Tips</h4><ul>
+<li><p>Use as few RPCs or replicated Blueprint functions as possible. If you can use a RepNotify instead, you should.</p>
+</li>
+<li><p>Use Multicast functions especially sparingly, as they create extra network traffic for each connected client in a session.</p>
+</li>
+<li><p>Server-only logic does not necessarily have to be contained in a server RPC if you can guarantee that a non-replicated function will only execute on the server.</p>
+</li>
+<li><p>Be cautious when binding Reliable RPCs to player input. Players can repeatedly press buttons very rapidly, and that will overflow the queue for Reliable RPCs. You should use some way of limiting how often players can activate these.</p>
+</li>
+<li><p>If your game calls an RPC or replicated function very often, such as on Tick, you should make it Unreliable.</p>
+</li>
+<li><p>Some functions can be recycled by calling them in response to gameplay logic, then calling them in response to a RepNotify to ensure that clients and servers have parallel execution.</p>
+</li>
+<li><p>You can check an Actor’s network role to see if it is ROLE_Authority or not. This is a useful method for filtering execution in functions that activate on both server and client.</p>
+</li>
+<li><p>You can check if a Pawn is locally controlled by using the IsLocallyControlled function in C++ or the Is Locally Controlled function in Blueprint. This is useful for filtering execution based on whether it is relevant to the owning client.</p>
+</li>
+<li><p>Avoid using IsLocallyControlled in constructor scripts, as it is possible for a Pawn not to have a Controller assigned during construction.</p>
+</li>
+</ul>
+<p>上面的英文内容是我直接复制粘贴过来的，有些是知识比较繁杂现在整理太费时间，就先做个标题，算是占位符了。</p>
 <h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
