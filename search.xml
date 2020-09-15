@@ -233,6 +233,8 @@
 </table>
 <p>UE4的默认模式是<strong>server-authoritative</strong>，也就是服务器端拥有Authority权限，总是会从Server到Client这样replicate。</p>
 <p>更多的Actor的network roles信息可以参照<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Roles/index.html" target="_blank" rel="noopener">Actor Role and RemoteRole-The various aspects of replicating Actor objects.</a></p>
+<p>简单的用表格来表示：</p>
+<p><img src="Role_Replication.jpg" alt="Role_Replication"></p>
 <h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
 <h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
 <ul>
@@ -401,7 +403,43 @@
 <li>对于任何被删除掉的components，发送特殊的删除命令</li>
 </ul>
 <p>算是大致翻译了一下这篇文章，有些明白了，但是有些还是不太清楚。</p>
-<h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<h3 id="NetDormancy-休眠"><a href="#NetDormancy-休眠" class="headerlink" title="NetDormancy 休眠"></a>NetDormancy 休眠</h3><p>可以通过Server的<code>AActor::SetNetDormancy</code>之类的函数来设置Actor的休眠状态，减少Actor的Replication的检查，达到减轻负荷的目的，是优化的一种手段。</p>
+<p>进入休眠状态的Actor可以使用<code>FlushNetDormancy()</code>函数来唤醒。这个函数也会在Actor的Properties有更新的时候自动被UE4调用，也就是说休<strong>眠状态的控制某种程度上是自动的</strong>。</p>
+<p>对于一段时间没有变化的Actor使其进入睡眠状态是可以某种程度上减少Replication的处理时间，但是如果频繁的进行睡眠状态的切换也只是增加处理时间。</p>
+<p>关于休眠状态的设定：<br>在Actor的Replication一栏可以设置<strong>Net Dormancy</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DORM_Never</td>
+<td>DORM_Awake一样</td>
+</tr>
+<tr>
+<td>DORM_Awake(Default)</td>
+<td>如果是休眠状态的话将其唤醒，并保持唤醒状态</td>
+</tr>
+<tr>
+<td>DORM_DormantAll</td>
+<td>进行向休眠状态迁移的检查，如果条件满足则迁移到睡眠状态</td>
+</tr>
+<tr>
+<td>DORM_DormantPartila</td>
+<td>可以根据每个Connection进行自定义切换，需要对AActor::GetNetDormancy进行实现</td>
+</tr>
+<tr>
+<td>DORM_Initial</td>
+<td>初期就会被从NetActorList中除外，进入休眠，当其FlushNetDormancy被调用则变成DORM_DormantAll</td>
+</tr>
+</tbody>
+</table>
+<p>对大多数情况下进行总结就是：</p>
+<p><strong>几乎不变的Actor设置为DromantAll，Level中的背景Actor推荐设置为Initial</strong></p>
+<h3 id="NetRelevancy-关联性"><a href="#NetRelevancy-关联性" class="headerlink" title="NetRelevancy 关联性"></a>NetRelevancy 关联性</h3><h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
 </ul>
