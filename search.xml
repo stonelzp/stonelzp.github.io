@@ -146,6 +146,7 @@
 </blockquote>
 <p>这一段来自<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/index.html" target="_blank" rel="noopener">Actor Replication - The various aspects of replicating Actor objects and their components.</a></p>
 <p>大意是说Actor是Replicate的主要的推动者，服务器会维护一个需要Replicate的Actor列表，定期的更新客户端数据，方便客户端维护这些Actor的值。</p>
+<p>还有一种说法就是，Replication是以Actor为单位进行状态的复制的，我觉得这很贴切了。</p>
 <p>Actor的更新主要通过两种方式：</p>
 <ul>
 <li>Property updates</li>
@@ -171,6 +172,37 @@
 <li>NetLoadOnClient = true (default), Replicates = false (default)</li>
 <li>NetLoadOnClient = false , Replicates = false (default)</li>
 </ol>
+<h4 id="bReplicateFlag的动态切换"><a href="#bReplicateFlag的动态切换" class="headerlink" title="bReplicateFlag的动态切换"></a>bReplicateFlag的动态切换</h4><p>在程序运行中很大程度上代表着Actor的Replication标识的bReplicate标识符可以动态的进行切换，我没有实际验证过，只是看到别人的总结的文章内容，就是下面那个<strong>Network处理流程</strong>中出现的那篇<a href="https://www.slideshare.net/EpicGamesJapan/ue4howtocreatemultiplayergame" target="_blank" rel="noopener">UE4でマルチプレイヤーゲームを作ろう</a></p>
+<ul>
+<li>False -&gt; True 切换<ul>
+<li>登记到Replication列表(具体是什么列表？)，Client上没有被复制的Actor也会被复制</li>
+</ul>
+</li>
+<li>True -&gt; False 切换<ul>
+<li>被从列表删除，不再进行Replication复制，减轻CPU和带宽的负荷</li>
+<li>被生成的<strong>ActorChannel</strong>仍然会维持原样</li>
+<li>在Client上被复制(Replicate)过一次的Character不会消失！</li>
+<li>Actor在被破坏的时候，即使是忘掉了bReplicate(应该是说想把其置为false)其ActorChannel的破坏联动使Client上的Actor也能被破坏掉。</li>
+</ul>
+</li>
+</ul>
+<p>这里面有些不知道的东西，比如说</p>
+<ul>
+<li>列表<ul>
+<li>被登录到列表上的Actor会被复制，这个list说的是哪个list</li>
+</ul>
+</li>
+<li>ActorChannel<ul>
+<li>这个又是用来做什么的？</li>
+<li>为什么生成的ActorChannel不会被一起释放掉？</li>
+</ul>
+</li>
+<li>Character<ul>
+<li>为什么曾经被Replicate过的Character不会消失？</li>
+<li>是为了重连吗？</li>
+</ul>
+</li>
+</ul>
 <h3 id="Network-Role-and-Authority"><a href="#Network-Role-and-Authority" class="headerlink" title="Network Role and Authority"></a>Network Role and Authority</h3><p>一个拥有Authority权限的Actor决定了它是Network中的控制角色，控制Actor的状态(state)并且会将ReplicationInfomation同步到其它远程。<strong>远程代理(remote Proxy)</strong> 是在远程上的机器的复制，它会接收来自于Authority权限的Actor的ReplicationInformation用来同步自己的状态。</p>
 <p><strong>Local Role</strong>和<strong>Romote Role</strong>变量用来指定这些Actor的Role：</p>
 <table>
@@ -238,6 +270,137 @@
 </li>
 </ul>
 <p>上面的英文内容是我直接复制粘贴过来的，有些是知识比较繁杂现在整理太费时间，就先做个标题，算是占位符了。</p>
+<h2 id="Network处理流程"><a href="#Network处理流程" class="headerlink" title="Network处理流程"></a>Network处理流程</h2><p>为了深入理解UE4的Network处理，其实我觉得直接看源码会更深入，但是，还是作为最后的后手吧…</p>
+<p><a href="https://www.slideshare.net/EpicGamesJapan/ue4howtocreatemultiplayergame" target="_blank" rel="noopener">UE4でマルチプレイヤーゲームを作ろう</a></p>
+<p>是由上面的Slide开始进行的理解：</p>
+<p>首先看一下Network的<strong>Tick</strong>的处理都做了哪些工作。摘抄自上面的Slide</p>
+<ol>
+<li>UWorld::Tick<ol>
+<li><strong>UNetworkDriver</strong> ::TickDispatch<ol>
+<li>Packet受信 &gt; <strong>Bunch</strong> 分解<ol>
+<li><strong>Bunch</strong>を<strong>ActorChannel</strong>に流して、プロパティを<strong>レプリケート＋RPCの実行</strong></li>
+<li>PostReceivedBunch &gt; <strong>RepNotify</strong> 処理</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>タスクグラフのループ<ol>
+<li>RPCの呼び出し(ServerMoveなど)</li>
+</ol>
+</li>
+<li><strong>UNetworkDriver</strong> ::TickFlush<ol>
+<li><strong>BuildConsiderList</strong> 考慮するべき<strong>NetActor</strong> のリストを作る</li>
+<li><strong>Connection</strong> 毎のループ<ol>
+<li><strong>PrioritizeActors</strong> </li>
+<li>ProcessePrioritizedActors<ol>
+<li><strong>ActorChannel</strong> 毎にプロパティの差分を抽出して<strong>Bunch</strong>を書き出す</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>Connection</strong> 毎のループ - <strong>UNetConnection</strong> ::Tick<ol>
+<li><strong>UNetConnection</strong>::FlushNet()</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>甚至还夹杂着日语，请多担待。</p>
+<p>还有官网中的描述<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/ReplicationFlow/index.html" target="_blank" rel="noopener">Detailed Actor Replication Flow - A detailed description of low-level Actor replication</a></p>
+<blockquote>
+<p>The bulk of actor replication happens inside UNetDriver::ServerReplicateActors. This is where the server will gather all of the actors that it has determined to be relevant for each client, and send any properties that have changed since the last time each connected client was updated.</p>
+</blockquote>
+<p><strong>UNetDriver::ServerReplicateActors</strong>看样子是非常重要的部分，Actor的Replication发生在这里，很多Actor的相关操作都在这里。</p>
+<p>非常重要的一些Flow：</p>
+<ul>
+<li><code>AActor::NetUpdateFrequency</code> - Used to determine how often an actor replicates<ul>
+<li>决定了Actor的Replication频度</li>
+</ul>
+</li>
+<li><code>AActor::PreReplication</code> - Called before any replication occurs<ul>
+<li>Replication发生之前被调用</li>
+</ul>
+</li>
+<li><code>AActor::bOnlyRelevantToOwner</code> - True if this actor replicates to owner<ul>
+<li>只对Owner进行Replicate，具体情况不太清楚</li>
+</ul>
+</li>
+<li><code>AActor::IsRelevancyOwnerFor</code> - Called to determain relevancy when bOnlyRelevantToOwner is true</li>
+<li><code>AActor::ISNetRelevantFor</code> - Called to determine relevancy when bOnlyRelevantToOwner is false</li>
+</ul>
+<p>关于Actor的<strong>Relevancy</strong> ，翻译是说关联性，是Actor的Replication的很重要的概念。但是目前对于这个属性的理解并不是很透彻。</p>
+<p>高度抽象一下的流程就像下面这样，(参考上面的官网链接，我只是试着翻译一下)</p>
+<ul>
+<li>遍历所有的Actor检查<strong>replicating</strong> 活动性(<code>AActor::SetReplicates(true)</code>)<ul>
+<li>确认Actor初期是否处于睡眠状态(DORM_Initial)，如果是，则跳过</li>
+<li>确认actor是否需要更新，通过检查<code>NetUpdateFrequency</code>的值，如果不需要更新，则跳过</li>
+<li>如果<code>AActor::bOnlyRelevantToOwner</code>为true，通过调用<code>AActor::IsRelevancyOwnerFor</code>来检查这个Actor在<strong>owning connection</strong>上的相关联性(relevancy)。如果relevancy为true，则添加到这个<strong>connection</strong> 的<strong>relevant list</strong> 中。<ul>
+<li>在这个case中，这个Actor会仅仅发送一个<strong>single connection</strong> (这里不是很清楚)</li>
+</ul>
+</li>
+<li>对于所有这些进行过初始检查(initial check↑上面的检查)的Actor，都会调用<code>AActor::PreReplication</code>函数。<ul>
+<li>PreReplication是一个你可以决定是否为<strong>connection</strong>进行<strong>properties replicate</strong> 的地方。使用<code>DOREPLIFETIME_ACTIVE_OVERRIDE</code></li>
+</ul>
+</li>
+<li>上面的操作都经历了之后，将其添加到<strong>considered list</strong></li>
+</ul>
+</li>
+<li>对于每一个<strong>connection</strong> <ul>
+<li>对上面的每一个<strong>considered actor</strong> <ul>
+<li>判断是否睡眠(dormant)</li>
+<li>如果还没有<strong>channel</strong><ul>
+<li>判断client的actor所在的level是否已经加载<ul>
+<li>没有加载，则跳过</li>
+</ul>
+</li>
+<li>判断actor的相关性，通过调用<code>AActor::IsNetRelevantFor</code>(检查connection与actor的relevancy)<ul>
+<li>如果不相关，则跳过</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将上面的actor添加到其<strong>connection</strong> 拥有的<strong>relevant list</strong> 中</li>
+<li>此时我们就拥有了一个与这个<strong>connection</strong>相关联的actor的列表(a list of actors are relevant for this connection)</li>
+<li>通过优先级(<strong>priority</strong>)对actor进行排序(Sort)</li>
+<li>对每一个已排序的Actor：<ul>
+<li>如果<strong>connection</strong>还没有加载这个Actor所在的<strong>level</strong>，则关闭这个<strong>channel(if any)</strong>, 然后continue</li>
+<li>每隔一秒，判断actor(与connection)的相关性(relevancy)，通过<code>AActor::IsNetRelevantFor</code>函数</li>
+<li>如果持续5秒不相关(not relevant),则关闭<strong>channel</strong></li>
+<li>如果相关但是没有channel开启，则开启一个</li>
+<li>如果这个<strong>connection</strong>已经饱和(If at any point this connection is saturated)<ul>
+<li>对于剩下的actors<ul>
+<li>如果相关的时间小于1秒，下一个Tick阶段强制更新</li>
+<li>如果相关的时间大于1秒，调用<code>AActor::IsNetRelevantFor</code>来判断下一个Tick是否更新</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对于任何通过上述操作的Actor，都会经由其connection对Actor进行replicate，通过调用<code>UChannel::ReplicateActor</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Replicating-an-Actor-to-a-Connection"><a href="#Replicating-an-Actor-to-a-Connection" class="headerlink" title="Replicating an Actor to a Connection"></a>Replicating an Actor to a Connection</h3><p>关于如何将Actor的Replication复制到connection上</p>
+<p><code>UChannel::ReplicateActor</code>是主要用来Replicate一个Actor和它所有的Component的内容到一个connection中，流程大致说明：</p>
+<ul>
+<li>判断自这个<strong>actor channel</strong>被打开后是否是第一次更新<ul>
+<li>如果是，则序列化其需要的信息(initial location, rotation.etc)</li>
+</ul>
+</li>
+<li>判断这个connection是否拥有这个actor(owning connection)<ul>
+<li>如果不属于，并且这个actor的<strong>role</strong>是<code>ROLE_AutonomousProxy</code>,将其降格为<code>ROLE_SimulatedProxy</code></li>
+</ul>
+</li>
+<li>Replicate这个actor有变动的属性(changed properties)</li>
+<li>Replicate这个Actor每一个component有变动的属性(component’s changed properties)</li>
+<li>对于任何被删除掉的components，发送特殊的删除命令</li>
+</ul>
+<p>算是大致翻译了一下这篇文章，有些明白了，但是有些还是不太清楚。</p>
 <h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
@@ -2557,11 +2720,12 @@
       </tags>
   </entry>
   <entry>
-    <title>UE4-SplineComponent学习</title>
-    <url>/stonelzp.github.io/UE4-%E5%90%84%E7%A7%8D%E6%8E%A7%E4%BB%B6%E6%88%96%E8%80%85%E5%8A%9F%E8%83%BD%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>内容太少我决定把这篇合并一下，记录一些UE4中的插件亦或者某个功能的使用方法等等。<br>偶然发现了一个很有趣的控件，<strong>Spline Component</strong>，感觉会很有用就记下来了。</p>
+    <title>UE4-各种组件的学习使用</title>
+    <url>/stonelzp.github.io/ue4-components-learning/</url>
+    <content><![CDATA[<p>内容太少我决定把这篇合并一下，记录一些UE4中的插件亦或者某个组件（Component）的使用方法等等。</p>
 <a id="more"></a>
-<h1 id="Spline"><a href="#Spline" class="headerlink" title="Spline"></a>Spline</h1><ul>
+<h1 id="Spline"><a href="#Spline" class="headerlink" title="Spline"></a>Spline</h1><p>偶然发现了一个很有趣的控件，<strong>Spline Component</strong>，感觉会很有用就记下来了。</p>
+<ul>
 <li><a href="https://www.youtube.com/watch?v=wR0fH6O9jD8" target="_blank" rel="noopener">Using Splines &amp; Spline Components | Live Training | Unreal Engine</a></li>
 </ul>
 <p>这是四年前的视频你敢信？！</p>
@@ -2570,8 +2734,12 @@
 <p>Store number of Spline points.</p>
 <p>在Spline的Component中输入Get就能看到好多和其相关的函数。</p>
 <p>2.AddSplinePoint</p>
-<h1 id="Spline-Mesh"><a href="#Spline-Mesh" class="headerlink" title="Spline Mesh"></a>Spline Mesh</h1><h1 id="在C-中使用Spline"><a href="#在C-中使用Spline" class="headerlink" title="在C++中使用Spline"></a>在C++中使用Spline</h1><h2 id="从Actor中获取SplineComponent"><a href="#从Actor中获取SplineComponent" class="headerlink" title="从Actor中获取SplineComponent"></a>从Actor中获取SplineComponent</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">AActor* Object;</span><br><span class="line"></span><br><span class="line">USplineComponent * comp = Object-&gt;FindComponentByClass&lt;USplineComponent&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> splineLength = comp-&gt;GetSplineLength();</span><br></pre></td></tr></table></figure>
+<h2 id="Spline-Mesh"><a href="#Spline-Mesh" class="headerlink" title="Spline Mesh"></a>Spline Mesh</h2><h2 id="在C-中使用Spline"><a href="#在C-中使用Spline" class="headerlink" title="在C++中使用Spline"></a>在C++中使用Spline</h2><h3 id="从Actor中获取SplineComponent"><a href="#从Actor中获取SplineComponent" class="headerlink" title="从Actor中获取SplineComponent"></a>从Actor中获取SplineComponent</h3><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">AActor* Object;</span><br><span class="line"></span><br><span class="line">USplineComponent * comp = Object-&gt;FindComponentByClass&lt;USplineComponent&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">float</span> splineLength = comp-&gt;GetSplineLength();</span><br></pre></td></tr></table></figure>
 <p>原本我是把这个Spline控件放在了一个Actor上面，然后更新DistanceAlongSpline的变量值来控制Actor在Spline上的位置，但是我却忽视了Actor移动的时候这个Spline也在移动，所以没有按照预期的进行。只有将Actor和spline分开，放到另外一个Actor上了。</p>
+<h1 id="USpringArmComponent"><a href="#USpringArmComponent" class="headerlink" title="USpringArmComponent"></a>USpringArmComponent</h1><p>我只要遇见的场合就是Camera的操控，作为CameraBoom(相机臂)来使用的。</p>
+<p><a href="https://docs.unrealengine.com/en-US/API/Runtime/Engine/GameFramework/USpringArmComponent/index.html" target="_blank" rel="noopener">USpringArmComponent - This component tries to maintain its children at a fixed distance from the parent, but will retract the children if there is a collision, and spring back when there is no collision.</a></p>
+<p>按照上面的描述说就是可以简单实现相机和目标之间有Collision的时候缩短相机臂，经常见到的那种效果。</p>
+<p>还有一些那种相机与目标之间存在Collision或者Mesh的时候吧Mesh半透明化的使用，不知道要怎么实现。</p>
 <h1 id="Gameplay-Tag"><a href="#Gameplay-Tag" class="headerlink" title="Gameplay Tag"></a>Gameplay Tag</h1><ul>
 <li><a href="http://unrealengine.hatenablog.com/entry/2017/02/21/220000" target="_blank" rel="noopener">UE4 Gameplay Tagを使ってゲームプレイ時のタグ管理をより扱いやすくする</a></li>
 </ul>
