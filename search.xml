@@ -404,7 +404,7 @@
 </ul>
 <p>算是大致翻译了一下这篇文章，有些明白了，但是有些还是不太清楚。</p>
 <h3 id="NetDormancy-休眠"><a href="#NetDormancy-休眠" class="headerlink" title="NetDormancy 休眠"></a>NetDormancy 休眠</h3><p>可以通过Server的<code>AActor::SetNetDormancy</code>之类的函数来设置Actor的休眠状态，减少Actor的Replication的检查，达到减轻负荷的目的，是优化的一种手段。</p>
-<p>进入休眠状态的Actor可以使用<code>FlushNetDormancy()</code>函数来唤醒。这个函数也会在Actor的Properties有更新的时候自动被UE4调用，也就是说休<strong>眠状态的控制某种程度上是自动的</strong>。</p>
+<p>进入休眠状态的Actor可以使用<code>FlushNetDormancy()</code>函数来唤醒。这个函数也会在Actor的Properties有更新的时候自动被UE4调用，也就是说<strong>休眠状态的控制某种程度上是自动的</strong>。</p>
 <p>对于一段时间没有变化的Actor使其进入睡眠状态是可以某种程度上减少Replication的处理时间，但是如果频繁的进行睡眠状态的切换也只是增加处理时间。</p>
 <p>关于休眠状态的设定：<br>在Actor的Replication一栏可以设置<strong>Net Dormancy</strong></p>
 <table>
@@ -439,7 +439,56 @@
 </table>
 <p>对大多数情况下进行总结就是：</p>
 <p><strong>几乎不变的Actor设置为DromantAll，Level中的背景Actor推荐设置为Initial</strong></p>
-<h3 id="NetRelevancy-关联性"><a href="#NetRelevancy-关联性" class="headerlink" title="NetRelevancy 关联性"></a>NetRelevancy 关联性</h3><h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<h3 id="NetRelevancy-关联性"><a href="#NetRelevancy-关联性" class="headerlink" title="NetRelevancy 关联性"></a>NetRelevancy 关联性</h3><p>在上面也有提到<strong>Relevancy</strong>这个词，在Server上每一个connection也会依据<strong>距离之类</strong>的关联性参数来判断Actor的Replication行为。</p>
+<p>生成NetActorList -&gt; 优先级排序 -&gt; <strong>关联性检查</strong> -&gt; 取得修改并发送</p>
+<h4 id="NetCullDistanceSquared"><a href="#NetCullDistanceSquared" class="headerlink" title="NetCullDistanceSquared"></a>NetCullDistanceSquared</h4><p><code>AActor::IsNetRelevantFor()</code>进行基于距离的剔除。</p>
+<h4 id="AlwaysRelevant"><a href="#AlwaysRelevant" class="headerlink" title="AlwaysRelevant"></a>AlwaysRelevant</h4><p>把上面的无效化的Flag。</p>
+<h3 id="NetPriority-通信优先级"><a href="#NetPriority-通信优先级" class="headerlink" title="NetPriority 通信优先级"></a>NetPriority 通信优先级</h3><p>Actor中的决定Replicate优先顺序的参数，优先级越高越容易排在复制通信的前面，相对频繁的获得复制的机会。</p>
+<p>使用一些特殊的函数(ForceNetUpdate，override AActor::GetNetPriority()函数)可以实现改变优先级的操作。</p>
+<h3 id="NetUpdateFrequency"><a href="#NetUpdateFrequency" class="headerlink" title="NetUpdateFrequency"></a>NetUpdateFrequency</h3><p>Actor的状态复制频率，单位是 <code>N次/s</code> 。</p>
+<p>被执行了Replicate的Actor会在<code>1/N</code>的时间里从NetActorList中剔除。</p>
+<p>可以适当的调整这个参数，把不需要经常更新的或者没必要迅速做出反应的Actor的更新频度降低，减少CPU和带宽的消耗。</p>
+<p>AActor:ForceNetUpdate可以重置<code>1/N</code>的间隔时间，也就是立即再次执行呗。</p>
+<h4 id="MinNetUpdateFrequency"><a href="#MinNetUpdateFrequency" class="headerlink" title="MinNetUpdateFrequency"></a>MinNetUpdateFrequency</h4><p>只有在AdaptiveNetUpdateFrequency有效的时候才会起作用的参数，默认是OFF状态。</p>
+<p>也就是UE4的Replication的一种自动调节功能，根据复制的评价值来让复制的操作在Min~NetUpdateFrequency之间自动调节。</p>
+<h3 id="NetLoadOnClient"><a href="#NetLoadOnClient" class="headerlink" title="NetLoadOnClient"></a>NetLoadOnClient</h3><p>这个标志位在之前就有讲过，本来以为是个不起眼的功能，没想到是为GameMode准备的。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>NetLoadOnClient</th>
+<th>bReplicates</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AGameMode</td>
+<td>false</td>
+<td>false</td>
+<td>Client上不生成</td>
+</tr>
+<tr>
+<td>ANavigationData</td>
+<td>false</td>
+<td>false</td>
+<td>Client上不生成</td>
+</tr>
+<tr>
+<td>APlayerState</td>
+<td>false</td>
+<td>true</td>
+<td>Level初始化的时候被从Client上删除然后再经由Server的Replication复制</td>
+</tr>
+<tr>
+<td>AGameState</td>
+<td>false</td>
+<td>true</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
 </ul>
