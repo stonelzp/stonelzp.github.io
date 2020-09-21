@@ -22,6 +22,7 @@
 <h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>首先是一些基础的概念，暂时还不需要对实现进行深究，但至少要知道。</p>
 <p>首先是UE4中提供的几种网络模式和服务器类型。当然这些大多数是上面的官方文档的内容，我感觉用中文表达出来更方便我查找和回忆。</p>
 <h3 id="Network-Modes-and-Sever-Types"><a href="#Network-Modes-and-Sever-Types" class="headerlink" title="Network Modes and Sever Types"></a>Network Modes and Sever Types</h3><p>要以什么样的方式来开发，单人还是多人。在UE4的运行界面选定自己想要开始运行的网络模式。</p>
+<p>.test1 table{</p>
 <style>
 
   table {
@@ -63,34 +64,9 @@
   }
 </style>
 
+<p>}</p>
+<div class="test1"><br><br>|Network Mode | Description|<br>|— |—|<br>|<strong>Standalone</strong>|就是以Server模式来运行，不接受任何来自别的客户端的连接|<br>|<strong>Client</strong> |就是以Client模式来运行，不会执行服务器端的任何逻辑代码|<br>|<strong>Listen <br> Server</strong> |以Server模式来运行，也会接受来自其他客户端的网络连接(connections)而且存在一个本地玩家(Local Player)|<br>|<strong>Dedicated <br> Server</strong> |以Server模式来运行而且也会接受来自其他Client的连接，但是不存在本地玩家。所以这个模式下可以忽略画面，声音，用户输入，或者其他用户相关的特性，以此来提高Server的执行效率。这也是<strong>非常多的多人</strong> 游戏会采取的网络模式。|<br><br></div>
 
-
-<table>
-<thead>
-<tr>
-<th>Network Mode</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Standalone</strong></td>
-<td>就是以Server模式来运行，不接受任何来自别的客户端的连接</td>
-</tr>
-<tr>
-<td><strong>Client</strong></td>
-<td>就是以Client模式来运行，不会执行服务器端的任何逻辑代码</td>
-</tr>
-<tr>
-<td><strong>Listen <br> Server</strong></td>
-<td>以Server模式来运行，也会接受来自其他客户端的网络连接(connections)而且存在一个本地玩家(Local Player)</td>
-</tr>
-<tr>
-<td><strong>Dedicated <br> Server</strong></td>
-<td>以Server模式来运行而且也会接受来自其他Client的连接，但是不存在本地玩家。所以这个模式下可以忽略画面，声音，用户输入，或者其他用户相关的特性，以此来提高Server的执行效率。这也是<strong>非常多的多人</strong> 游戏会采取的网络模式。</td>
-</tr>
-</tbody>
-</table>
 <h3 id="Actor-Replication"><a href="#Actor-Replication" class="headerlink" title="Actor Replication"></a>Actor Replication</h3><p><strong>Replication</strong>是我很早之前就接触到的名词，但是一直都很懵逼，不知道这个是干什么的。</p>
 <blockquote>
 <p><strong>Replication is the process of reproducing game state information between different machines in a network session.</strong></p>
