@@ -88,11 +88,15 @@
 <meta property="og:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/Role_Replication.jpg">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/NetConnection.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/FNetworkGUID.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPC1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPC2.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/SinglePlay.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Server.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client1.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client2.png">
-<meta property="og:updated_time" content="2020-09-17T02:42:50.269Z">
+<meta property="og:updated_time" content="2020-09-21T14:31:25.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-多人游戏框架理解">
 <meta name="twitter:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
@@ -346,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-09-17T11:42:50+09:00">
-                2020-09-17
+              <time title="更新于" itemprop="dateModified" datetime="2020-09-21T23:31:25+09:00">
+                2020-09-21
               </time>
             
           </span>
@@ -851,6 +855,22 @@
 <h4 id="MinNetUpdateFrequency"><a href="#MinNetUpdateFrequency" class="headerlink" title="MinNetUpdateFrequency"></a>MinNetUpdateFrequency</h4><p>只有在AdaptiveNetUpdateFrequency有效的时候才会起作用的参数，默认是OFF状态。</p>
 <p>也就是UE4的Replication的一种自动调节功能，根据复制的评价值来让复制的操作在Min~NetUpdateFrequency之间自动调节。</p>
 <h3 id="NetLoadOnClient"><a href="#NetLoadOnClient" class="headerlink" title="NetLoadOnClient"></a>NetLoadOnClient</h3><p>这个标志位在之前就有讲过，本来以为是个不起眼的功能，没想到是为GameMode准备的。</p>
+<style>
+table th:first-of-type {
+    width: 10%;
+}
+table th:nth-of-type(2) {
+    width: 10%;
+}
+table th:nth-of-type(3) {
+    width:10%;
+}
+table th:nth-of-type(4) {
+    width: 70%;
+}
+</style>
+
+
 <table>
 <thead>
 <tr>
@@ -887,6 +907,74 @@
 </tr>
 </tbody>
 </table>
+<h3 id="NetworkDriver"><a href="#NetworkDriver" class="headerlink" title="NetworkDriver"></a>NetworkDriver</h3><p>NetworkDriver是网络处理的源头，链接多人游戏世界(World)的主要部分。</p>
+<p>Server和Client都持有NetworkDriver。</p>
+<h4 id="NetConnection"><a href="#NetConnection" class="headerlink" title="NetConnection"></a>NetConnection</h4><p>NetConnection是不同World之间NetworkDriver的链接通道，Client生成一个，Server会根据连接的Player数量生成。</p>
+<p><img src="NetConnection.PNG" alt="NetConnection"></p>
+<h4 id="PlayerController"><a href="#PlayerController" class="headerlink" title="PlayerController"></a>PlayerController</h4><p>之前还是之后，这篇文章哪个地方有提到，PlayerController就是为了Connection而生的类，应该就是说的这个功能了。</p>
+<p>APlayerController会在登录到Server的时候生成，与NetworkConnection是一对一的关系。</p>
+<p>ServerRPC，ClientRPC能够向特定对象传送消息的前提是该Player属性持有有效的NetworkConnection。<br>(APawn::GetNetConnection &amp; APlayerController::GetNetConnection)</p>
+<h4 id="NetworkObjectList"><a href="#NetworkObjectList" class="headerlink" title="NetworkObjectList"></a>NetworkObjectList</h4><p>NetworkDriver中的存储需要进行网络通信的ActorList，类型是NetworkObjectInfo</p>
+<p>跟NetUpdateFrequency的计算有关，但是我还不是很清楚。</p>
+<p>貌似并不是每一个connection都会持有这样的列表。</p>
+<h4 id="ActorChannel-and-ChannelIndex"><a href="#ActorChannel-and-ChannelIndex" class="headerlink" title="ActorChannel and ChannelIndex"></a>ActorChannel and ChannelIndex</h4><p>ActorChannel是复制对象Actor一对一分配的通信管道，而ChannelIndex是静态的已经被确保的通信管道的序列索引。</p>
+<p>和通信的另一端的Actor，就是通过这个索引建立起来联系。</p>
+<h4 id="FNetworkGUID"><a href="#FNetworkGUID" class="headerlink" title="FNetworkGUID"></a>FNetworkGUID</h4><p>32位整数ID。用来建立进程间Object的联系。</p>
+<p>Level中的静态物体被分配为奇数，动态物体为偶数。</p>
+<blockquote>
+<p>サーバー側で初めてプロパティとして扱う必要が出た時Objectに対して割り当てられます。</p>
+</blockquote>
+<p>不止局限于复制对象的Actor，通信过程中的包含的所有Object都是其对象。（比如说玩家所站立的地板）</p>
+<p>使用<code>net.ListNetGUIDs</code>可以确认Actor的登录情况。</p>
+<p>使用Blueprint确认</p>
+<p><img src="FNetworkGUID.PNG" alt="BP_FNetworkGUID"></p>
+<p>传送的对象的World不存在的Actor的情况下是NULL</p>
+<h4 id="Bunch"><a href="#Bunch" class="headerlink" title="Bunch"></a>Bunch</h4><p>UE4的Replication状态复制处理的数据的输出单位。基本上就是</p>
+<p>1ReplicationActor = 1Bunch</p>
+<p>各个Bunch被送到上面提到的ChannelIndex那里，送到连接的另一端对应的Actor</p>
+<p>UNetConnection::ReceivedPacket 查看具体内容</p>
+<p>Network送信的包（Packet）中含有复数个Bunch</p>
+<h4 id="收信应答-ACK-NAK"><a href="#收信应答-ACK-NAK" class="headerlink" title="收信应答 ACK/NAK"></a>收信应答 ACK/NAK</h4><p>ACK - ACKnowledgement<br>NAK - Negative-Acknowledge</p>
+<p>是网络处理中的一般用语，并不是UE4专门术语。</p>
+<p>用来表示有没有接收到包（Packet）</p>
+<p>以bit数据的形式保存在包的Header部分，确认重要的包的送收信或者Reliable通信的确认等时候有用。</p>
+<h4 id="Variable-Replicate-amp-RPCs"><a href="#Variable-Replicate-amp-RPCs" class="headerlink" title="Variable Replicate &amp; RPCs"></a>Variable Replicate &amp; RPCs</h4><p>变量的复制</p>
+<p>不要过多的依赖PRCs，能用Property的Replication就尽量使用这个。</p>
+<p>こういうものはRPC向け</p>
+<ul>
+<li>RPCは「イベント」です<ul>
+<li>10秒後に無くてもいいもの</li>
+</ul>
+</li>
+<li>回数が重要なもの<ul>
+<li>音声</li>
+<li>VFX生成</li>
+</ul>
+</li>
+</ul>
+<p>ReliableRPC<br>RPCs函数被调用之后，会被立即放入包(Packet)的Buffer中。其他需要传送的数据就会被占用了空间而变少。</p>
+<p>非ReliableRPC会丢失，ReliableRPC则一定会送达。对方如果回答了<strong>Nak</strong>就会重新发送包数据。</p>
+<p>即使是Reliable，由于距离等的元素导致ActorChannel没有开启的情况下，RPC不会送信。</p>
+<p><img src="ReliableRPC1.png" alt="ReliableRPC-1"><br><img src="ReliableRPC2.png" alt="ReliableRPC-2"></p>
+<p>変数の複製 PropertyReplication<br>「変数の複製」は裏切らない</p>
+<p>こういうものは変数の複製向け</p>
+<ul>
+<li>アクターの状態を表す変数 <ul>
+<li>途中参加したときに復元しないと困るプロパティ </li>
+</ul>
+</li>
+<li>10秒後に失われては困るもの <ul>
+<li>ライフ </li>
+<li>所持アイテム<br>-キャラクターの見た目</li>
+</ul>
+</li>
+</ul>
+<p>关于变量的赋值一定要慎重，Authority检查很有必要。</p>
+<p>总结：</p>
+<ul>
+<li>Stat net命令执行时表示的参数都在Driver中控制的</li>
+<li>NetworkDriver把Level串联起来实现了多人游戏的网络控制</li>
+</ul>
 <h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
@@ -910,7 +998,7 @@
 <p>貌似是对Actor的属性(Properties)进行进一步的细节设置Replication。</p>
 <p>最后，ConnectionOwnership对autonomous proxies的Actor(Role is ROLE_AutonomousProxy)很重要。对于这些Actor来说，如果它们的属性被Replicate到一个并不拥有这Actor的connect上的时候(这个connect并不拥有这些Actors)，它们就会被降格到ROLE_SimulatedProxy。</p>
 <p>在进行详细说明之前，我想对已经大概理解的内容进行巩固和深入理解。</p>
-<h2 id="PlayerController"><a href="#PlayerController" class="headerlink" title="PlayerController"></a>PlayerController</h2><p>这个部分是以PlayerController开头却是想引出UE4的GameplayFramework的内容的。刚开始的时候总是会遇见一些名词，GameMode，GameState什么的，之前完全不是很理解这些内容。</p>
+<h2 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h2><p>这个部分是以PlayerController开头却是想引出UE4的GameplayFramework的内容的。刚开始的时候总是会遇见一些名词，GameMode，GameState什么的，之前完全不是很理解这些内容。</p>
 <p>在学习GameplayAbility的过程中又遇到了PlayerState这个东西，就觉得把这些很基础的内容串起来是很有必要的了。当然这些事情都有些好人帮我做了…</p>
 <p>我就直接贴上链接了</p>
 <ul>
@@ -934,7 +1022,7 @@
 <li>每台machine上，所有的Player都存在一个PlayerState</li>
 <li>Owner就是PlayerController (GetOwner()会返回PlayerController)</li>
 </ul>
-<h3 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
+<h3 id="PlayerController-2"><a href="#PlayerController-2" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
 <li>没有Owner (GetOwner() == nullptr)</li>
 <li>持有玩家操作的Pawn (GetControlledPawn取得)</li>
 <li>OnPossess(Overridable native function for when this controller possesses a pawn)</li>
@@ -1172,7 +1260,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4框架总览"><span class="nav-number">1.</span> <span class="nav-text">UE4框架总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">1.1.</span> <span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Modes-and-Sever-Types"><span class="nav-number">1.1.1.</span> <span class="nav-text">Network Modes and Sever Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Replication"><span class="nav-number">1.1.2.</span> <span class="nav-text">Actor Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Actor-Replication的方式"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Actor Replication的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Replicates-NetLoadOnClient"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">Replicates NetLoadOnClient</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bReplicateFlag的动态切换"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">bReplicateFlag的动态切换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Role-and-Authority"><span class="nav-number">1.1.3.</span> <span class="nav-text">Network Role and Authority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client-Ownership"><span class="nav-number">1.1.4.</span> <span class="nav-text">Client Ownership</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Relevance-and-Priority"><span class="nav-number">1.1.5.</span> <span class="nav-text">Relevance and Priority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Variable-Replication"><span class="nav-number">1.1.6.</span> <span class="nav-text">Variable Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RepNotifies"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">RepNotifies</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remote-Procedure-Calls-RPCs"><span class="nav-number">1.1.7.</span> <span class="nav-text">Remote Procedure Calls (RPCs)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reliability"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">Reliability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Validation"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">Validation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-and-Further-Reading"><span class="nav-number">1.1.8.</span> <span class="nav-text">Tips and Further Reading</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Replicated-Actor-Checklist"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">Basic Replicated Actor Checklist</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Networking-Tips"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">Networking Tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network处理流程"><span class="nav-number">1.2.</span> <span class="nav-text">Network处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Replicating-an-Actor-to-a-Connection"><span class="nav-number">1.2.1.</span> <span class="nav-text">Replicating an Actor to a Connection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetDormancy-休眠"><span class="nav-number">1.2.2.</span> <span class="nav-text">NetDormancy 休眠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetRelevancy-关联性"><span class="nav-number">1.2.3.</span> <span class="nav-text">NetRelevancy 关联性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NetCullDistanceSquared"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">NetCullDistanceSquared</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AlwaysRelevant"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">AlwaysRelevant</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetPriority-通信优先级"><span class="nav-number">1.2.4.</span> <span class="nav-text">NetPriority 通信优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetUpdateFrequency"><span class="nav-number">1.2.5.</span> <span class="nav-text">NetUpdateFrequency</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MinNetUpdateFrequency"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">MinNetUpdateFrequency</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetLoadOnClient"><span class="nav-number">1.2.6.</span> <span class="nav-text">NetLoadOnClient</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些基础概念"><span class="nav-number">2.</span> <span class="nav-text">一些基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Owning-Connection"><span class="nav-number">2.1.</span> <span class="nav-text">Owning Connection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PlayerController"><span class="nav-number">2.2.</span> <span class="nav-text">PlayerController</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GameMode"><span class="nav-number">2.2.1.</span> <span class="nav-text">GameMode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GameState"><span class="nav-number">2.2.2.</span> <span class="nav-text">GameState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerState"><span class="nav-number">2.2.3.</span> <span class="nav-text">PlayerState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerController-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">PlayerController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pawn"><span class="nav-number">2.2.5.</span> <span class="nav-text">Pawn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SinglePlay的情况"><span class="nav-number">2.2.6.</span> <span class="nav-text">SinglePlay的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiPlay的情况"><span class="nav-number">2.2.7.</span> <span class="nav-text">MultiPlay的情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instigator"><span class="nav-number">2.3.</span> <span class="nav-text">Instigator</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4框架总览"><span class="nav-number">1.</span> <span class="nav-text">UE4框架总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">1.1.</span> <span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Modes-and-Sever-Types"><span class="nav-number">1.1.1.</span> <span class="nav-text">Network Modes and Sever Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Replication"><span class="nav-number">1.1.2.</span> <span class="nav-text">Actor Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Actor-Replication的方式"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Actor Replication的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Replicates-NetLoadOnClient"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">Replicates NetLoadOnClient</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bReplicateFlag的动态切换"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">bReplicateFlag的动态切换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Role-and-Authority"><span class="nav-number">1.1.3.</span> <span class="nav-text">Network Role and Authority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client-Ownership"><span class="nav-number">1.1.4.</span> <span class="nav-text">Client Ownership</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Relevance-and-Priority"><span class="nav-number">1.1.5.</span> <span class="nav-text">Relevance and Priority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Variable-Replication"><span class="nav-number">1.1.6.</span> <span class="nav-text">Variable Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RepNotifies"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">RepNotifies</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remote-Procedure-Calls-RPCs"><span class="nav-number">1.1.7.</span> <span class="nav-text">Remote Procedure Calls (RPCs)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reliability"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">Reliability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Validation"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">Validation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-and-Further-Reading"><span class="nav-number">1.1.8.</span> <span class="nav-text">Tips and Further Reading</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Replicated-Actor-Checklist"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">Basic Replicated Actor Checklist</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Networking-Tips"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">Networking Tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network处理流程"><span class="nav-number">1.2.</span> <span class="nav-text">Network处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Replicating-an-Actor-to-a-Connection"><span class="nav-number">1.2.1.</span> <span class="nav-text">Replicating an Actor to a Connection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetDormancy-休眠"><span class="nav-number">1.2.2.</span> <span class="nav-text">NetDormancy 休眠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetRelevancy-关联性"><span class="nav-number">1.2.3.</span> <span class="nav-text">NetRelevancy 关联性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NetCullDistanceSquared"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">NetCullDistanceSquared</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AlwaysRelevant"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">AlwaysRelevant</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetPriority-通信优先级"><span class="nav-number">1.2.4.</span> <span class="nav-text">NetPriority 通信优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetUpdateFrequency"><span class="nav-number">1.2.5.</span> <span class="nav-text">NetUpdateFrequency</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MinNetUpdateFrequency"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">MinNetUpdateFrequency</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetLoadOnClient"><span class="nav-number">1.2.6.</span> <span class="nav-text">NetLoadOnClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetworkDriver"><span class="nav-number">1.2.7.</span> <span class="nav-text">NetworkDriver</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NetConnection"><span class="nav-number">1.2.7.1.</span> <span class="nav-text">NetConnection</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PlayerController"><span class="nav-number">1.2.7.2.</span> <span class="nav-text">PlayerController</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NetworkObjectList"><span class="nav-number">1.2.7.3.</span> <span class="nav-text">NetworkObjectList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActorChannel-and-ChannelIndex"><span class="nav-number">1.2.7.4.</span> <span class="nav-text">ActorChannel and ChannelIndex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FNetworkGUID"><span class="nav-number">1.2.7.5.</span> <span class="nav-text">FNetworkGUID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bunch"><span class="nav-number">1.2.7.6.</span> <span class="nav-text">Bunch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收信应答-ACK-NAK"><span class="nav-number">1.2.7.7.</span> <span class="nav-text">收信应答 ACK/NAK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Variable-Replicate-amp-RPCs"><span class="nav-number">1.2.7.8.</span> <span class="nav-text">Variable Replicate &amp; RPCs</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些基础概念"><span class="nav-number">2.</span> <span class="nav-text">一些基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Owning-Connection"><span class="nav-number">2.1.</span> <span class="nav-text">Owning Connection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PlayerController-1"><span class="nav-number">2.2.</span> <span class="nav-text">PlayerController</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GameMode"><span class="nav-number">2.2.1.</span> <span class="nav-text">GameMode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GameState"><span class="nav-number">2.2.2.</span> <span class="nav-text">GameState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerState"><span class="nav-number">2.2.3.</span> <span class="nav-text">PlayerState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerController-2"><span class="nav-number">2.2.4.</span> <span class="nav-text">PlayerController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pawn"><span class="nav-number">2.2.5.</span> <span class="nav-text">Pawn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SinglePlay的情况"><span class="nav-number">2.2.6.</span> <span class="nav-text">SinglePlay的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiPlay的情况"><span class="nav-number">2.2.7.</span> <span class="nav-text">MultiPlay的情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instigator"><span class="nav-number">2.3.</span> <span class="nav-text">Instigator</span></a></li></ol></li></ol></div>
             
 
           </div>
