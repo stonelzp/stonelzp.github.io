@@ -795,7 +795,107 @@ table th:nth-of-type(4) {
 </ul>
 <p>这是一个完整的关于GameplayAbilitySystem的框架的使用文章，这里面包含了很多的知识，也吃掉了我许多时间，实在是理解GAS的一个非常好非常重要的文章。</p>
 <p>由于理解本身就已经非常费时费力，当然更多的是自己的摸鱼和工作不力，但还是希望能好好理解UE4这个框架</p>
-<h2 id="GameplayAbilitySystem中重要的类，结构体"><a href="#GameplayAbilitySystem中重要的类，结构体" class="headerlink" title="GameplayAbilitySystem中重要的类，结构体"></a>GameplayAbilitySystem中重要的类，结构体</h2><h3 id="GameplayEffect"><a href="#GameplayEffect" class="headerlink" title="GameplayEffect"></a>GameplayEffect</h3><h4 id="FGameplayEffectContext"><a href="#FGameplayEffectContext" class="headerlink" title="FGameplayEffectContext"></a>FGameplayEffectContext</h4><h4 id="FGameplayEffectContextHandle"><a href="#FGameplayEffectContextHandle" class="headerlink" title="FGameplayEffectContextHandle"></a>FGameplayEffectContextHandle</h4><h2 id="一些小的知识点"><a href="#一些小的知识点" class="headerlink" title="一些小的知识点"></a>一些小的知识点</h2><h3 id="OnAvatarSet"><a href="#OnAvatarSet" class="headerlink" title="OnAvatarSet"></a>OnAvatarSet</h3><p>GameplayAbility.h<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UCLASS(Blueprintable)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GAMEPLAYABILITIES_API</span> <span class="title">UGameplayAbility</span> :</span> <span class="keyword">public</span> UObject, <span class="keyword">public</span> IGameplayTaskOwnerInterface</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/** Called when the avatar actor is set/changes */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnAvatarSet</span><span class="params">(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="GASDocumentation的个人翻译和理解"><a href="#GASDocumentation的个人翻译和理解" class="headerlink" title="GASDocumentation的个人翻译和理解"></a>GASDocumentation的个人翻译和理解</h2><p>在这里我准备把这个GitHub的文章的一些重要部分进行翻译和整理，当然不是全部，还有对其中的实现做一些记录。</p>
+<h3 id="Intro-to-the-GameplayAbilitySystem-Plugin"><a href="#Intro-to-the-GameplayAbilitySystem-Plugin" class="headerlink" title="Intro to the GameplayAbilitySystem Plugin"></a>Intro to the GameplayAbilitySystem Plugin</h3><p>官网上的说明跳过不说，我自己的理解就是，GAS这个系统是为RPG和MOBA类游戏打造的框架，里面包含了升级啊角色技能冷却啊之类的要素的开箱即用的功能，即包装好的功能。由于在这个框架中实现了许多Multiplay的内容，相较于自己重新构建，学习使用这个框架的成本更低一些，嘛代价就是不能彻底理解UE4的多人游戏网络框架了。</p>
+<p>但是有得必有失。由于GAS已经内置于UE4的源码中了，所以直接拿来用就好了。如果有不满的地方，那么之后再考虑如何对其进行扩展。</p>
+<p>关于UE4中关于GAS提供的功能，在这篇文章中是这样形容的：</p>
+<blockquote>
+<p>The plugin provides an out-of-the-box solution in single and multiplayer games for:</p>
+<ul>
+<li>Implementing level-based character abilities or skills with optional costs and cooldowns (GameplayAbilities)</li>
+<li>Manipulating numerical Attributes belonging to actors (Attributes)</li>
+<li>Applying status effects to actors (GameplayEffects)</li>
+<li>Applying GameplayTags to actors (GameplayTags)</li>
+<li>Spawning visual or sound effects (GameplayCues)</li>
+<li>Replication of everything mentioned above</li>
+</ul>
+</blockquote>
+<p>在我整理这篇文章的时候已经对这篇文章和这个项目的源码进行了大致的理解和实现，所以对于不知所云的地方会加上一些标注。</p>
+<p>GAS提供的一些开箱即用的功能有（包含单人和多人游戏）：</p>
+<ul>
+<li>基于等级的能力和技能的实现带有一些数值的消耗或者冷却时间，即GameplayAbility</li>
+<li>操纵Actor的数值属性，即Attribute</li>
+<li>应用一些“影响”到Actor当前的状态上，即GameplayEffect</li>
+<li>将GameplayTags应用到Actor上，即一些GameplayTag的使用</li>
+<li>生成一些特效或音效，即GameplayCue</li>
+<li>上述提到的内容的状态复制，即Replication</li>
+</ul>
+<blockquote>
+<p>In multiplayer games, GAS provides support for client-side prediction of:</p>
+<ul>
+<li>Ability activation</li>
+<li>Playing animation montages</li>
+<li>Changes to Attributes</li>
+<li>Applying GameplayTags</li>
+<li>Spawning GameplayCues</li>
+<li>Movement via RootMotionSource functions connected to the CharacterMovementComponent.</li>
+</ul>
+</blockquote>
+<p>关于GAS的一些高级特性，就是某种程度上提供了<strong>客户端本地预测</strong>。</p>
+<ul>
+<li>Ability的激活</li>
+<li>Animation Montage的播放</li>
+<li>Attribute的变动</li>
+<li>应用GameplayTag</li>
+<li>生成GameplayCue</li>
+<li><span style="color: red; ">Movement via RootMotionSource functions connected to the CharacterMovementComponent.</span></li>
+</ul>
+<p>最后一个特性是我没有遇见过的也是没有验证过的，也不知道该怎么翻译</p>
+<blockquote>
+<p>Current issues with GAS:</p>
+<ul>
+<li>GameplayEffect latency reconciliation (can’t predict ability cooldowns resulting in players with higher latencies having lower rate of fire for low cooldown abilities compared to players with lower latencies).</li>
+<li>Cannot predict the removal of GameplayEffects. We can however predict adding GameplayEffects with the inverse effects, effectively removing them. This is not always appropriate or feasible and still remains an issue.</li>
+<li>Lack of boilerplate templates, multiplayer examples, and documentation. Hopefully this helps with that!</li>
+</ul>
+</blockquote>
+<p>目前GAS上仍然需要解决的问题是以下几个问题：</p>
+<ul>
+<li>GameplayEffect latency reconciliation, 我也不知道该怎么翻译这个，按照描述时所说就是ability的colldown无法本地预测导致了拥有高延迟的本地玩家相较于低延迟的玩家拥有更低的开火率，这在GameplayEffect章节中会再提及。</li>
+<li>不能预测GameplayEffect的移除。虽然可以预测性的添加具有相反效果的GE来完成看似删除的效果，但是这不是总是可行的，仍然是一个问题。</li>
+<li>确实样例模板和文档。（跟GAS相关的文档就少到离谱，而且大多还是英文，而事实上这篇文章帮了我很多很多）</li>
+</ul>
+<p>但是最详尽的文档就是UE4的源码了…</p>
+<h3 id="Setting-Up-a-Project-Using-GAS"><a href="#Setting-Up-a-Project-Using-GAS" class="headerlink" title="Setting Up a Project Using GAS"></a>Setting Up a Project Using GAS</h3><blockquote>
+<ol>
+<li>Enable GameplayAbilitySystem plugin in the Editor</li>
+<li>Edit YourProjectName.Build.cs to add “GameplayAbilities”, “GameplayTags”, “GameplayTasks” to your PrivateDependencyModuleNames</li>
+<li>Refresh/Regenerate your Visual Studio project files</li>
+<li>Starting with 4.24, it is now mandatory to call UAbilitySystemGlobals::InitGlobalData() to use TargetData. The Sample Project does this in UEngineSubsystem::Initialize(). See InitGlobalData() for more information.</li>
+</ol>
+</blockquote>
+<p>前几条就是常规操作了，但是最后一条，在使用了<strong>TargetData</strong>之后，不要忘记调用<code>UAbilitySystemGlobals::InitGlobalData()</code>，这个部分我还没有验证过。</p>
+<h3 id="AbilitySystemComponent"><a href="#AbilitySystemComponent" class="headerlink" title="AbilitySystemComponent"></a>AbilitySystemComponent</h3><p><code>AbilitySystemComponent</code>简称ACS，是GAS的自内脏，嘛就是中心，控制着GAS中的所有的交互。如果想要让一个Actor拥有<strong>Attributes</strong>，或者能够使用<strong>GameplayAbilities</strong>，那么对于Actor来说都需要一个ACS。我们可以选择直接使用或者继承它自己定义新的Component。</p>
+<p>ACS所依附(AttachTo)的Actor一般名义上就是这个ASC的<strong>OwnerActor</strong>。而ACS的实际上的物理使用者Actor则被称为<strong>AvatarActor</strong>。(这里文章所说的<em>PhysicalRepresentationActor</em>我不知道该如何翻译)一般情况下这两者都会是相同的Acotr(MOBA游戏中的简单的AI控制单位AI minion等等)。他们也有可能是不同的Actor，比如说MOBA游戏中玩家控制的Hero角色，OwnerActor是PlayerState，AvatarActor则是Hero的Character类来担任。</p>
+<p>大多数情况下Actor都会自己持有ASC，除非是想要Respawn这个Actor而且想要持续的保持Actor中的属性状态，就像是MOBA游戏中的Hero的属性，这个时候我们第一个想到的就是将ASC放到PlayerState上。</p>
+<blockquote>
+<p>If your Actor will respawn and need persistence of Attributes or GameplayEffects between spawns (like a hero in a MOBA), then the ideal location for the ASC is on the PlayerState.</p>
+</blockquote>
+<p>需要注意的是：</p>
+<ol>
+<li>如果设置了ASC到PlayerState上了，要记着调整<code>NetUpdateFrequency</code>的值。默认的值很低，使用默认值的话，Client上可能会有很高的延迟感，相对于Attributes和GameplayTag的使用来说。<ul>
+<li>记得开启<code>AdaptiveNetworkUpdateFrequency</code>选项。Fortnite使用了这个。</li>
+</ul>
+</li>
+<li><p>想要使用ASC的时候一定要继承实现<code>IAbilitySystemInterface</code>,如果是上述的那种OwnerActor和AvatarActor不同的情况下（也就是PlayerState拥有真正的ASC实例，Character只是ASC的指针的时候）对于两个Actor来说，都需要继承该接口并对其进行实现。</p>
+<ul>
+<li><code>UAbilitySystemComponent* GetAbilitySystemComponent() const</code>进行实现</li>
+<li>ASCs interact with each other internally to the system by looking for this interface function.ASC之间的交互貌似会用到这个接口，其他情况下不太清楚。</li>
+</ul>
+</li>
+<li><p>ASC中有一个变量<code>FActiveGameplayEffectsContainer ActiveGameplayEffects</code>用来保存目前active状态的GameplayEffects</p>
+</li>
+<li>ASC中有一个变量<code>GameplayAbilitySpecContainer ActivatableAbilities</code>用来保存所有生成的GameplayAbilities。<ul>
+<li>这里的<em>granted Gameplay Abilities</em>的翻译可能不是很准确。</li>
+<li>如果需要遍历<code>ActivatableAbilities.Items这个List的时候，一定要在之前加上</code>ABILITYLIST_SCOPE_LOCK();`来防止在循环的时候内容被修改(removing a ability是被修改的原因)。</li>
+<li>在scope中的时候<code>AbilityScopeLockCount</code>会加算，scope运行结束之后会减去。</li>
+<li>不要尝试在<code>ABILITYLIST_SCOPE_LOCK();</code>中移除ability(the clear ability functions check AbilityScopeLockCount internally to prevent removing abilities if the list is locked)</li>
+</ul>
+</li>
+</ol>
+<h4 id="Replication-Mode"><a href="#Replication-Mode" class="headerlink" title="Replication Mode"></a>Replication Mode</h4><h2 id="GameplayAbilitySystem中重要的类，结构体"><a href="#GameplayAbilitySystem中重要的类，结构体" class="headerlink" title="GameplayAbilitySystem中重要的类，结构体"></a>GameplayAbilitySystem中重要的类，结构体</h2><h3 id="GameplayEffect"><a href="#GameplayEffect" class="headerlink" title="GameplayEffect"></a>GameplayEffect</h3><h4 id="FGameplayEffectContext"><a href="#FGameplayEffectContext" class="headerlink" title="FGameplayEffectContext"></a>FGameplayEffectContext</h4><h4 id="FGameplayEffectContextHandle"><a href="#FGameplayEffectContextHandle" class="headerlink" title="FGameplayEffectContextHandle"></a>FGameplayEffectContextHandle</h4><h2 id="一些小的知识点"><a href="#一些小的知识点" class="headerlink" title="一些小的知识点"></a>一些小的知识点</h2><p>这里插播几个小知识点，在C++中添加了BlueprintCallable的函数的时候，直接编译之后保持Editor的开启状态可能会不出现，在Blueprint的编辑界面还是找不到这个函数，此时需要重启UE4的Editor。</p>
+<p>还有一个就是在Blueprint中调用Parent节点的内容时，需要右键该节点找到<strong>add call to parent function</strong>。</p>
+<h3 id="OnAvatarSet"><a href="#OnAvatarSet" class="headerlink" title="OnAvatarSet"></a>OnAvatarSet</h3><p>GameplayAbility.h<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UCLASS(Blueprintable)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GAMEPLAYABILITIES_API</span> <span class="title">UGameplayAbility</span> :</span> <span class="keyword">public</span> UObject, <span class="keyword">public</span> IGameplayTaskOwnerInterface</span><br><span class="line">&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">/** Called when the avatar actor is set/changes */</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">OnAvatarSet</span><span class="params">(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span></span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>GameplayAbility.cpp<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> UGameplayAbility::OnAvatarSet(<span class="keyword">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="keyword">const</span> FGameplayAbilitySpec&amp; Spec)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Projects may want to initiate passives or do other "BeginPlay" type of logic here</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这个是GameplayAbility自身所有的一个函数，在想要使用的时候需要对其重写。就像是对Actor的BeginPlay函数一样，对GameplayAbility来说就是OnAvatarSet函数。</p>
 <p>按照这篇文章的做法就是将被动属性的GameplayAbility的激活放在了一开始，就是这个函数里面。</p>
