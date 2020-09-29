@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-一个Actor的生命周期</title>
+    <url>/stonelzp.github.io/ue4-actor-lifecycle/</url>
+    <content><![CDATA[<p>关于Actor的生命周期，与很多初始化的操作相关联，准备整理到这篇文章中。</p>
+<a id="more"></a>
+<h1 id="Actor-Lifecycle"><a href="#Actor-Lifecycle" class="headerlink" title="Actor Lifecycle"></a>Actor Lifecycle</h1><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Actors/ActorLifecycle/index.html" target="_blank" rel="noopener">Actor Lifecycle - What actually happens when an Actor is loaded or spawned, and eventually dies.</a></li>
+</ul>
+<p>首先是官方文档。</p>
+<h1 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h1><h3 id="SpawnActorDeferred"><a href="#SpawnActorDeferred" class="headerlink" title="SpawnActorDeferred"></a>SpawnActorDeferred</h3><p>遇到了一个Actor的生成问题，不过关于物体的动态生成一直都是一个非常重要的问题。</p>
+<p>首先看一下GASDocumentation中的一段代码：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EditAnywhere, Meta = (ExposeOnSpawn = <span class="literal">true</span>))</span><br><span class="line">    <span class="keyword">float</span> Range;</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = <span class="literal">true</span>))</span><br><span class="line">    FGameplayEffectSpecHandle DamageEffectSpecHandle;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line">    AGDProjectile* Projectile = GetWorld()-&gt;SpawnActorDeferred&lt;AGDProjectile&gt;(ProjectileClass, MuzzleTransform, GetOwningActorFromActorInfo(), Hero, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);</span><br><span class="line">    Projectile-&gt;DamageEffectSpecHandle = DamageEffectSpecHandle;</span><br><span class="line">    Projectile-&gt;Range = Range;</span><br><span class="line">    Projectile-&gt;FinishSpawning(MuzzleTransform);</span><br></pre></td></tr></table></figure></p>
+<h4 id="Deferred-Spawn"><a href="#Deferred-Spawn" class="headerlink" title="Deferred Spawn"></a>Deferred Spawn</h4><p>这种生成Actor的方法被这样称为</p>
+<blockquote>
+<p>An Actor can be Deferred Spawned by having any properties set to “Expose on Spawn.”</p>
+<ol>
+<li><p><strong>SpawnActorDeferred</strong> - meant to spawn procedural Actors, allows additional setup before Blueprint construction script.</p>
+</li>
+<li><p>Everything in SpawnActor occurs, but after PostActorCreated the following occurs:</p>
+<ol>
+<li>Do setup / call various “initialization functions” with a valid but incomplete Actor instance.</li>
+<li><strong>FinishSpawningActor</strong> - called to Finalize the Actor, picks up at ExecuteConstruction in the Spawn Actor line.</li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<p>就像上面描述的和那样的使用方法。</p>
+<h4 id="Expose-on-Spawn"><a href="#Expose-on-Spawn" class="headerlink" title="Expose on Spawn"></a>Expose on Spawn</h4><p>上面的例子提到了了这个属性修饰符，在Blueprint中也能找到这个条目。</p>
+<p>感觉就是因为这个属性才会用到<strong>DeferredSpaen</strong>，经常在Blueprint中会有<code>SpawnActorByClass</code>的时候，当我们在C++使用了上面的修饰符和写法之后，在这个函数的里面就会出现”Exposed“属性。</p>
+<p>所以就像上面说的那样，允许在BP的Construction之前做一些设置。</p>
+<p>嘛先记住吧总归是有好处的。</p>
+<ul>
+<li><a href="https://papersloth.hatenablog.com/entry/2018/04/13/232533" target="_blank" rel="noopener">UE4 C++でのExposeOnSpawnについて</a></li>
+</ul>
+<p>按照上面的文章内容所说，在蓝图中设置的时候除了<strong>Expose on Spawn</strong>需要check之外，<strong>instance editable</strong>一项也需要被check，理由暂时不太清楚。</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-多人游戏框架理解</title>
     <url>/stonelzp.github.io/ue4-multiplay-framework/</url>
     <content><![CDATA[<p>UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。</p>
@@ -4730,8 +4772,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>编程</tag>
         <tag>C</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -4769,8 +4811,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>编程</tag>
         <tag>C</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -5237,9 +5279,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5276,9 +5318,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5447,8 +5489,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
