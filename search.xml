@@ -2815,7 +2815,7 @@ table th:nth-of-type(4) {
       </tags>
   </entry>
   <entry>
-    <title>VS中有用的插件</title>
+    <title>如何使用VisualStudio</title>
     <url>/stonelzp.github.io/how-to-visual-studio/</url>
     <content><![CDATA[<p>我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。<br><a id="more"></a></p>
 <h1 id="VS中的DEBUG"><a href="#VS中的DEBUG" class="headerlink" title="VS中的DEBUG"></a>VS中的DEBUG</h1><p>如何使用VS进行Debug是非常重要的，致命的是我至今未能完全掌握，不要总是依靠Log的输出自己猜了。</p>
@@ -2829,6 +2829,13 @@ table th:nth-of-type(4) {
 <li><a href="https://docs.microsoft.com/ja-jp/visualstudio/ide/reference/generate-xml-documentation-comments?view=vs-2019" target="_blank" rel="noopener">How to: Insert XML comments for documentation generation</a></li>
 </ul>
 <p>主要是我想知道使用<code>///</code>来插入一段完整的段落注释的方法。</p>
+<h1 id="简单的设置VS"><a href="#简单的设置VS" class="headerlink" title="简单的设置VS"></a>简单的设置VS</h1><h2 id="Solution-Configurations"><a href="#Solution-Configurations" class="headerlink" title="Solution Configurations"></a>Solution Configurations</h2><p>使用VS的时候，尤其是我在使用UE4的时候可能会切换编译的模式，什么<strong>Development Editor</strong>, <strong>Debug Editor</strong>等等，又长又短，长了就看不清自己设置的什么模式。</p>
+<p>就想让他变长，我说那个drop-down list。</p>
+<ul>
+<li><a href="https://visualstudioextensions.vlasovstudio.com/2014/08/14/adjusting-the-width-of-solution-configurations-drop-down-list-in-the-visual-studio-toolbar/" target="_blank" rel="noopener">Adjusting the width of “Solution Configurations” drop-down list in the Visual Studio toolbar</a></li>
+</ul>
+<p>Tools -&gt; Customize -&gt; Commands -&gt; Toobar -&gt; 下拉找到Standard -&gt; 找到Solution Configuration -&gt; 右边的Modify Selection -&gt; 把Width改成165</p>
+<p>就OK了。</p>
 ]]></content>
       <categories>
         <category>工具</category>
