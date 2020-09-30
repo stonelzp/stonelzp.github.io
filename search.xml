@@ -276,6 +276,17 @@
 <p>更多的Actor的network roles信息可以参照<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Roles/index.html" target="_blank" rel="noopener">Actor Role and RemoteRole-The various aspects of replicating Actor objects.</a></p>
 <p>简单的用表格来表示：</p>
 <p><img src="Role_Replication.jpg" alt="Role_Replication"></p>
+<p>不过说到这里这张图看得我还是不懂。有的时候还会搞错，直到我最近真正敲代码进行实战之后才搞明白。</p>
+<p>就是总而言之，<strong>Server上的LocalRole都是Authority，而在Client上的PlayerController和Pawn是Autonomous之外，其它都是Simulated</strong>。</p>
+<p>当然这种情况下的Actor都是设置正确的情况下，就是说在Server的Actor的Replication对象存在在Client上。那种Client纯本地生成的不好说。</p>
+<p>Tips：</p>
+<ul>
+<li>Editor中检查是否是Server端<ul>
+<li>C++中使用<code>GetNetMode() == ENetMode::NM_ListenServer</code>，函数放这里了，具体直接去源码找。参考这里<a href="https://answers.unrealengine.com/questions/416305/how-to-know-if-listenserverclient-owner-for-rpc.html" target="_blank" rel="noopener">How to know if listenserver/client, owner for rpc?</a></li>
+<li>Blueprint中貌似可以直接使用<code>IsServer</code>节点</li>
+</ul>
+</li>
+</ul>
 <h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
 <h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
 <ul>
