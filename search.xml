@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-对工程进行DEBUG的正确姿势</title>
+    <url>/stonelzp.github.io/ue4-debug-your-project/</url>
+    <content><![CDATA[<p>这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。</p>
+<a id="more"></a>
+<h1 id="保留项目中的设定"><a href="#保留项目中的设定" class="headerlink" title="保留项目中的设定"></a>保留项目中的设定</h1><h2 id="对-ini-文件的读写"><a href="#对-ini-文件的读写" class="headerlink" title="对 ini 文件的读写"></a>对 ini 文件的读写</h2><p>UE4中的基本上所有的设定都是保存在ini文件中的。而我今天就要了解如何在UE4的Editor-ProjectSettings中对ini文件进行读写操作。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>基本上都是参照这一篇的内容。</p>
+<ul>
+<li><a href="https://nerivec.github.io/old-ue4-wiki/pages/customsettings.html" target="_blank" rel="noopener">Custom Settings</a></li>
+</ul>
+<h2 id="对ini文件的深度读写"><a href="#对ini文件的深度读写" class="headerlink" title="对ini文件的深度读写"></a>对ini文件的深度读写</h2><p>上面的内容只是单纯的介绍了使用UE4的Editor来对ini文件进行读写，由于很多读写的细节被封装到了Editor当中，使用自制的Debug工具的时候少不了对ini文件的读写。所以这一部分用来记录我调查的内容。</p>
+<p>关于ImGui的内容在另一篇文章。</p>
+<p>关于如何做到自己对ini文件读写，首先我无意间看到这篇文章：</p>
+<ul>
+<li><a href="https://blog.cnu.jp/2015/12/19/hidden-parameter/" target="_blank" rel="noopener">設定ファイルのヒミツ - Happy My Life</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-一个Actor的生命周期</title>
     <url>/stonelzp.github.io/ue4-actor-lifecycle/</url>
     <content><![CDATA[<p>关于Actor的生命周期，与很多初始化的操作相关联，准备整理到这篇文章中。</p>
@@ -288,7 +312,12 @@
 </li>
 </ul>
 <h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
-<h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
+<h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><p>参考官网的内容</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/RPCs/index.html" target="_blank" rel="noopener">RPCs - Designating function replication across the network</a></li>
+</ul>
+<p>这里的内容非常重要，有时间需要整理。</p>
+<h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
 <ul>
 <li><p>Set the Actor’s Replicated setting to True.</p>
 </li>
@@ -604,7 +633,7 @@ table th:nth-of-type(4) {
 <p>ReliableRPC<br>RPCs函数被调用之后，会被立即放入包(Packet)的Buffer中。其他需要传送的数据就会被占用了空间而变少。</p>
 <p>非ReliableRPC会丢失，ReliableRPC则一定会送达。对方如果回答了<strong>Nak</strong>就会重新发送包数据。</p>
 <p>即使是Reliable，由于距离等的元素导致ActorChannel没有开启的情况下，RPC不会送信。</p>
-<p><img src="ReliableRPC1.png" alt="ReliableRPC-1"><br><img src="ReliableRPC2.png" alt="ReliableRPC-2"></p>
+<p><img src="ReliableRPCs1.png" alt="ReliableRPC-1"><br><img src="ReliableRPC2.png" alt="ReliableRPC-2"></p>
 <p>変数の複製 PropertyReplication<br>「変数の複製」は裏切らない</p>
 <p>こういうものは変数の複製向け</p>
 <ul>
@@ -1944,9 +1973,9 @@ table th:nth-of-type(4) {
         <category>Unity</category>
       </categories>
       <tags>
-        <tag>Plugins</tag>
         <tag>DoTween</tag>
         <tag>Curve</tag>
+        <tag>Plugins</tag>
       </tags>
   </entry>
   <entry>
@@ -3156,6 +3185,19 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://stackoverflow.com/questions/5789806/meaning-of-and-in-c" target="_blank" rel="noopener">Meaning of *&amp; and **&amp; in C++</a></li>
 </ul>
+<h1 id="指针与引用"><a href="#指针与引用" class="headerlink" title="指针与引用"></a>指针与引用</h1><p>关于指针和引用这一块儿我不明白的地方有很多，可以简单验证的方法有很多，我就是懒。</p>
+<h2 id="与-amp-的区别"><a href="#与-amp-的区别" class="headerlink" title="* 与 &amp; 的区别"></a>* 与 &amp; 的区别</h2><ul>
+<li><a href="https://stackoverflow.com/questions/28778625/whats-the-difference-between-and-in-c/28778902" target="_blank" rel="noopener">What’s the difference between * and &amp; in C?</a><br>这里是这两种关键字出现在函数的参数修饰符的位置。关于作为函数的参数，有什么区别的问题：<blockquote>
+<p><code>funct(int a)</code></p>
+<p>Creates a copy of a</p>
+<p><code>funct(int * a)</code> </p>
+<p>Takes a pointer to an int as input. But makes a copy of the pointer.</p>
+<p><code>funct(int&amp; a)</code></p>
+<p>Takes an int, but by reference. a is now the exact same int that was given. Not a copy. Not a pointer.</p>
+</blockquote>
+</li>
+</ul>
+<p>还有其他的答案也很好，有一些我不知道的知识点，之后整理。</p>
 ]]></content>
       <categories>
         <category>C++</category>
@@ -4930,8 +4972,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>C</tag>
         <tag>编程</tag>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -4969,8 +5011,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>C</tag>
         <tag>编程</tag>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -6048,7 +6090,7 @@ table th:nth-of-type(4) {
     <content><![CDATA[<p>UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。</p>
 <a id="more"></a>
 <h1 id="1-值类型？指针？"><a href="#1-值类型？指针？" class="headerlink" title="1.值类型？指针？"></a>1.值类型？指针？</h1><p>在标准C++中，类的声明可以<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">ClassExample ObjName;</span><br><span class="line"></span><br><span class="line">/或者是</span><br><span class="line"></span><br><span class="line">ClassExample* ObjPtr;</span><br></pre></td></tr></table></figure></p>
-<p>而在UE4中为了统一值类型与指针的规则，想这种类的声明全部使用指针类型，不使用值类型。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UObject* o;</span><br></pre></td></tr></table></figure></p>
+<p>而在UE4中为了统一值类型与指针的规则，将这种类的声明全部使用指针类型，不使用值类型。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UObject* o;</span><br></pre></td></tr></table></figure></p>
 <h1 id="2-UE4生成类对象实例-Instance"><a href="#2-UE4生成类对象实例-Instance" class="headerlink" title="2.UE4生成类对象实例(Instance)"></a>2.UE4生成类对象实例(Instance)</h1><p>直接上例子：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//声明</span></span><br><span class="line">UMyClass* MyClass;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生成实例</span></span><br><span class="line">MyClass = NewObject&lt;UMyClass&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line">MyClass = NewObject&lt;UMyClass&gt;(Owner);</span><br></pre></td></tr></table></figure></p>
 <p>Tips:</p>
 <ul>

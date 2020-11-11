@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="经常会遇见一些不常遇见的修饰符，记录在这里。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-10-20T03:12:12.856Z">
+<meta property="og:updated_time" content="2020-11-09T02:46:33.456Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++中的常见关键字记录">
 <meta name="twitter:description" content="经常会遇见一些不常遇见的修饰符，记录在这里。">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-10-20T12:12:12+09:00">
-                2020-10-20
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-09T11:46:33+09:00">
+                2020-11-09
               </time>
             
           </span>
@@ -420,6 +420,19 @@
 <ul>
 <li><a href="https://stackoverflow.com/questions/5789806/meaning-of-and-in-c" target="_blank" rel="noopener">Meaning of *&amp; and **&amp; in C++</a></li>
 </ul>
+<h1 id="指针与引用"><a href="#指针与引用" class="headerlink" title="指针与引用"></a>指针与引用</h1><p>关于指针和引用这一块儿我不明白的地方有很多，可以简单验证的方法有很多，我就是懒。</p>
+<h2 id="与-amp-的区别"><a href="#与-amp-的区别" class="headerlink" title="* 与 &amp; 的区别"></a>* 与 &amp; 的区别</h2><ul>
+<li><a href="https://stackoverflow.com/questions/28778625/whats-the-difference-between-and-in-c/28778902" target="_blank" rel="noopener">What’s the difference between * and &amp; in C?</a><br>这里是这两种关键字出现在函数的参数修饰符的位置。关于作为函数的参数，有什么区别的问题：<blockquote>
+<p><code>funct(int a)</code></p>
+<p>Creates a copy of a</p>
+<p><code>funct(int * a)</code> </p>
+<p>Takes a pointer to an int as input. But makes a copy of the pointer.</p>
+<p><code>funct(int&amp; a)</code></p>
+<p>Takes an int, but by reference. a is now the exact same int that was given. Not a copy. Not a pointer.</p>
+</blockquote>
+</li>
+</ul>
+<p>还有其他的答案也很好，有一些我不知道的知识点，之后整理。</p>
 
       
     </div>
@@ -545,8 +558,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -563,7 +585,7 @@
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -624,6 +646,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#指针与引用"><span class="nav-number">1.</span> <span class="nav-text">指针与引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#与-amp-的区别"><span class="nav-number">1.1.</span> <span class="nav-text">* 与 &amp; 的区别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

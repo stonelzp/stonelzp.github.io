@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-09-30T13:17:19.558Z">
+<meta property="og:updated_time" content="2020-11-09T02:23:58.375Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的C++">
 <meta name="twitter:description" content="UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-09-30T22:17:19+09:00">
-                2020-09-30
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-09T11:23:58+09:00">
+                2020-11-09
               </time>
             
           </span>
@@ -399,7 +399,7 @@
         <p>UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。</p>
 <a id="more"></a>
 <h1 id="1-值类型？指针？"><a href="#1-值类型？指针？" class="headerlink" title="1.值类型？指针？"></a>1.值类型？指针？</h1><p>在标准C++中，类的声明可以<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ClassExample ObjName;</span><br><span class="line"></span><br><span class="line">/或者是</span><br><span class="line"></span><br><span class="line">ClassExample* ObjPtr;</span><br></pre></td></tr></table></figure></p>
-<p>而在UE4中为了统一值类型与指针的规则，想这种类的声明全部使用指针类型，不使用值类型。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UObject* o;</span><br></pre></td></tr></table></figure></p>
+<p>而在UE4中为了统一值类型与指针的规则，将这种类的声明全部使用指针类型，不使用值类型。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UObject* o;</span><br></pre></td></tr></table></figure></p>
 <h1 id="2-UE4生成类对象实例-Instance"><a href="#2-UE4生成类对象实例-Instance" class="headerlink" title="2.UE4生成类对象实例(Instance)"></a>2.UE4生成类对象实例(Instance)</h1><p>直接上例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明</span></span><br><span class="line">UMyClass* MyClass;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生成实例</span></span><br><span class="line">MyClass = NewObject&lt;UMyClass&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line">MyClass = NewObject&lt;UMyClass&gt;(Owner);</span><br></pre></td></tr></table></figure></p>
 <p>Tips:</p>
 <ul>
@@ -695,7 +695,7 @@
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -90,13 +90,13 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/Role_Replication.jpg">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/NetConnection.PNG">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/FNetworkGUID.PNG">
-<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPC1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPCs1.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPC2.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/SinglePlay.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Server.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client1.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client2.png">
-<meta property="og:updated_time" content="2020-09-30T14:52:58.413Z">
+<meta property="og:updated_time" content="2020-11-09T04:05:21.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-多人游戏框架理解">
 <meta name="twitter:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
@@ -350,8 +350,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-09-30T23:52:58+09:00">
-                2020-09-30
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-09T13:05:21+09:00">
+                2020-11-09
               </time>
             
           </span>
@@ -649,7 +649,12 @@
 </li>
 </ul>
 <h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
-<h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
+<h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><p>参考官网的内容</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/RPCs/index.html" target="_blank" rel="noopener">RPCs - Designating function replication across the network</a></li>
+</ul>
+<p>这里的内容非常重要，有时间需要整理。</p>
+<h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
 <ul>
 <li><p>Set the Actor’s Replicated setting to True.</p>
 </li>
@@ -965,7 +970,7 @@ table th:nth-of-type(4) {
 <p>ReliableRPC<br>RPCs函数被调用之后，会被立即放入包(Packet)的Buffer中。其他需要传送的数据就会被占用了空间而变少。</p>
 <p>非ReliableRPC会丢失，ReliableRPC则一定会送达。对方如果回答了<strong>Nak</strong>就会重新发送包数据。</p>
 <p>即使是Reliable，由于距离等的元素导致ActorChannel没有开启的情况下，RPC不会送信。</p>
-<p><img src="ReliableRPC1.png" alt="ReliableRPC-1"><br><img src="ReliableRPC2.png" alt="ReliableRPC-2"></p>
+<p><img src="ReliableRPCs1.png" alt="ReliableRPC-1"><br><img src="ReliableRPC2.png" alt="ReliableRPC-2"></p>
 <p>変数の複製 PropertyReplication<br>「変数の複製」は裏切らない</p>
 <p>こういうものは変数の複製向け</p>
 <ul>
@@ -1258,7 +1263,7 @@ table th:nth-of-type(4) {
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">83</span>
+                  <span class="site-state-item-count">84</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
