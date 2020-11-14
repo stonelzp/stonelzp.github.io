@@ -88,7 +88,7 @@
 <meta property="og:description" content="这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-debug-your-project/Screenshot%202020-11-14%20150422.jpg">
-<meta property="og:updated_time" content="2020-11-14T07:23:41.549Z">
+<meta property="og:updated_time" content="2020-11-14T09:08:53.659Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-对工程进行DEBUG的正确姿势">
 <meta name="twitter:description" content="这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。">
@@ -342,7 +342,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-11-14T16:23:41+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-14T18:08:53+09:00">
                 2020-11-14
               </time>
             
@@ -448,6 +448,16 @@
 <li><a href="https://blog.csdn.net/u012999985/article/details/52801264" target="_blank" rel="noopener">UE4 Config配置文件详解（2017.4.1更新）</a></li>
 </ul>
 <p>这篇文章说的额非常详细，也涉及到了我在简略的读这一部分代码的时候遇到的一些类方法的说明，有时间的话可以把这篇文章的内容摘抄一下嘿嘿。</p>
+<h3 id="从命令行对设定进行重写"><a href="#从命令行对设定进行重写" class="headerlink" title="从命令行对设定进行重写"></a>从命令行对设定进行重写</h3><p>ini文件设定是可以在UE4启动的时候用命令行的形式对其进行重新赋值的，就像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-ini:inifile:[section1]:parameter1=value1,[section2]:parameter2=value2,...</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>inifile : 是<strong>configfile</strong>的名字，应该就是UCLASS修饰符的<code>config=ConfigName</code>中的ConfigName，比如说DefaultEngine.ini的情况就是<code>Engine</code>。</li>
+<li>section : 是ini文件中的section名字，类似于[/Script/Engine.Engine]</li>
+<li>parameter1=value1 : 重新值的方式</li>
+</ul>
+<p>由于我并没有直接验证过，估计要以后使用了才会知道，只记录下我找的资料链接</p>
+<ul>
+<li><a href="https://www.cc2.co.jp/blog/?p=21872" target="_blank" rel="noopener">第006回 コマンドラインからConfig設定を上書きする時の注意点</a></li>
+</ul>
 <h3 id="LOCTEXT"><a href="#LOCTEXT" class="headerlink" title="LOCTEXT"></a>LOCTEXT</h3><p>硬要说的话是上面的代码中：<code>LOCTEXT_NAMESPACE</code>的作用，这涉及到了UE4的LocalizationSystem的问题，我也是完全不知道啊，反正遇到的上面的问题就是在我使用<code>LOCTEXT</code>的时候，没有在开始定义那个NAMESPACE的时候就会报错。</p>
 <p>简单的贴一下链接：</p>
 <ul>
@@ -470,7 +480,68 @@
 <li><a href="https://blog.cnu.jp/2015/12/19/hidden-parameter/" target="_blank" rel="noopener">設定ファイルのヒミツ - Happy My Life</a></li>
 </ul>
 <p>这之后应该是对源码的解析，和自己使用ini文件的案例的分析和记录。</p>
-
+<h1 id="Asset加载的实时观测"><a href="#Asset加载的实时观测" class="headerlink" title="Asset加载的实时观测"></a>Asset加载的实时观测</h1><p>最近在调查如何在Realtime情况下观测UE4中Assets的Load和UnLoad，好像调查方向有点走偏了。</p>
+<h2 id="Asset-Registry"><a href="#Asset-Registry" class="headerlink" title="Asset Registry"></a>Asset Registry</h2><p>在我苦苦追寻有没有什么函数回调可以追踪UE4中的Asset的加载的时候找到了这个Module，就一些人所说，</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/812628/track-assets-loaded-inside-the-game.html" target="_blank" rel="noopener">Track assets loaded inside the game</a></li>
+</ul>
+<p>在<code>FAssetRegistryModule</code>和<code>IAssetRegistry</code>API源码中可以寻找答案，更准确的说是<code>OnInMemoryAsset</code>事件。</p>
+<p>结果是否答案在它们身上我也不是很清楚，因为我对UE4本身的资源管理不是了解的缘故，我也不敢随便下结论。首先是<strong>AssetRegistry</strong>这个是什么开始。</p>
+<blockquote>
+<p>The Asset Registry is an editor subsystem which gathers information about unloaded assets asynchronously as the editor loads. This information is stored in memory so the editor can create lists of assets without loading them. The information is authoritative and is kept up to date automatically as assets are changed in memory or files are changed on disk. The Content Browser is the primary consumer for this system, but it may be used anywhere in editor code.</p>
+</blockquote>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Assets/Registry/index.html" target="_blank" rel="noopener">Asset Registry</a></li>
+</ul>
+<p>首先是官网的解读，AssetRegistry是Editor的子系统，用来收集各种Asset的加载信息。这些情报被加载在内存当中，Editor会根据这些情报管理那些加载和未被加载的Asset。而AssetRegistry的主要消费对象是Editor的<strong>Content Browser</strong>。</p>
+<p>其实调查到这里我就觉得有点偏了，因为这个感觉主要面向对象是UE4的Editor，想要自己制作Debugger的话，不知道能不能用啊。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FAssetRegistryModule&amp; AssetRegistryModule = FModuleManager::LoadModuleChecked&lt;FAssetRegistryModule&gt;(<span class="string">"AssetRegistry"</span>);</span><br><span class="line">TArray&lt;FAssetData&gt; AssetData;</span><br><span class="line"><span class="keyword">const</span> UClass* Class = UStaticMesh::StaticClass();</span><br><span class="line">AssetRegistryModule.Get().GetAssetsByClass(Class, AssetData);</span><br></pre></td></tr></table></figure>
+<p>很遗憾官网上的这段代码并不能执行，函数的参数类型对不上。</p>
+<p>下面这段至少是我在UE4.25版本的时候执行可以顺利运行的代码。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">FAssetRegistryModule&amp; AssetRegistryModule = FModuleManager::LoadModuleChecked&lt;FAssetRegistryModule&gt;(<span class="string">"AssetRegistry"</span>);</span><br><span class="line">        TArray&lt;FAssetData&gt; AssetDatas;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        // const FName ClassName = </span></span><br><span class="line"><span class="comment">        AssetRegistryModule.Get().GetAssetsByClass("StaticMesh", AssetDatas);</span></span><br><span class="line"><span class="comment">        if(AssetDatas.Num() &gt; 0)</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">                for (FAssetData Element : AssetDatas)</span></span><br><span class="line"><span class="comment">                &#123;</span></span><br><span class="line"><span class="comment">                        UE_LOG(LogTemp, Log, TEXT("%s"), *(Element.AssetName.ToString()));</span></span><br><span class="line"><span class="comment">                        // if(Element.IsAssetLoaded())</span></span><br><span class="line"><span class="comment">                &#125;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">        AssetRegistryModule.Get().GetAllAssets(AssetDatas);</span><br><span class="line">                <span class="keyword">if</span>(AssetDatas.Num() &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">for</span> (FAssetData Element : AssetDatas)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// UE_LOG(LogTemp, Log, TEXT("%s"), *(Element.AssetName.ToString()));</span></span><br><span class="line">                        <span class="keyword">if</span>(Element.IsAssetLoaded())</span><br><span class="line">                        &#123;</span><br><span class="line">                                UE_LOG(LogTemp, Log, TEXT(<span class="string">"%s"</span>), *(Element.AssetName.ToString()));</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里注目的是两个函数：</p>
+<ul>
+<li><code>GetAllAssets(AssetDatas)</code>: 直接查看代码的话，这个函数会返回在这个Registry中所有的Assets，但是比较慢，推荐使用另一个有Filter版本的函数。</li>
+<li><code>IsAssetLoaded()</code> : 检查Asset是否被加载。</li>
+</ul>
+<p>还有就是判断一个Asset是否已经被加载的判断是已被加载的Asset是可以被<code>FindObject</code>到的，但也是我读了代码的一点推测而已。</p>
+<p>关于AssetRegistry更加详细的解释，我发现了这样的文章：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/76964514" target="_blank" rel="noopener">UE4 AssetRegistry分析</a></li>
+</ul>
+<p>再就是官方文档和源码了，由于时间关系，先理解到这里。</p>
+<p>关于AssetRegistry更加准确，或说是更好的概括的一个答案：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/877592/what-is-asset-registry-used-for.html" target="_blank" rel="noopener">What is Asset Registry used for?</a></li>
+</ul>
+<blockquote>
+<p>To understand what asset registry is you need to understand what asset is in technical term.</p>
+<p>Asset is a UObject that can be dumped down to file (uasset package) and can be loaded back to the memory from that file and in is mainly used to store game resources, when you load them they are avable in memory as UObject objects like UBlueprint, UTexture2D, USkeletalMesh. USoundWave and so on. Every type of asset you see in content browser has corresponding class and each asset you see in “content Browser” is a UObject that is in memory or can be loaded in memory.</p>
+<p>As assets are UObjects normally you would seek them out from reflection system. But because assets exists also on files and don’t need to be loaded to memory all the time when they are unused (they would just waste memory space), there need to be object that needs to keep track of them regardless if they are loaded or not. Searching them in reflection system is pointless if they are not loaded first. And that what AsssetRegistry is. it allows you to list out assets, get there regestry entry (FAssetData) and load them up, it also a to more optimized way to seek assets that are loaded already, as well as edit there registry information. And yes “Content Browser” in reality is Asset Registry explorer and it mainly use AssetRegistry to list and edit assets in there. It also provides event delegates which let you track live any changes done to asset registry.</p>
+<p>Best way to just look in API refrence to see what function it gives:</p>
+<p><a href="https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/index.html" target="_blank" rel="noopener">https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/index.html</a></p>
+<p>You can always access from anywhere via:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;  AssetRegistryModule.Get()-&gt;...</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>Assets in registry are stored in paths (which you see as folder structure in content browser), if you want to request specific asset you need to know path for it (you can get it by right clicking asset and clicking Copy Reference). but you can also whole sets of assets using diffrent identificators. for example you can get all assets of specific class (class name as name if the asset class without U prefix:</p>
+<p><a href="https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/GetAssetsByClass/index.html" target="_blank" rel="noopener">https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/GetAssetsByClass/index.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;  TArray&lt;FAssetData&gt; Assets;</span><br><span class="line">&gt;  AssetRegistryModule.Get()-&gt;GetAssetsByClass(FName(&quot;Texture2D&quot;),Assets,true);</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>And oyu will get registry entires of assets in form of array of FAssetData structures:</p>
+<p><a href="https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/FAssetData/index.html" target="_blank" rel="noopener">https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/FAssetData/index.html</a></p>
+<p>And you can load and get asset UObject it self by calling GetAsset()</p>
+<p>LoadObject is a function that loads UObject form the file, it function is useful if you want to load asset (or not) that is outside of asset registry.</p>
+<p>Find Object on other hand finds assets that is already loaded in memory.</p>
+</blockquote>
+<h2 id="Memreport命令抓取Asset的加载情况"><a href="#Memreport命令抓取Asset的加载情况" class="headerlink" title="Memreport命令抓取Asset的加载情况"></a>Memreport命令抓取Asset的加载情况</h2><p>这个命令的的得知来自于</p>
+<ul>
+<li><a href="https://www.unrealengine.com/ja/blog/debugging-and-optimizing-memory" target="_blank" rel="noopener">デバッグとメモリーの最適化</a></li>
+</ul>
+<p>在工程的命令行直接输入<code>Memrepory</code>，则会瞬间抓取这一帧的内存加载情况，结果会输出到你的<em>YourGame/Saved/Profiling/MemReports</em>文件夹中。</p>
+<p><code>Memreport -Full</code>命令则会输出更详细的内容。BaseEngine.ini中的[MemReportCommands] Section下（带有-Full的情况下则是[MemReportFullCommands]）的所有命令都会在Memreport的命令执行后被执行</p>
+<p>还有一些其他的命令等待我去发现。</p>
+<h2 id="Unreal-Insight-Asset-Loading-Insight"><a href="#Unreal-Insight-Asset-Loading-Insight" class="headerlink" title="Unreal Insight - Asset Loading Insight"></a>Unreal Insight - Asset Loading Insight</h2><h2 id="Low-Level-Memory-Tracker。"><a href="#Low-Level-Memory-Tracker。" class="headerlink" title="Low-Level Memory Tracker。"></a>Low-Level Memory Tracker。</h2>
       
     </div>
     
@@ -687,7 +758,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#保留项目中的设定"><span class="nav-number">1.</span> <span class="nav-text">保留项目中的设定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对-ini-文件的读写"><span class="nav-number">1.1.</span> <span class="nav-text">对 ini 文件的读写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Config-ConfigName"><span class="nav-number">1.1.1.</span> <span class="nav-text">Config=ConfigName</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LOCTEXT"><span class="nav-number">1.1.2.</span> <span class="nav-text">LOCTEXT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.1.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对ini文件的深度读写"><span class="nav-number">1.2.</span> <span class="nav-text">对ini文件的深度读写</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#保留项目中的设定"><span class="nav-number">1.</span> <span class="nav-text">保留项目中的设定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对-ini-文件的读写"><span class="nav-number">1.1.</span> <span class="nav-text">对 ini 文件的读写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Config-ConfigName"><span class="nav-number">1.1.1.</span> <span class="nav-text">Config=ConfigName</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从命令行对设定进行重写"><span class="nav-number">1.1.2.</span> <span class="nav-text">从命令行对设定进行重写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LOCTEXT"><span class="nav-number">1.1.3.</span> <span class="nav-text">LOCTEXT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.1.4.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对ini文件的深度读写"><span class="nav-number">1.2.</span> <span class="nav-text">对ini文件的深度读写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Asset加载的实时观测"><span class="nav-number">2.</span> <span class="nav-text">Asset加载的实时观测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Asset-Registry"><span class="nav-number">2.1.</span> <span class="nav-text">Asset Registry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memreport命令抓取Asset的加载情况"><span class="nav-number">2.2.</span> <span class="nav-text">Memreport命令抓取Asset的加载情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unreal-Insight-Asset-Loading-Insight"><span class="nav-number">2.3.</span> <span class="nav-text">Unreal Insight - Asset Loading Insight</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Low-Level-Memory-Tracker。"><span class="nav-number">2.4.</span> <span class="nav-text">Low-Level Memory Tracker。</span></a></li></ol></li></ol></div>
             
 
           </div>
