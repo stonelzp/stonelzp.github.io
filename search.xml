@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-版本4.25新特性</title>
+    <url>/stonelzp.github.io/ue4-4.25-version-newfunction/</url>
+    <content><![CDATA[<p>最近看了一些UE4.25版本更新内容的视频，不知道记录在哪个部分好就新开了一篇文章。用来记录我遇到的UE4 4.25版本的新特性。</p>
+<a id="more"></a>
+<h1 id="UE4-25版本新特性"><a href="#UE4-25版本新特性" class="headerlink" title="UE4.25版本新特性"></a>UE4.25版本新特性</h1><h2 id="IOStore"><a href="#IOStore" class="headerlink" title="IOStore"></a>IOStore</h2><ul>
+<li><a href="https://www.youtube.com/watch?v=i31wSiqt-7w" target="_blank" rel="noopener">【UE4.25 新機能】ロードの高速化機能「IOStore」について</a></li>
+</ul>
+<h2 id="Unversioned-Property-Serialization"><a href="#Unversioned-Property-Serialization" class="headerlink" title="Unversioned Property Serialization"></a>Unversioned Property Serialization</h2><ul>
+<li><a href="https://www.youtube.com/watch?v=V5tUNlfiJ5s" target="_blank" rel="noopener">【UE4.25 新機能】新しいシリアライゼーション機能「Unversioned Property Serialization」について</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>UE4.25</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-对工程进行DEBUG的正确姿势</title>
     <url>/stonelzp.github.io/ue4-debug-your-project/</url>
     <content><![CDATA[<p>这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。</p>
@@ -2107,9 +2127,9 @@ table th:nth-of-type(4) {
         <category>Unity</category>
       </categories>
       <tags>
+        <tag>Plugins</tag>
         <tag>DoTween</tag>
         <tag>Curve</tag>
-        <tag>Plugins</tag>
       </tags>
   </entry>
   <entry>
@@ -2125,8 +2145,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -2146,8 +2166,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -5578,8 +5598,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -5912,8 +5932,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -5959,8 +5979,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -6074,8 +6094,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6180,8 +6200,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6214,8 +6234,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6373,8 +6393,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6430,8 +6450,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6538,8 +6558,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6954,9 +6974,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
+        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
