@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-反射机制</title>
+    <url>/stonelzp.github.io/ue4-reflection/</url>
+    <content><![CDATA[<p>反射在其它的比如说C#，JAVA语言中比较常见。反射概况的来说是描述类在运行时的状态，反射中包含的信息有类名，类数据成员，数据成员类型，还有每个成员位于对象内存映像的偏移(offset)，类所有成员函数的信息。</p>
+<a id="more"></a>
+<p>C++本身是不支持反射的，4在C++的基础上搭建了自己的一套反射机制。</p>
+<h1 id="UE4的反射机制原理"><a href="#UE4的反射机制原理" class="headerlink" title="UE4的反射机制原理"></a>UE4的反射机制原理</h1><ul>
+<li><a href="https://www.unrealengine.com/en-US/blog/unreal-property-system-reflection?sessionInvalidated=true&amp;lang=en-US" target="_blank" rel="noopener">Unreal Property System (Reflection)</a></li>
+</ul>
+<p>Property system的层级<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UField</span><br><span class="line">        UStruct</span><br><span class="line">                UClass (C++ class)</span><br><span class="line">                UScriptStruct (C++ struct)</span><br><span class="line">                UFunction (C++ function)</span><br><span class="line"></span><br><span class="line">        UEnum (C++ enumeration)</span><br><span class="line"></span><br><span class="line">        UProperty (C++ member variable <span class="keyword">or</span> function parameter)</span><br><span class="line"></span><br><span class="line">                (Many subclasses <span class="keyword">for</span> different types)</span><br></pre></td></tr></table></figure></p>
+<p>上面的文章虽然是很久之前文章，但是还是很厉害。</p>
+<h2 id="利用反射对属性进行读写"><a href="#利用反射对属性进行读写" class="headerlink" title="利用反射对属性进行读写"></a>利用反射对属性进行读写</h2><p>最近在搞使用ImGui对ini文件进行读写的功能，同时又希望像UE4的Editor那样，对于添加的UCLASS的类中的UPROPERTY属性自动的显示各种类型的UI。于是就研究了一下反射，虽然原理什么的我还是不是很清楚，希望能多读读上面的文章而不是只是单纯的记录下来，终归动还是能动的。</p>
+<p>直接贴上代码：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Debug settings UI</span></span><br><span class="line"><span class="keyword">bool</span> show_about_app = <span class="literal">true</span>;</span><br><span class="line">ImGui::Begin(<span class="string">"DebugSettings"</span>, &amp;show_about_app, ImGuiWindowFlags_AlwaysAutoResize);</span><br><span class="line">    </span><br><span class="line"><span class="comment">// Creaete DebugUI for UObject</span></span><br><span class="line"><span class="keyword">bool</span> AnyPropertiesEdited = <span class="literal">false</span>;</span><br><span class="line">UClass* obj = DebugSettings-&gt;GetClass();</span><br><span class="line"><span class="keyword">for</span>(TFieldIterator&lt;FProperty&gt; PropertyIterator(obj); PropertyIterator; ++PropertyIterator)</span><br><span class="line">&#123;</span><br><span class="line">        FProperty* Property = *PropertyIterator;</span><br><span class="line">        <span class="keyword">if</span>(FBoolProperty* BoolProperty = CastField&lt;FBoolProperty&gt;(Property))</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// UE_LOG(LogTemp, Log, TEXT("cast bool property successed."));</span></span><br><span class="line">                <span class="keyword">static</span> <span class="keyword">bool</span> sampleBool = BoolProperty-&gt;GetPropertyValue_InContainer(DebugSettings);</span><br><span class="line">                ImGui::Checkbox(TCHAR_TO_ANSI(*BoolProperty-&gt;GetName()), &amp;sampleBool);</span><br><span class="line">                <span class="keyword">if</span>(ImGui::IsItemEdited())</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// Apply changes</span></span><br><span class="line">                        BoolProperty-&gt;SetPropertyValue(BoolProperty-&gt;ContainerPtrToValuePtr&lt;<span class="keyword">bool</span>&gt;(DebugSettings), sampleBool);</span><br><span class="line">                        AnyPropertiesEdited = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(FIntProperty* IntProperty = CastField&lt;FIntProperty&gt;(Property))</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// UE_LOG(LogTemp, Log, TEXT("cast int property successed."));</span></span><br><span class="line">                <span class="keyword">static</span> <span class="keyword">int</span> sampleInt = IntProperty-&gt;GetPropertyValue_InContainer(DebugSettings);</span><br><span class="line">                ImGui::InputInt(TCHAR_TO_ANSI(*IntProperty-&gt;GetName()), &amp;sampleInt);</span><br><span class="line">                <span class="keyword">if</span>(ImGui::IsItemEdited())</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// Apply changes</span></span><br><span class="line">                        IntProperty-&gt;SetPropertyValue(IntProperty-&gt;ContainerPtrToValuePtr&lt;<span class="keyword">int</span>&gt;(DebugSettings), sampleInt);</span><br><span class="line">                        AnyPropertiesEdited = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(AnyPropertiesEdited)</span><br><span class="line">&#123;</span><br><span class="line">        DebugSettings-&gt;SaveConfig();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ImGui::End();</span><br></pre></td></tr></table></figure></p>
+<p>没有对应所有的类型，但是知道了方法就行了。</p>
+<p>这其中有一篇文章很重要：</p>
+<ul>
+<li><a href="https://www.ayumax.net/entry/2020/03/22/144226" target="_blank" rel="noopener">UProperty -&gt; FPropertyへの変化(UE4 4.25)</a></li>
+</ul>
+<p>UE4.25版本更改了<code>UProperty-&gt;FProperty</code>，跟之前写法会有些出入</p>
+<p>还参考了其他人的提问的文章</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/108323-how-to-list-uproperties-of-an-uobject-at-runtime-read-write-uproperty" target="_blank" rel="noopener">How to list UProperties of an UObject at runtime? Read/write UProperty?</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/mohuak/article/details/81913532?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromBaidu-1.add_param_isCf&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromBaidu-1.add_param_isCf" target="_blank" rel="noopener">UE4反射原理的探究</a></li>
+<li><a href="https://www.cnblogs.com/ghl_carmack/p/5698438.html" target="_blank" rel="noopener">虚幻4属性系统（反射）翻译</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/60622181" target="_blank" rel="noopener">UE4反射机制</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25098685" target="_blank" rel="noopener">《InsideUE4》UObject（四）类型系统代码生成</a></li>
+</ul>
+<p>感觉上面的文章都很重要。尤其是最后一篇。</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>UE4.25</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-版本4.25新特性</title>
     <url>/stonelzp.github.io/ue4-4.25-version-newfunction/</url>
     <content><![CDATA[<p>最近看了一些UE4.25版本更新内容的视频，不知道记录在哪个部分好就新开了一篇文章。用来记录我遇到的UE4 4.25版本的新特性。</p>
@@ -2165,9 +2204,9 @@ table th:nth-of-type(4) {
         <category>Unity</category>
       </categories>
       <tags>
-        <tag>Plugins</tag>
         <tag>DoTween</tag>
         <tag>Curve</tag>
+        <tag>Plugins</tag>
       </tags>
   </entry>
   <entry>
@@ -2183,8 +2222,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -2204,8 +2243,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5636,8 +5675,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5970,8 +6009,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6017,8 +6056,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6132,8 +6171,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6238,8 +6277,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6272,8 +6311,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6431,8 +6470,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6488,8 +6527,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6596,8 +6635,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7012,9 +7051,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
