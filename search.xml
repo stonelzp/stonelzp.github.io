@@ -166,7 +166,45 @@
 <p>在工程的命令行直接输入<code>Memrepory</code>，则会瞬间抓取这一帧的内存加载情况，结果会输出到你的<em>YourGame/Saved/Profiling/MemReports</em>文件夹中。</p>
 <p><code>Memreport -Full</code>命令则会输出更详细的内容。BaseEngine.ini中的[MemReportCommands] Section下（带有-Full的情况下则是[MemReportFullCommands]）的所有命令都会在Memreport的命令执行后被执行</p>
 <p>还有一些其他的命令等待我去发现。</p>
-<h2 id="Unreal-Insight-Asset-Loading-Insight"><a href="#Unreal-Insight-Asset-Loading-Insight" class="headerlink" title="Unreal Insight - Asset Loading Insight"></a>Unreal Insight - Asset Loading Insight</h2><h2 id="Low-Level-Memory-Tracker。"><a href="#Low-Level-Memory-Tracker。" class="headerlink" title="Low-Level Memory Tracker。"></a>Low-Level Memory Tracker。</h2>]]></content>
+<h3 id="抓取数据"><a href="#抓取数据" class="headerlink" title="抓取数据"></a>抓取数据</h3><p>应用的启动参数(Standalone模式启动的额外参数)指定<code>Loadtime</code><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-trace=Loadtime</span><br></pre></td></tr></table></figure></p>
+<p>想要获取更多情报的话，CPUEvent或者I/O事件的情报，添加更多参数<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-trace=Loadtime,File,Cpu -statnamedevents</span><br></pre></td></tr></table></figure></p>
+<p>至于其他的命令，遇见在做记录吧。</p>
+<h2 id="Unreal-Insight-Asset-Loading-Insight"><a href="#Unreal-Insight-Asset-Loading-Insight" class="headerlink" title="Unreal Insight - Asset Loading Insight"></a>Unreal Insight - Asset Loading Insight</h2><p>最近研究如何使用UnrealInsights吃了一点闭门羹，隐藏的有点深啊，各种使用方法。这次参照的是UnealEngineJP的官方视频：</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=NhehQI98lis&amp;app=desktop" target="_blank" rel="noopener">UE4.25 Update - Unreal Insights -</a></li>
+</ul>
+<p>只参照了AssetLoadingInsights的部分。</p>
+<p><strong>Package(Shipping以外)可以使用。</strong></p>
+<h2 id="Unreal-Insights-Memory-Innsights"><a href="#Unreal-Insights-Memory-Innsights" class="headerlink" title="Unreal Insights - Memory Innsights"></a>Unreal Insights - Memory Innsights</h2><p>UE4.26版本增加了Beta特性MemoryInsinsights的功能。</p>
+<p>使用方法很普通的UnrealInsights差不多，以Standalone模式启动，添加额外的启动命令行参数<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">-trace=memory</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://qiita.com/EGJ-Ken_Kuwano/items/83425f450f6da100a9d0" target="_blank" rel="noopener">[UE4] Memory Insightsを使用したメモリトラッキング</a></li>
+</ul>
+<h2 id="Low-Level-Memory-Tracker"><a href="#Low-Level-Memory-Tracker" class="headerlink" title="Low-Level Memory Tracker"></a>Low-Level Memory Tracker</h2><p>据说是从4.18版本实装的一个可以追踪内存使用情况的工具。</p>
+<blockquote>
+<p>LLM supports PlayStation 4 and XboxOne. Windows is supported as an experimental feature.</p>
+</blockquote>
+<p>先简单介绍一下用法。</p>
+<ul>
+<li>打开LLM：Editor的话以Standalone模式，添加<code>-llm</code>启动参数</li>
+<li>使用命令：<code>Stat LLM</code>, <code>Stat LLMFull</code>等命令就可以查看内存使用情况了。</li>
+</ul>
+<p>但是乍看一下输出的内存使用情况就很粗略，还有就是可以输出到CSV文件中查看，我暂时还不清楚使用CSV是否更好一些。</p>
+<h3 id="LLMTAGSETS"><a href="#LLMTAGSETS" class="headerlink" title="LLMTAGSETS"></a>LLMTAGSETS</h3><p>这个功能是<strong>Experimenttal</strong>的功能，但是感觉的确是我想用的，便试了一下但是并不顺利。</p>
+<p>首先由于还是实验性的功能，据其它的文章所说，我们需要开启这个功能：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在 Engine\Source\Runtime\Core\Public\HAL\LowLevelMemTracker.h 中可以找到</span></span><br><span class="line">    <span class="comment">// using asset tagging requires a significantly higher number of per-thread tags, so make it optional</span></span><br><span class="line">    <span class="comment">// even if this is on, we still need to run with -llmtagsets=assets because of the sheer number of stat ids it makes</span></span><br><span class="line">    <span class="comment">// LLM Assets can be viewed in game using 'Stat LLMAssets'</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> LLM_ALLOW_ASSETS_TAGS 0</span></span><br></pre></td></tr></table></figure></p>
+<p>源码是0，所以我改成了1，重新编译之后就发生了错误，原因是：<code>FStatGroup_STATGROUP_LLMAssets: undeclared identifier</code>。总而言之调查结果就是在相同路径下的<code>LowLevelMemStats.h</code>文件中的内容出了问题，因为当中的所有代码都没有被编译进去。</p>
+<p>原因是一开始的编译条件中有一个<strong>WITH_ENGINE</strong>的宏定义值为0，为什么啊，我又搜了一下这个是什么</p>
+<ul>
+<li><a href="https://imzlp.me/posts/5214/" target="_blank" rel="noopener">Macro defined by UBT in UE4</a></li>
+</ul>
+<p>也就在这种文章中有所提及，貌似是涉及到UE4的UBT的配置问题，但是我对UBT也不是特别了解。</p>
+<h3 id="参考资料-1"><a href="#参考资料-1" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Development/Tools/LowLevelMemoryTracker/index.html" target="_blank" rel="noopener">Low-Level Memory Tracracker</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/78005333" target="_blank" rel="noopener">UE4 Low Level Memory Tracker 使用</a></li>
+<li><a href="https://qiita.com/donbutsu17/items/dd410cd6ee53b0b348ca" target="_blank" rel="noopener">[UE4] LLM (Low Level Memory Tracker)を使用したメモリトラッキング</a></li>
+</ul>
+]]></content>
       <categories>
         <category>UnrealEngine</category>
       </categories>
