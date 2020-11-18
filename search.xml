@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-关于Subsystem</title>
+    <url>/stonelzp.github.io/ue4-subsystem/</url>
+    <content><![CDATA[<p>这次要学习的是UE4的Subsystem，由4.22版本实装的功能。简单来说就是被某个系统所管理，会被自动实例化并拥有生命周期的类。</p>
+<a id="more"></a>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www2.slideshare.net/EpicGamesJapan/ue4-subsystem" target="_blank" rel="noopener">猫でも分かるUE4.22から入ったSubsystem</a></li>
+</ul>
+<p>与之配套的讲解视频：  <a href="https://www.youtube.com/watch?v=Wbq3KO3ZJaI" target="_blank" rel="noopener">第4回UE4何でも勉強会 in 東京 アーカイブ動画</a></p>
+<p>我很早就应该看到但是却没有的文档：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/GameFlow/index.html" target="_blank" rel="noopener">Game Flow Overview</a></li>
+</ul>
+<p>这里面的大图片想方法给它抠出来…</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>UE4-ActionRPG解析</title>
+    <url>/stonelzp.github.io/ue4-actionrpg/</url>
+    <content><![CDATA[<p>今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。</p>
+<a id="more"></a>
+<p>首先是UE4的异步加载界面的实现。</p>
+<p>加载界面需要了解UE4的<strong>Slate</strong>，先上教学：</p>
+<ul>
+<li><a href="https://nerivec.github.io/old-ue4-wiki/pages/slate-hello.html" target="_blank" rel="noopener">Slate, Hello</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>ActionRPG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-ImGui使用</title>
     <url>/stonelzp.github.io/ue4-imgui/</url>
     <content><![CDATA[<p>ImGui是一个UE4的插件，方便用来制作Debug的工具界面。</p>
@@ -2246,8 +2287,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -2267,8 +2308,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -4930,6 +4971,10 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="http://monsho.hatenablog.com/entry/2017/12/16/012502" target="_blank" rel="noopener">UE4の描画パスについて Ver 4.18.1</a></li>
 </ul>
+<p>UE4的的官方视频关于Profiling和Optimization的，由于是2019年年末的视频，我觉得有必要学习一下</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=EbXakIuZPFo" target="_blank" rel="noopener">Profiling and Optimization in UE4 | Unreal Indie Dev Days 2019 | Unreal Engine</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
@@ -5227,8 +5272,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>编程</tag>
         <tag>C</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -5266,8 +5311,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>编程</tag>
         <tag>C</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -5699,8 +5744,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -5734,9 +5779,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5773,9 +5818,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5944,8 +5989,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -6033,8 +6078,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6080,8 +6125,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -6195,8 +6240,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6301,8 +6346,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6335,8 +6380,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6494,8 +6539,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6551,8 +6596,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6659,8 +6704,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -7075,9 +7120,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
+        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
