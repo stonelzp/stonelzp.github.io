@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-UMG相关知识点</title>
+    <url>/stonelzp.github.io/ue4-learning-umg/</url>
+    <content><![CDATA[<p>本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。</p>
+<a id="more"></a>
+<p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
+<ul>
+<li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-关于Subsystem</title>
     <url>/stonelzp.github.io/ue4-subsystem/</url>
     <content><![CDATA[<p>这次要学习的是UE4的Subsystem，由4.22版本实装的功能。简单来说就是被某个系统所管理，会被自动实例化并拥有生命周期的类。</p>
 <a id="more"></a>
+<h1 id="SububSystem概要"><a href="#SububSystem概要" class="headerlink" title="SububSystem概要"></a>SububSystem概要</h1><h2 id="GameInstanceSubsystem"><a href="#GameInstanceSubsystem" class="headerlink" title="GameInstanceSubsystem"></a>GameInstanceSubsystem</h2><p>多说无用，先介绍我目前最急迫使用的<strong>GameInstance Subsubsystem</strong>：</p>
+<p><code>UGameInstance</code>进行管理 <br></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="https://www2.slideshare.net/EpicGamesJapan/ue4-subsystem" target="_blank" rel="noopener">猫でも分かるUE4.22から入ったSubsystem</a></li>
 </ul>
@@ -14,6 +33,10 @@
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/GameFlow/index.html" target="_blank" rel="noopener">Game Flow Overview</a></li>
 </ul>
 <p>这里面的大图片想方法给它抠出来…</p>
+<p>在使用这个Subsystem的时候需要对整个UE4的各种类的生命周期做些深入的了解：</p>
+<ul>
+<li><a href="https://www2.slideshare.net/com044/ue4-in" target="_blank" rel="noopener">UE4プログラマー勉強会 in 大阪 -エンジンの内部挙動について</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
@@ -2287,8 +2310,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -2308,8 +2331,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5272,8 +5295,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>C</tag>
         <tag>编程</tag>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -5311,8 +5334,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>C</tag>
         <tag>编程</tag>
+        <tag>C</tag>
       </tags>
   </entry>
   <entry>
@@ -5744,8 +5767,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5779,9 +5802,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5818,9 +5841,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -5989,8 +6012,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6046,6 +6069,15 @@ table th:nth-of-type(4) {
 <p>参考的链接：<a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/42246-tweakobjectptr-with-custom-character-class" target="_blank" rel="noopener">TWeakObjectPtr with Custom Character Class</a></p>
 <p><code>error C2440: &#39;initializing&#39; : cannot convert from &#39;initializer-list&#39;</code></p>
 <p>关于这个错误类型，涉及到一些初始化操作，但我的情况下还是头文件没有包含进去的问题，真是头大。</p>
+<h2 id="unresolved-eternal-symbol类型"><a href="#unresolved-eternal-symbol类型" class="headerlink" title="unresolved eternal symbol类型"></a>unresolved eternal symbol类型</h2><p>有的时候会在错误信息中包含上述关键词的错误</p>
+<p><code>error Link2019: unresolved external symbol 函数名</code> 这样的错误是找到了函数的声明但是却找不到函数的定义。</p>
+<p>一般需要检查Build.cs文件中的依赖项是否添加。</p>
+<p>亦或者出现在利用另一个<strong>Module</strong>中的函数的时候，找不到函数的实现，出现上面的错误编译不通过。实际上调用的函数是虚函数的话就没有问题，关键是不是虚函数的情况。</p>
+<p>所以问我怎么办我也不太清楚，这一部分好好参考如何添加Module或者ActionRPG的LoadScreen部分的源码好好实现应该就没有问题了。</p>
+<p>另外贴一个别人整理的一些报错的文章</p>
+<ul>
+<li><a href="https://finap.hateblo.jp/entry/2019/12/06/000000" target="_blank" rel="noopener">UE4 C++ビルドエラー対応覚書</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
@@ -6078,8 +6110,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6125,8 +6157,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6240,8 +6272,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6346,8 +6378,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6380,8 +6412,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6539,8 +6571,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6596,8 +6628,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6704,8 +6736,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7120,9 +7152,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
