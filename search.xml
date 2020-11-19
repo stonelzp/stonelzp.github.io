@@ -50,11 +50,14 @@
     <url>/stonelzp.github.io/ue4-actionrpg/</url>
     <content><![CDATA[<p>今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。</p>
 <a id="more"></a>
-<p>首先是UE4的异步加载界面的实现。</p>
+<h2 id="Load-Screen-Module"><a href="#Load-Screen-Module" class="headerlink" title="Load Screen Module"></a>Load Screen Module</h2><p>首先是UE4的异步加载界面的实现。</p>
 <p>加载界面需要了解UE4的<strong>Slate</strong>，先上教学：</p>
 <ul>
 <li><a href="https://nerivec.github.io/old-ue4-wiki/pages/slate-hello.html" target="_blank" rel="noopener">Slate, Hello</a></li>
 </ul>
+<h3 id="UE4中的Interface"><a href="#UE4中的Interface" class="headerlink" title="UE4中的Interface"></a>UE4中的Interface</h3><p>关于UE4或者说C++的一些接口的用法进行一些记录。原本是ActionRPG中的Module开始调查，就先从Module的接口开始说起，不过除了调查这个是什么的接口，更重要的是了解接口的使用方式，不仅仅是UE4中的有重要作用的接口。</p>
+<p>C++的接口的一些特性使用方法更为重要。</p>
+<h4 id="IModuleInterface"><a href="#IModuleInterface" class="headerlink" title="IModuleInterface"></a>IModuleInterface</h4><h4 id="UInterface"><a href="#UInterface" class="headerlink" title="UInterface"></a>UInterface</h4><p>UINTERFACE()</p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
