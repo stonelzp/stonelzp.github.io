@@ -403,13 +403,20 @@
         <p>自从发现自己写的东西被人原封不动的复制粘贴扔到了CSDN之后，曾经一度想要废了这个博客，写博客对我来说就是一个记笔记的过程，记录自己工作中遇到的问题和解决过程，顺便写写自己的心得什么的，就是很随意。未想着给别人看，但是要是写的某一个地方帮上了某个地方的某个人也是好事情，哪怕不知道有没有，但也是一种安慰了。所以博客自建成起，就根本没设置什么自欺欺人的评论功能点赞功能。也没想着会有。</p>
 <p>但是整篇文章直接贴走，连个转载链接都不留是不是就有些过分了，生气不可避免了但是也只是只能无能狂怒了。去CSDN注册个账户举报？说到底对于我去CSDN注册账户这件事情都很抵触。算了，就算了吧。</p>
 <a id="more"></a>
-<h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><p>果然UE4中的有些代码不会给你高亮，看起来就很不舒服，有时间填一下坑。</p>
-<h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="1-博文压缩"><a href="#1-博文压缩" class="headerlink" title="1. 博文压缩"></a>1. 博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
+<h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><ul>
+<li>2020/11/20 : 对新建文章的模板进行了修改</li>
+</ul>
+<h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><p>果然UE4中的有些代码不会给你高亮，看起来就很不舒服，有时间填一下坑。</p>
+<h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
 <p>因为用起来麻烦就忘了。</p>
 <p>执行</p>
 <p><code>hexo g &amp;&amp; gulp</code></p>
 <p>就会压缩public中的静态资源文件。</p>
-<h2 id="2-修改代码块自定义样式"><a href="#2-修改代码块自定义样式" class="headerlink" title="2.修改代码块自定义样式"></a>2.修改<code></code>代码块自定义样式</h2><p><code>\themes\next\source\css\_custom\custom.styl</code></p>
+<h2 id="定义新建文章的模板"><a href="#定义新建文章的模板" class="headerlink" title="定义新建文章的模板"></a>定义新建文章的模板</h2><p>因为每次都要手动添加新的项目，心血来潮找了找有没有修改新建文章模板的方法</p>
+<ul>
+<li><a href="https://azriton.github.io/2016/11/04/Hexo%E3%81%AE%E6%96%B0%E8%A6%8F%E6%8A%95%E7%A8%BF%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA/" target="_blank" rel="noopener">Hexo の 新規投稿テンプレート を カスタマイズ</a></li>
+</ul>
+<h2 id="修改代码块自定义样式"><a href="#修改代码块自定义样式" class="headerlink" title="修改代码块自定义样式"></a>修改<code></code>代码块自定义样式</h2><p><code>\themes\next\source\css\_custom\custom.styl</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// Custom styles.</span><br><span class="line">code &#123;</span><br><span class="line">    color: #ff7600;</span><br><span class="line">    background: #fbf7f8;</span><br><span class="line">    margin: 2px;</span><br><span class="line">&#125;</span><br><span class="line">// 大代码块的自定义样式</span><br><span class="line">.highlight, pre &#123;</span><br><span class="line">    margin: 5px 0;</span><br><span class="line">    padding: 5px;</span><br><span class="line">    border-radius: 3px;</span><br><span class="line">&#125;</span><br><span class="line">.highlight, code, pre &#123;</span><br><span class="line">    border: 1px solid #d6d6d6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我加入了上面的代码，原先是什么都没有的…</p>
 <p>看了下效果，嗯，感觉什么都没变。</p>
@@ -566,7 +573,7 @@
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">90</span>
+                  <span class="site-state-item-count">91</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -637,7 +644,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">1.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">1.1.</span> <span class="nav-text">代码部分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">2.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-博文压缩"><span class="nav-number">2.1.</span> <span class="nav-text">1. 博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-修改代码块自定义样式"><span class="nav-number">2.2.</span> <span class="nav-text">2.修改代码块自定义样式</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">1.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">1.1.</span> <span class="nav-text">代码部分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">2.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#博文压缩"><span class="nav-number">2.1.</span> <span class="nav-text">博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义新建文章的模板"><span class="nav-number">2.2.</span> <span class="nav-text">定义新建文章的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改代码块自定义样式"><span class="nav-number">2.3.</span> <span class="nav-text">修改代码块自定义样式</span></a></li></ol></li></ol></div>
             
 
           </div>
