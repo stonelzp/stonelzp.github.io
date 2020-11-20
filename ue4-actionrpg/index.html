@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-20T13:29:52.215Z">
+<meta property="og:updated_time" content="2020-11-20T14:58:26.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-ActionRPG解析">
 <meta name="twitter:description" content="今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。">
@@ -340,7 +340,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-11-20T22:29:52+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-20T23:58:26+09:00">
                 2020-11-20
               </time>
             
@@ -408,14 +408,36 @@
 <ul>
 <li><a href="https://www.youtube.com/watch?v=ON1_dEHoNDg" target="_blank" rel="noopener">Async Loading Screens and Transition Levels | Unreal Fest Europe 2019 | Unreal Engine</a></li>
 </ul>
+<h2 id="UE4的Slate"><a href="#UE4的Slate" class="headerlink" title="UE4的Slate"></a>UE4的Slate</h2><p>UE4deSlate是UMG框架下的一部分。UMG我会在其它文章中介绍具体的使用方法。UI的制作肯定是要用UMG来实现的，但是这里用到Slate的理由是，我们想要实现异步加载界面的实现。</p>
+<p>首先UE4的Scene的加载只能在Gam线程中完成，也就是主线程，异步加载界面的实现，而Slate刚好是在别的线程中实现的，至于什么线程我还不清楚…</p>
+<p>我想利用这个特性，于是开始了解Slate。当然还有<code>MoviePlayer</code>这个东西。</p>
 <p>加载界面需要了解UE4的<strong>Slate</strong>，先上教学：</p>
 <ul>
 <li><a href="https://nerivec.github.io/old-ue4-wiki/pages/slate-hello.html" target="_blank" rel="noopener">Slate, Hello</a></li>
 </ul>
-<h3 id="UE4中的Interface"><a href="#UE4中的Interface" class="headerlink" title="UE4中的Interface"></a>UE4中的Interface</h3><p>关于UE4或者说C++的一些接口的用法进行一些记录。原本是ActionRPG中的Module开始调查，就先从Module的接口开始说起，不过除了调查这个是什么的接口，更重要的是了解接口的使用方式，不仅仅是UE4中的有重要作用的接口。</p>
+<p>有一个偏方，就是使用UE4的<strong>Widget Reflector</strong>工具，直接查看引擎Editor实现的源代码。因为Editor就是用Slate制作的。</p>
+<p>Window -&gt; Developer Tools -&gt; Widget Reflector</p>
+<p>Window -&gt; Developer Tools -&gt; Debug Tools 中找到 Test Suite</p>
+<p>可以发现很多UE4准备好的UI例子，直接抓取源码方便参照。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>官方参考资料，据官网所说这篇适合反复的阅读</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Slate/Architecture/index.html" target="_blank" rel="noopener">Slate Architecture</a></li>
+</ul>
+<p>关于Slate的一些实现参考例子，但我还是推荐上面的那种方法。感觉有些枯燥，但是会更加系统的介绍</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Slate/Widgets/index.html" target="_blank" rel="noopener">Slate Widget Examples</a></li>
+</ul>
+<p>这里有一篇我无意中发现的文章，使用Slate制作了一点东西，感觉有可能会用的上</p>
+<ul>
+<li><a href="https://historia.co.jp/archives/13304/" target="_blank" rel="noopener">[UE4] Slateで検索可能なコンボボックスを自作する</a></li>
+</ul>
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><h3 id="UE4中的Interface"><a href="#UE4中的Interface" class="headerlink" title="UE4中的Interface"></a>UE4中的Interface</h3><p>关于UE4或者说C++的一些接口的用法进行一些记录。原本是ActionRPG中的Module开始调查，就先从Module的接口开始说起，不过除了调查这个是什么的接口，更重要的是了解接口的使用方式，不仅仅是UE4中的有重要作用的接口。</p>
 <p>C++的接口的一些特性使用方法更为重要。</p>
 <h4 id="IModuleInterface"><a href="#IModuleInterface" class="headerlink" title="IModuleInterface"></a>IModuleInterface</h4><h4 id="UInterface"><a href="#UInterface" class="headerlink" title="UInterface"></a>UInterface</h4><p>UINTERFACE()</p>
-<h3 id="FGCObject"><a href="#FGCObject" class="headerlink" title="FGCObject"></a>FGCObject</h3>
+<h3 id="FGCObject"><a href="#FGCObject" class="headerlink" title="FGCObject"></a>FGCObject</h3><ul>
+<li><a href="https://qiita.com/go_astrayer/items/11b99ef8849b43796fee" target="_blank" rel="noopener">UPROPERTY を使わずにオブジェクトをガーベジ コレクションの対象から外す方法</a></li>
+</ul>
+
       
     </div>
     
@@ -638,7 +660,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Screen-Module"><span class="nav-number">1.</span> <span class="nav-text">Load Screen Module</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">1.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">1.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface"><span class="nav-number">1.1.2.</span> <span class="nav-text">UInterface</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FGCObject"><span class="nav-number">1.2.</span> <span class="nav-text">FGCObject</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Screen-Module"><span class="nav-number">1.</span> <span class="nav-text">Load Screen Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的Slate"><span class="nav-number">2.</span> <span class="nav-text">UE4的Slate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">2.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展"><span class="nav-number">3.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">3.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">3.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface"><span class="nav-number">3.1.2.</span> <span class="nav-text">UInterface</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FGCObject"><span class="nav-number">3.2.</span> <span class="nav-text">FGCObject</span></a></li></ol></li></ol></div>
             
 
           </div>
