@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-需要时常关注的文章更新和视频更新</title>
+    <url>/stonelzp.github.io/ue4-follow/</url>
+    <content><![CDATA[<p>不断地学习最新的知识，则需要集思广益而且要与时俱进，这篇文章主要是为了记录一些需要时时查看的文章和链接，学习最新的知识。<br><a id="more"></a></p>
+<h1 id="与时俱进的文章"><a href="#与时俱进的文章" class="headerlink" title="与时俱进的文章"></a>与时俱进的文章</h1><h2 id="Qitta"><a href="#Qitta" class="headerlink" title="Qitta"></a>Qitta</h2><ul>
+<li><a href="https://qiita.com/EGJ-Ken_Kuwano" target="_blank" rel="noopener">Ken Kuwano</a></li>
+</ul>
+<p>这个大佬的文章会介绍新出的特性，而且是虚幻日本官方的技术支持。还回答过我的问题。</p>
+<h1 id="与时俱进的视频"><a href="#与时俱进的视频" class="headerlink" title="与时俱进的视频"></a>与时俱进的视频</h1><h2 id="Youtube"><a href="#Youtube" class="headerlink" title="Youtube"></a>Youtube</h2><ul>
+<li><a href="https://www.youtube.com/c/UnrealEngineJP/videos" target="_blank" rel="noopener">Unreal Engine JP</a></li>
+</ul>
+<p>油管的虚幻日本频道有一些喜欢积极分享技术的人时常聚在一起分享见解，氛围非常的令人羡慕，也会时常更新最新的特性，超级有用。</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE44</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-RayTracing学习</title>
     <url>/stonelzp.github.io/ue4-learning-raytracing/</url>
     <content><![CDATA[<p>很久之前就听说过这个酷炫的功能了，但是一直都没有提笔记录和学习，可以建模？！那更应该赶紧学了。</p>
@@ -42,6 +62,10 @@
 <a id="more"></a>
 <h1 id="SububSystem概要"><a href="#SububSystem概要" class="headerlink" title="SububSystem概要"></a>SububSystem概要</h1><h2 id="GameInstanceSubsystem"><a href="#GameInstanceSubsystem" class="headerlink" title="GameInstanceSubsystem"></a>GameInstanceSubsystem</h2><p>多说无用，先介绍我目前最急迫使用的<strong>GameInstance Subsubsystem</strong>：</p>
 <p><code>UGameInstance</code>进行管理 <br></p>
+<p>参考的文章：</p>
+<ul>
+<li><a href="https://qiita.com/unknown_ds/items/afcff802ab17db486822" target="_blank" rel="noopener">UE4 プログラミングサブシステムを試してみる</a></li>
+</ul>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li><a href="https://www2.slideshare.net/EpicGamesJapan/ue4-subsystem" target="_blank" rel="noopener">猫でも分かるUE4.22から入ったSubsystem</a></li>
 </ul>
@@ -2381,8 +2405,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -2402,8 +2426,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5845,8 +5869,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5880,8 +5904,8 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
         <tag>编程</tag>
       </tags>
   </entry>
@@ -5919,8 +5943,8 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
         <tag>编程</tag>
       </tags>
   </entry>
@@ -6090,8 +6114,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6188,8 +6212,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6235,8 +6259,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6350,8 +6374,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6456,8 +6480,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6490,8 +6514,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6649,8 +6673,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6706,8 +6730,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6814,8 +6838,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7230,9 +7254,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
