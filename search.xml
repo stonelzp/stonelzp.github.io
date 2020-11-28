@@ -1067,7 +1067,7 @@ table th:nth-of-type(4) {
 <p><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/CharacterMovementComponent/index.html" target="_blank" rel="noopener">Character Movement ComponentDetailed explanation of Character Movement Component</a></p>
 <h3 id="Replication-Graph"><a href="#Replication-Graph" class="headerlink" title="Replication Graph"></a>Replication Graph</h3><p>这是UE4为超多人游戏而准备的一个Plugin，具体使用方法不清楚，上面的Slide也有介绍。</p>
 <p><a href="https://docs.unrealengine.com/en-US/Engine/Networking/ReplicationGraph/index.html" target="_blank" rel="noopener">Replication Graph - Overview of the Replication Graph feature and Replication Graph Nodes.</a></p>
-<p>#重要的基础概念<br>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<h1 id="重要的基础概念"><a href="#重要的基础概念" class="headerlink" title="重要的基础概念"></a>重要的基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
 </ul>
@@ -1559,7 +1559,7 @@ table th:nth-of-type(4) {
 </ul>
 <p></p>
 <p>这段代码实现了两个函数<code>ListenForAttributeChange</code>和<code>ListenForAttributesChange</code>用来监视Attribute的值的变更，同时是基于<code>UBlueprintAsyncActionBase</code>扩展的类，也可以在BP中方便的使用这两个函数，主要是对于UI的操作来说，提供这样的函数会更加方便一些。</p>
-<p><img src="ListenForAttributeChange.PNG" alt="AttributeChange"></p>
+<p><img src="ListenForAttributeChange.png" alt="AttributeChange"></p>
 <h4 id="Derived-Attributes"><a href="#Derived-Attributes" class="headerlink" title="Derived Attributes"></a>Derived Attributes</h4><p>刚开始看的时候就觉得好高大上啊，派生属性好厉害，难不成是AttributeSet的派生类中的Attribute也能更新，但仔细想想这太厉害了也，而且不符合我学到的知识。</p>
 <p>关于这个Attribute的派生的功能，其实是说比如当我们在<code>Infinite</code>类型的<code>GameplayEffect</code>中使用一个或更多个的<code>Attribute Based</code>和<code>MMC Modifiers</code>的时候，<code>Derived Attribute</code>会依据它所依赖的上述类型的变量的变化而更新自己的值。</p>
 <blockquote>

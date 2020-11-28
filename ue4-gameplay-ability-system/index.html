@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中Action RPG这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/ListenForAttributeChange.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/ListenForAttributeChange.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/WaitDelay.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/TaskWaitDelay.png">
-<meta property="og:updated_time" content="2020-11-28T15:07:13.977Z">
+<meta property="og:updated_time" content="2020-11-28T15:48:54.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-GameplayAbilitySystem学习">
 <meta name="twitter:description" content="这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中Action RPG这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。">
-<meta name="twitter:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/ListenForAttributeChange.PNG">
+<meta name="twitter:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/ListenForAttributeChange.png">
 
 
 
@@ -344,7 +344,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-11-29T00:07:13+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-29T00:48:54+09:00">
                 2020-11-29
               </time>
             
@@ -748,7 +748,7 @@
 </ul>
 <p></p>
 <p>这段代码实现了两个函数<code>ListenForAttributeChange</code>和<code>ListenForAttributesChange</code>用来监视Attribute的值的变更，同时是基于<code>UBlueprintAsyncActionBase</code>扩展的类，也可以在BP中方便的使用这两个函数，主要是对于UI的操作来说，提供这样的函数会更加方便一些。</p>
-<p><img src="ListenForAttributeChange.PNG" alt="AttributeChange"></p>
+<p><img src="ListenForAttributeChange.png" alt="AttributeChange"></p>
 <h4 id="Derived-Attributes"><a href="#Derived-Attributes" class="headerlink" title="Derived Attributes"></a>Derived Attributes</h4><p>刚开始看的时候就觉得好高大上啊，派生属性好厉害，难不成是AttributeSet的派生类中的Attribute也能更新，但仔细想想这太厉害了也，而且不符合我学到的知识。</p>
 <p>关于这个Attribute的派生的功能，其实是说比如当我们在<code>Infinite</code>类型的<code>GameplayEffect</code>中使用一个或更多个的<code>Attribute Based</code>和<code>MMC Modifiers</code>的时候，<code>Derived Attribute</code>会依据它所依赖的上述类型的变量的变化而更新自己的值。</p>
 <blockquote>
