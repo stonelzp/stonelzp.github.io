@@ -1067,7 +1067,7 @@ table th:nth-of-type(4) {
 <p><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/CharacterMovementComponent/index.html" target="_blank" rel="noopener">Character Movement ComponentDetailed explanation of Character Movement Component</a></p>
 <h3 id="Replication-Graph"><a href="#Replication-Graph" class="headerlink" title="Replication Graph"></a>Replication Graph</h3><p>这是UE4为超多人游戏而准备的一个Plugin，具体使用方法不清楚，上面的Slide也有介绍。</p>
 <p><a href="https://docs.unrealengine.com/en-US/Engine/Networking/ReplicationGraph/index.html" target="_blank" rel="noopener">Replication Graph - Overview of the Replication Graph feature and Replication Graph Nodes.</a></p>
-<h1 id="一些基础概念"><a href="#一些基础概念" class="headerlink" title="一些基础概念"></a>一些基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<p>#重要的基础概念<br>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
 <h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
 </ul>
@@ -1190,6 +1190,16 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/RPCs/index.html" target="_blank" rel="noopener">RPCs</a></li>
 </ul>
+<h1 id="深入理解UE的Multiplayer-Online"><a href="#深入理解UE的Multiplayer-Online" class="headerlink" title="深入理解UE的Multiplayer Online"></a>深入理解UE的Multiplayer Online</h1><p>结合上面的内容，也随着项目越来越深入，逐渐想对UE4的多人游戏框架进行更深入的了解。</p>
+<p>首先是很不错的文章链接</p>
+<ul>
+<li><a href="https://historia.co.jp/archives/6750/https://historia.co.jp/archives/6750/" target="_blank" rel="noopener">[UE4] Multiplayer Online Deep Dive で講演してきました</a></li>
+</ul>
+<h2 id="Traveling理解"><a href="#Traveling理解" class="headerlink" title="Traveling理解"></a>Traveling理解</h2><p>参照的上面的文章中的一个Slide，这里直接贴出Slide的链接：</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/ue4-multiplayer-online-deep-dive-traveling-ue4dd?ref=https://historia.co.jp/" target="_blank" rel="noopener">UE4 MultiPlayer Online Deep Dive 基礎編2 -Traveling</a></li>
+</ul>
+<p>这一部分将对UE4中的Map的Traveling概念进行学习理解。有些在意的还有<strong>OnlineSubsystem</strong>和<strong>Session</strong>这两个部分，都是我目前还不了解的。</p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
