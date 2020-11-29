@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-23T12:36:18.771Z">
+<meta property="og:updated_time" content="2020-11-29T13:35:01.955Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-ActionRPG解析">
 <meta name="twitter:description" content="今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-11-23T21:36:18+09:00">
-                2020-11-23
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-29T22:35:01+09:00">
+                2020-11-29
               </time>
             
           </span>
@@ -403,7 +403,8 @@
 <li><a href="https://www2.slideshare.net/EpicGamesJapan/ue4action-rpg" target="_blank" rel="noopener">猫でも分かる UE4の新しいサンプル「Action RPG」について</a></li>
 </ul>
 <p>应该配合视频更好，都是一个系列的有时间找一下看看。</p>
-<h2 id="Load-Screen-Module"><a href="#Load-Screen-Module" class="headerlink" title="Load Screen Module"></a>Load Screen Module</h2><p>首先是UE4的异步加载界面的实现。</p>
+<h1 id="LoadScreenModule实现和相关内容"><a href="#LoadScreenModule实现和相关内容" class="headerlink" title="LoadScreenModule实现和相关内容"></a>LoadScreenModule实现和相关内容</h1><h2 id="Load-Screen-Module"><a href="#Load-Screen-Module" class="headerlink" title="Load Screen Module"></a>Load Screen Module</h2><p>首先是UE4的异步加载界面的实现。</p>
+<p>其中感觉很重要但是我目前还没有仔细调查的MoviePlayer，不知道是否可以实现Loading界面播片的问题，需要调查。</p>
 <p>很不错的介绍AsyncLoadingScreen的视频，还顺便介绍了一个很重要的概念，TransitionLevel</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=ON1_dEHoNDg" target="_blank" rel="noopener">Async Loading Screens and Transition Levels | Unreal Fest Europe 2019 | Unreal Engine</a></li>
@@ -456,7 +457,7 @@
 <h3 id="FGCObject"><a href="#FGCObject" class="headerlink" title="FGCObject"></a>FGCObject</h3><ul>
 <li><a href="https://qiita.com/go_astrayer/items/11b99ef8849b43796fee" target="_blank" rel="noopener">UPROPERTY を使わずにオブジェクトをガーベジ コレクションの対象から外す方法</a></li>
 </ul>
-
+<h1 id="AssetManager的Asset管理"><a href="#AssetManager的Asset管理" class="headerlink" title="AssetManager的Asset管理"></a>AssetManager的Asset管理</h1>
       
     </div>
     
@@ -679,7 +680,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Screen-Module"><span class="nav-number">1.</span> <span class="nav-text">Load Screen Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的Slate"><span class="nav-number">2.</span> <span class="nav-text">UE4的Slate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Slate-Hello"><span class="nav-number">2.1.</span> <span class="nav-text">Slate, Hello</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#很好的源码参考方式"><span class="nav-number">2.2.</span> <span class="nav-text">很好的源码参考方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">2.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展"><span class="nav-number">3.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">3.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">3.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface"><span class="nav-number">3.1.2.</span> <span class="nav-text">UInterface</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FGCObject"><span class="nav-number">3.2.</span> <span class="nav-text">FGCObject</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LoadScreenModule实现和相关内容"><span class="nav-number">1.</span> <span class="nav-text">LoadScreenModule实现和相关内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Screen-Module"><span class="nav-number">1.1.</span> <span class="nav-text">Load Screen Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的Slate"><span class="nav-number">1.2.</span> <span class="nav-text">UE4的Slate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Slate-Hello"><span class="nav-number">1.2.1.</span> <span class="nav-text">Slate, Hello</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#很好的源码参考方式"><span class="nav-number">1.2.2.</span> <span class="nav-text">很好的源码参考方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.2.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展"><span class="nav-number">1.3.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">1.3.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">UInterface</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FGCObject"><span class="nav-number">1.3.2.</span> <span class="nav-text">FGCObject</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AssetManager的Asset管理"><span class="nav-number">2.</span> <span class="nav-text">AssetManager的Asset管理</span></a></li></ol></div>
             
 
           </div>

@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="关于UE4中的LOG的使用我一直都是经常使用，但是也只是只用了最常见的UE_LOG，这篇文章注意主要想集中记录UE4中的LOG的使用和日志文件的问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-29T08:49:53.163Z">
+<meta property="og:updated_time" content="2020-11-29T09:11:55.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-正确使用LOG">
 <meta name="twitter:description" content="关于UE4中的LOG的使用我一直都是经常使用，但是也只是只用了最常见的UE_LOG，这篇文章注意主要想集中记录UE4中的LOG的使用和日志文件的问题。">
@@ -340,7 +340,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-11-29T17:49:53+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-29T18:11:55+09:00">
                 2020-11-29
               </time>
             
@@ -426,6 +426,9 @@
 <p>为什么会需要这个参数？原因就是对于我们不想输出的层级仍然需要进行比是否要输出该层级，索性直接将其从编译中移除更彻底。</p>
 <p>按照文章的内容所说一个大量的日志输出，哪怕并不会输出到日志上，但是决定这些是否要输出日志这件事本身就很慢了。</p>
 <p><strong>All</strong>相当于<strong>VeryVerbose</strong>的缩写，效果是相同的。</p>
+<h2 id="UE4的LOG输出时间"><a href="#UE4的LOG输出时间" class="headerlink" title="UE4的LOG输出时间"></a>UE4的LOG输出时间</h2><p>我一直以为UE4的Log没办法输出时间，实际上只是我没有调查而已…</p>
+<p><code>Preferences -&gt; General -&gt;  Apppearance -&gt; Log Timestamp</code>选择类型就可以输出时间了。</p>
+<h2 id="UE4的LOG输出日志文件"><a href="#UE4的LOG输出日志文件" class="headerlink" title="UE4的LOG输出日志文件"></a>UE4的LOG输出日志文件</h2><p>由于我没有调查过，UE4的日志输出文件应该也有功能，有时间一定要调查一下，或者说有需求着手之前一定要调查。</p>
 <h1 id="使用UE4之外的手段输出LOG"><a href="#使用UE4之外的手段输出LOG" class="headerlink" title="使用UE4之外的手段输出LOG"></a>使用UE4之外的手段输出LOG</h1><p>即我之前傻傻的未调查UE4的LOG系统可以做到什么程度，直接使用<a href="https://github.com/SergiusTheBest/plog" target="_blank" rel="noopener">plog</a>来进行Log日志的保存。但是我觉得效果还是一样的。</p>
 <p>至少不用每次都写UE4那个看起来就长的输出用的LOG宏<code>UE_LOG(xxx)</code>。</p>
 <p>等我有兴致再整理吧。</p>
@@ -646,7 +649,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的LOG"><span class="nav-number">1.</span> <span class="nav-text">UE4中的LOG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义LOG的Category"><span class="nav-number">1.1.</span> <span class="nav-text">自定义LOG的Category</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第二个参数：Log"><span class="nav-number">1.1.1.</span> <span class="nav-text">第二个参数：Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三个参数：All"><span class="nav-number">1.1.2.</span> <span class="nav-text">第三个参数：All</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用UE4之外的手段输出LOG"><span class="nav-number">2.</span> <span class="nav-text">使用UE4之外的手段输出LOG</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的LOG"><span class="nav-number">1.</span> <span class="nav-text">UE4中的LOG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义LOG的Category"><span class="nav-number">1.1.</span> <span class="nav-text">自定义LOG的Category</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第二个参数：Log"><span class="nav-number">1.1.1.</span> <span class="nav-text">第二个参数：Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三个参数：All"><span class="nav-number">1.1.2.</span> <span class="nav-text">第三个参数：All</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的LOG输出时间"><span class="nav-number">1.2.</span> <span class="nav-text">UE4的LOG输出时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的LOG输出日志文件"><span class="nav-number">1.3.</span> <span class="nav-text">UE4的LOG输出日志文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用UE4之外的手段输出LOG"><span class="nav-number">2.</span> <span class="nav-text">使用UE4之外的手段输出LOG</span></a></li></ol></div>
             
 
           </div>

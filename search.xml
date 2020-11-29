@@ -33,6 +33,9 @@
 <p>为什么会需要这个参数？原因就是对于我们不想输出的层级仍然需要进行比是否要输出该层级，索性直接将其从编译中移除更彻底。</p>
 <p>按照文章的内容所说一个大量的日志输出，哪怕并不会输出到日志上，但是决定这些是否要输出日志这件事本身就很慢了。</p>
 <p><strong>All</strong>相当于<strong>VeryVerbose</strong>的缩写，效果是相同的。</p>
+<h2 id="UE4的LOG输出时间"><a href="#UE4的LOG输出时间" class="headerlink" title="UE4的LOG输出时间"></a>UE4的LOG输出时间</h2><p>我一直以为UE4的Log没办法输出时间，实际上只是我没有调查而已…</p>
+<p><code>Preferences -&gt; General -&gt;  Apppearance -&gt; Log Timestamp</code>选择类型就可以输出时间了。</p>
+<h2 id="UE4的LOG输出日志文件"><a href="#UE4的LOG输出日志文件" class="headerlink" title="UE4的LOG输出日志文件"></a>UE4的LOG输出日志文件</h2><p>由于我没有调查过，UE4的日志输出文件应该也有功能，有时间一定要调查一下，或者说有需求着手之前一定要调查。</p>
 <h1 id="使用UE4之外的手段输出LOG"><a href="#使用UE4之外的手段输出LOG" class="headerlink" title="使用UE4之外的手段输出LOG"></a>使用UE4之外的手段输出LOG</h1><p>即我之前傻傻的未调查UE4的LOG系统可以做到什么程度，直接使用<a href="https://github.com/SergiusTheBest/plog" target="_blank" rel="noopener">plog</a>来进行Log日志的保存。但是我觉得效果还是一样的。</p>
 <p>至少不用每次都写UE4那个看起来就长的输出用的LOG宏<code>UE_LOG(xxx)</code>。</p>
 <p>等我有兴致再整理吧。</p>
@@ -141,7 +144,8 @@
 <li><a href="https://www2.slideshare.net/EpicGamesJapan/ue4action-rpg" target="_blank" rel="noopener">猫でも分かる UE4の新しいサンプル「Action RPG」について</a></li>
 </ul>
 <p>应该配合视频更好，都是一个系列的有时间找一下看看。</p>
-<h2 id="Load-Screen-Module"><a href="#Load-Screen-Module" class="headerlink" title="Load Screen Module"></a>Load Screen Module</h2><p>首先是UE4的异步加载界面的实现。</p>
+<h1 id="LoadScreenModule实现和相关内容"><a href="#LoadScreenModule实现和相关内容" class="headerlink" title="LoadScreenModule实现和相关内容"></a>LoadScreenModule实现和相关内容</h1><h2 id="Load-Screen-Module"><a href="#Load-Screen-Module" class="headerlink" title="Load Screen Module"></a>Load Screen Module</h2><p>首先是UE4的异步加载界面的实现。</p>
+<p>其中感觉很重要但是我目前还没有仔细调查的MoviePlayer，不知道是否可以实现Loading界面播片的问题，需要调查。</p>
 <p>很不错的介绍AsyncLoadingScreen的视频，还顺便介绍了一个很重要的概念，TransitionLevel</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=ON1_dEHoNDg" target="_blank" rel="noopener">Async Loading Screens and Transition Levels | Unreal Fest Europe 2019 | Unreal Engine</a></li>
@@ -194,7 +198,7 @@
 <h3 id="FGCObject"><a href="#FGCObject" class="headerlink" title="FGCObject"></a>FGCObject</h3><ul>
 <li><a href="https://qiita.com/go_astrayer/items/11b99ef8849b43796fee" target="_blank" rel="noopener">UPROPERTY を使わずにオブジェクトをガーベジ コレクションの対象から外す方法</a></li>
 </ul>
-]]></content>
+<h1 id="AssetManager的Asset管理"><a href="#AssetManager的Asset管理" class="headerlink" title="AssetManager的Asset管理"></a>AssetManager的Asset管理</h1>]]></content>
       <categories>
         <category>UnrealEngine4</category>
       </categories>
@@ -1244,6 +1248,41 @@ table th:nth-of-type(4) {
 <li><a href="https://www.slideshare.net/EpicGamesJapan/ue4-multiplayer-online-deep-dive-traveling-ue4dd?ref=https://historia.co.jp/" target="_blank" rel="noopener">UE4 MultiPlayer Online Deep Dive 基礎編2 -Traveling</a></li>
 </ul>
 <p>这一部分将对UE4中的Map的Traveling概念进行学习理解。有些在意的还有<strong>OnlineSubsystem</strong>和<strong>Session</strong>这两个部分，都是我目前还不了解的。</p>
+<p>时间有限我就简单对这个章节的内容做一些记录。</p>
+<p>普通的比如说单机模式在下，切换Map的情况的话只要简单的调用<code>OpenLevel</code>函数就可以实现了。但是多人情况下，简单的调用实现不了这个功能，那同时双方都调用这个函数肯定是可以的，但是这样耿直未免有些傻气。</p>
+<p>UE4提供了<strong>Traveling</strong>功能，可以实现多人游戏模式下的地图(Map)切换的同步。</p>
+<h3 id="以Listen-Server的形式打开Map"><a href="#以Listen-Server的形式打开Map" class="headerlink" title="以Listen Server的形式打开Map"></a>以Listen Server的形式打开Map</h3><p>首先我们多人模式需要Server端以<strong>Listen Server</strong>的的模式打开Map：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Start Server */</span></span><br><span class="line">UGameplayStatics::OpenLevel(GetWorld(), <span class="string">"LevelName"</span>, <span class="literal">true</span>, <span class="string">"listen"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>也算是重新打开一次map，只不过是带有<code>listen</code>命令</p>
+<h4 id="Option-String"><a href="#Option-String" class="headerlink" title="Option String"></a>Option String</h4><p>关于这个命令，我稍作了解，自己的理解就是创建<code>UWorld</code>的时候会带有一些<code>Option</code>,这些<code>Option</code>就是命令，有固定格式的写法，也有方法读取。</p>
+<p>这个<code>Option</code>中添加的字符串(也就是“listen“)会作为被加载的Level的<code>GameMode</code>的<code>OptionString</code>属性被保存。</p>
+<p>至于读取方法我没有验证过，这里只贴上链接：</p>
+<ul>
+<li><a href="http://monsho.blog63.fc2.com/blog-entry-121.html" target="_blank" rel="noopener">[UE4] Levelを開く</a></li>
+</ul>
+<p>我自己又稍微看过一点源码，所以我了解到在打开map的时候<code>UWorld</code>会更新一个WorldContent还是什么的结构体，这个结构体是由GameInstance保存的貌似，然后还有一个LastURL的属性，记录上次打开map的命令，我用这个来判断是否是ListenServer模式了，不知道对不对。</p>
+<p>上面我有空要准确的更新一下，找一找源码。</p>
+<h4 id="以ListenServer打开Level的流程图"><a href="#以ListenServer打开Level的流程图" class="headerlink" title="以ListenServer打开Level的流程图"></a>以ListenServer打开Level的流程图</h4><p><img src="ServerWithlisten.PNG" alt="Server"></p>
+<h3 id="ServerTravel"><a href="#ServerTravel" class="headerlink" title="ServerTravel"></a>ServerTravel</h3><p>然后Server端只要在想要进行map的的跳转是调用<code>ServerTravel</code>函数，与之相连的Client也会一起跳转。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Start ServerTravel */</span></span><br><span class="line">GetWorld()-&gt;ServerTravel(<span class="string">"LevelName"</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="Server端开始Traveling的流程"><a href="#Server端开始Traveling的流程" class="headerlink" title="Server端开始Traveling的流程"></a>Server端开始Traveling的流程</h4><p><img src="server1.PNG" alt="Server"></p>
+<p>Client的流程：<br><img src="client3.PNG" alt="Client"></p>
+<p>也就是说，根据上面的图得到的结论就是，每一次<code>ServerTravel</code>被调用跳转到下一个Map的时候，Client端向Server端的Login处理都要再执行一次。</p>
+<p><code>ServerTravel</code>这其实也就是UE4已经包装好的RPCs，而且在Server调用，Client接收到通知准备跳转之前还有一个Callback，我使用这个回调来实现Client端的加载界面表示。</p>
+<p>关于这个函数回调和这个RPCs的详细内容之后补上。</p>
+<h3 id="ClientTravel"><a href="#ClientTravel" class="headerlink" title="ClientTravel"></a>ClientTravel</h3><p>关于Client的Traveling内容目前我还不是非常的清楚，等到真正需要用到的时候再仔细验证整理吧。</p>
+<p>应该是重连的部分会用到。</p>
+<p><img src="ClientTraveling.PNG" alt="ClientTravel"></p>
+<h4 id="Cllient的Traveling流程图"><a href="#Cllient的Traveling流程图" class="headerlink" title="Cllient的Traveling流程图"></a>Cllient的Traveling流程图</h4><p><img src="client1.PNG" alt="client"><br><img src="client2.PNG" alt="client"></p>
+<h5 id="UPendingNetGame"><a href="#UPendingNetGame" class="headerlink" title="UPendingNetGame"></a>UPendingNetGame</h5><ul>
+<li>Control Channel で Server に Hello メッセージして待っている間、 UPendingNetGame オブジェクトが Server からの返答待ち及び、 Server が Closed になっていないかどうかの監視を行う</li>
+</ul>
+<h5 id="Control-Channel"><a href="#Control-Channel" class="headerlink" title="Control Channel"></a>Control Channel</h5><ul>
+<li>C/S 間の接続の制御に利用されるチャンネル</li>
+<li>UConnection 生成時に一つ生成される</li>
+</ul>
+<p>这个Slide的后面还有<strong>Network Version</strong>, <strong>PreLogin</strong>之类的看似很重要的内容，因为暂时还没有急切的需要用到，就先占个位，到时候再遇到再理解整理吧。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="Server-Client-Traveling.PNG" alt="总结内容"></p>
+<h3 id="SeamlessTravel解决每次map跳转Client都要再Login的问题"><a href="#SeamlessTravel解决每次map跳转Client都要再Login的问题" class="headerlink" title="SeamlessTravel解决每次map跳转Client都要再Login的问题"></a>SeamlessTravel解决每次map跳转Client都要再Login的问题</h3><p>利用<strong>SeamlessTravel</strong>的特性，经由一个<strong>TransitionMap</strong>再跳转到目标Map，则可以保持Client的连接进行跳转，还可以保持一些对象一起跳转到下一个Map中。</p>
+<p>使用方法等到真正用到的时候再整理吧。这里有许多需要注意的地方，参照原文。</p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
