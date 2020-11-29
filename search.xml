@@ -1,6 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-正确使用LOG</title>
+    <url>/stonelzp.github.io/how-to-use-log/</url>
+    <content><![CDATA[<p>关于UE4中的LOG的使用我一直都是经常使用，但是也只是只用了最常见的<code>UE_LOG</code>，这篇文章注意主要想集中记录UE4中的LOG的使用和日志文件的问题。</p>
+<a id="more"></a>
+<h1 id="UE4中的LOG"><a href="#UE4中的LOG" class="headerlink" title="UE4中的LOG"></a>UE4中的LOG</h1><p>在想要在游戏中使用LOG的时候，首先需要知道的是UE4的LOG可以做到哪一步。</p>
+<p>首先需要记录的UE4中的LOG。</p>
+<h2 id="自定义LOG的Category"><a href="#自定义LOG的Category" class="headerlink" title="自定义LOG的Category"></a>自定义LOG的Category</h2><p>参考文章：</p>
+<ul>
+<li><a href="https://blog.jamie.holdings/2020/04/21/unreal-engine-4-custom-log-categories/" target="_blank" rel="noopener">Unreal Engine 4 - Custom Log Categories</a></li>
+</ul>
+<p>自定义LOG的步骤有三步：声明-定义-使用。就这么简单。</p>
+<p>头文件中声明：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">DECLARE_LOG_CATEGORY_EXTERN(LogMyAwesomeGame, Log, All);</span><br></pre></td></tr></table></figure></p>
+<p>CPP文件中定义：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">DEFINE_LOG_CATEGORY(LogMyAwesomeGame);</span><br></pre></td></tr></table></figure></p>
+<p>使用：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UE_LOG(LogMyAwesomeGame, Log, TEXT(<span class="string">"Test Log Message"</span>));</span><br></pre></td></tr></table></figure></p>
+<p>然后是对声明中出现的参数进行说明。</p>
+<p>第一个参数当然我们新定义的LOG类别的名称。</p>
+<h3 id="第二个参数：Log"><a href="#第二个参数：Log" class="headerlink" title="第二个参数：Log"></a>第二个参数：Log</h3><p>第二个参数则是为这个种类的LOG定义了输出等级，UE4中包含了以下的几个LOG输出等级：</p>
+<ul>
+<li>Fatal</li>
+<li>Error</li>
+<li>Warning</li>
+<li>Display</li>
+<li>Log</li>
+<li>Verbose</li>
+<li>VeryVerbose </li>
+</ul>
+<p>像上面，如果你定义了Log类型，则Log以上包含Log的输出等级的Log都会被输出。</p>
+<p>额外的，如果你想提升LOG的输出等级，只是为了Debug，我们可以在不修改代码改为修改设定文件的方式对该类型的默认LOG输出层级进行重写：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[Core.Log]</span><br><span class="line">LogMyAwesomeGame=VeryVerbose</span><br></pre></td></tr></table></figure></p>
+<h3 id="第三个参数：All"><a href="#第三个参数：All" class="headerlink" title="第三个参数：All"></a>第三个参数：All</h3><p>第三个参数则是决定了编译阶段会被编译进去的LOG层级，这意味着在Runtime对Log的输出层级进行修改变为不可能，当然是指修改为未被编译进去的LOG层级。</p>
+<p>为什么会需要这个参数？原因就是对于我们不想输出的层级仍然需要进行比是否要输出该层级，索性直接将其从编译中移除更彻底。</p>
+<p>按照文章的内容所说一个大量的日志输出，哪怕并不会输出到日志上，但是决定这些是否要输出日志这件事本身就很慢了。</p>
+<p><strong>All</strong>相当于<strong>VeryVerbose</strong>的缩写，效果是相同的。</p>
+<h1 id="使用UE4之外的手段输出LOG"><a href="#使用UE4之外的手段输出LOG" class="headerlink" title="使用UE4之外的手段输出LOG"></a>使用UE4之外的手段输出LOG</h1><p>即我之前傻傻的未调查UE4的LOG系统可以做到什么程度，直接使用<a href="https://github.com/SergiusTheBest/plog" target="_blank" rel="noopener">plog</a>来进行Log日志的保存。但是我觉得效果还是一样的。</p>
+<p>至少不用每次都写UE4那个看起来就长的输出用的LOG宏<code>UE_LOG(xxx)</code>。</p>
+<p>等我有兴致再整理吧。</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-需要时常关注的文章更新和视频更新</title>
     <url>/stonelzp.github.io/ue4-follow/</url>
     <content><![CDATA[<p>不断地学习最新的知识，则需要集思广益而且要与时俱进，这篇文章主要是为了记录一些需要时时查看的文章和链接，学习最新的知识。<br><a id="more"></a></p>
@@ -5740,6 +5784,18 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://wiki.unrealengine.com/Linking_Dlls" target="_blank" rel="noopener">Linking Dlls</a></li>
 </ul>
+<p>上面的链接已经失效了，UE4的Wiki一升级就完蛋。还好能搜到文章的映像，好心人还是有的。</p>
+<ul>
+<li><a href="https://nerivec.github.io/old-ue4-wiki/pages/linking-dlls.html" target="_blank" rel="noopener">Linking Dlls</a></li>
+</ul>
+<p>我觉得我还是好好的记录一下为好…</p>
+<p>使用VS新建一个动态链接库的解决方案，就是工程<br><img src="CreateDLL_Setp1.jpg" alt="创建动态链接库"></p>
+<p>至于它默认的建立的几个文件说实话我也不是特别了解，反正只是按照教程我自己新建了一个新的文件<code>LogFuncExport</code>的 .h .cpp文件。<br><img src="CreateDLL_Setp2.jpg" alt="新建一个我们用来导出函数的类文件"></p>
+<p>然后我们复制粘贴测试代码，然后用<code>Release</code>和<code>X64</code>模式编译项目，在我们的项目文件夹下的<strong>x64/Release</strong>下找到我们用来测试用的dll文件。</p>
+<p>至于测试代码就顺带贴一下，顺带一提我用的是VS2019，UE4的版本是4.25。头文件别忘了根据场景替换。</p>
+<details><br>  <summary>点击展开测试用的代码</summary><br>  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">  <span class="comment">// .h文件</span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">pragma</span> once  </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DLL_EXPORT __declspec(dllexport)  <span class="comment">//shortens __declspec(dllexport) to DLL_EXPORT</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus    <span class="comment">//if C++ is used convert it to C to prevent C++'s name mangling of method names</span></span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">bool</span> DLL_EXPORT <span class="title">getInvertedBool</span><span class="params">(<span class="keyword">bool</span> boolState)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">int</span> DLL_EXPORT <span class="title">getIntPlusPlus</span><span class="params">(<span class="keyword">int</span> lastInt)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">float</span> DLL_EXPORT <span class="title">getCircleArea</span><span class="params">(<span class="keyword">float</span> radius)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">char</span> DLL_EXPORT *<span class="title">getCharArray</span><span class="params">(<span class="keyword">char</span>* parameterText)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">float</span> DLL_EXPORT *<span class="title">getVector4</span><span class="params">( <span class="keyword">float</span> x, <span class="keyword">float</span> y, <span class="keyword">float</span> z, <span class="keyword">float</span> w)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure><br><br>  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">  <span class="comment">// .cpp文件</span></span><br><span class="line">  <span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"string.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CreateAndLinkDLLFile.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Exported method that invertes a given boolean.</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">getInvertedBool</span><span class="params">(<span class="keyword">bool</span> boolState)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">bool</span>(!boolState);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Exported method that iterates a given int value.</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getIntPlusPlus</span><span class="params">(<span class="keyword">int</span> lastInt)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">int</span>(++lastInt);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Exported method that calculates the are of a circle by a given radius.</span></span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">getCircleArea</span><span class="params">(<span class="keyword">float</span> radius)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">float</span>(<span class="number">3.1416f</span> * (radius * radius));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Exported method that adds a parameter text to an additional text and returns them combined.</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">getCharArray</span><span class="params">(<span class="keyword">char</span>* parameterText)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span>* additionalText = <span class="string">" world!"</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">strlen</span>(parameterText) + <span class="built_in">strlen</span>(additionalText) + <span class="number">1</span> &gt; <span class="number">256</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">char</span>*)<span class="string">"Error: Maximum size of the char array is 256 chars."</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">char</span> combinedText[<span class="number">256</span>] = <span class="string">""</span>;</span><br><span class="line">  </span><br><span class="line">  strcpy_s( combinedText, <span class="number">256</span>, parameterText);</span><br><span class="line">  strcat_s( combinedText, <span class="number">256</span>, additionalText);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> ( <span class="keyword">char</span>* )combinedText;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Exported method that adds a vector4 to a given vector4 and returns the sum.</span></span><br><span class="line"><span class="function"><span class="keyword">float</span> *<span class="title">getVector4</span><span class="params">( <span class="keyword">float</span> x, <span class="keyword">float</span> y, <span class="keyword">float</span> z, <span class="keyword">float</span> w )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">float</span>* modifiedVector4 = <span class="keyword">new</span> <span class="keyword">float</span>[<span class="number">4</span>];</span><br><span class="line">  </span><br><span class="line">  modifiedVector4[<span class="number">0</span>] = x + <span class="number">1.0F</span>;</span><br><span class="line">  modifiedVector4[<span class="number">1</span>] = y + <span class="number">2.0F</span>;</span><br><span class="line">  modifiedVector4[<span class="number">2</span>] = z + <span class="number">3.0F</span>;</span><br><span class="line">  modifiedVector4[<span class="number">3</span>] = w + <span class="number">4.0F</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> ( <span class="keyword">float</span>* )modifiedVector4;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br></details>
+
+
 <h1 id="导出函数"><a href="#导出函数" class="headerlink" title="导出函数"></a>导出函数</h1><p>添加了具体的库的功能之后，需要将函数导出供外部使用。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DLL_EXPORT __declspec(dllexport)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> DLL_EXPORT <span class="title">ExportFuncName</span><span class="params">()</span></span>&#123; <span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">    <span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
 <p>像这样，上述的函数就被导出，能够被外部调用了。</p>
 <h2 id="导出函数的时候遇到的问题"><a href="#导出函数的时候遇到的问题" class="headerlink" title="导出函数的时候遇到的问题"></a>导出函数的时候遇到的问题</h2><p>当我在UE4中使用inline这个关键字的时候，给我报错了。</p>
@@ -5810,6 +5866,8 @@ table th:nth-of-type(4) {
 <p> 我只列出了比较重要的内容，对于理解打包第三方库来说的。相比于默认的（创建工程的时候）文件结构来说，唯一不同的地方是在<code>Plugins</code>的文件夹下面的插件中的<code>Binaries</code>和<code>Source</code>文件夹出现了<code>ThirdParty</code>文件夹。当然这个文件夹也不是我创建的。那么我也不是凭空就知道正确的结构。要点就在于UE4提供了第三方库的插件使用模板。</p>
 <ol>
 <li>有效使用UE4提供的第三方库的插件使用模板。可以参考下面的第二个链接。<code>Edit -&gt; Plugins -&gt; NewPlugin</code>打开创建新的插件窗口。拉到最下边有一个<strong>Third Party Library</strong>的模板，创建使用。当然这还只是开始。不过这个时候已经有了雏形，大体的插件文件结构已经构建完成，不需要再去额外的创建文件，只要适当的修改文件就好了。</li>
+<li>使用这个方法创建了第三方库之后你会发现，在你的Plugin的<em>Source/ThirdParty/PluginNameLibrary</em>下面就有了一个Solution，完全可以直接在这个Solution中制作想要的第三方库。</li>
+<li>但是由于生成的Solution的名字固定，我选择删除了这个Solution，把上面自己新建的Solution给复制进去了。</li>
 </ol>
 </li>
 <li><p>确保第三方库（DLL）的路径。下面是第三方库的编译设置文件(Build.cs)中的内容</p>
@@ -5984,9 +6042,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -6023,9 +6081,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -6194,8 +6252,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
