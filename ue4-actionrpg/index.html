@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-actionrpg/SaveGame.jpg">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-actionrpg/BPGameInstance1.jpg">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-actionrpg/BPGameInstance2.jpg">
-<meta property="og:updated_time" content="2020-12-03T15:56:13.330Z">
+<meta property="og:updated_time" content="2020-12-04T14:57:35.612Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-ActionRPG解析">
 <meta name="twitter:description" content="今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。">
@@ -344,7 +344,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-04T00:56:13+09:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-04T23:57:35+09:00">
                 2020-12-04
               </time>
             
@@ -487,8 +487,32 @@
 <p>实现内容很短，使用的时候参照一下就好了。</p>
 <p>还有一些函数没有记录进去，不是特别重要，但是也有作用，比如说上面的<code>bPendingSaveRequested</code>，但是在制作的时候大概都会想到，再添加进去也来得及，主要是直接去看ActionRPG的源码更快，这里我只是稍加记录，方便自己理解回忆。</p>
 <p>实现上面的话应该就可以了，为什么是”应该“？因为我还没有验证过，只是趁着为数不多的时间理解并记录了一下，等之后我需要在自己的项目中实现一下。</p>
+<h2 id="数据的序列化-Serialize"><a href="#数据的序列化-Serialize" class="headerlink" title="数据的序列化(Serialize)"></a>数据的序列化(Serialize)</h2><p>在初步的尝试使用<code>SaveGame</code>来进行数据的存储之后，稍微复杂一点的数据结构或者说是数据类型就没有办法保存了。比如说指针类型。</p>
+<p>Pointer类型的数据没有办法保存。<code>UObject*</code>或者<code>AActor*</code>类型，取出来都是NULL，还好还是有救的。</p>
+<p>这里先只贴上链接，等到以后真要使用了在验证整理吧…</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/35618/savingloading-an-array-of-objects.html" target="_blank" rel="noopener">What is the best way to handle Saving/Loading an Array of Objects?</a></li>
+</ul>
+<p>上面的问题的回答应该算是官方解答了，具体我没有验证过，等我需要验证的时候再到这里找答案吧。</p>
+<ul>
+<li><a href="https://www.gamedev.net/forums/topic/685514-complex-saving-and-loading-techniques-in-unreal-engine-4/" target="_blank" rel="noopener">Complex Saving and Loading Techniques in Unreal Engine 4</a></li>
+<li><a href="http://runedegroot.com/saving-and-loading-actor-data-in-unreal-engine-4/" target="_blank" rel="noopener">Saving and loading actor data in Unreal Engine 4</a></li>
+<li><a href="https://www.ue4community.wiki/legacy/savegame-pointers-and-structs-8wlg0qms" target="_blank" rel="noopener">Legacy/SaveGame Pointers and Structs</a></li>
+<li><a href="https://historia.co.jp/archives/1457/" target="_blank" rel="noopener">[UE4] 独自のアセットを実装する方法(6)　独自のシリアライズを実装する</a></li>
+</ul>
+<p>上面的链接都是很好的参考资料。应该。找时间整理一下。</p>
+<p>下面这篇文章我没有读过，但是我觉得我应该花时间把这篇文章研读整理一下，说不定就能明白UE4中的序列化的问题。</p>
+<ul>
+<li><a href="https://michaeljcole.github.io/wiki.unrealengine.com/Save_System,_Read_&amp;_Write_Any_Data_to_Compressed_Binary_Files/" target="_blank" rel="noopener">#Save System, Read &amp; Write Any Data to Compressed Binary Files</a></li>
+</ul>
+<p>所以最终我没有尝试验证上面的方法可行不可行的原因之一是，上面的方法都指向了自己序列化数据类型然后自己设置二进制文件进行保存，没有用到UE4提供的<code>SaveGame</code>类，更不用说<code>LoadGameFromSlot</code>函数和和它的异步版本(AsyncLoad/Save)了，这样的话我又要改造。</p>
+<p>原因之二也是最重要的原因是我用<strong>Struct</strong>来代替指针类型了，非常方便。</p>
 <h2 id="拓展-1"><a href="#拓展-1" class="headerlink" title="拓展"></a>拓展</h2><p>在学习这个<code>SaveGame</code>的过程中遇到了几个知识点。</p>
 <h3 id="CreateLambda"><a href="#CreateLambda" class="headerlink" title="CreateLambda"></a>CreateLambda</h3><p>使用UE4的Delegate遇到的<code>CreateLambda</code>函数，没想到会在UE4里遇见你啊，有时间要整理。</p>
+<ul>
+<li><a href="https://qiita.com/sy_/items/541fd18e460f5a881c75" target="_blank" rel="noopener">Unreal Engine 4メモ：デリゲートをprivateで書く</a></li>
+</ul>
+<p>上面的文章关于Delegate的各种意义上的蛮重要的。</p>
 <h3 id="NewObject添加构造函数参数"><a href="#NewObject添加构造函数参数" class="headerlink" title="NewObject添加构造函数参数"></a>NewObject添加构造函数参数</h3><p>这是我在寻找为UE4的<code>NewObject</code>新建一个UObject的时候是否能使用带参数的初始化函数进行初始化的时候找到的解决方案，因为使用NewObject的时候顶多添加一个Outer，我所知道的，查不到可以调用带参数的构造函数方法，这个时候我搜到了这个：</p>
 <blockquote>
 <p>Hey, here’s one way round I use to construct and init my UObjects in one call. In one sentence: make a static function that takes in the desired parameters, creates the UObject, inits it with the params and returns it at the end.</p>
@@ -720,7 +744,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LoadScreenModule实现和相关内容"><span class="nav-number">1.</span> <span class="nav-text">LoadScreenModule实现和相关内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Screen-Module"><span class="nav-number">1.1.</span> <span class="nav-text">Load Screen Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的Slate"><span class="nav-number">1.2.</span> <span class="nav-text">UE4的Slate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Slate-Hello"><span class="nav-number">1.2.1.</span> <span class="nav-text">Slate, Hello</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#很好的源码参考方式"><span class="nav-number">1.2.2.</span> <span class="nav-text">很好的源码参考方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.2.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展"><span class="nav-number">1.3.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">1.3.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">UInterface</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UINTERFACE修饰符"><span class="nav-number">1.3.1.2.1.</span> <span class="nav-text">UINTERFACE修饰符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FGCObject"><span class="nav-number">1.3.2.</span> <span class="nav-text">FGCObject</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AssetManager的Asset管理"><span class="nav-number">2.</span> <span class="nav-text">AssetManager的Asset管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SaveGame存档管理"><span class="nav-number">3.</span> <span class="nav-text">SaveGame存档管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展-1"><span class="nav-number">3.1.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CreateLambda"><span class="nav-number">3.1.1.</span> <span class="nav-text">CreateLambda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NewObject添加构造函数参数"><span class="nav-number">3.1.2.</span> <span class="nav-text">NewObject添加构造函数参数</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LoadScreenModule实现和相关内容"><span class="nav-number">1.</span> <span class="nav-text">LoadScreenModule实现和相关内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Load-Screen-Module"><span class="nav-number">1.1.</span> <span class="nav-text">Load Screen Module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的Slate"><span class="nav-number">1.2.</span> <span class="nav-text">UE4的Slate</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Slate-Hello"><span class="nav-number">1.2.1.</span> <span class="nav-text">Slate, Hello</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#很好的源码参考方式"><span class="nav-number">1.2.2.</span> <span class="nav-text">很好的源码参考方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.2.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展"><span class="nav-number">1.3.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">1.3.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">UInterface</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UINTERFACE修饰符"><span class="nav-number">1.3.1.2.1.</span> <span class="nav-text">UINTERFACE修饰符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FGCObject"><span class="nav-number">1.3.2.</span> <span class="nav-text">FGCObject</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AssetManager的Asset管理"><span class="nav-number">2.</span> <span class="nav-text">AssetManager的Asset管理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SaveGame存档管理"><span class="nav-number">3.</span> <span class="nav-text">SaveGame存档管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据的序列化-Serialize"><span class="nav-number">3.1.</span> <span class="nav-text">数据的序列化(Serialize)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展-1"><span class="nav-number">3.2.</span> <span class="nav-text">拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CreateLambda"><span class="nav-number">3.2.1.</span> <span class="nav-text">CreateLambda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NewObject添加构造函数参数"><span class="nav-number">3.2.2.</span> <span class="nav-text">NewObject添加构造函数参数</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
