@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-actionrpg/SaveGame.jpg">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-actionrpg/BPGameInstance1.jpg">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-actionrpg/BPGameInstance2.jpg">
-<meta property="og:updated_time" content="2020-12-04T14:57:35.612Z">
+<meta property="og:updated_time" content="2020-12-09T02:46:52.720Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-ActionRPG解析">
 <meta name="twitter:description" content="今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。">
@@ -344,8 +344,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-12-04T23:57:35+09:00">
-                2020-12-04
+              <time title="更新于" itemprop="dateModified" datetime="2020-12-09T11:46:52+09:00">
+                2020-12-09
               </time>
             
           </span>
@@ -512,7 +512,7 @@
 <ul>
 <li><a href="https://qiita.com/sy_/items/541fd18e460f5a881c75" target="_blank" rel="noopener">Unreal Engine 4メモ：デリゲートをprivateで書く</a></li>
 </ul>
-<p>上面的文章关于Delegate的各种意义上的蛮重要的。</p>
+<p>上面的文章关于Delegate的各种意义上蛮重要的。</p>
 <h3 id="NewObject添加构造函数参数"><a href="#NewObject添加构造函数参数" class="headerlink" title="NewObject添加构造函数参数"></a>NewObject添加构造函数参数</h3><p>这是我在寻找为UE4的<code>NewObject</code>新建一个UObject的时候是否能使用带参数的初始化函数进行初始化的时候找到的解决方案，因为使用NewObject的时候顶多添加一个Outer，我所知道的，查不到可以调用带参数的构造函数方法，这个时候我搜到了这个：</p>
 <blockquote>
 <p>Hey, here’s one way round I use to construct and init my UObjects in one call. In one sentence: make a static function that takes in the desired parameters, creates the UObject, inits it with the params and returns it at the end.</p>
