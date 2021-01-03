@@ -7520,6 +7520,10 @@ table th:nth-of-type(4) {
 <p>然后声明一个Handle<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在.h文件中声明一个Timer Handle供我们使用，一个Handle就是一个定时的名字应该</span></span><br><span class="line">FTimerHandle timer_handle;</span><br></pre></td></tr></table></figure></p>
 <p>最后开始定时：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">timer.SetTimer(timer_handle, <span class="keyword">this</span>, &amp;USampleActorComponent::TimerMethodWnted, <span class="number">1.0</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
 <p>参数的意思应该一目了然了。</p>
+<h3 id="UE4项目右键找不到GenerateProjectFile选项的问题"><a href="#UE4项目右键找不到GenerateProjectFile选项的问题" class="headerlink" title="UE4项目右键找不到GenerateProjectFile选项的问题"></a>UE4项目右键找不到GenerateProjectFile选项的问题</h3><p>换新电脑或者重做系统之后会遇到的麻烦事儿，就是想要重新生成UE4的<strong>sln</strong>工程文件，右键却找不到重新生成选项的问题。解决方案是：</p>
+<p><strong>找到使用的引擎文件中的UnrealVersionSelector.exe文件，并双击。</strong></p>
+<p>一般这个文件都是在UE4的<em>Binary</em>文件夹下面。</p>
+<p>参考资料：<br><a href="https://forums.unrealengine.com/development-discussion/content-creation/81964-association-uproject-unreal-are-broken?109862-Association-uproject-unreal-are-broken=" target="_blank" rel="noopener">Association .uproject / unreal are broken</a></p>
 <h2 id="UE4知识拓展"><a href="#UE4知识拓展" class="headerlink" title="UE4知识拓展"></a>UE4知识拓展</h2><p>主要用来记录一些常见但是需要理解的优先级不高或者不太常用的知识点的拓展。</p>
 <h3 id="Class-Specifiers"><a href="#Class-Specifiers" class="headerlink" title="Class Specifiers"></a>Class Specifiers</h3><p>关于UClass的修饰符</p>
 <p>Class Specifiers</p>
