@@ -566,7 +566,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>UnrealEngine</category>
+        <category>UnrealEngine4</category>
       </categories>
       <tags>
         <tag>UE4</tag>
@@ -608,7 +608,7 @@
 <p>按照上面的文章内容所说，在蓝图中设置的时候除了<strong>Expose on Spawn</strong>需要check之外，<strong>instance editable</strong>一项也需要被check，理由暂时不太清楚。</p>
 ]]></content>
       <categories>
-        <category>UnrealEngine</category>
+        <category>UnrealEngine4</category>
       </categories>
       <tags>
         <tag>UE4</tag>
@@ -2016,7 +2016,7 @@ table th:nth-of-type(4) {
 <p>我就粘贴上大概的实现，反正要找的话都能找到。</p>
 </details>]]></content>
       <categories>
-        <category>Unreal Engine</category>
+        <category>UnrealEngine4</category>
       </categories>
       <tags>
         <tag>UE4</tag>
