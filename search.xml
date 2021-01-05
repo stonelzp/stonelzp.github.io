@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Vim学习笔记</title>
+    <url>/stonelzp.github.io/learning-vim/</url>
+    <content><![CDATA[<p>记录一些Vim的常用的使用方法。</p>
+<a id="more"></a>
+<p>我使用Vim也很久了，但是要问我学的怎么样，我也只能说啥都不会，也就会一点特别基础的移动光标而已。所以这篇文章用来记录一些我使用Vim的命令。</p>
+<h3 id="替换字符"><a href="#替换字符" class="headerlink" title="替换字符"></a>替换字符</h3><p>经常会需要使用其他的单词替换全文的某个单词，找了一下Vim的使用，有很多，但我看不懂，我就记下我看懂了的而且感觉上还好用的那种。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">:%s/foo/bar/gc</span><br></pre></td></tr></table></figure>
+<p>使用上面的命令进行逐个替换，<code>c</code>应该是确认的意思，<code>y/n</code>键进行确认替换和取消替换。</p>
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-各种容器的介绍</title>
     <url>/stonelzp.github.io/ue4-container/</url>
     <content><![CDATA[<p>UE4中提供了许多自定义的容器，比如说<code>TArray</code>，<code>TMap</code>等等，这篇文章主要想记录这些容器的使用。</p>
@@ -117,6 +134,7 @@
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
 </ul>
+<p>关于上面的邪门的知识，在使用过程中我遇见的坑，就是按照那个规则创建了控件之后蓝图编译总是报错，说是没有这个类型的控件，这个时候解决方案是，C++的那边修改一下变量名然后再编译。</p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
@@ -2725,8 +2743,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -2746,8 +2764,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6203,8 +6221,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6238,9 +6256,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -6277,9 +6295,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -6448,8 +6466,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6546,8 +6564,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6593,8 +6611,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -6708,8 +6726,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6814,8 +6832,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -6848,8 +6866,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -7007,8 +7025,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -7064,8 +7082,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -7172,8 +7190,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -7592,9 +7610,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
+        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
