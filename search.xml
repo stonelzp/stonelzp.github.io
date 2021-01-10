@@ -582,6 +582,18 @@
 <li><a href="https://zhuanlan.zhihu.com/p/78005333" target="_blank" rel="noopener">UE4 Low Level Memory Tracker 使用</a></li>
 <li><a href="https://qiita.com/donbutsu17/items/dd410cd6ee53b0b348ca" target="_blank" rel="noopener">[UE4] LLM (Low Level Memory Tracker)を使用したメモリトラッキング</a></li>
 </ul>
+<h1 id="一些优化的小技巧"><a href="#一些优化的小技巧" class="headerlink" title="一些优化的小技巧"></a>一些优化的小技巧</h1><p>在对UE4的逐渐学习理解过程中，会遇见一些常见的优化小技巧。</p>
+<h2 id="Uin8变量的使用"><a href="#Uin8变量的使用" class="headerlink" title="Uin8变量的使用"></a>Uin8变量的使用</h2><p>在UE4的源码中经常会见到一些看起来比较违和的变量声明：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">uint8 bCanBeDamaged : <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p>之前我什么都不懂，以为只是一种布尔型变量的初始化，上面的就是初始化为true的意思，实际上就是我真的什么都不懂。</p>
+<p>按照别人的解答，这样的写法，首先是UE4默认的布尔类型变量的声明是以小写字母<code>b</code>开始的，而数字<code>1</code>的含义则是只使用1bit位。这是节省内存的表现，相比于布尔类型的数据。这是它们的唯一的不同。</p>
+<p>为了方便理解原文，贴上原答案：</p>
+<blockquote>
+<p>All booleans in Unreal are prefixed with b. If you see a uint with the b prefix it is declared as a bit field like <code>uint8 bCanBeDamaged:1</code> The 1 in the end indicates that it only uses 1 bit. <code>bCanBeDamaged == true</code> is perfectly fine to do even though it is a uint8. The reason a bit field is used instead of a bool is to save memory and the only difference between a uint8 bit field and a bool is the way it is declared.</p>
+</blockquote>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/888947/uint8-confusion-why-not-bool.html" target="_blank" rel="noopener">Uint8 Confusion .. Why not bool?</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
