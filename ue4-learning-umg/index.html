@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-01-05T08:25:00.590Z">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/WidgetsList.png">
+<meta property="og:updated_time" content="2021-01-17T09:42:58.290Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-UMG相关知识点">
 <meta name="twitter:description" content="本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。">
+<meta name="twitter:image" content="http://stonelzp.github.io/ue4-learning-umg/WidgetsList.png">
 
 
 
@@ -340,8 +342,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-01-05T17:25:00+09:00">
-                2021-01-05
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-17T18:42:58+09:00">
+                2021-01-17
               </time>
             
           </span>
@@ -398,7 +400,31 @@
       
         <p>本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。</p>
 <a id="more"></a>
-<p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
+<h1 id="UMG"><a href="#UMG" class="headerlink" title="UMG"></a>UMG</h1><p>首先是对UMG这个概念的解读，<strong>Unreal Motion Graphics UI设计</strong> 是UE4提供的可以方便展示UI的设计框架，这个框架本质上还是使用<strong>Slate</strong>搭建的。</p>
+<p>提到UMG也还会经常听到HUD这个词，在UE4中的HUD主要是指</p>
+<ul>
+<li>UE3那里继承来的Head-Up Display功能，在UE4中主要是用来Debug</li>
+<li>向画布上添加图形图元的功能，表示文字的功能，还有简单的HitBox处理，用来检测鼠标等</li>
+</ul>
+<p>但是由于这些功能UMG都可以干，所以UE4的HUD功能也不是需要一定要掌握了，HUD自身也有许多比如说执行才能被渲染不执行无法确认，文字表现不尽人意，旧版本的功能稳定性之类的问题。</p>
+<p>点线图形之类图元的图形渲染UMG的<code>OnPaint</code>函数也可以实现。</p>
+<p>而非常重要的<strong>Slate</strong>的话题，Slate是不依靠某个平台的UI框架，UE4的Editor和游戏中的UI都是使用Slate构建的。也就是说想要对UE4的Editor进行比较深度的扩展就一定要动Slate才行。但是网上关于Slate的文章有但是不是很多，需要仔细的挖掘和学习总结了。更多Slate的内容我想在ActionRPG那篇文章中记录。</p>
+<p>回到UMG的话题，UMG是什么呢，又是为了什么而存在的呢？</p>
+<p>UMG说白了就是对Slate进行了扩展方便在游戏中使用的框架</p>
+<ul>
+<li>首先是继承了UObject使得Blueprint也可以方便使用</li>
+<li>方便在UE4的Editor上确实渲染结果</li>
+<li>简单的制作UI动画</li>
+</ul>
+<h2 id="Widget"><a href="#Widget" class="headerlink" title="Widget"></a>Widget</h2><p>使用UMG的话，应该第一个需要接触的就是Widget这个概念了，而实际上使用UMG的时候，基本上都要跟Widget打交道了。</p>
+<p>Widget是UE4提供的部件，可以方便的使用蓝图进行操作，嵌套之类的都支持。</p>
+<p>UE4提提供了许多有用的Widget部件，大概像这样<br><img src="WidgetsList.png" alt="Widgets"></p>
+<p>关于不同类型的Widget，我觉得很重要，有一些不知道的话不知道使用就得不偿失了，有时间一定要整理学习。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/umg-80334310" target="_blank" rel="noopener">猫でも分かるUMG</a></li>
+</ul>
+<h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
 </ul>
@@ -526,8 +552,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -544,7 +579,7 @@
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">95</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -605,6 +640,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UMG"><span class="nav-number">1.</span> <span class="nav-text">UMG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Widget"><span class="nav-number">1.1.</span> <span class="nav-text">Widget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG使用的Tips"><span class="nav-number">1.2.</span> <span class="nav-text">UMG使用的Tips</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

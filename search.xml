@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++中的函数指针理解</title>
+    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/</url>
+    <content><![CDATA[<a id="more"></a>
+]]></content>
+  </entry>
+  <entry>
+    <title>C++中的函数指针理解</title>
+    <url>/stonelzp.github.io/c++-function-pointer/</url>
+    <content><![CDATA[<p>学会如何辨别和使用函数指针，还有与模板之间的应用。<br><a id="more"></a></p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Vim学习笔记</title>
     <url>/stonelzp.github.io/learning-vim/</url>
     <content><![CDATA[<p>记录一些Vim的常用的使用方法。</p>
@@ -86,7 +105,11 @@
 <h1 id="使用UE4之外的手段输出LOG"><a href="#使用UE4之外的手段输出LOG" class="headerlink" title="使用UE4之外的手段输出LOG"></a>使用UE4之外的手段输出LOG</h1><p>即我之前傻傻的未调查UE4的LOG系统可以做到什么程度，直接使用<a href="https://github.com/SergiusTheBest/plog" target="_blank" rel="noopener">plog</a>来进行Log日志的保存。但是我觉得效果还是一样的。</p>
 <p>至少不用每次都写UE4那个看起来就长的输出用的LOG宏<code>UE_LOG(xxx)</code>。</p>
 <p>等我有兴致再整理吧。</p>
-]]></content>
+<h1 id="使用UE-LOG输出各种数据类型"><a href="#使用UE-LOG输出各种数据类型" class="headerlink" title="使用UE_LOG输出各种数据类型"></a>使用UE_LOG输出各种数据类型</h1><p>在UE4的使用中真的不可避免的使用LOG输出，使用VS的Deebug模式也是很方便而且更准确，但是根据Debug模式的不同，有些地方编译器会进行优化设置断点也未必能取到有效的数据。</p>
+<p>这篇算是总结和记录<code>UE_LOG</code>宏的各种数据类型的输出样例，方便我以后查看。</p>
+<h2 id="FString"><a href="#FString" class="headerlink" title="FString"></a>FString</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"output message %s"</span>), *(FDateTime::Now().ToString()));</span><br></pre></td></tr></table></figure>
+<p>这个我在其它的文章里也有一点记录，算是重复了。</p>
+<h2 id="FName"><a href="#FName" class="headerlink" title="FName"></a>FName</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">FName MyName;</span><br><span class="line"> UE_LOG(LogTemp, Warning, TEXT(<span class="string">"My Name: %s"</span>), *MyName.ToString());</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>UnrealEngine4</category>
       </categories>
@@ -141,7 +164,31 @@
     <url>/stonelzp.github.io/ue4-learning-umg/</url>
     <content><![CDATA[<p>本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。</p>
 <a id="more"></a>
-<p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
+<h1 id="UMG"><a href="#UMG" class="headerlink" title="UMG"></a>UMG</h1><p>首先是对UMG这个概念的解读，<strong>Unreal Motion Graphics UI设计</strong> 是UE4提供的可以方便展示UI的设计框架，这个框架本质上还是使用<strong>Slate</strong>搭建的。</p>
+<p>提到UMG也还会经常听到HUD这个词，在UE4中的HUD主要是指</p>
+<ul>
+<li>UE3那里继承来的Head-Up Display功能，在UE4中主要是用来Debug</li>
+<li>向画布上添加图形图元的功能，表示文字的功能，还有简单的HitBox处理，用来检测鼠标等</li>
+</ul>
+<p>但是由于这些功能UMG都可以干，所以UE4的HUD功能也不是需要一定要掌握了，HUD自身也有许多比如说执行才能被渲染不执行无法确认，文字表现不尽人意，旧版本的功能稳定性之类的问题。</p>
+<p>点线图形之类图元的图形渲染UMG的<code>OnPaint</code>函数也可以实现。</p>
+<p>而非常重要的<strong>Slate</strong>的话题，Slate是不依靠某个平台的UI框架，UE4的Editor和游戏中的UI都是使用Slate构建的。也就是说想要对UE4的Editor进行比较深度的扩展就一定要动Slate才行。但是网上关于Slate的文章有但是不是很多，需要仔细的挖掘和学习总结了。更多Slate的内容我想在ActionRPG那篇文章中记录。</p>
+<p>回到UMG的话题，UMG是什么呢，又是为了什么而存在的呢？</p>
+<p>UMG说白了就是对Slate进行了扩展方便在游戏中使用的框架</p>
+<ul>
+<li>首先是继承了UObject使得Blueprint也可以方便使用</li>
+<li>方便在UE4的Editor上确实渲染结果</li>
+<li>简单的制作UI动画</li>
+</ul>
+<h2 id="Widget"><a href="#Widget" class="headerlink" title="Widget"></a>Widget</h2><p>使用UMG的话，应该第一个需要接触的就是Widget这个概念了，而实际上使用UMG的时候，基本上都要跟Widget打交道了。</p>
+<p>Widget是UE4提供的部件，可以方便的使用蓝图进行操作，嵌套之类的都支持。</p>
+<p>UE4提提供了许多有用的Widget部件，大概像这样<br><img src="WidgetsList.png" alt="Widgets"></p>
+<p>关于不同类型的Widget，我觉得很重要，有一些不知道的话不知道使用就得不偿失了，有时间一定要整理学习。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/umg-80334310" target="_blank" rel="noopener">猫でも分かるUMG</a></li>
+</ul>
+<h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
 </ul>
@@ -2766,8 +2813,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -2787,8 +2834,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6244,8 +6291,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6587,8 +6634,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6634,8 +6681,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6749,8 +6796,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6855,8 +6902,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -6889,8 +6936,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7048,8 +7095,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7105,8 +7152,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7213,8 +7260,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7633,9 +7680,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>

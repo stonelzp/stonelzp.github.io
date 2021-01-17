@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="关于UE4中的LOG的使用我一直都是经常使用，但是也只是只用了最常见的UE_LOG，这篇文章注意主要想集中记录UE4中的LOG的使用和日志文件的问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-29T09:11:55.142Z">
+<meta property="og:updated_time" content="2021-01-17T07:19:41.792Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-正确使用LOG">
 <meta name="twitter:description" content="关于UE4中的LOG的使用我一直都是经常使用，但是也只是只用了最常见的UE_LOG，这篇文章注意主要想集中记录UE4中的LOG的使用和日志文件的问题。">
@@ -340,8 +340,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-11-29T18:11:55+09:00">
-                2020-11-29
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-17T16:19:41+09:00">
+                2021-01-17
               </time>
             
           </span>
@@ -432,7 +432,11 @@
 <h1 id="使用UE4之外的手段输出LOG"><a href="#使用UE4之外的手段输出LOG" class="headerlink" title="使用UE4之外的手段输出LOG"></a>使用UE4之外的手段输出LOG</h1><p>即我之前傻傻的未调查UE4的LOG系统可以做到什么程度，直接使用<a href="https://github.com/SergiusTheBest/plog" target="_blank" rel="noopener">plog</a>来进行Log日志的保存。但是我觉得效果还是一样的。</p>
 <p>至少不用每次都写UE4那个看起来就长的输出用的LOG宏<code>UE_LOG(xxx)</code>。</p>
 <p>等我有兴致再整理吧。</p>
-
+<h1 id="使用UE-LOG输出各种数据类型"><a href="#使用UE-LOG输出各种数据类型" class="headerlink" title="使用UE_LOG输出各种数据类型"></a>使用UE_LOG输出各种数据类型</h1><p>在UE4的使用中真的不可避免的使用LOG输出，使用VS的Deebug模式也是很方便而且更准确，但是根据Debug模式的不同，有些地方编译器会进行优化设置断点也未必能取到有效的数据。</p>
+<p>这篇算是总结和记录<code>UE_LOG</code>宏的各种数据类型的输出样例，方便我以后查看。</p>
+<h2 id="FString"><a href="#FString" class="headerlink" title="FString"></a>FString</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"output message %s"</span>), *(FDateTime::Now().ToString()));</span><br></pre></td></tr></table></figure>
+<p>这个我在其它的文章里也有一点记录，算是重复了。</p>
+<h2 id="FName"><a href="#FName" class="headerlink" title="FName"></a>FName</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FName MyName;</span><br><span class="line"> UE_LOG(LogTemp, Warning, TEXT(<span class="string">"My Name: %s"</span>), *MyName.ToString());</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -582,7 +586,7 @@
               
                 <a href="/stonelzp.github.io/archives/">
               
-                  <span class="site-state-item-count">95</span>
+                  <span class="site-state-item-count">97</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -653,7 +657,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的LOG"><span class="nav-number">1.</span> <span class="nav-text">UE4中的LOG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义LOG的Category"><span class="nav-number">1.1.</span> <span class="nav-text">自定义LOG的Category</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第二个参数：Log"><span class="nav-number">1.1.1.</span> <span class="nav-text">第二个参数：Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三个参数：All"><span class="nav-number">1.1.2.</span> <span class="nav-text">第三个参数：All</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的LOG输出时间"><span class="nav-number">1.2.</span> <span class="nav-text">UE4的LOG输出时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的LOG输出日志文件"><span class="nav-number">1.3.</span> <span class="nav-text">UE4的LOG输出日志文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用UE4之外的手段输出LOG"><span class="nav-number">2.</span> <span class="nav-text">使用UE4之外的手段输出LOG</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的LOG"><span class="nav-number">1.</span> <span class="nav-text">UE4中的LOG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义LOG的Category"><span class="nav-number">1.1.</span> <span class="nav-text">自定义LOG的Category</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第二个参数：Log"><span class="nav-number">1.1.1.</span> <span class="nav-text">第二个参数：Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三个参数：All"><span class="nav-number">1.1.2.</span> <span class="nav-text">第三个参数：All</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的LOG输出时间"><span class="nav-number">1.2.</span> <span class="nav-text">UE4的LOG输出时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4的LOG输出日志文件"><span class="nav-number">1.3.</span> <span class="nav-text">UE4的LOG输出日志文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用UE4之外的手段输出LOG"><span class="nav-number">2.</span> <span class="nav-text">使用UE4之外的手段输出LOG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用UE-LOG输出各种数据类型"><span class="nav-number">3.</span> <span class="nav-text">使用UE_LOG输出各种数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FString"><span class="nav-number">3.1.</span> <span class="nav-text">FString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FName"><span class="nav-number">3.2.</span> <span class="nav-text">FName</span></a></li></ol></li></ol></div>
             
 
           </div>
