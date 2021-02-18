@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="UE4," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4光照学习调查笔记">
+<meta property="og:url" content="http://stonelzp.github.io/2019/03/15/UE4光照学习调查笔记/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-16T08:16:21.769Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4光照学习调查笔记">
+<meta name="twitter:description" content="提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/2019/03/15/UE4光照学习调查笔记/"/>
+
+
+
+
+
+  <title>UE4光照学习调查笔记 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2019/03/15/UE4光照学习调查笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UE4光照学习调查笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-15T17:56:21+09:00">
+                2019-03-15
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-04-16T17:16:21+09:00">
+                2019-04-16
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index">
+                    <span itemprop="name">UnrealEngine4</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。</p>
+<a id="more"></a>
+<h1 id="光照"><a href="#光照" class="headerlink" title="光照"></a>光照</h1><p>在UE4的官方文档中有很多说明，我只记录一些我可能会忘记的。</p>
+<p>我在别的优化文章里面多少有提到关于光照的内容。</p>
+<h2 id="Light-Mobility"><a href="#Light-Mobility" class="headerlink" title="Light Mobility"></a>Light Mobility</h2><ul>
+<li><a href="https://docs.unrealengine.com/en-us/Engine/Rendering/LightingAndShadows/LightMobility" target="_blank" rel="noopener">Light Mobility</a><h3 id="Stationary-lights"><a href="#Stationary-lights" class="headerlink" title="Stationary lights"></a>Stationary lights</h3>这种光源是位置不变但是它的brightness和color等想要变化的那种光源。</li>
+</ul>
+<blockquote>
+<p>However,it should be noted that runtime changes to brightness only affect the direct lighting.Indirect (bounced) lighting, since it is pre-calculated by lightmass, will not change.</p>
+</blockquote>
+<p>这里有三个需要我理解的地方。</p>
+<ul>
+<li>Direct Lighting ( √ )</li>
+<li>Indirect (bounced) Light</li>
+<li>Lightmass</li>
+</ul>
+<p>所有来自于Stationary Light的indirect lighting (应该是间接光照吧) 和间接阴影(indirect shadowing)会存储在Lightmap（光照贴图）中。直接光照阴影会存储在阴影贴图中(Shadowmap)。</p>
+<blockquote>
+<p>All of the indirect lighting and shadowing from Stationary Lights is stored within the lightmap.Direct shadows are stored within the Shadowmap.These lights make use of Distance Field Shadows, meaning that their shadows can remain crisp even fairly low Lightmap Resolution on lit objects.</p>
+</blockquote>
+<p>当使用了低质量lightmap解决方案的时候，因为Stationary lights直射光产生的直接阴影是存储在Shadowmap中的，所以仍然还可以产生比较清晰的阴影。</p>
+<p>这里需要深入理解的是：</p>
+<ul>
+<li>Shadowmap</li>
+<li>Lightmap</li>
+</ul>
+<h4 id="Direct-Lighting"><a href="#Direct-Lighting" class="headerlink" title="Direct Lighting"></a>Direct Lighting</h4><blockquote>
+<p>The direct lighting of stationary lights is rendered dynamically using deferred shading.This allows the brightness and color tobe changeable at runtime, along with a light function or IES profile.</p>
+</blockquote>
+<p>应该就是直接光源，stationary light的直接光照是使用延迟渲染。</p>
+<p>这里我应该理解的是</p>
+<ul>
+<li>Deferred shading(该回忆了)</li>
+<li>IES profile</li>
+</ul>
+<h4 id="Direct-Shadowing"><a href="#Direct-Shadowing" class="headerlink" title="Direct Shadowing"></a>Direct Shadowing</h4><blockquote>
+<p>Realtime shadowing of light sources has a major performance cost. A fully dynamic light with shadows will often cost twenty times(20x) as much to render than a dynamic light without shadows. For this reason, stationary light have the ability to have static shadowing on static object, but with some limitations.</p>
+</blockquote>
+<p>关于阴影，光照的实时阴影是影响性能的一个主要参数。stationary light能产生静态阴影，在静态物体上。但是有限制。</p>
+<h5 id="Static-Shadowing"><a href="#Static-Shadowing" class="headerlink" title="Static Shadowing"></a>Static Shadowing</h5><p><strong>On Opaque</strong></p>
+<blockquote>
+<p>Lightmass generate distance field shadow maps for stationary lights on static objects during the lighting rebuild. Distance field shadow maps provide very accurate shadow transition even at low resolution, and with very little runtime cost. Like lightmaps, distance field shadow maps require uniquely unwrapped UVs on all <em>StaticMeshes</em> using static lighting.</p>
+</blockquote>
+<p>当stationary light对不透明静态物体生成阴影的时候，在lighting rebuild阶段生成distance field shadow maps 。</p>
+<blockquote>
+<p>Lighting must be built to display distance field shadows, otherwise whole scene dynamic shadows will be used for previewing.</p>
+</blockquote>
+<p>这里我并没有找到有能够显示<strong>distance field shadow</strong>的编译选项。</p>
+<blockquote>
+<p>Only 4 or fewer overlaping stationary lights can have static shadowing, because the lights must be assigned to different channels of a shadowmap texture. This is a graph coloring problem, so there are often fewer than 4 overlapping allowed due to topology. </p>
+</blockquote>
+<blockquote>
+<p>Shadowing cannot affect the overlap test, so <strong>the sunlight typically requires a channel from the entire level it is in, even the underground areas.</strong><br>这一句话应该是说阴影不会影响overlap测试，所以即使是在地下世界里的场景，有sunlight的情况下都要给sunlight预留一个channel。</p>
+</blockquote>
+<p>就像上面所说的，尽量避免stationary lighting的overlapping。在<strong>StationaryLightOverlap</strong>视图中，可以查看stationary lighting的重合程度。如果光源的图标变成了红色的X就表明它不能容纳更多的channel了。</p>
+<p><strong>On Translucency</strong></p>
+<blockquote>
+<p>Translucency also receives shadowing very cheaply with Stationary lights - Lightmass precomputes a shadow depth map from static geometry which is applied to transluency at runtime. This form of shadowing is fairly coarse only captures shadowing on the scale of metres.</p>
+</blockquote>
+<p>不透明的物体也可以接收来自Stationary Light的光照阴影，代价也不是很高。但是这种阴影很粗糙。</p>
+<ul>
+<li>Shadow depth map</li>
+</ul>
+<blockquote>
+<p>The resolution of the static shadow depth map is controlled by StaticShadowDepthMapTransitionSampleDistanceX and StaticShadowDepthMapTransitionSampleDistanceY in BaseLightmass.ini, with a default setting of 100 meaning one texel every meter.</p>
+</blockquote>
+<h5 id="Dynamic-Shadowing"><a href="#Dynamic-Shadowing" class="headerlink" title="Dynamic Shadowing"></a>Dynamic Shadowing</h5><blockquote>
+<p>Dynamic objects(like StaticMeshComponents and SkeletalMeshComponement with Mobility set to Movable) must integrate into the static shadowing of the world from distance field shadowmaps. This is accomplished with <em>Per Object</em> shadows. Each movable object creates two dynamic shadows from a stationary light : a shadow to handle the static world casting onto the object, and a shadow to handle the object casting onto the world.</p>
+</blockquote>
+<p>动态物体（movable）必须整合到来自<strong>distance field shadowmap</strong>的世界静态阴影(<strong>The static shadowing of the world</strong>) 中去,这个经由<strong>Per Object shadows</strong>来完成(每一个物体的阴影计算？)。每一个标记为movable的物体会创建两个来自StationaryLight的动态阴影，一个用来处理静态世界在该物体上的阴影，另外一个用来处理该物体在世界里面的阴影。</p>
+<p>这意味着当动态物体的数量很多的时候，使用动态光是更好的选择。</p>
+<blockquote>
+<p><em>Per Object</em> shadows used by movable components apply a shadowmap to the object’s bounds, therefore the bounds must be accurate. For Skeletal meshes this means they should have a physics assets. For partial systems, any fixed bounding box must be large enough to contain all particles.</p>
+</blockquote>
+<p><strong>Direction light dynamic shadowing</strong></p>
+<p><strong>Directiong Stationary Lights</strong>比较特殊，因为它通过<em>Cascaded Shadow Maps</em>(级联阴影贴图)和<em>static shadowing</em>支持整个场景的阴影的生成。当场景中存在许多<em>animating foliage</em>会很有用；当在player的周围存在许多动态的阴影，但是并不想花费太大的代价去使用许多cascades覆盖很大的视野范围。动态阴影将会随着距离的提升一点点渐隐到静态阴影中，这样的过度通常难以区分。</p>
+<p>可以改变 <em>DirectionalLightStationary</em> 的<strong>Dynamic Shadow Distance StationaryLight</strong> 的范围来控制过渡的距离范围。</p>
+<p>这里我不理解的概念：</p>
+<ul>
+<li>Cascaded Shadow Maps</li>
+<li>Animating foliage</li>
+</ul>
+<blockquote>
+<p>Movable components will still create PerObjects shadows even when using Cascaded Shadow Maps on a directional light.This behavior is useful with small Dynamic Shadow Distance, but incurs unnecessary cost with larger distance. To disable PerObject shadows and save performance, disable <em>Use Inset Shadows For Movable Objects</em> on the light.</p>
+</blockquote>
+<h4 id="Indirect-Lighting"><a href="#Indirect-Lighting" class="headerlink" title="Indirect Lighting"></a>Indirect Lighting</h4><p>和静态光照一样，StationaryLight将间接光照存储在光照贴图内（lightmap）。间接光照不能像直接光照那样运行中改变光照的brightness和color。这意味着即使在<strong>light build</strong>中将<strong>Visible</strong>取消，间接光照还是会被存储在光照贴图当中。</p>
+<p><strong>IndirectLightingIntensity</strong>的光照属性可以被用来控制大小和开关，在光照的编译阶段。</p>
+<blockquote>
+<p>However there is a post process volumn setting called <strong>IndirectLightingIntensity</strong> which lets you scale the contribution of the lightmap for all light, which can be changed at runtime from a blueprint.</p>
+</blockquote>
+<p>上面的很好理解就不解释了。</p>
+<h4 id="Use-Area-Shadows-for-Stationary-Lights"><a href="#Use-Area-Shadows-for-Stationary-Lights" class="headerlink" title="Use Area Shadows for Stationary Lights"></a>Use Area Shadows for Stationary Lights</h4><p><strong>Directional Light</strong>可以打开这个属性，但是要保证这个直射光照的<strong>Mobility</strong>是<strong>Stationary</strong>。</p>
+<blockquote>
+<p>When the <em>Use Area Shadows for Stationary Lights</em> option is enabled,the Stationary Light will use area shadows for the precomputed shadow maps. Area shadows are shadows that get softer the further they are from caster.</p>
+</blockquote>
+<blockquote>
+<p>Note that Area Shadows will only work on Stationary Lights and you might have to increase some objects lightmap resolution to get the same shadow quality and sharpness.</p>
+</blockquote>
+<p>总的来说就是这个属性会让阴影变得比较柔软，更贴近现实一些。</p>
+<h3 id="Movable-Lights"><a href="#Movable-Lights" class="headerlink" title="Movable Lights"></a>Movable Lights</h3><p>动态光照不会把数据烘焙到光照贴图里，并且没有任何间接关照（currently）。</p>
+<h4 id="阴影"><a href="#阴影" class="headerlink" title="阴影"></a>阴影</h4><p>阴影是动态光照里最昂贵的花销之一，光照内的mesh的图元数量和三角形数量是影响性能的指标。</p>
+<blockquote>
+<p>Movable lights setup to cast shadows use whole scene dynamic shadows, which have a significant performance cost.The performance cost comes primarily from the number meshes affected by the light,and the triangle count of those meshes.</p>
+</blockquote>
+<h4 id="Shadow-Map-Caching"><a href="#Shadow-Map-Caching" class="headerlink" title="Shadow Map Caching"></a>Shadow Map Caching</h4><ol>
+<li>选中所有产生动态阴影的动态光</li>
+<li>确保<strong>Mobility</strong>是<strong>Movable</strong>，并且<strong>Cast Shadows</strong>属性选中</li>
+<li><strong>Backtick( ` )</strong> 打开console输入 <em><span style="color:green">Stat Shadowrendering</span></em> 查看实时动态阴影的花销</li>
+<li>再次打开console，键入 <em><span style="color:green">Sr.Shadow.CacheWholeSceneShadow 0</span></em>关掉<strong>dynamic shadow caching</strong></li>
+<li>注意<strong>CallCount</strong> 和 <strong>InclusiveAug</strong></li>
+<li>再打开console，键入 <em><span style="color:green">r.Shadow.CacheWholeSceneShadow 1</span></em> 打开<strong>dynamic shadow caching</strong></li>
+</ol>
+<ul>
+<li>you can control the maximum amount memory used by the Shadow Map Cache using <strong><span style="color:green">r.Shadow.WholeScenceShadowCacheMb</span></strong></li>
+</ul>
+<h5 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h5><p>关于使用限制：</p>
+<ul>
+<li>By default,caching can only happen when an object meets the following requirements:<ul>
+<li>Primitives have their mobility <strong>Mobility</strong> set <strong>Static</strong> or <strong>Stationary</strong>.</li>
+<li>Materials used in the level do not use <strong>World Position Offset</strong>.</li>
+<li>Light need to be either a <strong>Point</strong> or <strong>Spot</strong> light, have its <strong>Mobility</strong> set to <strong>Movable</strong>, and have <strong>Shadow Casting</strong> enabled.</li>
+<li>Lights have to remain at one location.</li>
+<li>Material that use animated <strong>Tessellation</strong> or <strong>Pixel Depth Offset</strong> can cause artifacts as their shadow depths are cached.</li>
+</ul>
+</li>
+</ul>
+<p>最后一条不太理解，需要继续调查：</p>
+<ul>
+<li>Tessellation</li>
+<li>Pixel Depth Offset</li>
+</ul>
+<h2 id="Actor-Mobility"><a href="#Actor-Mobility" class="headerlink" title="Actor Mobility"></a>Actor Mobility</h2><p>这里插一条概念，关于Actor的Mobility属性。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-us/Engine/Actors/Mobility" target="_blank" rel="noopener">Actor Mobility</a></li>
+</ul>
+<p>文档上有写，所以我就少写一点。</p>
+<p>当我知道了StationaryLight的属性的影响的时候，主要会让我产生混乱的是当StaticMesh的mobility属性是Stationary的话怎么办</p>
+<blockquote>
+<p>For Static Mesh Actors,this means that they can be changed but not moved.They do not contribute to pre-calculated lightmaps using Lightmass and are lit like Movable Actor when lit by a Static or Stationary Light.However,when lit by a Movable Light, they will use a Cached Shadow Map to reuse for the next frame when the lighting is not moving.</p>
+</blockquote>
+<p>大体上就是StationaryLight下的StationaryMobility的StaticMeshActor,没什么太大的意义。</p>
+<h2 id="Lightmass"><a href="#Lightmass" class="headerlink" title="Lightmass"></a>Lightmass</h2><ul>
+<li><a href="https://docs.unrealengine.com/en-us/Engine/Rendering/LightingAndShadows/Lightmass" target="_blank" rel="noopener">Lightmass Global Illumination</a></li>
+</ul>
+<p>Lightmass生成像区域阴影，漫反射交互等等的复杂光照交互的光照贴图。通常被用来预计算一部分的静态光照和StationaryLight的光照。</p>
+<h2 id="Feature-for-Static-and-Stationary-lights"><a href="#Feature-for-Static-and-Stationary-lights" class="headerlink" title="Feature for Static and Stationary lights"></a>Feature for Static and Stationary lights</h2><h3 id="Diffuse-Interreflection"><a href="#Diffuse-Interreflection" class="headerlink" title="Diffuse Interreflection"></a>Diffuse Interreflection</h3><p><strong>Diffuse interreflection</strong> is by far the most visually important global illumination lighting effect.Light bounces by default with Lightmass,and the BaseColor term of your material controls how much light(and what color)bounces in all directions. This effect is sometimes called Color Bleeding.Diffse Interreflection is incoming light reflecting equally in all directions,which means  that it is not affected by the viewing direction or position.</p>
+<h3 id="Indirect-Lighting-Cache"><a href="#Indirect-Lighting-Cache" class="headerlink" title="Indirect Lighting Cache"></a>Indirect Lighting Cache</h3><p>Lightmass为静态物体生成间接光照的光照贴图，动态物体也同样需要，解决方案是使用<strong>Indirect Lighting Cache</strong>。但是从UE4 4.18版本之后默认实现就被<strong>Volumetric Lightmap</strong> 取代了。</p>
+<h3 id="Volumetic-Lightmaps"><a href="#Volumetic-Lightmaps" class="headerlink" title="Volumetic Lightmaps"></a>Volumetic Lightmaps</h3><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Engine/Rendering/LightingAndShadows/VolumetricLightmaps" target="_blank" rel="noopener">Volumetric Lightmaps</a></li>
+</ul>
+<p>在光照的编译阶段所有的点预计算的光照会被存储在Volumetric Lightmap中，之后在实时运算中被用来dynamic objects的间接光照插值运算。</p>
+<p>工作方式：</p>
+<ul>
+<li>在光照的编译阶段，Lightmass会在整个场景中放置<strong>lighting samples</strong> 并且计算它们的间接光照。</li>
+<li>当开始渲染动态物体的时候，<strong>Volumetric Lightmap</strong>会以插值的方式为每一个被渲染的像素提供预先计算好的间接光照。</li>
+<li>if no built lighting is available(meaning the object is new or has moved too much), lighting is interpolated to each pixel from the Vloumetric Lightmap for <strong>Static</strong> objects until lighting is rebuild.</li>
+</ul>
+<p>上面的那句话我不太理解就直接抄了英文。</p>
+<h4 id="Enabling-Volumetric-Lightmap-Visualization"><a href="#Enabling-Volumetric-Lightmap-Visualization" class="headerlink" title="Enabling Volumetric Lightmap Visualization"></a>Enabling Volumetric Lightmap Visualization</h4><p>在view视图中找到：</p>
+<p><strong>Show &gt; Visualize &gt; Volumetric Lightmap</strong></p>
+<p>可以查看，貌似必须是编译好光照之后才能看的见。</p>
+<p>有着越远离几何体密度越低的特点。</p>
+<p>这里提到了<strong>Lightmass Important Volume</strong>这个蛮重要的东西。</p>
+<h2 id="Stationary-Light的阴影"><a href="#Stationary-Light的阴影" class="headerlink" title="Stationary Light的阴影"></a>Stationary Light的阴影</h2><ul>
+<li><a href="http://darakemonodarake.hatenablog.jp/entry/2015/12/16/UE4/Stationary" target="_blank" rel="noopener">Stationary Light の影について</a></li>
+</ul>
+<p>参照上面的文章进行的一些总结。</p>
+<h3 id="Static-Mesh-Shadow"><a href="#Static-Mesh-Shadow" class="headerlink" title="Static Mesh Shadow"></a>Static Mesh Shadow</h3><ul>
+<li><p><strong>Stationary Light的阴影贴图是由各自的StaticMesh保持的</strong></p>
+<ul>
+<li>这个可以在Stat的NumSM/TextureSM条目里查看</li>
+<li>ULightComponent::ReassignStationaryLightChannels</li>
+</ul>
+</li>
+<li><p><strong>Stationary Light的ShadowMap是经由G-Buffer之后的光照计算阶段生成的</strong></p>
+<ul>
+<li>再稍微具体一点来说就是：StaticMesh在LightBuilt之后，有了StationaryLight阴影贴图，然后在BasePass阶段，把这个ShadowMaps的值拷贝到G-Buffer中的一个PrecomputedShadowFactors的float4类型的值中去，在写进G-Buffer中之后，在光照计算阶段，光照通过读取自己持有的Index对应的PrecomputedShadowFactor的值来计算像素的阴影。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Movable-Object"><a href="#Movable-Object" class="headerlink" title="Movable Object"></a>Movable Object</h3><p>动态物体在StationaryLight的阴影又是什么样子的？</p>
+<p>先是以点光源为例，DirectionalLight使用的是CascadeShadow，有一些不同。</p>
+<ul>
+<li>StationaryLight为每一个MovableMesh计算阴影贴图，并把ShadowMap的数据存储到一张巨大的阴影贴图中。</li>
+<li>之后逐个对其所有的Mesh的渲染进行阴影的计算。（实际的渲染阶段的阴影计算？）</li>
+</ul>
+<p>总结为：</p>
+<p><strong>Movable Mesh的Stationary Light阴影的计算Cost = 光照范围内的Movable Mesh数 * 每一个物体阴影的生成和渲染cost（PerObject？之前貌似在哪里见过）</strong></p>
+<p>Stationary Light的阴影，每一个Movable Mesh都会被计算。</p>
+<p>像是废话。</p>
+<p>Stationary Light的阴影，对于Movable Mesh而言，它会一个一个的进行阴影贴图的计算，然后一个一个的进行渲染。</p>
+<p>用实际的数据来展现就是：</p>
+<p>在<span style="color:green">ProfileGPU</span>命令打开的Profiler中的这一项：</p>
+<ul>
+<li><strong>ShadowDepthFromOpaqueProjected</strong></li>
+</ul>
+<p>可以看到Movable Mesh在Stationary Light下的每一个阴影贴图计算的时间，一般都是0.01我感觉。</p>
+<p>终于知道这个是什么意思了。</p>
+<p>还有这一项：</p>
+<ul>
+<li><strong>ShadowProjectionOnOpaque</strong></li>
+</ul>
+<p>可以看到对于每一个Movable Mesh，Stationary Light的实际的阴影计算所消耗的时间。</p>
+<p>（我觉得我应该去复习一下渲染流程了。）</p>
+<p>这就会在StationaryLight的光照范围内加入大量的动态物体会使得处理时间变长的原因。</p>
+<p><strong>而另一方面，Movable Light对于Movable Mesh阴影的处理不是以每一个动态物体为单位而是以光照为单位，对这个光照范围内的所有物体打包计算。</strong></p>
+<p>因此当Movable物体很多的时候，动态光照的方案要优于StationaryLight方案。</p>
+<h3 id="Directional-Light的阴影"><a href="#Directional-Light的阴影" class="headerlink" title="Directional Light的阴影"></a>Directional Light的阴影</h3><p>上面的都是对点光源和聚光灯的光源来说的不包含直射光。</p>
+<p>Directional Light基本上是用Cascade Shadow Map进行的。级联阴影贴图。</p>
+<p>在ProfileGPU中的具体项目是：</p>
+<ul>
+<li>ShadowDepthFromOpaqueProjected<ul>
+<li>WholeScene split1</li>
+<li>WholeScene split2</li>
+<li>WholeScene split3</li>
+<li>..(maybe)</li>
+</ul>
+</li>
+</ul>
+<p>有一个让处在Cascade Shadow以外的Object以点光源一样进行阴影计算的方式：</p>
+<ul>
+<li>Cascade Shadow Map &gt; Inset Shadow For Movable Objects</li>
+</ul>
+<p>这意思是CascadeShadow是有范围的？</p>
+<p>通过调整 <em>Dynamic Shadow Distance Stationary Light</em> 的距离可以让物体不使用Cascade Shadow。</p>
+<p>总结：</p>
+<ul>
+<li><p><strong>Static Mesh：Stationary Light事先计算阴影，由各静态mesh保持，当开始渲染的时候直接读取值处理负荷很小。</strong></p>
+</li>
+<li><p><strong>Movable Mesh：Stationary Light对每一个动态Mesh计算阴影，当动态物体很多的时候，优先选择Movable Light。</strong></p>
+</li>
+</ul>
+<h2 id="Lighting-needs-to-be-rebuilt"><a href="#Lighting-needs-to-be-rebuilt" class="headerlink" title="Lighting needs to be rebuilt"></a>Lighting needs to be rebuilt</h2><p>光照烘焙，一般的情况下这个提示是要烘焙光照，但是我遇到了烘焙光照之后还有这个提示的问题。是在我删除掉场景里的所有FoliageStaticMesh之后。</p>
+<h3 id="DumpUnbuildLightInteractions"><a href="#DumpUnbuildLightInteractions" class="headerlink" title="DumpUnbuildLightInteractions"></a>DumpUnbuildLightInteractions</h3><p>在Command Line中输入上述的命令，可以在OutputMessage里面输出需要烘焙的对象信息。</p>
+<h1 id="Light-Map"><a href="#Light-Map" class="headerlink" title="Light Map"></a>Light Map</h1><p>光照贴图这个部分能说的东西实在时候太多了，要理解的东西也非常多，<strong>LightMap</strong>具体是个什么东西，用来存储什么数据？搜LightMap的时候又会出现其他的概念，<strong>LightMass</strong>又是什么？</p>
+<p>LightMass在上面也有提到一点。</p>
+<h2 id="Unwrapping-UVs-for-Lightmaps"><a href="#Unwrapping-UVs-for-Lightmaps" class="headerlink" title="Unwrapping UVs for Lightmaps"></a>Unwrapping UVs for Lightmaps</h2><p>当试着搜LightMap的时候，就会出现这篇官方文档<br>-<a href="https://docs.unrealengine.com/en-US/Engine/Content/Types/StaticMeshes/LightmapUnwrapping" target="_blank" rel="noopener">Unwrapping UVs for Lightmaps</a></p>
+<h2 id="Lightmass-1"><a href="#Lightmass-1" class="headerlink" title="Lightmass"></a>Lightmass</h2><p>这个有我下载的PDF，有时间总结一下。</p>
+<ul>
+<li><a href="">Lightmassの仕組み ~Lightmap編~ (Epic Games Japan- 篠山範明)</a></li>
+</ul>
+<p>这篇文章提到的：</p>
+<p><strong>LightMap和ShadowMap是以Actor为单位各自保持的。</strong></p>
+<p>可以在Statistics中的StaticMeshLighting info中看到Actor的各自持有的<strong>TextureLM</strong>和<strong>TextureSM</strong>。</p>
+<h1 id="LightingTroubleshootingGuide"><a href="#LightingTroubleshootingGuide" class="headerlink" title="LightingTroubleshootingGuide"></a>LightingTroubleshootingGuide</h1><ul>
+<li><a href="https://wiki.unrealengine.com/LightingTroubleshootingGuide#Lightmap_Resolution_.2F_Shadow_Quality" target="_blank" rel="noopener">LightTroubleshootingGuide</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/2019/03/15/UE4光照学习调查笔记/" title="UE4光照学习调查笔记">http://stonelzp.github.io/2019/03/15/UE4光照学习调查笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/15/C++中的各种文件操作/" rel="next" title="C++中的各种文件操作">
+                <i class="fa fa-chevron-left"></i> C++中的各种文件操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/19/UE4-Performance提升/" rel="prev" title="UE4-Performance提升">
+                UE4-Performance提升 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.gif"
+                alt="stone" />
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#光照"><span class="nav-number">1.</span> <span class="nav-text">光照</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Light-Mobility"><span class="nav-number">1.1.</span> <span class="nav-text">Light Mobility</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stationary-lights"><span class="nav-number">1.1.1.</span> <span class="nav-text">Stationary lights</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Direct-Lighting"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">Direct Lighting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Direct-Shadowing"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">Direct Shadowing</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Static-Shadowing"><span class="nav-number">1.1.1.2.1.</span> <span class="nav-text">Static Shadowing</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dynamic-Shadowing"><span class="nav-number">1.1.1.2.2.</span> <span class="nav-text">Dynamic Shadowing</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Indirect-Lighting"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">Indirect Lighting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Use-Area-Shadows-for-Stationary-Lights"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">Use Area Shadows for Stationary Lights</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Movable-Lights"><span class="nav-number">1.1.2.</span> <span class="nav-text">Movable Lights</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#阴影"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">阴影</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Shadow-Map-Caching"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">Shadow Map Caching</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Limitations"><span class="nav-number">1.1.2.2.1.</span> <span class="nav-text">Limitations</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Actor-Mobility"><span class="nav-number">1.2.</span> <span class="nav-text">Actor Mobility</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lightmass"><span class="nav-number">1.3.</span> <span class="nav-text">Lightmass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Feature-for-Static-and-Stationary-lights"><span class="nav-number">1.4.</span> <span class="nav-text">Feature for Static and Stationary lights</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Diffuse-Interreflection"><span class="nav-number">1.4.1.</span> <span class="nav-text">Diffuse Interreflection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Indirect-Lighting-Cache"><span class="nav-number">1.4.2.</span> <span class="nav-text">Indirect Lighting Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Volumetic-Lightmaps"><span class="nav-number">1.4.3.</span> <span class="nav-text">Volumetic Lightmaps</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Enabling-Volumetric-Lightmap-Visualization"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">Enabling Volumetric Lightmap Visualization</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stationary-Light的阴影"><span class="nav-number">1.5.</span> <span class="nav-text">Stationary Light的阴影</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Static-Mesh-Shadow"><span class="nav-number">1.5.1.</span> <span class="nav-text">Static Mesh Shadow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Movable-Object"><span class="nav-number">1.5.2.</span> <span class="nav-text">Movable Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Directional-Light的阴影"><span class="nav-number">1.5.3.</span> <span class="nav-text">Directional Light的阴影</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lighting-needs-to-be-rebuilt"><span class="nav-number">1.6.</span> <span class="nav-text">Lighting needs to be rebuilt</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DumpUnbuildLightInteractions"><span class="nav-number">1.6.1.</span> <span class="nav-text">DumpUnbuildLightInteractions</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Light-Map"><span class="nav-number">2.</span> <span class="nav-text">Light Map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unwrapping-UVs-for-Lightmaps"><span class="nav-number">2.1.</span> <span class="nav-text">Unwrapping UVs for Lightmaps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lightmass-1"><span class="nav-number">2.2.</span> <span class="nav-text">Lightmass</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LightingTroubleshootingGuide"><span class="nav-number">3.</span> <span class="nav-text">LightingTroubleshootingGuide</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++,笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去发现这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。">
+<meta name="keywords" content="C++,笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++编程思想手抄">
+<meta property="og:url" content="http://stonelzp.github.io/2018/11/01/C-编程思想手抄/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去发现这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-12T09:02:47.594Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++编程思想手抄">
+<meta name="twitter:description" content="好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去发现这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/2018/11/01/C-编程思想手抄/"/>
+
+
+
+
+
+  <title>C++编程思想手抄 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/2018/11/01/C-编程思想手抄/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++编程思想手抄</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-01T16:27:36+09:00">
+                2018-11-01
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-11-12T18:02:47+09:00">
+                2018-11-12
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去发现这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。</p>
+<a id="more"></a>
+<p>想要把那份源码记在脑子里似的，希望能够多过几遍，之后肯定会用的上的。</p>
+<p>所以言归正传，聊聊现在看的书，C++编程思想。我会记下来我觉得非常有意义的话语，多看多读，能够印在脑子里面是最好，因为有些东西知道了就想会在代码中潜移默化的表现出来。</p>
+<h1 id="第一章-对象导言"><a href="#第一章-对象导言" class="headerlink" title="第一章 对象导言"></a>第一章 对象导言</h1><blockquote>
+<p>在面向对象的程序设计中，答案是非常新奇的：编译器不做传统意义上的函数调用。由非OOP编译器产生的函数调用会导致与被调用代码的<em>早捆绑(early binding)</em>，对于这一术语，读者可能还没有听说过，因为从来没有想到过它。早捆绑的意思是，编译器会对特定的函数名产生调用，而连接器将这个调用解析为要执行代码的绝对地址。在OOP中直到程序运行时，编译器才能确定执行代码的地。所以，当消息被发送给一般对象时，需要采用其他的方案。</p>
+<p>为了解决这一问题，面向对象语言采用<em>晚捆绑(late binding)</em> 的思想。当给对象发送消息时，在程序运行的时候才去确定调用的代码。编译器保证这个被调用的函数存在，并执行参数和返回类型的检查【其中不采用这种处理方式的语言称为<em>弱类型(weakly typed)</em> 语言】，但是它并不知道将执行的确切代码。</p>
+<p>为了执行晚捆绑，C++编译器在真正调用的地方插入一段特殊的代码。通过使用存放在对象自身中的信息，这段代码在运行时计算被调用函数函数体的地址（这一过程将在15章中详细介绍）。这样每个对象就能根据这段二进制的内容有不同的行为。当一个对象接收到消息时，它根据这个消息判断应该做什么。</p>
+<p>我们可以用关键字<strong>virtual</strong>声明他希望某个函数有晚捆绑的灵活性。我们并不需要懂得<strong>virtual</strong>的使用机制，但是没有它，我们就不能用C++进行面向对象的程序设计。在C++中，必须记住添加<strong>virtual</strong>关键字，因为根据规定，默认情况下成员函数不能动态捆绑。virtual函数（虚函数）可用来表示出现在相同家族中的类具有不同的行为。这些不同是产生多态行为的原因。</p>
+</blockquote>
+<p>上面的话对我从新理解C++的面向对象的程序的理解是有帮助的。</p>
+<p>比如说这段话对于<em>virtual</em>的理解，不是说遇到这种情况的话需要使用<code>virtual</code>关键字，而是清楚地描述了这种情况下，<code>virtual</code>关键字可以帮助我们来实现。以前只是知道这个关键字是用来声明虚函数，但是为什么要声明虚函数呢，什么情况下声明虚函数却不清楚。 </p>
+<h1 id="第二章-对象的创建与使用"><a href="#第二章-对象的创建与使用" class="headerlink" title="第二章 对象的创建与使用"></a>第二章 对象的创建与使用</h1><p>这一章虽然都是大白话，但是对于底层的描述说到底还是不是完全理解的，所以需要细致的去理解。</p>
+<h2 id="2-1-语言的翻译过程"><a href="#2-1-语言的翻译过程" class="headerlink" title="2.1 语言的翻译过程"></a>2.1 语言的翻译过程</h2><p>计算机语言转化为机器指令需要翻译器</p>
+<blockquote>
+<p>通常，翻译器分为两类：<em>解释器（interpreter）</em>和<em>编译器（compiler）</em>。</p>
+</blockquote>
+<p>为什么要录下这段话是因为我以为翻译器只有编译器一种呢。Python使用的就是解释器。而C++使用的就是编译器。虽然解释器与编译器之间的界限也很模糊（听说的）。</p>
+<p>但是C++的重点在与编译器的理解上。我也有一个独立写一个编译器的梦想……</p>
+<h3 id="2-1-3-编译过程"><a href="#2-1-3-编译过程" class="headerlink" title="2.1.3 编译过程"></a>2.1.3 编译过程</h3><p>关于编译的过程我看的是云里雾，所以详细了调查了一些文章。</p>
+<ul>
+<li><a href="http://nethack4.org/blog/building-c.html" target="_blank" rel="noopener">Building C Projects - Alex Smith</a>关于编译过程的详细说明<ul>
+<li>1.Configuration（配置）<ul>
+<li>用户系统环境配置的详细参数信息。以便编译器适应不同的用户环境配置。</li>
+</ul>
+</li>
+<li>2.Standard dircetor detection（确定标准库位置）</li>
+<li>3.Source file dependency calculation（确定依赖关系）</li>
+<li>4.Header file location（确定头文件位置）</li>
+<li>5.Header precompilation（头文件的预编译）</li>
+<li>6.Preprocessing（预处理）</li>
+<li>7.Compilation and assembly（编译）</li>
+<li>8.Object file dependency calculation</li>
+<li>9.Linking（连接）<ul>
+<li>编译器把外部函数的代码添加到可执行文件中。<em>静态连接</em> 与 <em>动态连接</em>。</li>
+</ul>
+</li>
+<li>10.Installing（安装）</li>
+<li>11.Resource linking</li>
+<li>12.Package generation（生成安装包）</li>
+<li>13.Dynamic linking（动态连接）</li>
+</ul>
+</li>
+</ul>
+<p>时间关系就直接把编译过程的大概列出来吧。</p>
+<blockquote>
+<p>某些语言（特别是C/C++）编译时，首先要对源代码进行预处理，<em>预处理器（preprocesser）</em> 是一个简单的程序，它用程序员（利用预处理器指令）定义好的模式代替源代码中的模式。预处理指令用来节省输入，增加代码的可读性。（C++程序设计并不鼓励多使用预处理指令，因为他可能引起一些不易发现的错误，这些将在本书的后面分析。）预处理过的代码通常放在一个中间文件中。</p>
+<p>编译一般分两遍进行。首先，对预处理过的代码进行语法分析。编译器把源代码分解成小的单元，并把它们按树形结构组织起来。表达式“A+B”中的“A”，“+”和“B”就是语法分析树的叶子节点。</p>
+<p>有时会在编译的第一遍和第二遍之间使用<em>全局优化器（global optimizer）</em> 来生成更短，更快的代码。</p>
+<p>编译的第二遍，由<em>代码生成器（code generator）</em> 遍历语法分析树，把树的每个节点转化成汇编语言或机器代码。如果代码生成器生成的是汇编语言，那么还必须用汇编器对其汇编。两种情况的最终结果都是生成目标模块（通常是一个以<code>.o</code>或<code>.obj</code>为扩展名的文件）。有时也会在第二遍中使用<em>窥孔优化器（peephole optimizer）</em> 从相邻一段代码中查找冗余语句。</p>
+</blockquote>
+<p>上述内容大致描述了编译过程，应该还涉及到了许多之前尚未完全理解的内容吧。</p>
+<h2 id="2-2-分段编译工具"><a href="#2-2-分段编译工具" class="headerlink" title="2.2 分段编译工具"></a>2.2 分段编译工具</h2><blockquote>
+<p>程序可由多个文件构成，一个文件中的函数可能要访问另一个文件中的函数和数据。编译一个文件时，C或C++编译器需要知道在另一个文件中的函数和数据，特别是它的名字和基本用法，编译器就是要确保函数和数据被正确的使用。”告知编译器“外部函数和数据的名称及它们的模样，这一过程就是<em>声明（declaration）</em> 。一旦声明了一个函数或变量，编译器知道怎样检查对它们的引用，以确保引用正确。</p>
+</blockquote>
+<p>这一段话告知了声明这一概念，为什么需要声明，声明用来做什么的。声明就是像编译器告知外部自己的存在以及如何使用自己。</p>
+<h3 id="2-2-1-声明与定义"><a href="#2-2-1-声明与定义" class="headerlink" title="2.2.1 声明与定义"></a>2.2.1 声明与定义</h3><p>之前从未对这两个概念进行细致的区分，或者说根本没有去注意。理解这两个概念会发现，这两个概念，还蛮重要的…</p>
+<blockquote>
+<p><em>声明（declaration）</em> 是向编译器介绍名字-标识符。它告诉编译器“这个函数或这个变量在某处可以找到，它的模样像什么”。而<em>定义（definition）</em> 是说：“在这里建立变量”或“在这里建立函数”。它为名字分配存储空间。无论定义的函数还是变量，编译器都要为它们在定义点分配存储空间。对于变量，编译器确定变量的大小。，然后在内存中开辟空间来保存量的数据。对于函数，编译器会产生代码，这些代码最终也要占用一些内存。</p>
+</blockquote>
+<p>上面的内容说明了声明跟定义的区别。声明就好比开店之前的宣传，编译器拿着传单知道了这家店的信息，使用情报，而定义就是真正的开店开业，是在上述传单的描述中真实存在的一家店。</p>
+<blockquote>
+<p>在C/C++中，可以在不同的地方声明相同的变量和函数，但是只能有一个定义【有时这称为<em>ODR（one-defifition rule,单一定义规则）</em>】。当连接器连接所有的目标模块时，如果发现一个函数或变量有多个定义，连接器将报告出错。</p>
+</blockquote>
+<p>相同的变量或函数可以多次声明，但是定义只能有一次。</p>
+<blockquote>
+<p>定义也可以是声明。如果定义<code>int x;</code>之前，编译器没有发现标识X，编译器则把这一标识符看成是声明并立即为它分配存储空间。</p>
+</blockquote>
+<h4 id="2-2-1-4变量声明的语法"><a href="#2-2-1-4变量声明的语法" class="headerlink" title="2.2.1.4变量声明的语法"></a>2.2.1.4变量声明的语法</h4><p>关于变量的声明，由于文章的说明有些多，直接写下自己的理解：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a;</span><br></pre></td></tr></table></figure>
+<p>这只是一个非常常见的变量声明，这是声明？还是定义？</p>
+<blockquote>
+<p>这段代码有足够的信息让编译器为整数a分配空间，而且编译器也确实给整数a分配了空间。要解决这个矛盾，对于C/C++需要一个关键字来说明“这只是一个声明，它的定义在别的地方”。这个关键字就是<code>extern</code>，它表示变量是在文件以外定义的，或在文件后面部分才定义。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> a;  <span class="comment">//声明一个变量但是不定义它</span></span><br></pre></td></tr></table></figure>
+<p>结果就是，对于变量来说简单的声明所提供的情报足以让编译器为其定义。想要停止这种编译器自动的行为就需要使用<code>extern</code>关键字来告诉编译器说我要晚一点再定义这个变量，你先知道有这么个变量就行了。</p>
+<p>对于函数来说又是什么样子的呢？<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">func1</span><span class="params">(<span class="keyword">int</span> length, <span class="keyword">int</span> width)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">func1</span><span class="params">(<span class="keyword">int</span> length, <span class="keyword">int</span> width)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>这两种声明方式有区别吗？</p>
+<blockquote>
+<p>因为没有函数体，编译器必定把它作为声明而不是函数定义。<code>extern</code>关键字对函数来说是多余的，可选的。C语言的程序设计者并不要求函数声明使用extern，这可能有些令人遗憾；</p>
+</blockquote>
+<p>无论加还是不加，编译器都认为这种定义方式都没有足够的信息去定义一个函数，因此都会被视为声明。通过理解<em>声明</em>与<em>定义</em>的区别，应该可以灵活运用函数与变量的出现位置。</p>
+<p>关于extern关键字使用的拓展，目的是加深理解这个关键字的作用。参看文章</p>
+<ul>
+<li><a href="https://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777431.html" target="_blank" rel="noopener">C/C++中的extern关键字详解</a></li>
+</ul>
+<p><strong>extern</strong>除了告诉编译器这只是一个声明之外，还有一个作用是跟<code>&quot;C&quot;</code>一起连用的时候，是告诉编译器按照C的规则来办事。比如说下面的例子:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> <span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>;  <span class="comment">//出于上述的文章中的描述</span></span><br></pre></td></tr></table></figure>
+<p>按照C的规则来翻译这个声明的函数，貌似按照C++的翻译规则，编译器会将函数名变得跟<code>fun</code>不一样，要看编译器的”脾气”。这个跟C++的函数重载特性有关。<br>下面的内容全是选自上面的文章：</p>
+<ul>
+<li><p>extern变量</p>
+<ul>
+<li><p>在一个源文件里定义了一个数组:<code>char a[6];</code>在另一个文件里声明<code>extern char *a;</code>  这种声明可以吗？</p>
+<ul>
+<li><p>答案是不可以。程序运行会告诉你非法访问。原因是类型不同，<em>指向类型T的指针并不等价于类型T的数组</em>，不难发现，这是指针与数组使用中经常出现的盲区知识，若是对于指针的理解只有半吊子的水平还喜欢炫耀的话就会在此栽跟头。正确的声明应该是:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> a[];</span><br></pre></td></tr></table></figure>
+<p>在使用<strong>extern</strong>的时候应该严格对应声明的格式。</p>
+</li>
+</ul>
+</li>
+<li>extern常常被用作全局变量来使用，利用其这种特性，在<code>.h</code>文件中使用extern来声明。</li>
+</ul>
+</li>
+<li><p>extern “C”</p>
+<ul>
+<li>C++语言在编译的时候为了解决函数的多态问题，会将函数名和参数联合起来生成一个中间的函数名称，而C语言则不会，因此会造成链接时找不到对应函数的情况，此时C函数就需要用`extern “C进行链接指定，这告诉编译器，请保持我的名称，不要给我生成用于链接的中间函数名。</li>
+<li>这应该是在C++环境中使用C函数的时候应该注意的问题。</li>
+</ul>
+</li>
+<li><p>extern函数声明</p>
+<ul>
+<li>原文中举了一个例子，总的来说就是extern对于函数来说就像上文提到的可加可不加，没有明显的区别，仅仅就是一个暗示，可能这个函数会在别的源文件里面定义。</li>
+<li>当把全局变量的声明跟定义放在一起的时候，会因为<code>#include</code>的存在而产生重复定义的链接错误。所以：<strong>只在头文件中做声明，真理就是这么简单</strong>。当然不使用<code>#include</code>语句，将想要提供给外部接口的函数和变量全部使用<code>extern</code>来修饰也是一种方法。你用么，反正我不用。</li>
+</ul>
+</li>
+<li><p>extern和static</p>
+<ul>
+<li>（1）extern表明该变量在别的地方已经定义过了，这里要使用那个变量。</li>
+<li>（2）static表示静态的变量，分配内存的时候，存储在静态区，不存储在栈上面。</li>
+<li><p>stati作用范围是内部连接的关系，跟extern一样，修饰的部分是跟对象分开存储的，但是却不能被其他对象引用，而extern可以。static修饰的变量只允许对象本身使用。具体差别首先：static跟extern是一对”水火不容”的家伙，也就是说，<strong>extern和static不能同时修饰一个变量</strong>；其次，<strong>static修饰的全局变量声明与定义同时进行</strong>，也就是说你在头文件中使用static声明了全局变量之后，它同时被定义了；最后，<strong>static修饰的全局变量的作用域只能是本事的编译单元</strong>，也就是说它的全局只对本编译单元有效，其他编译单元则看不到它。如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test1.h</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> g_str[] = <span class="string">"123456"</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// test1.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"test1.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">()</span></span>&#123; <span class="built_in">cout</span>&lt;&lt;g_str&lt;&lt;<span class="built_in">endl</span>;  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// test2.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"test1.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func2</span><span class="params">()</span></span>&#123; <span class="built_in">cout</span>&lt;&lt;g_str&lt;&lt;<span class="built_in">endl</span>; &#125;</span><br></pre></td></tr></table></figure>
+<p>以上的两个编译单元可以连接成功，你可以在各自的<code>.obj</code>文件中找到字符串<code>&quot;123456&quot;</code>的存在。<strong>虽然它们有相同的内容，但是存储的物理地址并不一样</strong>，就像是两个不同的变量赋了相同的值一样，而这两个变量分别作用于它们各自的编译单元。</p>
+</li>
+<li><strong>一般定义static全局变量的时候，都把它放在原文件中而不是头文件</strong>，这样就不会给其他模块造成不必要的信息污染。</li>
+</ul>
+</li>
+<li><p>extern和const</p>
+<ul>
+<li>C++中的const修饰的全局常量有跟static相同的特性，即它只能作用于本编译模块中，但是<strong>const可以和extern连用来声明该常量可以作用于其他编译模块中</strong>，如<code>extern const char g_str[];</code>,然后在原文件中别忘了定义：<code>const char g_str[] = &quot;123456&quot;;</code></li>
+<li>所以当单独使用的时候它就与static相同，而当与extern一起合作的时候，它的特性就跟extern一样了。最后是该作者的提醒：<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* g_str = <span class="string">"123456"</span>;    <span class="comment">// const修饰的是char*而不是g_str</span></span><br><span class="line"><span class="comment">// 与下面的写法</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> g_str[] = <span class="string">"123456"</span>;</span><br><span class="line"><span class="comment">// </span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">const</span> g_str = <span class="string">"123456"</span>;</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>上面算是对extern关联的一些拓展内容吧。</p>
+<h4 id="2-2-1-5包含头文件"><a href="#2-2-1-5包含头文件" class="headerlink" title="2.2.1.5包含头文件"></a>2.2.1.5包含头文件</h4>
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/2018/11/01/C-编程思想手抄/" title="C++编程思想手抄">http://stonelzp.github.io/2018/11/01/C-编程思想手抄/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          
+            <a href="/tags/笔记/" rel="tag"><i class="fa fa-tag"></i> 笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/09/UE4中的Casting/" rel="next" title="UE4中的Casting">
+                <i class="fa fa-chevron-left"></i> UE4中的Casting
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.gif"
+                alt="stone" />
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/images/cc-by.svg" alt="Creative Commons" />
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-对象导言"><span class="nav-number">1.</span> <span class="nav-text">第一章 对象导言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-对象的创建与使用"><span class="nav-number">2.</span> <span class="nav-text">第二章 对象的创建与使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-语言的翻译过程"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 语言的翻译过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-编译过程"><span class="nav-number">2.1.1.</span> <span class="nav-text">2.1.3 编译过程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-分段编译工具"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 分段编译工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-声明与定义"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 声明与定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-4变量声明的语法"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">2.2.1.4变量声明的语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-5包含头文件"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">2.2.1.5包含头文件</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/stonelzp.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/stonelzp.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/stonelzp.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/stonelzp.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/stonelzp.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/stonelzp.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Shader,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。">
+<meta name="keywords" content="Shader">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity-Shader学习">
+<meta property="og:url" content="http://stonelzp.github.io/unity-shader-learning/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-24T15:49:46.014Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity-Shader学习">
+<meta name="twitter:description" content="关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/stonelzp.github.io/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/unity-shader-learning/">
+
+
+
+
+
+  <title>Unity-Shader学习 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/stonelzp.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/stonelzp.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/stonelzp.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/stonelzp.github.io/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/stonelzp.github.io/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/stonelzp.github.io/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/stonelzp.github.io/unity-shader-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/stonelzp.github.io/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Unity-Shader学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-28T19:07:05+09:00">
+                2019-06-28
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-25T00:49:46+09:00">
+                2020-01-25
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/stonelzp.github.io/categories/Unity/" itemprop="url" rel="index">
+                    <span itemprop="name">Unity</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。</p>
+<a id="more"></a>
+<h1 id="PostProcessing"><a href="#PostProcessing" class="headerlink" title="PostProcessing"></a>PostProcessing</h1><p>不知道该起什么名字为好。</p>
+<h2 id="Post-Processing-Stack-v2"><a href="#Post-Processing-Stack-v2" class="headerlink" title="Post Processing Stack v2"></a>Post Processing Stack v2</h2><p>这个是一个Unity中方便添加PostProcessing特效的插件。</p>
+<p>对这个插件有一个大体上的了解可以参照这篇文章：</p>
+<ul>
+<li><a href="https://www.gaprot.jp/gaprot-x-chogiken/xr/unity-lookdev-post-processing-stack-v2" target="_blank" rel="noopener">Unity ルックデヴ講座 Post Processing Stack v2編</a></li>
+</ul>
+<p>但是当你想要添加自己的自定义特效的话，就不够用了。</p>
+<ul>
+<li><a href="http://pond-comfat.hatenablog.com/entry/2019/01/23/031855" target="_blank" rel="noopener">Post Processing Stack v2にカスタムエフェクトを追加する方法</a></li>
+</ul>
+<p>使用这个插件添加自定义Post Processing Shader的话，就要写点代码了，不光是Shader的。</p>
+<h1 id="Renderer-Pipeline"><a href="#Renderer-Pipeline" class="headerlink" title="Renderer Pipeline"></a>Renderer Pipeline</h1><h2 id="LWRP"><a href="#LWRP" class="headerlink" title="LWRP"></a>LWRP</h2><ul>
+<li><a href="https://www.slideshare.net/UnityTechnologiesJapan/190130unitydojyo-tatsuhiko-yamamura" target="_blank" rel="noopener">【 Unity道場 1月 ~LWRPとシェーダー~】軽量レンダーパイプライン、Light Weight Renderer Pipeline…とは</a></li>
+</ul>
+<h2 id="Scriptable-Render-Pipeline"><a href="#Scriptable-Render-Pipeline" class="headerlink" title="Scriptable Render Pipeline"></a>Scriptable Render Pipeline</h2><ul>
+<li><a href="https://github.com/Unity-Technologies/ScriptableRenderPipeline" target="_blank" rel="noopener">Unity Scriptable Render Pipeline</a></li>
+</ul>
+<h1 id="使用PostProcessingStack的实例"><a href="#使用PostProcessingStack的实例" class="headerlink" title="使用PostProcessingStack的实例"></a>使用PostProcessingStack的实例</h1><h2 id="使用PostProcess制作受伤效果"><a href="#使用PostProcess制作受伤效果" class="headerlink" title="使用PostProcess制作受伤效果"></a>使用PostProcess制作受伤效果</h2><p>感觉上就像是受到伤害的时候摄像机中心到边缘向红色渐变的效果。</p>
+<p>首先是我使用的Unity版本是<strong>Unity2019.2.12f1</strong>。</p>
+<p>参考的就除了上面贴出来的链接之外，还有最重要的官方文档了<a href="https://github.com/Unity-Technologies/PostProcessing/wiki/Writing-Custom-Effects" target="_blank" rel="noopener">PostProcessing-Writing Custom Effects</a></p>
+<blockquote>
+<p>Custom effects need a minimum of two files: a C# and a HLSL source files (note that HLSL gets cross-compiled to GLSL, Metal and others API by Unity so it doesn’t mean it’s restricted to DirectX).</p>
+</blockquote>
+<h3 id="C"><a href="#C" class="headerlink" title="C"></a>C</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">using System;</span><br><span class="line">using UnityEngine;</span><br><span class="line">using UnityEngine.Rendering.PostProcessing;</span><br><span class="line"> </span><br><span class="line">[Serializable]</span><br><span class="line">[PostProcess(typeof(GrayscaleRenderer), PostProcessEvent.AfterStack, &quot;Custom/Grayscale&quot;)]</span><br><span class="line">public sealed class Grayscale : PostProcessEffectSettings</span><br><span class="line">&#123;</span><br><span class="line">    [Range(0f, 1f), Tooltip(&quot;Grayscale effect intensity.&quot;)]</span><br><span class="line">    public FloatParameter blend = new FloatParameter &#123; value = 0.5f &#125;;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public sealed class GrayscaleRenderer : PostProcessEffectRenderer&lt;Grayscale&gt;</span><br><span class="line">&#123;</span><br><span class="line">    public override void Render(PostProcessRenderContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        var sheet = context.propertySheets.Get(Shader.Find(&quot;Hidden/Custom/Grayscale&quot;));</span><br><span class="line">        sheet.properties.SetFloat(&quot;_Blend&quot;, settings.blend);</span><br><span class="line">        context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>Important: this code has to be stored in a file named Grayscale.cs. Because of how serialization works in Unity, you have to make sure that the file is named after your settings class name or it won’t be serialized properly.</strong></p>
+</blockquote>
+<p>这里要注意的是脚本名字要一致。</p>
+<h4 id="Setting"><a href="#Setting" class="headerlink" title="Setting"></a>Setting</h4><blockquote>
+<p>The settings class holds the data for our effect. These are all the user-facing fields you’ll see in the volume inspector.</p>
+</blockquote>
+<p>之前用的时候就会觉得为什么还要做个这个类，原来是为了保存为PostProcess准备的预设数据，所以有<code>Serializable</code>属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[Serializable]</span><br><span class="line">[PostProcess(typeof(GrayscaleRenderer), PostProcessEvent.AfterStack, &quot;Custom/Grayscale&quot;)]</span><br><span class="line">public sealed class Grayscale : PostProcessEffectSettings</span><br><span class="line">&#123;</span><br><span class="line">    [Range(0f, 1f), Tooltip(&quot;Grayscale effect intensity.&quot;)]</span><br><span class="line">    public FloatParameter blend = new FloatParameter &#123; value = 0.5f &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>……我觉得官网说的比我清楚多了，干脆贴上英文得了。</p>
+<p>看英文，看英文。<a href="https://github.com/Unity-Technologies/PostProcessing/wiki/Writing-Custom-Effects" target="_blank" rel="noopener">Writing Custom Effects</a></p>
+<h4 id="Renderer"><a href="#Renderer" class="headerlink" title="Renderer"></a>Renderer</h4><blockquote>
+<p>Our renderer extends PostProcessEffectRenderer<t>, with T being the settings type to attach to this renderer.</t></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public sealed class GrayscaleRenderer : PostProcessEffectRenderer&lt;Grayscale&gt;</span><br><span class="line">&#123;</span><br><span class="line">    public override void Render(PostProcessRenderContext context)</span><br><span class="line">    &#123;</span><br><span class="line">        var sheet = context.propertySheets.Get(Shader.Find(&quot;Hidden/Custom/Grayscale&quot;));</span><br><span class="line">        sheet.properties.SetFloat(&quot;_Blend&quot;, settings.blend);</span><br><span class="line">        context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看文档看文档。</p>
+<h3 id="Shader"><a href="#Shader" class="headerlink" title="Shader"></a>Shader</h3><p>进入Shader的书写。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Shader &quot;Hidden/Custom/Grayscale&quot;</span><br><span class="line">&#123;</span><br><span class="line">    HLSLINCLUDE</span><br><span class="line"></span><br><span class="line">        #include &quot;Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl&quot;</span><br><span class="line"></span><br><span class="line">        TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);</span><br><span class="line">        float _Blend;</span><br><span class="line"></span><br><span class="line">        float4 Frag(VaryingsDefault i) : SV_Target</span><br><span class="line">        &#123;</span><br><span class="line">            float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);</span><br><span class="line">            float luminance = dot(color.rgb, float3(0.2126729, 0.7151522, 0.0721750));</span><br><span class="line">            color.rgb = lerp(color.rgb, luminance.xxx, _Blend.xxx);</span><br><span class="line">            return color;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    ENDHLSL</span><br><span class="line"></span><br><span class="line">    SubShader</span><br><span class="line">    &#123;</span><br><span class="line">        Cull Off ZWrite Off ZTest Always</span><br><span class="line"></span><br><span class="line">        Pass</span><br><span class="line">        &#123;</span><br><span class="line">            HLSLPROGRAM</span><br><span class="line"></span><br><span class="line">                #pragma vertex VertDefault</span><br><span class="line">                #pragma fragment Frag</span><br><span class="line"></span><br><span class="line">            ENDHLSL</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看文档，看文档。<strong>关于shader里面的内容还有好多我不懂的</strong>。</p>
+<h3 id="Effect-ordering"><a href="#Effect-ordering" class="headerlink" title="Effect ordering"></a>Effect ordering</h3><h3 id="Custom-editor"><a href="#Custom-editor" class="headerlink" title="Custom editor"></a>Custom editor</h3><h3 id="Additional-notes"><a href="#Additional-notes" class="headerlink" title="Additional notes"></a>Additional notes</h3><h3 id="特效制作"><a href="#特效制作" class="headerlink" title="特效制作"></a>特效制作</h3><p>所以上面的使用说明看完之后，就是实现部分了。不知不觉就把上面的部分写到这一章节离了= =。</p>
+<p>因为上面的实现都差不多，只记下Shader部分的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">Shader &quot;Hidden/Custom/Damage&quot;</span><br><span class="line">&#123;</span><br><span class="line">    HLSLINCLUDE</span><br><span class="line"></span><br><span class="line">#include &quot;Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl&quot;</span><br><span class="line"></span><br><span class="line">    TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);</span><br><span class="line">    float _Range;</span><br><span class="line">    float4 _Color;</span><br><span class="line"></span><br><span class="line">    float4 Frag(VaryingsDefault i) : SV_Target</span><br><span class="line">    &#123;</span><br><span class="line">        float2 uv = i.texcoord;</span><br><span class="line">        float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);</span><br><span class="line">        float radiusFactor = (1 - _Range) * (1 - _Range) / 4;</span><br><span class="line">        float radius = saturate(((uv.x - 0.5) * (uv.x - 0.5) + (uv.y - 0.5) * (uv.y - 0.5)) / radiusFactor);</span><br><span class="line">        return saturate(color * (1 - radius) + _Color * radius);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ENDHLSL</span><br><span class="line"></span><br><span class="line">    SubShader</span><br><span class="line">    &#123;</span><br><span class="line">        Cull Off ZWrite Off ZTest Always</span><br><span class="line"></span><br><span class="line">        Pass</span><br><span class="line">        &#123;</span><br><span class="line">            HLSLPROGRAM</span><br><span class="line"></span><br><span class="line">                #pragma vertex VertDefault</span><br><span class="line">                #pragma fragment Frag</span><br><span class="line"></span><br><span class="line">            ENDHLSL</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这些都是要做的准备工作，最后要把这个PostProcess应用到Camer上。</p>
+<ul>
+<li>Camera上添加PostProcessLayer组件，指定PostProcessEffect的layer</li>
+<li>New一个GameObject，添加PostProcessVolume组件，可以是子物体</li>
+<li>GameObject的Layer需要指定上面提到的layer</li>
+</ul>
+<p>这些是有可能会忘的，其他的就很简单了。别忘了New一个新的Profile。参数的话可以参照<a href="https://docs.unity3d.com/Packages/com.unity.postprocessing@2.0/api/UnityEngine.Rendering.PostProcessing.PostProcessVolume.html" target="_blank" rel="noopener">Class PostProcessVolume</a></p>
+<h2 id="使用PostPerocess制作向纯色渐变的效果"><a href="#使用PostPerocess制作向纯色渐变的效果" class="headerlink" title="使用PostPerocess制作向纯色渐变的效果"></a>使用PostPerocess制作向纯色渐变的效果</h2><p>说起来上面的效果也只是这个效果的拓展，这个效果是我从巨佬那里偷学来的。</p>
+<h1 id="关于Shader的一些文章"><a href="#关于Shader的一些文章" class="headerlink" title="关于Shader的一些文章"></a>关于Shader的一些文章</h1><ul>
+<li><p><a href="https://en.wikibooks.org/wiki/Cg_Programming/Unity/Translucent_Bodies" target="_blank" rel="noopener">Cg Programming/Unity/Translucent Bodies</a></p>
+</li>
+<li><p><a href="https://roystan.net/articles/toon-shader.html" target="_blank" rel="noopener">Toon Shader</a></p>
+</li>
+<li><p><a href="http://tsubakit1.hateblo.jp/entry/2018/01/04/235520" target="_blank" rel="noopener">【Unity】良い感じに見える（屋内向け）ライティングの設定手順</a></p>
+</li>
+<li><p><a href="https://ics.media/entry/19728/" target="_blank" rel="noopener">Unity Post Processing Stackで作る光芒エフェクト</a></p>
+</li>
+<li><p><a href="http://light11.hatenadiary.com/entry/2018/03/15/000022" target="_blank" rel="noopener">【Unity】【シェーダ】ブルームを独自実装する</a></p>
+</li>
+</ul>
+<p>原先在知乎上看到的文章，这回有大图看：</p>
+<ul>
+<li><p><a href="https://connect.unity.com/p/unite-2018-beng-pi-3-zai-unityzhong-shi-xian-gao-pin-zhi-de-qia-tong-xuan-ran-shang" target="_blank" rel="noopener">Unite 2018 | 《崩坏3》：在Unity中实现高品质的卡通渲染（上）</a></p>
+</li>
+<li><p><a href="http://vfxmike.blogspot.com/2018/07/dark-and-stormy.html" target="_blank" rel="noopener">Dark and Stormy</a></p>
+</li>
+</ul>
+<p>一个关于Shader的WIKI，据说关于Unity的Shader讲得很详细。（但是貌似不翻墙看不到。）</p>
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/Cg_Programming" target="_blank" rel="noopener">Cg Programming</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/unity-shader-learning/" title="Unity-Shader学习">http://stonelzp.github.io/unity-shader-learning/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/stonelzp.github.io/tags/Shader/" rel="tag"><i class="fa fa-tag"></i> Shader</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/stonelzp.github.io/git-learning/" rel="next" title="Git学习笔记">
+                <i class="fa fa-chevron-left"></i> Git学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/stonelzp.github.io/unity-data-transission/" rel="prev" title="Unity中的通信">
+                Unity中的通信 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/stonelzp.github.io/uploads/avatar.gif" alt="stone">
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/stonelzp.github.io/archives/">
+              
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/stonelzp.github.io/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/stonelzp.github.io/tags/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/stonelzp.github.io/images/cc-by.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PostProcessing"><span class="nav-number">1.</span> <span class="nav-text">PostProcessing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Post-Processing-Stack-v2"><span class="nav-number">1.1.</span> <span class="nav-text">Post Processing Stack v2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Renderer-Pipeline"><span class="nav-number">2.</span> <span class="nav-text">Renderer Pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LWRP"><span class="nav-number">2.1.</span> <span class="nav-text">LWRP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scriptable-Render-Pipeline"><span class="nav-number">2.2.</span> <span class="nav-text">Scriptable Render Pipeline</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用PostProcessingStack的实例"><span class="nav-number">3.</span> <span class="nav-text">使用PostProcessingStack的实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用PostProcess制作受伤效果"><span class="nav-number">3.1.</span> <span class="nav-text">使用PostProcess制作受伤效果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C"><span class="nav-number">3.1.1.</span> <span class="nav-text">C</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Setting"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">Setting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Renderer"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">Renderer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shader"><span class="nav-number">3.1.2.</span> <span class="nav-text">Shader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Effect-ordering"><span class="nav-number">3.1.3.</span> <span class="nav-text">Effect ordering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Custom-editor"><span class="nav-number">3.1.4.</span> <span class="nav-text">Custom editor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Additional-notes"><span class="nav-number">3.1.5.</span> <span class="nav-text">Additional notes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特效制作"><span class="nav-number">3.1.6.</span> <span class="nav-text">特效制作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用PostPerocess制作向纯色渐变的效果"><span class="nav-number">3.2.</span> <span class="nav-text">使用PostPerocess制作向纯色渐变的效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于Shader的一些文章"><span class="nav-number">4.</span> <span class="nav-text">关于Shader的一些文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/stonelzp.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/stonelzp.github.io/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

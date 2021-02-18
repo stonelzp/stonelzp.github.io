@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/stonelzp.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/stonelzp.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/stonelzp.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/stonelzp.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/stonelzp.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/stonelzp.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="UE4,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4-对工程进行DEBUG的正确姿势">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-debug-your-project/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-debug-your-project/Screenshot%202020-11-14%20150422.jpg">
+<meta property="og:updated_time" content="2021-01-10T13:37:30.654Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4-对工程进行DEBUG的正确姿势">
+<meta name="twitter:description" content="这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。">
+<meta name="twitter:image" content="http://stonelzp.github.io/ue4-debug-your-project/Screenshot%202020-11-14%20150422.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/stonelzp.github.io/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/ue4-debug-your-project/">
+
+
+
+
+
+  <title>UE4-对工程进行DEBUG的正确姿势 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/stonelzp.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/stonelzp.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/stonelzp.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/stonelzp.github.io/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/stonelzp.github.io/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/stonelzp.github.io/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/stonelzp.github.io/ue4-debug-your-project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/stonelzp.github.io/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UE4-对工程进行DEBUG的正确姿势</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-11-09T13:06:08+09:00">
+                2020-11-09
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2021-01-10T22:37:30+09:00">
+                2021-01-10
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/stonelzp.github.io/categories/UnrealEngine4/" itemprop="url" rel="index">
+                    <span itemprop="name">UnrealEngine4</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。</p>
+<a id="more"></a>
+<h1 id="保留项目中的设定"><a href="#保留项目中的设定" class="headerlink" title="保留项目中的设定"></a>保留项目中的设定</h1><h2 id="对-ini-文件的读写"><a href="#对-ini-文件的读写" class="headerlink" title="对 ini 文件的读写"></a>对 ini 文件的读写</h2><p>UE4中的基本上所有的设定都是保存在ini文件中的。而我今天就要了解如何在UE4的Editor-ProjectSettings中对ini文件进行读写操作。</p>
+<p>首先我们需要的是一个<strong>config object</strong>，然后把保存着设定数据的对象暴露给UE4的Editor方便其与接口对接进行操作，而不是直接对ini文件进行读写。</p>
+<details><br>    <summary> Creating you settings object (Click to expand) </summary><br>    <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copyright 2015 Moritz Wundke. All Rights Reserved.</span></span><br><span class="line"><span class="comment">// Released under MIT.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CustomGameSettings.generated.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Setting object used to hold both config settings and editable ones in one place</span></span><br><span class="line"><span class="comment"> * To ensure the settings are saved to the specified config file make sure to add</span></span><br><span class="line"><span class="comment"> * props using the globalconfig or config meta.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">UCLASS(config = Game, defaultconfig)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UCustomGameSettings</span> :</span> <span class="keyword">public</span> UObject</span><br><span class="line">&#123;</span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    UCustomGameSettings(<span class="keyword">const</span> FObjectInitializer&amp; ObjectInitializer);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Sample bool property */</span></span><br><span class="line">    UPROPERTY(EditAnywhere, config, Category = Custom)</span><br><span class="line">    <span class="keyword">bool</span> bSampleBool;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Sample float property that requires a restart */</span></span><br><span class="line">    UPROPERTY(EditAnywhere, config, Category = Custom, meta = (ConfigRestartRequired = <span class="literal">true</span>))</span><br><span class="line">    <span class="keyword">float</span> SampleFloatRequireRestart;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Sample string list */</span></span><br><span class="line">    UPROPERTY(config, EditAnywhere, Category = Custom)</span><br><span class="line">    TArray&lt;FString&gt; SampleStringList;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Or add min, max or clamp values to the settings */</span></span><br><span class="line">    UPROPERTY(config, EditAnywhere, Category = Custom, meta = (UIMin = <span class="number">1</span>, ClampMin = <span class="number">1</span>))</span><br><span class="line">    int32 ClampedIntSetting;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** We can even use asset references */</span></span><br><span class="line">    UPROPERTY(config, EditAnywhere, Category = Materials, meta = (AllowedClasses = <span class="string">"MaterialInterface"</span>))</span><br><span class="line">    FStringAssetReference StringMaterialAssetReference;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br><br></details>
+
+<p>这里重要的有两处：</p>
+<ul>
+<li><code>UCLASS(config=Game, defaultconfig)</code> : 表明这是一个Config对象的UObject，存储的设定(ini)文件在默认的位置。</li>
+<li><code>UPROPERTY(config)</code> : 将属性暴露给Editor的关键字，想要保存在ini文件中的属性一定要带上这个属性修饰符。</li>
+</ul>
+<p>之后就是空的构造函数的实现，这里直接省略了代码。</p>
+<p>接下来是将我们准备好的<strong>config object</strong>登录到我们想要是有的Module上。这会让我们的configobject适用于任何的Module甚至是Plugins。这需要我们继承<strong>IModuleInterface</strong>接口并实现。由于plugins和工程的Module一般都是会继承这个接口，所以我们不需要刻意去实现，只要利用已经存在的<code>StartupModule</code>函数就足够了。</p>
+<details><br>    <summary> Registering the object with our module (click to expand) </summary><br>    <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copyright 2015 Moritz Wundke.All Rights Reserved.</span></span><br><span class="line"><span class="comment">// Released under MIT.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CustomSettings.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Settings</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CustomGameSettings.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ISettingsModule.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ISettingsSection.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ISettingsContainer.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LOCTEXT_NAMESPACE <span class="meta-string">"CustomSettings"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FCustomSettingsModule</span> :</span> <span class="keyword">public</span> FDefaultGameModuleImpl</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">StartupModule</span><span class="params">()</span> override</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            RegisterSettings();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">ShutdownModule</span><span class="params">()</span> override</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (UObjectInitialized())</span><br><span class="line">            &#123;</span><br><span class="line">                    UnregisterSettings();</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">SupportsDynamicReloading</span><span class="params">()</span> override</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Callback for when the settings were saved.</span></span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">HandleSettingsSaved</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            UCustomGameSettings* Settings = GetMutableDefault&lt;UCustomGameSettings&gt;();</span><br><span class="line">            <span class="keyword">bool</span> ResaveSettings = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// You can put any validation code in here and resave the settings in case an invalid</span></span><br><span class="line">            <span class="comment">// value has been entered</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (ResaveSettings)</span><br><span class="line">            &#123;</span><br><span class="line">                    Settings-&gt;SaveConfig();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">RegisterSettings</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            <span class="comment">// Registering some settings is just a matter of exposing the default UObject of</span></span><br><span class="line">            <span class="comment">// your desired class, feel free to add here all those settings you want to expose</span></span><br><span class="line">            <span class="comment">// to your LDs or artists.</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (ISettingsModule* SettingsModule = FModuleManager::GetModulePtr&lt;ISettingsModule&gt;(<span class="string">"Settings"</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                    <span class="comment">// Create the new category</span></span><br><span class="line">                    ISettingsContainerPtr SettingsContainer = SettingsModule-&gt;GetContainer(<span class="string">"Project"</span>);</span><br><span class="line"></span><br><span class="line">                    SettingsContainer-&gt;DescribeCategory(<span class="string">"CustomSettings"</span>,</span><br><span class="line">                            LOCTEXT(<span class="string">"RuntimeWDCategoryName"</span>, <span class="string">"CustomSettings"</span>),</span><br><span class="line">                            LOCTEXT(<span class="string">"RuntimeWDCategoryDescription"</span>, <span class="string">"Game configuration for the CustomSettings game module"</span>));</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// Register the settings</span></span><br><span class="line">                    ISettingsSectionPtr SettingsSection = SettingsModule-&gt;RegisterSettings(<span class="string">"Project"</span>, <span class="string">"CustomSettings"</span>, <span class="string">"General"</span>,</span><br><span class="line">                            LOCTEXT(<span class="string">"RuntimeGeneralSettingsName"</span>, <span class="string">"General"</span>),</span><br><span class="line">                            LOCTEXT(<span class="string">"RuntimeGeneralSettingsDescription"</span>, <span class="string">"Base configuration for our game module"</span>),</span><br><span class="line">                            GetMutableDefault&lt;UCustomGameSettings&gt;()</span><br><span class="line">                            );</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// Register the save handler to your settings, you might want to use it to</span></span><br><span class="line">                    <span class="comment">// validate those or just act to settings changes.</span></span><br><span class="line">                    <span class="keyword">if</span> (SettingsSection.IsValid())</span><br><span class="line">                    &#123;</span><br><span class="line">                            SettingsSection-&gt;OnModified().BindRaw(<span class="keyword">this</span>, &amp;FCustomSettingsModule::HandleSettingsSaved);</span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">UnregisterSettings</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">            <span class="comment">// Ensure to unregister all of your registered settings here, hot-reload would</span></span><br><span class="line">            <span class="comment">// otherwise yield unexpected results.</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (ISettingsModule* SettingsModule = FModuleManager::GetModulePtr&lt;ISettingsModule&gt;(<span class="string">"Settings"</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                    SettingsModule-&gt;UnregisterSettings(<span class="string">"Project"</span>, <span class="string">"CustomSettings"</span>, <span class="string">"General"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">IMPLEMENT_PRIMARY_GAME_MODULE( FCustomSettingsModule, CustomSettings, <span class="string">"CustomSettings"</span> );</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">undef</span> LOCTEXT_NAMESPACE</span></span><br></pre></td></tr></table></figure><br><br></details>
+
+<p>像上面这样我们就在UE4的<code>Project Settings</code>就能看到我们新添加的Category：CustomSettings，<br><img src="Screenshot 2020-11-14 150422.jpg" alt="Register the settings"></p>
+<p>从函数的名称可以猜测，UE4的ProjectSettings的界面分成了Container，Category，Section。</p>
+<p>在我参照的文章的最后提到了一个最简单的向ProjectSettings中追加新的Category的方法。就是直接使用<code>UDeveloperSettings</code>类，这样默认的就是直接在ProjectSetting中的Game的Section中出现我们新的项目</p>
+<details><br>    <summary> Using Auto-discovery Settings : Click to expand </summary><br>    <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">UCLASS(config=Game, defaultconfig, meta=(DisplayName=<span class="string">"My Settings"</span>))</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LOADINGSCREEN_API</span> <span class="title">UMyDeveloperSettings</span> :</span> <span class="keyword">public</span> UDeveloperSettings</span><br><span class="line">&#123;</span><br><span class="line">    GENERATED_UCLASS_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add all your properties here as we did before</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br><br></details>
+
+<p>这样我们就可以使用UE4准备的接口进行差不多全部的设定的读写了。但是对UE4是如何管理ini文件的流程完全没有深入的了解。</p>
+<h3 id="Config-ConfigName"><a href="#Config-ConfigName" class="headerlink" title="Config=ConfigName"></a>Config=ConfigName</h3><p>关于UCLASS的限定修饰符<strong>config</strong></p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Reference/Classes/Specifiers/index.html" target="_blank" rel="noopener">Class Specifiers</a></li>
+</ul>
+<blockquote>
+<p>Config=ConfigName</p>
+<p>Indicates that this class is allowed to store data in a configuration file (.ini). If there are any class properties declared with the config or globalconfig Specifiers, this Specifier causes those properties to be stored in the named configuration file. This Specifier is propagated to all child classes and cannot be negated, but child classes can change the config file by re-declaring the config Specifier and providing a different ConfigName. Common ConfigName values are “Engine”, “Editor”, “Input”, and “Game”.</p>
+</blockquote>
+<p>经过验证，UCLASS中的<strong>config</strong>修饰符决定了ini文件的名称，<strong>defaultconfig</strong>决定了ini文件的路径。关于还有没有其他的关键字我不清楚。应该还有。</p>
+<ul>
+<li><code>config=Game, defaultconfig</code> : 会存在<em>ProjectName/Config/DefaultGame.ini</em>设定文件中。</li>
+</ul>
+<p>同理将Game替换为上面的”Engine”, “Editor”, “Input”，就会保存在各种的<em>DefaultEngine.ini</em>，<em>DefaultEditor.ini</em>，<em>DefaultInput.ini</em>文件中。</p>
+<p>但是于此同时在<em>Project/Saved/Config/Windows</em>文件夹下也会相应的生成<em>Game.ini</em>，<em>Engine.ini</em>， <em>Editor.ini</em>，<em>Input.ini</em>文件，这涉及到了一些更复杂的机制。Game，Engine，Editor这些都是在创建项目的时候UE4为我们自动创建的，也是基本上常用的设定文件。但是当我们决定使用我们自己的设定文件的时候，比如说这样写：</p>
+<ul>
+<li><code>config=DebugSettings, defaultconfig</code></li>
+</ul>
+<p>那么我们会发现在<em>Project/Config</em>的默认的设定文件文件夹中出现了<em>DefaultDebugSettings.ini</em>设定文件，同时在Saved的文件中的设定文件中的出现了<em>DebugSettings.ini</em>文件夹。这就涉及到了UE4的ini设定文件的管理问题了，说实话我只是观察到了现象，对于源码并没有进行深入的了解。</p>
+<p>当我们不使用<em>defaultconfig</em>修饰符的话，我们的<em>Project/Config</em>文件夹下就不会生成设定文件，只有Saved文件夹下会生成相应的ini文件。</p>
+<p>除了藉由UE4的Editor的SettingsModule对ini文件进行读写之外，还可以使用提供的函数。</p>
+<ul>
+<li>SaveConfig</li>
+<li>LoadConfig</li>
+</ul>
+<p>关于自定义读写和对UE4的设定文件的更详细的说明，我发现了一篇文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/u012999985/article/details/52801264" target="_blank" rel="noopener">UE4 Config配置文件详解（2017.4.1更新）</a></li>
+</ul>
+<p>这篇文章说的额非常详细，也涉及到了我在简略的读这一部分代码的时候遇到的一些类方法的说明，有时间的话可以把这篇文章的内容摘抄一下嘿嘿。</p>
+<h3 id="从命令行对设定进行重写"><a href="#从命令行对设定进行重写" class="headerlink" title="从命令行对设定进行重写"></a>从命令行对设定进行重写</h3><p>ini文件设定是可以在UE4启动的时候用命令行的形式对其进行重新赋值的，就像<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-ini:inifile:[section1]:parameter1=value1,[section2]:parameter2=value2,...</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>inifile : 是<strong>configfile</strong>的名字，应该就是UCLASS修饰符的<code>config=ConfigName</code>中的ConfigName，比如说DefaultEngine.ini的情况就是<code>Engine</code>。</li>
+<li>section : 是ini文件中的section名字，类似于[/Script/Engine.Engine]</li>
+<li>parameter1=value1 : 重新值的方式</li>
+</ul>
+<p>由于我并没有直接验证过，估计要以后使用了才会知道，只记录下我找的资料链接</p>
+<ul>
+<li><a href="https://www.cc2.co.jp/blog/?p=21872" target="_blank" rel="noopener">第006回 コマンドラインからConfig設定を上書きする時の注意点</a></li>
+</ul>
+<h3 id="LOCTEXT"><a href="#LOCTEXT" class="headerlink" title="LOCTEXT"></a>LOCTEXT</h3><p>硬要说的话是上面的代码中：<code>LOCTEXT_NAMESPACE</code>的作用，这涉及到了UE4的LocalizationSystem的问题，我也是完全不知道啊，反正遇到的上面的问题就是在我使用<code>LOCTEXT</code>的时候，没有在开始定义那个NAMESPACE的时候就会报错。</p>
+<p>简单的贴一下链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/849059/view.html?sort=oldest" target="_blank" rel="noopener">#define LOCTEXT_NAMESPACE “Something”</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Localization/Formatting/index.html" target="_blank" rel="noopener">Text Localization</a></li>
+</ul>
+<p>涉及到了本地化的内容，感觉超级重要，先记录下来链接之后一定要另外整理：</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/ue4-ue4-localization-deep-dive-191115517" target="_blank" rel="noopener">UE4のローカライズ機能紹介 (UE4 Localization Deep Dive)</a></li>
+</ul>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>基本上都是参照这一篇的内容。</p>
+<ul>
+<li><a href="https://nerivec.github.io/old-ue4-wiki/pages/customsettings.html" target="_blank" rel="noopener">Custom Settings</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Basics/ConfigurationFiles/index.html" target="_blank" rel="noopener">Configuration Files</a></li>
+</ul>
+<h2 id="对ini文件的深度读写"><a href="#对ini文件的深度读写" class="headerlink" title="对ini文件的深度读写"></a>对ini文件的深度读写</h2><p>上面的内容只是单纯的介绍了使用UE4的Editor来对ini文件进行读写，由于很多读写的细节被封装到了Editor当中，使用自制的Debug工具的时候少不了对ini文件的读写。所以这一部分用来记录我调查的内容。</p>
+<p>关于ImGui的内容在另一篇文章。</p>
+<p>关于如何做到自己对ini文件读写，首先我无意间看到这篇文章：</p>
+<ul>
+<li><a href="https://blog.cnu.jp/2015/12/19/hidden-parameter/" target="_blank" rel="noopener">設定ファイルのヒミツ - Happy My Life</a></li>
+</ul>
+<p>这之后应该是对源码的解析，和自己使用ini文件的案例的分析和记录。</p>
+<h1 id="Asset加载的实时观测"><a href="#Asset加载的实时观测" class="headerlink" title="Asset加载的实时观测"></a>Asset加载的实时观测</h1><p>最近在调查如何在Realtime情况下观测UE4中Assets的Load和UnLoad，好像调查方向有点走偏了。</p>
+<h2 id="Asset-Registry"><a href="#Asset-Registry" class="headerlink" title="Asset Registry"></a>Asset Registry</h2><p>在我苦苦追寻有没有什么函数回调可以追踪UE4中的Asset的加载的时候找到了这个Module，就一些人所说，</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/812628/track-assets-loaded-inside-the-game.html" target="_blank" rel="noopener">Track assets loaded inside the game</a></li>
+</ul>
+<p>在<code>FAssetRegistryModule</code>和<code>IAssetRegistry</code>API源码中可以寻找答案，更准确的说是<code>OnInMemoryAsset</code>事件。</p>
+<p>结果是否答案在它们身上我也不是很清楚，因为我对UE4本身的资源管理不是了解的缘故，我也不敢随便下结论。首先是<strong>AssetRegistry</strong>这个是什么开始。</p>
+<blockquote>
+<p>The Asset Registry is an editor subsystem which gathers information about unloaded assets asynchronously as the editor loads. This information is stored in memory so the editor can create lists of assets without loading them. The information is authoritative and is kept up to date automatically as assets are changed in memory or files are changed on disk. The Content Browser is the primary consumer for this system, but it may be used anywhere in editor code.</p>
+</blockquote>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Assets/Registry/index.html" target="_blank" rel="noopener">Asset Registry</a></li>
+</ul>
+<p>首先是官网的解读，AssetRegistry是Editor的子系统，用来收集各种Asset的加载信息。这些情报被加载在内存当中，Editor会根据这些情报管理那些加载和未被加载的Asset。而AssetRegistry的主要消费对象是Editor的<strong>Content Browser</strong>。</p>
+<p>其实调查到这里我就觉得有点偏了，因为这个感觉主要面向对象是UE4的Editor，想要自己制作Debugger的话，不知道能不能用啊。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FAssetRegistryModule&amp; AssetRegistryModule = FModuleManager::LoadModuleChecked&lt;FAssetRegistryModule&gt;(<span class="string">"AssetRegistry"</span>);</span><br><span class="line">TArray&lt;FAssetData&gt; AssetData;</span><br><span class="line"><span class="keyword">const</span> UClass* Class = UStaticMesh::StaticClass();</span><br><span class="line">AssetRegistryModule.Get().GetAssetsByClass(Class, AssetData);</span><br></pre></td></tr></table></figure>
+<p>很遗憾官网上的这段代码并不能执行，函数的参数类型对不上。</p>
+<p>下面这段至少是我在UE4.25版本的时候执行可以顺利运行的代码。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">FAssetRegistryModule&amp; AssetRegistryModule = FModuleManager::LoadModuleChecked&lt;FAssetRegistryModule&gt;(<span class="string">"AssetRegistry"</span>);</span><br><span class="line">        TArray&lt;FAssetData&gt; AssetDatas;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        // const FName ClassName = </span></span><br><span class="line"><span class="comment">        AssetRegistryModule.Get().GetAssetsByClass("StaticMesh", AssetDatas);</span></span><br><span class="line"><span class="comment">        if(AssetDatas.Num() &gt; 0)</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">                for (FAssetData Element : AssetDatas)</span></span><br><span class="line"><span class="comment">                &#123;</span></span><br><span class="line"><span class="comment">                        UE_LOG(LogTemp, Log, TEXT("%s"), *(Element.AssetName.ToString()));</span></span><br><span class="line"><span class="comment">                        // if(Element.IsAssetLoaded())</span></span><br><span class="line"><span class="comment">                &#125;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">        AssetRegistryModule.Get().GetAllAssets(AssetDatas);</span><br><span class="line">                <span class="keyword">if</span>(AssetDatas.Num() &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="keyword">for</span> (FAssetData Element : AssetDatas)</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// UE_LOG(LogTemp, Log, TEXT("%s"), *(Element.AssetName.ToString()));</span></span><br><span class="line">                        <span class="keyword">if</span>(Element.IsAssetLoaded())</span><br><span class="line">                        &#123;</span><br><span class="line">                                UE_LOG(LogTemp, Log, TEXT(<span class="string">"%s"</span>), *(Element.AssetName.ToString()));</span><br><span class="line">                        &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里注目的是两个函数：</p>
+<ul>
+<li><code>GetAllAssets(AssetDatas)</code>: 直接查看代码的话，这个函数会返回在这个Registry中所有的Assets，但是比较慢，推荐使用另一个有Filter版本的函数。</li>
+<li><code>IsAssetLoaded()</code> : 检查Asset是否被加载。</li>
+</ul>
+<p>还有就是判断一个Asset是否已经被加载的判断是已被加载的Asset是可以被<code>FindObject</code>到的，但也是我读了代码的一点推测而已。</p>
+<p>关于AssetRegistry更加详细的解释，我发现了这样的文章：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/76964514" target="_blank" rel="noopener">UE4 AssetRegistry分析</a></li>
+</ul>
+<p>再就是官方文档和源码了，由于时间关系，先理解到这里。</p>
+<p>关于AssetRegistry更加准确，或说是更好的概括的一个答案：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/877592/what-is-asset-registry-used-for.html" target="_blank" rel="noopener">What is Asset Registry used for?</a></li>
+</ul>
+<blockquote>
+<p>To understand what asset registry is you need to understand what asset is in technical term.</p>
+<p>Asset is a UObject that can be dumped down to file (uasset package) and can be loaded back to the memory from that file and in is mainly used to store game resources, when you load them they are avable in memory as UObject objects like UBlueprint, UTexture2D, USkeletalMesh. USoundWave and so on. Every type of asset you see in content browser has corresponding class and each asset you see in “content Browser” is a UObject that is in memory or can be loaded in memory.</p>
+<p>As assets are UObjects normally you would seek them out from reflection system. But because assets exists also on files and don’t need to be loaded to memory all the time when they are unused (they would just waste memory space), there need to be object that needs to keep track of them regardless if they are loaded or not. Searching them in reflection system is pointless if they are not loaded first. And that what AsssetRegistry is. it allows you to list out assets, get there regestry entry (FAssetData) and load them up, it also a to more optimized way to seek assets that are loaded already, as well as edit there registry information. And yes “Content Browser” in reality is Asset Registry explorer and it mainly use AssetRegistry to list and edit assets in there. It also provides event delegates which let you track live any changes done to asset registry.</p>
+<p>Best way to just look in API refrence to see what function it gives:</p>
+<p><a href="https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/index.html" target="_blank" rel="noopener">https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/index.html</a></p>
+<p>You can always access from anywhere via:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;  AssetRegistryModule.Get()-&gt;...</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>Assets in registry are stored in paths (which you see as folder structure in content browser), if you want to request specific asset you need to know path for it (you can get it by right clicking asset and clicking Copy Reference). but you can also whole sets of assets using diffrent identificators. for example you can get all assets of specific class (class name as name if the asset class without U prefix:</p>
+<p><a href="https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/GetAssetsByClass/index.html" target="_blank" rel="noopener">https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/GetAssetsByClass/index.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;  TArray&lt;FAssetData&gt; Assets;</span><br><span class="line">&gt;  AssetRegistryModule.Get()-&gt;GetAssetsByClass(FName(&quot;Texture2D&quot;),Assets,true);</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>And oyu will get registry entires of assets in form of array of FAssetData structures:</p>
+<p><a href="https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/FAssetData/index.html" target="_blank" rel="noopener">https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/FAssetData/index.html</a></p>
+<p>And you can load and get asset UObject it self by calling GetAsset()</p>
+<p>LoadObject is a function that loads UObject form the file, it function is useful if you want to load asset (or not) that is outside of asset registry.</p>
+<p>Find Object on other hand finds assets that is already loaded in memory.</p>
+</blockquote>
+<h2 id="Memreport命令抓取Asset的加载情况"><a href="#Memreport命令抓取Asset的加载情况" class="headerlink" title="Memreport命令抓取Asset的加载情况"></a>Memreport命令抓取Asset的加载情况</h2><p>这个命令的的得知来自于</p>
+<ul>
+<li><a href="https://www.unrealengine.com/ja/blog/debugging-and-optimizing-memory" target="_blank" rel="noopener">デバッグとメモリーの最適化</a></li>
+</ul>
+<p>在工程的命令行直接输入<code>Memrepory</code>，则会瞬间抓取这一帧的内存加载情况，结果会输出到你的<em>YourGame/Saved/Profiling/MemReports</em>文件夹中。</p>
+<p><code>Memreport -Full</code>命令则会输出更详细的内容。BaseEngine.ini中的[MemReportCommands] Section下（带有-Full的情况下则是[MemReportFullCommands]）的所有命令都会在Memreport的命令执行后被执行</p>
+<p>还有一些其他的命令等待我去发现。</p>
+<h3 id="抓取数据"><a href="#抓取数据" class="headerlink" title="抓取数据"></a>抓取数据</h3><p>应用的启动参数(Standalone模式启动的额外参数)指定<code>Loadtime</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-trace=Loadtime</span><br></pre></td></tr></table></figure></p>
+<p>想要获取更多情报的话，CPUEvent或者I/O事件的情报，添加更多参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-trace=Loadtime,File,Cpu -statnamedevents</span><br></pre></td></tr></table></figure></p>
+<p>至于其他的命令，遇见在做记录吧。</p>
+<h2 id="Unreal-Insight-Asset-Loading-Insight"><a href="#Unreal-Insight-Asset-Loading-Insight" class="headerlink" title="Unreal Insight - Asset Loading Insight"></a>Unreal Insight - Asset Loading Insight</h2><p>最近研究如何使用UnrealInsights吃了一点闭门羹，隐藏的有点深啊，各种使用方法。这次参照的是UnealEngineJP的官方视频：</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=NhehQI98lis&amp;app=desktop" target="_blank" rel="noopener">UE4.25 Update - Unreal Insights -</a></li>
+</ul>
+<p>只参照了AssetLoadingInsights的部分。</p>
+<p><strong>Package(Shipping以外)可以使用。</strong></p>
+<h2 id="Unreal-Insights-Memory-Innsights"><a href="#Unreal-Insights-Memory-Innsights" class="headerlink" title="Unreal Insights - Memory Innsights"></a>Unreal Insights - Memory Innsights</h2><p>UE4.26版本增加了Beta特性MemoryInsinsights的功能。</p>
+<p>使用方法很普通的UnrealInsights差不多，以Standalone模式启动，添加额外的启动命令行参数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-trace=memory</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://qiita.com/EGJ-Ken_Kuwano/items/83425f450f6da100a9d0" target="_blank" rel="noopener">[UE4] Memory Insightsを使用したメモリトラッキング</a></li>
+</ul>
+<h2 id="Low-Level-Memory-Tracker"><a href="#Low-Level-Memory-Tracker" class="headerlink" title="Low-Level Memory Tracker"></a>Low-Level Memory Tracker</h2><p>据说是从4.18版本实装的一个可以追踪内存使用情况的工具。</p>
+<blockquote>
+<p>LLM supports PlayStation 4 and XboxOne. Windows is supported as an experimental feature.</p>
+</blockquote>
+<p>先简单介绍一下用法。</p>
+<ul>
+<li>打开LLM：Editor的话以Standalone模式，添加<code>-llm</code>启动参数</li>
+<li>使用命令：<code>Stat LLM</code>, <code>Stat LLMFull</code>等命令就可以查看内存使用情况了。</li>
+</ul>
+<p>但是乍看一下输出的内存使用情况就很粗略，还有就是可以输出到CSV文件中查看，我暂时还不清楚使用CSV是否更好一些。</p>
+<h3 id="LLMTAGSETS"><a href="#LLMTAGSETS" class="headerlink" title="LLMTAGSETS"></a>LLMTAGSETS</h3><p>这个功能是<strong>Experimenttal</strong>的功能，但是感觉的确是我想用的，便试了一下但是并不顺利。</p>
+<p>首先由于还是实验性的功能，据其它的文章所说，我们需要开启这个功能：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 Engine\Source\Runtime\Core\Public\HAL\LowLevelMemTracker.h 中可以找到</span></span><br><span class="line">    <span class="comment">// using asset tagging requires a significantly higher number of per-thread tags, so make it optional</span></span><br><span class="line">    <span class="comment">// even if this is on, we still need to run with -llmtagsets=assets because of the sheer number of stat ids it makes</span></span><br><span class="line">    <span class="comment">// LLM Assets can be viewed in game using 'Stat LLMAssets'</span></span><br><span class="line">    <span class="meta">#<span class="meta-keyword">define</span> LLM_ALLOW_ASSETS_TAGS 0</span></span><br></pre></td></tr></table></figure></p>
+<p>源码是0，所以我改成了1，重新编译之后就发生了错误，原因是：<code>FStatGroup_STATGROUP_LLMAssets: undeclared identifier</code>。总而言之调查结果就是在相同路径下的<code>LowLevelMemStats.h</code>文件中的内容出了问题，因为当中的所有代码都没有被编译进去。</p>
+<p>原因是一开始的编译条件中有一个<strong>WITH_ENGINE</strong>的宏定义值为0，为什么啊，我又搜了一下这个是什么</p>
+<ul>
+<li><a href="https://imzlp.me/posts/5214/" target="_blank" rel="noopener">Macro defined by UBT in UE4</a></li>
+</ul>
+<p>也就在这种文章中有所提及，貌似是涉及到UE4的UBT的配置问题，但是我对UBT也不是特别了解。</p>
+<h3 id="参考资料-1"><a href="#参考资料-1" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/Development/Tools/LowLevelMemoryTracker/index.html" target="_blank" rel="noopener">Low-Level Memory Tracracker</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/78005333" target="_blank" rel="noopener">UE4 Low Level Memory Tracker 使用</a></li>
+<li><a href="https://qiita.com/donbutsu17/items/dd410cd6ee53b0b348ca" target="_blank" rel="noopener">[UE4] LLM (Low Level Memory Tracker)を使用したメモリトラッキング</a></li>
+</ul>
+<h1 id="一些优化的小技巧"><a href="#一些优化的小技巧" class="headerlink" title="一些优化的小技巧"></a>一些优化的小技巧</h1><p>在对UE4的逐渐学习理解过程中，会遇见一些常见的优化小技巧。</p>
+<h2 id="Uin8变量的使用"><a href="#Uin8变量的使用" class="headerlink" title="Uin8变量的使用"></a>Uin8变量的使用</h2><p>在UE4的源码中经常会见到一些看起来比较违和的变量声明：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uint8 bCanBeDamaged : <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p>之前我什么都不懂，以为只是一种布尔型变量的初始化，上面的就是初始化为true的意思，实际上就是我真的什么都不懂。</p>
+<p>按照别人的解答，这样的写法，首先是UE4默认的布尔类型变量的声明是以小写字母<code>b</code>开始的，而数字<code>1</code>的含义则是只使用1bit位。这是节省内存的表现，相比于布尔类型的数据。这是它们的唯一的不同。</p>
+<p>为了方便理解原文，贴上原答案：</p>
+<blockquote>
+<p>All booleans in Unreal are prefixed with b. If you see a uint with the b prefix it is declared as a bit field like <code>uint8 bCanBeDamaged:1</code> The 1 in the end indicates that it only uses 1 bit. <code>bCanBeDamaged == true</code> is perfectly fine to do even though it is a uint8. The reason a bit field is used instead of a bool is to save memory and the only difference between a uint8 bit field and a bool is the way it is declared.</p>
+</blockquote>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/888947/uint8-confusion-why-not-bool.html" target="_blank" rel="noopener">Uint8 Confusion .. Why not bool?</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/ue4-debug-your-project/" title="UE4-对工程进行DEBUG的正确姿势">http://stonelzp.github.io/ue4-debug-your-project/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/stonelzp.github.io/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/stonelzp.github.io/ue4-actor-lifecycle/" rel="next" title="UE4-一个Actor的生命周期">
+                <i class="fa fa-chevron-left"></i> UE4-一个Actor的生命周期
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/stonelzp.github.io/ue4-4.25-version-newfunction/" rel="prev" title="UE4-版本4.25新特性">
+                UE4-版本4.25新特性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/stonelzp.github.io/uploads/avatar.gif" alt="stone">
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/stonelzp.github.io/archives/">
+              
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/stonelzp.github.io/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/stonelzp.github.io/tags/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/stonelzp.github.io/images/cc-by.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#保留项目中的设定"><span class="nav-number">1.</span> <span class="nav-text">保留项目中的设定</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#对-ini-文件的读写"><span class="nav-number">1.1.</span> <span class="nav-text">对 ini 文件的读写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Config-ConfigName"><span class="nav-number">1.1.1.</span> <span class="nav-text">Config=ConfigName</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从命令行对设定进行重写"><span class="nav-number">1.1.2.</span> <span class="nav-text">从命令行对设定进行重写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LOCTEXT"><span class="nav-number">1.1.3.</span> <span class="nav-text">LOCTEXT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">1.1.4.</span> <span class="nav-text">参考资料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对ini文件的深度读写"><span class="nav-number">1.2.</span> <span class="nav-text">对ini文件的深度读写</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Asset加载的实时观测"><span class="nav-number">2.</span> <span class="nav-text">Asset加载的实时观测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Asset-Registry"><span class="nav-number">2.1.</span> <span class="nav-text">Asset Registry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memreport命令抓取Asset的加载情况"><span class="nav-number">2.2.</span> <span class="nav-text">Memreport命令抓取Asset的加载情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取数据"><span class="nav-number">2.2.1.</span> <span class="nav-text">抓取数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unreal-Insight-Asset-Loading-Insight"><span class="nav-number">2.3.</span> <span class="nav-text">Unreal Insight - Asset Loading Insight</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unreal-Insights-Memory-Innsights"><span class="nav-number">2.4.</span> <span class="nav-text">Unreal Insights - Memory Innsights</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Low-Level-Memory-Tracker"><span class="nav-number">2.5.</span> <span class="nav-text">Low-Level Memory Tracker</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLMTAGSETS"><span class="nav-number">2.5.1.</span> <span class="nav-text">LLMTAGSETS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料-1"><span class="nav-number">2.5.2.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些优化的小技巧"><span class="nav-number">3.</span> <span class="nav-text">一些优化的小技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Uin8变量的使用"><span class="nav-number">3.1.</span> <span class="nav-text">Uin8变量的使用</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/stonelzp.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/stonelzp.github.io/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

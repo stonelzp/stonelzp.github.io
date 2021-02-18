@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/stonelzp.github.io/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/stonelzp.github.io/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/stonelzp.github.io/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/stonelzp.github.io/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/stonelzp.github.io/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/stonelzp.github.io/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="UE4,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4-多人游戏框架理解">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-multiplay-framework/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/Role_Replication.jpg">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/NetConnection.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/FNetworkGUID.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPCs1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ReliableRPC2.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/SinglePlay.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Server.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/MultiPlay-Client2.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ServerWithlisten.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/server1.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/client3.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/ClientTraveling.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/client1.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/client2.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-multiplay-framework/Server-Client-Traveling.PNG">
+<meta property="og:updated_time" content="2020-11-29T16:16:47.566Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4-多人游戏框架理解">
+<meta name="twitter:description" content="UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。">
+<meta name="twitter:image" content="http://stonelzp.github.io/ue4-multiplay-framework/Role_Replication.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/stonelzp.github.io/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://stonelzp.github.io/ue4-multiplay-framework/">
+
+
+
+
+
+  <title>UE4-多人游戏框架理解 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/stonelzp.github.io/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">StoneのBLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">生活这种事情，从来都是自我陶醉</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/stonelzp.github.io/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/stonelzp.github.io/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/stonelzp.github.io/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/stonelzp.github.io/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/stonelzp.github.io/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/stonelzp.github.io/ue4-multiplay-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/stonelzp.github.io/uploads/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UE4-多人游戏框架理解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-03T12:35:12+09:00">
+                2020-08-03
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-11-30T01:16:47+09:00">
+                2020-11-30
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/stonelzp.github.io/categories/UnrealEngine4/" itemprop="url" rel="index">
+                    <span itemprop="name">UnrealEngine4</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。</p>
+<a id="more"></a>
+<h1 id="UE4框架总览"><a href="#UE4框架总览" class="headerlink" title="UE4框架总览"></a>UE4框架总览</h1><p>首先是对UE4的框架进行认知，UE4是以什么样的模式来定义多人游戏的。首先是官方文档的描述</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Overview/index.html" target="_blank" rel="noopener">Networking Overview</a></li>
+</ul>
+<p>即<strong>Server/Client</strong>的构成，我目前所知的就两种：</p>
+<ul>
+<li>Listen Server</li>
+<li>Dedicated Server</li>
+</ul>
+<p>下面的这篇是关于多人游戏设计的文章，总结了很多重要的知识。</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/online-multiplay-game-design" target="_blank" rel="noopener">Online MultiPlay Game Design</a></li>
+</ul>
+<p>下面让我开始真正的UE4多人框架理解之旅。</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>首先是一些基础的概念，暂时还不需要对实现进行深究，但至少要知道。</p>
+<p>首先是UE4中提供的几种网络模式和服务器类型。当然这些大多数是上面的官方文档的内容，我感觉用中文表达出来更方便我查找和回忆。</p>
+<h3 id="Network-Modes-and-Sever-Types"><a href="#Network-Modes-and-Sever-Types" class="headerlink" title="Network Modes and Sever Types"></a>Network Modes and Sever Types</h3><p>要以什么样的方式来开发，单人还是多人。在UE4的运行界面选定自己想要开始运行的网络模式。</p>
+<style>
+
+  table {
+    table-layout: fixed;
+    /*width: 1000px;*/ /*表格宽度*/
+    max-width: 1000px; /*表格最大宽度，避免表格过宽*/
+    border: 1px solid #dedede; /*表格外边框设置*/
+    margin: 15px auto; /*外边距*/
+    border-collapse: collapse; /*使用单一线条的边框*/
+    word-break:break-all;
+    word-wrap:break-word;
+    empty-cells: show; /*单元格无内容依旧绘制边框*/
+  }
+  table th,
+  table td {
+    height: 35px; /*统一每一行的默认高度*/
+    border: 1px solid #dedede; /*内部边框样式*/
+    padding: 0 10px; /*内边距*/
+  }
+  table th {
+    font-weight: bold; /*加粗*/
+    text-align: center !important; /*内容居中，加上 !important 避免被 Markdown 样式覆盖*/
+    background: rgba(158,188,226,0.2); /*背景色*/
+  }
+
+  table tbody tr:nth-child(2n) {
+    background: rgba(158,188,226,0.12);
+  }
+
+  table th {
+    white-space: nowrap; /*表头内容强制在一行显示*/
+  }
+
+  table th:nth-of-type(1){
+    width: 20%;
+  }
+  table th:nth-of-type(2){
+    width: 80%;
+  }
+
+</style>
+
+<table>
+<thead>
+<tr>
+<th>Network Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standalone</strong></td>
+<td>就是以Server模式来运行，不接受任何来自别的客户端的连接</td>
+</tr>
+<tr>
+<td><strong>Client</strong></td>
+<td>就是以Client模式来运行，不会执行服务器端的任何逻辑代码</td>
+</tr>
+<tr>
+<td><strong>Listen <br> Server</strong></td>
+<td>以Server模式来运行，也会接受来自其他客户端的网络连接(connections)而且存在一个本地玩家(Local Player)</td>
+</tr>
+<tr>
+<td><strong>Dedicated <br> Server</strong></td>
+<td>以Server模式来运行而且也会接受来自其他Client的连接，但是不存在本地玩家。所以这个模式下可以忽略画面，声音，用户输入，或者其他用户相关的特性，以此来提高Server的执行效率。这也是<strong>非常多的多人</strong> 游戏会采取的网络模式。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Actor-Replication"><a href="#Actor-Replication" class="headerlink" title="Actor Replication"></a>Actor Replication</h3><p><strong>Replication</strong>是我很早之前就接触到的名词，但是一直都很懵逼，不知道这个是干什么的。</p>
+<blockquote>
+<p><strong>Replication is the process of reproducing game state information between different machines in a network session.</strong></p>
+</blockquote>
+<p><strong>Replication</strong>(复制)是网络同步的一个非常非常重要的过程。恰当且正确的设置Replication，可以实现不同机器之间游戏状态的同步。默认情况下，Actor的Replication功能是关闭的，也就是说仅会在本地执行，不会将现在的状态同步到其他机器。可以很方便的通过C++设置<code>bReplicates = true</code>或者在Blueprint中把<strong>Replicates</strong>设置为<strong>true</strong>。</p>
+<p>关于一些常见的Replication特性，使用Actor的Replication可以做什么事情</p>
+<table>
+<thead>
+<tr>
+<th>Replication Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Creation <br> and <br> Destruction</strong></td>
+<td>如果一个具有权威(Authority)版本的并且被标记为Replicate(=true)的Actor于Server生成(Spawn)，它就会自动的生成一个远程代理(remote proxies)用来同步所有与之相连的客户端的数据。如果你销毁了这个Actor，它也会销毁这些代理。</td>
+</tr>
+<tr>
+<td><strong>Movement <br> Replication</strong></td>
+<td>如果Authoritative Actor的<strong>Replicate Movement</strong> 被激活(或者在C++中设置<code>bReplicateMovement</code>)，那么它的Location，Rotation，Velocity都会被同步。</td>
+</tr>
+<tr>
+<td><strong>Variable <br> Replication</strong></td>
+<td>Authoritive Actor中的变量如果被标记为<strong>Replicated</strong>，那么当该变量值被修改的时候，也会通过远程代理将修改同步到其它远程上。</td>
+</tr>
+<tr>
+<td><strong>Component <br> Replication</strong></td>
+<td>Actor的Components replicate同于其所属的的Actor，被标记为<strong>Replicated</strong>的变量同样会被复制，Component中的RPCs调用跟Actor类中的RPCs调用表现一致。</td>
+</tr>
+<tr>
+<td><strong>Remote <br> Procedure <br> Calls(RPCs)</strong></td>
+<td>RPCs是一种特殊的函数可以用来与特定的某个远程机器进行通信，不论是从哪一方调用。它可以被指定为<strong>Server(only runs on the server), Client(only runs on the Actor’s owning client), NetMulticast(runs on every machine conneted to the session, including the server)</strong>。</td>
+</tr>
+</tbody>
+</table>
+<p>这里举几个反例，几个常见的特性在，Actor，Pawns，Characters中不需要replicate的：</p>
+<ul>
+<li><strong>Skeletal Mesh</strong> and <strong>Static Mesh</strong> Components</li>
+<li><strong>Materials</strong></li>
+<li><strong>Animation Blueprints</strong></li>
+<li><strong>Particle Systems</strong></li>
+<li><strong>Sound Emitters</strong></li>
+<li><strong>Physics Objects</strong></li>
+</ul>
+<blockquote>
+<p>Each of these runs separately on all clients. However, if the variables that drive these visual elements are replicated, it will ensure that all client has the same information and therefore simulates them in approximately the same way.</p>
+</blockquote>
+<p>嘛，翻译过来总感觉不太对劲，大概就是那个意思。</p>
+<h4 id="Actor-Replication的方式"><a href="#Actor-Replication的方式" class="headerlink" title="Actor Replication的方式"></a>Actor Replication的方式</h4><p>关于Actor的Replication是一个很大的课题，知道UE4为Replication到底做到了哪一步很重要。官网中说</p>
+<blockquote>
+<p>As mentioned in the networking overview, Actors are the main workhorse for replication. The server will maintain a list of actors, and will update the client periodically so that the client will maintain a close approximation of each actor (that is marked to be replicated).</p>
+</blockquote>
+<p>这一段来自<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/index.html" target="_blank" rel="noopener">Actor Replication - The various aspects of replicating Actor objects and their components.</a></p>
+<p>大意是说Actor是Replicate的主要的推动者，服务器会维护一个需要Replicate的Actor列表，定期的更新客户端数据，方便客户端维护这些Actor的值。</p>
+<p>还有一种说法就是，Replication是以Actor为单位进行状态的复制的，我觉得这很贴切了。</p>
+<p>Actor的更新主要通过两种方式：</p>
+<ul>
+<li>Property updates</li>
+<li>RPCs (Remote Procedure Calls)</li>
+</ul>
+<p>两者之间的区别在于属性更新当属性的值改变的时候自动Replicate，而RPCs只有在被执行的时候会Replicate。</p>
+<p>这里官网中所说，自动进行属性值的更新并不代表完全没有任何代价，在判断属性值是否有被修改这个过程中还是存在着一点CPU的资源占用。取而代之的就是未修改的属性不会占用我们带宽(network bandwidth)。</p>
+<p>关于各种Replication的具体使用，在上面的链接中有一些介绍，暂时先等用到的时候再逐一整理了。</p>
+<h4 id="Replicates-NetLoadOnClient"><a href="#Replicates-NetLoadOnClient" class="headerlink" title="Replicates NetLoadOnClient"></a>Replicates NetLoadOnClient</h4><p>在设置Actor的Replication的时候会遇到一些标志位，<strong>Replicates</strong>, <strong>NetLoadOnClient</strong>等等，它们之间有什么影响进行了验证。当然一开始我也是不知道的，于是问了公司的前辈，没想到前辈虽然不太清楚但是用非常详细的方式帮我验证了，这就是我跟强者之间的差距吗…</p>
+<p>废话不多说直接上结论：</p>
+<p><strong>就初级功能而言，Replicates和NetLoadOnClient的效果是一样的，在Server中无论哪个被设置为true，Actor都会在各个客户端生成。</strong></p>
+<p>但是这也是仅针对初级功能而言：在游戏未运行的时候Server设置好，都会在Client中生成Actor，也就是说当你在UE4的Editor中把两个的任何一个设置为true，或者全部设置为true，都能观察到这个Actor在各个Client中都会被生成(以ListenServer模式运行)。当这两个都设置为false的时候，会发现这个只会在本地存在实例，不会被同步Spawn到其他远程上。</p>
+<p>但是<strong>NetloadOnClient</strong>默认是true的，所以一般情况下没有必要特意的设置为false，除非是特殊情况只想生成本地实例。NetLoadOnClient貌似只是负责游戏最开始Play的时候是否要进行Actor的Creation Replication，还有最后游戏结束的Actor的Destruction Replication。</p>
+<p>而<strong>Replicates</strong>则相当于更负责任的版本，除了Creation和Destruction的Replication之外，还会负责Variable的Replication。Actor的变量想要Replicate一定要把<strong>Replicates</strong>设置为true。</p>
+<p>还有一种特殊的情况是当Actor的生成是动态的情况，也就是游戏运行的是Runtime生成Actor的时候，这两个变量对Replication的影响。结论就是：<strong>只有Replicates设置为true的时候，Actor会在各个Client生成远程版本，即Replication成功</strong>。</p>
+<p>也就是说NetLoadOnClient对动态生成的Actor的Replication没有什么贡献。</p>
+<p>那既然<strong>Replicates</strong>就足够用了，那我可以不可以手贱把Replicates设置为true，同时吧NetLoadOnClient设置为false呢？</p>
+<p>答就是不要手贱，因为在Level.cpp中的Ulevel::InitializeNetworkActors()的处理中有这样的代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!bIsServer)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(!Actor-&gt;bNetLoadOnClient)</span><br><span class="line">    &#123;</span><br><span class="line">        Actor-&gt;Destory(<span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br></pre></td></tr></table></figure></p>
+<p>不是Server的时候这个Actor直接会被Destroy掉，但是由于Replicates设置为true，Server又会让该Client重新Spawn这个Actor，就没必要。</p>
+<p>所以这两个标志位的情况应该是这样：</p>
+<ol>
+<li>NetLoadOnClient = true (default), Replicates = true</li>
+<li>NetLoadOnClient = true (default), Replicates = false (default)</li>
+<li>NetLoadOnClient = false , Replicates = false (default)</li>
+</ol>
+<h4 id="bReplicateFlag的动态切换"><a href="#bReplicateFlag的动态切换" class="headerlink" title="bReplicateFlag的动态切换"></a>bReplicateFlag的动态切换</h4><p>在程序运行中很大程度上代表着Actor的Replication标识的bReplicate标识符可以动态的进行切换，我没有实际验证过，只是看到别人的总结的文章内容，就是下面那个<strong>Network处理流程</strong>中出现的那篇<a href="https://www.slideshare.net/EpicGamesJapan/ue4howtocreatemultiplayergame" target="_blank" rel="noopener">UE4でマルチプレイヤーゲームを作ろう</a></p>
+<ul>
+<li>False -&gt; True 切换<ul>
+<li>登记到Replication列表(具体是什么列表？)，Client上没有被复制的Actor也会被复制</li>
+</ul>
+</li>
+<li>True -&gt; False 切换<ul>
+<li>被从列表删除，不再进行Replication复制，减轻CPU和带宽的负荷</li>
+<li>被生成的<strong>ActorChannel</strong>仍然会维持原样</li>
+<li>在Client上被复制(Replicate)过一次的Character不会消失！</li>
+<li>Actor在被破坏的时候，即使是忘掉了bReplicate(应该是说想把其置为false)其ActorChannel的破坏联动使Client上的Actor也能被破坏掉。</li>
+</ul>
+</li>
+</ul>
+<p>这里面有些不知道的东西，比如说</p>
+<ul>
+<li>列表<ul>
+<li>被登录到列表上的Actor会被复制，这个list说的是哪个list</li>
+</ul>
+</li>
+<li>ActorChannel<ul>
+<li>这个又是用来做什么的？</li>
+<li>为什么生成的ActorChannel不会被一起释放掉？</li>
+</ul>
+</li>
+<li>Character<ul>
+<li>为什么曾经被Replicate过的Character不会消失？</li>
+<li>是为了重连吗？</li>
+</ul>
+</li>
+</ul>
+<h3 id="Network-Role-and-Authority"><a href="#Network-Role-and-Authority" class="headerlink" title="Network Role and Authority"></a>Network Role and Authority</h3><p>一个拥有Authority权限的Actor决定了它是Network中的控制角色，控制Actor的状态(state)并且会将ReplicationInfomation同步到其它远程。<strong>远程代理(remote Proxy)</strong> 是在远程上的机器的复制，它会接收来自于Authority权限的Actor的ReplicationInformation用来同步自己的状态。</p>
+<p><strong>Local Role</strong>和<strong>Romote Role</strong>变量用来指定这些Actor的Role：</p>
+<table>
+<thead>
+<tr>
+<th>Network Role</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>None</strong></td>
+<td>代表着Actor在这个网络中不拥有role，不会被复制(replicate)</td>
+</tr>
+<tr>
+<td><strong>Authority</strong></td>
+<td>Actor具有Authority权限，会复制(replicate)自己到其他的远程代理(remote proxy)上。</td>
+</tr>
+<tr>
+<td><strong>Simulated Proxy</strong></td>
+<td>是完全由另外一个远程上具有Authority权限的Actor复制的远程代理。Netwrok中大多数的Actor，像拾取物，子弹，可交互物体大多表现为远程客户端的SimulatedProxy角色。</td>
+</tr>
+<tr>
+<td><strong>Autonomous Proxy</strong></td>
+<td>这种Actor是一种可以执行自己本地功能的远程代理(remote proxy)，但是会收到其他远程的AuthorityActor的校正，这种角色一般是直接控制玩家的角色准备的。比如Pawn</td>
+</tr>
+</tbody>
+</table>
+<p>UE4的默认模式是<strong>server-authoritative</strong>，也就是服务器端拥有Authority权限，总是会从Server到Client这样replicate。</p>
+<p>更多的Actor的network roles信息可以参照<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Roles/index.html" target="_blank" rel="noopener">Actor Role and RemoteRole-The various aspects of replicating Actor objects.</a></p>
+<p>简单的用表格来表示：</p>
+<p><img src="Role_Replication.jpg" alt="Role_Replication"></p>
+<p>不过说到这里这张图看得我还是不懂。有的时候还会搞错，直到我最近真正敲代码进行实战之后才搞明白。</p>
+<p>就是总而言之，<strong>Server上的LocalRole都是Authority，而在Client上的PlayerController和Pawn是Autonomous之外，其它都是Simulated</strong>。</p>
+<p>当然这种情况下的Actor都是设置正确的情况下，就是说在Server的Actor的Replication对象存在在Client上。那种Client纯本地生成的不好说。</p>
+<p>Tips：</p>
+<ul>
+<li>Editor中检查是否是Server端<ul>
+<li>C++中使用<code>GetNetMode() == ENetMode::NM_ListenServer</code>，函数放这里了，具体直接去源码找。参考这里<a href="https://answers.unrealengine.com/questions/416305/how-to-know-if-listenserverclient-owner-for-rpc.html" target="_blank" rel="noopener">How to know if listenserver/client, owner for rpc?</a></li>
+<li>Blueprint中貌似可以直接使用<code>IsServer</code>节点</li>
+</ul>
+</li>
+</ul>
+<h3 id="Client-Ownership"><a href="#Client-Ownership" class="headerlink" title="Client Ownership"></a>Client Ownership</h3><p>这里可以参照<strong>Owning Connection</strong>部分。</p>
+<h3 id="Relevance-and-Priority"><a href="#Relevance-and-Priority" class="headerlink" title="Relevance and Priority"></a>Relevance and Priority</h3><h3 id="Variable-Replication"><a href="#Variable-Replication" class="headerlink" title="Variable Replication"></a>Variable Replication</h3><h4 id="RepNotifies"><a href="#RepNotifies" class="headerlink" title="RepNotifies"></a>RepNotifies</h4><h3 id="Remote-Procedure-Calls-RPCs"><a href="#Remote-Procedure-Calls-RPCs" class="headerlink" title="Remote Procedure Calls (RPCs)"></a>Remote Procedure Calls (RPCs)</h3><p>参考官网的内容</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/RPCs/index.html" target="_blank" rel="noopener">RPCs - Designating function replication across the network</a></li>
+</ul>
+<p>这里的内容非常重要，有时间需要整理。</p>
+<h4 id="Reliability"><a href="#Reliability" class="headerlink" title="Reliability"></a>Reliability</h4><h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><h3 id="Tips-and-Further-Reading"><a href="#Tips-and-Further-Reading" class="headerlink" title="Tips and Further Reading"></a>Tips and Further Reading</h3><h4 id="Basic-Replicated-Actor-Checklist"><a href="#Basic-Replicated-Actor-Checklist" class="headerlink" title="Basic Replicated Actor Checklist"></a>Basic Replicated Actor Checklist</h4><p>To create a replicated Actor, follow these steps:</p>
+<ul>
+<li><p>Set the Actor’s Replicated setting to True.</p>
+</li>
+<li><p>If the replicated Actor needs to move, set Replicates Movement to True.</p>
+</li>
+<li><p>When you spawn or destroy a replicated Actor, ensure that you do it on the server.</p>
+</li>
+<li><p>Set any variables that must be shared between machines to replicate. This usually applies to gameplay-essential variables.</p>
+</li>
+<li><p>Use Unreal Engine’s pre-made Movement Components whenever possible, as they are already built for replication.</p>
+</li>
+<li><p>If you are using a server-authoritative model, make sure any new actions that the player can perform are triggered by Server functions.</p>
+</li>
+</ul>
+<h4 id="Networking-Tips"><a href="#Networking-Tips" class="headerlink" title="Networking Tips"></a>Networking Tips</h4><ul>
+<li><p>Use as few RPCs or replicated Blueprint functions as possible. If you can use a RepNotify instead, you should.</p>
+</li>
+<li><p>Use Multicast functions especially sparingly, as they create extra network traffic for each connected client in a session.</p>
+</li>
+<li><p>Server-only logic does not necessarily have to be contained in a server RPC if you can guarantee that a non-replicated function will only execute on the server.</p>
+</li>
+<li><p>Be cautious when binding Reliable RPCs to player input. Players can repeatedly press buttons very rapidly, and that will overflow the queue for Reliable RPCs. You should use some way of limiting how often players can activate these.</p>
+</li>
+<li><p>If your game calls an RPC or replicated function very often, such as on Tick, you should make it Unreliable.</p>
+</li>
+<li><p>Some functions can be recycled by calling them in response to gameplay logic, then calling them in response to a RepNotify to ensure that clients and servers have parallel execution.</p>
+</li>
+<li><p>You can check an Actor’s network role to see if it is ROLE_Authority or not. This is a useful method for filtering execution in functions that activate on both server and client.</p>
+</li>
+<li><p>You can check if a Pawn is locally controlled by using the IsLocallyControlled function in C++ or the Is Locally Controlled function in Blueprint. This is useful for filtering execution based on whether it is relevant to the owning client.</p>
+</li>
+<li><p>Avoid using IsLocallyControlled in constructor scripts, as it is possible for a Pawn not to have a Controller assigned during construction.</p>
+</li>
+</ul>
+<p>上面的英文内容是我直接复制粘贴过来的，有些是知识比较繁杂现在整理太费时间，就先做个标题，算是占位符了。</p>
+<h2 id="Network处理流程"><a href="#Network处理流程" class="headerlink" title="Network处理流程"></a>Network处理流程</h2><p>为了深入理解UE4的Network处理，其实我觉得直接看源码会更深入，但是，还是作为最后的后手吧…</p>
+<p><a href="https://www.slideshare.net/EpicGamesJapan/ue4howtocreatemultiplayergame" target="_blank" rel="noopener">UE4でマルチプレイヤーゲームを作ろう</a></p>
+<p>是由上面的Slide开始进行的理解：</p>
+<p>首先看一下Network的<strong>Tick</strong>的处理都做了哪些工作。摘抄自上面的Slide</p>
+<ol>
+<li>UWorld::Tick<ol>
+<li><strong>UNetworkDriver</strong> ::TickDispatch<ol>
+<li>Packet受信 &gt; <strong>Bunch</strong> 分解<ol>
+<li><strong>Bunch</strong>を<strong>ActorChannel</strong>に流して、プロパティを<strong>レプリケート＋RPCの実行</strong></li>
+<li>PostReceivedBunch &gt; <strong>RepNotify</strong> 処理</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>タスクグラフのループ<ol>
+<li>RPCの呼び出し(ServerMoveなど)</li>
+</ol>
+</li>
+<li><strong>UNetworkDriver</strong> ::TickFlush<ol>
+<li><strong>BuildConsiderList</strong> 考慮するべき<strong>NetActor</strong> のリストを作る</li>
+<li><strong>Connection</strong> 毎のループ<ol>
+<li><strong>PrioritizeActors</strong> </li>
+<li>ProcessePrioritizedActors<ol>
+<li><strong>ActorChannel</strong> 毎にプロパティの差分を抽出して<strong>Bunch</strong>を書き出す</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><strong>Connection</strong> 毎のループ - <strong>UNetConnection</strong> ::Tick<ol>
+<li><strong>UNetConnection</strong>::FlushNet()</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>甚至还夹杂着日语，请多担待。</p>
+<p>还有官网中的描述<a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/ReplicationFlow/index.html" target="_blank" rel="noopener">Detailed Actor Replication Flow - A detailed description of low-level Actor replication</a></p>
+<blockquote>
+<p>The bulk of actor replication happens inside UNetDriver::ServerReplicateActors. This is where the server will gather all of the actors that it has determined to be relevant for each client, and send any properties that have changed since the last time each connected client was updated.</p>
+</blockquote>
+<p><strong>UNetDriver::ServerReplicateActors</strong>看样子是非常重要的部分，Actor的Replication发生在这里，很多Actor的相关操作都在这里。</p>
+<p>非常重要的一些Flow：</p>
+<ul>
+<li><code>AActor::NetUpdateFrequency</code> - Used to determine how often an actor replicates<ul>
+<li>决定了Actor的Replication频度</li>
+</ul>
+</li>
+<li><code>AActor::PreReplication</code> - Called before any replication occurs<ul>
+<li>Replication发生之前被调用</li>
+</ul>
+</li>
+<li><code>AActor::bOnlyRelevantToOwner</code> - True if this actor replicates to owner<ul>
+<li>只对Owner进行Replicate，具体情况不太清楚</li>
+</ul>
+</li>
+<li><code>AActor::IsRelevancyOwnerFor</code> - Called to determain relevancy when bOnlyRelevantToOwner is true</li>
+<li><code>AActor::ISNetRelevantFor</code> - Called to determine relevancy when bOnlyRelevantToOwner is false</li>
+</ul>
+<p>关于Actor的<strong>Relevancy</strong> ，翻译是说关联性，是Actor的Replication的很重要的概念。但是目前对于这个属性的理解并不是很透彻。</p>
+<p>高度抽象一下的流程就像下面这样，(参考上面的官网链接，我只是试着翻译一下)</p>
+<ul>
+<li>遍历所有的Actor检查<strong>replicating</strong> 活动性(<code>AActor::SetReplicates(true)</code>)<ul>
+<li>确认Actor初期是否处于睡眠状态(DORM_Initial)，如果是，则跳过</li>
+<li>确认actor是否需要更新，通过检查<code>NetUpdateFrequency</code>的值，如果不需要更新，则跳过</li>
+<li>如果<code>AActor::bOnlyRelevantToOwner</code>为true，通过调用<code>AActor::IsRelevancyOwnerFor</code>来检查这个Actor在<strong>owning connection</strong>上的相关联性(relevancy)。如果relevancy为true，则添加到这个<strong>connection</strong> 的<strong>relevant list</strong> 中。<ul>
+<li>在这个case中，这个Actor会仅仅发送一个<strong>single connection</strong> (这里不是很清楚)</li>
+</ul>
+</li>
+<li>对于所有这些进行过初始检查(initial check↑上面的检查)的Actor，都会调用<code>AActor::PreReplication</code>函数。<ul>
+<li>PreReplication是一个你可以决定是否为<strong>connection</strong>进行<strong>properties replicate</strong> 的地方。使用<code>DOREPLIFETIME_ACTIVE_OVERRIDE</code></li>
+</ul>
+</li>
+<li>上面的操作都经历了之后，将其添加到<strong>considered list</strong></li>
+</ul>
+</li>
+<li>对于每一个<strong>connection</strong> <ul>
+<li>对上面的每一个<strong>considered actor</strong> <ul>
+<li>判断是否睡眠(dormant)</li>
+<li>如果还没有<strong>channel</strong><ul>
+<li>判断client的actor所在的level是否已经加载<ul>
+<li>没有加载，则跳过</li>
+</ul>
+</li>
+<li>判断actor的相关性，通过调用<code>AActor::IsNetRelevantFor</code>(检查connection与actor的relevancy)<ul>
+<li>如果不相关，则跳过</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>将上面的actor添加到其<strong>connection</strong> 拥有的<strong>relevant list</strong> 中</li>
+<li>此时我们就拥有了一个与这个<strong>connection</strong>相关联的actor的列表(a list of actors are relevant for this connection)</li>
+<li>通过优先级(<strong>priority</strong>)对actor进行排序(Sort)</li>
+<li>对每一个已排序的Actor：<ul>
+<li>如果<strong>connection</strong>还没有加载这个Actor所在的<strong>level</strong>，则关闭这个<strong>channel(if any)</strong>, 然后continue</li>
+<li>每隔一秒，判断actor(与connection)的相关性(relevancy)，通过<code>AActor::IsNetRelevantFor</code>函数</li>
+<li>如果持续5秒不相关(not relevant),则关闭<strong>channel</strong></li>
+<li>如果相关但是没有channel开启，则开启一个</li>
+<li>如果这个<strong>connection</strong>已经饱和(If at any point this connection is saturated)<ul>
+<li>对于剩下的actors<ul>
+<li>如果相关的时间小于1秒，下一个Tick阶段强制更新</li>
+<li>如果相关的时间大于1秒，调用<code>AActor::IsNetRelevantFor</code>来判断下一个Tick是否更新</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>对于任何通过上述操作的Actor，都会经由其connection对Actor进行replicate，通过调用<code>UChannel::ReplicateActor</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Replicating-an-Actor-to-a-Connection"><a href="#Replicating-an-Actor-to-a-Connection" class="headerlink" title="Replicating an Actor to a Connection"></a>Replicating an Actor to a Connection</h3><p>关于如何将Actor的Replication复制到connection上</p>
+<p><code>UChannel::ReplicateActor</code>是主要用来Replicate一个Actor和它所有的Component的内容到一个connection中，流程大致说明：</p>
+<ul>
+<li>判断自这个<strong>actor channel</strong>被打开后是否是第一次更新<ul>
+<li>如果是，则序列化其需要的信息(initial location, rotation.etc)</li>
+</ul>
+</li>
+<li>判断这个connection是否拥有这个actor(owning connection)<ul>
+<li>如果不属于，并且这个actor的<strong>role</strong>是<code>ROLE_AutonomousProxy</code>,将其降格为<code>ROLE_SimulatedProxy</code></li>
+</ul>
+</li>
+<li>Replicate这个actor有变动的属性(changed properties)</li>
+<li>Replicate这个Actor每一个component有变动的属性(component’s changed properties)</li>
+<li>对于任何被删除掉的components，发送特殊的删除命令</li>
+</ul>
+<p>算是大致翻译了一下这篇文章，有些明白了，但是有些还是不太清楚。</p>
+<h3 id="NetDormancy-休眠"><a href="#NetDormancy-休眠" class="headerlink" title="NetDormancy 休眠"></a>NetDormancy 休眠</h3><p>可以通过Server的<code>AActor::SetNetDormancy</code>之类的函数来设置Actor的休眠状态，减少Actor的Replication的检查，达到减轻负荷的目的，是优化的一种手段。</p>
+<p>进入休眠状态的Actor可以使用<code>FlushNetDormancy()</code>函数来唤醒。这个函数也会在Actor的Properties有更新的时候自动被UE4调用，也就是说<strong>休眠状态的控制某种程度上是自动的</strong>。</p>
+<p>对于一段时间没有变化的Actor使其进入睡眠状态是可以某种程度上减少Replication的处理时间，但是如果频繁的进行睡眠状态的切换也只是增加处理时间。</p>
+<p>关于休眠状态的设定：<br>在Actor的Replication一栏可以设置<strong>Net Dormancy</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DORM_Never</td>
+<td>DORM_Awake一样</td>
+</tr>
+<tr>
+<td>DORM_Awake(Default)</td>
+<td>如果是休眠状态的话将其唤醒，并保持唤醒状态</td>
+</tr>
+<tr>
+<td>DORM_DormantAll</td>
+<td>进行向休眠状态迁移的检查，如果条件满足则迁移到睡眠状态</td>
+</tr>
+<tr>
+<td>DORM_DormantPartila</td>
+<td>可以根据每个Connection进行自定义切换，需要对AActor::GetNetDormancy进行实现</td>
+</tr>
+<tr>
+<td>DORM_Initial</td>
+<td>初期就会被从NetActorList中除外，进入休眠，当其FlushNetDormancy被调用则变成DORM_DormantAll</td>
+</tr>
+</tbody>
+</table>
+<p>对大多数情况下进行总结就是：</p>
+<p><strong>几乎不变的Actor设置为DromantAll，Level中的背景Actor推荐设置为Initial</strong></p>
+<h3 id="NetRelevancy-关联性"><a href="#NetRelevancy-关联性" class="headerlink" title="NetRelevancy 关联性"></a>NetRelevancy 关联性</h3><p>在上面也有提到<strong>Relevancy</strong>这个词，在Server上每一个connection也会依据<strong>距离之类</strong>的关联性参数来判断Actor的Replication行为。</p>
+<p>生成NetActorList -&gt; 优先级排序 -&gt; <strong>关联性检查</strong> -&gt; 取得修改并发送</p>
+<h4 id="NetCullDistanceSquared"><a href="#NetCullDistanceSquared" class="headerlink" title="NetCullDistanceSquared"></a>NetCullDistanceSquared</h4><p><code>AActor::IsNetRelevantFor()</code>进行基于距离的剔除。</p>
+<h4 id="AlwaysRelevant"><a href="#AlwaysRelevant" class="headerlink" title="AlwaysRelevant"></a>AlwaysRelevant</h4><p>把上面的无效化的Flag。</p>
+<h3 id="NetPriority-通信优先级"><a href="#NetPriority-通信优先级" class="headerlink" title="NetPriority 通信优先级"></a>NetPriority 通信优先级</h3><p>Actor中的决定Replicate优先顺序的参数，优先级越高越容易排在复制通信的前面，相对频繁的获得复制的机会。</p>
+<p>使用一些特殊的函数(ForceNetUpdate，override AActor::GetNetPriority()函数)可以实现改变优先级的操作。</p>
+<h3 id="NetUpdateFrequency"><a href="#NetUpdateFrequency" class="headerlink" title="NetUpdateFrequency"></a>NetUpdateFrequency</h3><p>Actor的状态复制频率，单位是 <code>N次/s</code> 。</p>
+<p>被执行了Replicate的Actor会在<code>1/N</code>的时间里从NetActorList中剔除。</p>
+<p>可以适当的调整这个参数，把不需要经常更新的或者没必要迅速做出反应的Actor的更新频度降低，减少CPU和带宽的消耗。</p>
+<p>AActor:ForceNetUpdate可以重置<code>1/N</code>的间隔时间，也就是立即再次执行呗。</p>
+<h4 id="MinNetUpdateFrequency"><a href="#MinNetUpdateFrequency" class="headerlink" title="MinNetUpdateFrequency"></a>MinNetUpdateFrequency</h4><p>只有在AdaptiveNetUpdateFrequency有效的时候才会起作用的参数，默认是OFF状态。</p>
+<p>也就是UE4的Replication的一种自动调节功能，根据复制的评价值来让复制的操作在Min~NetUpdateFrequency之间自动调节。</p>
+<h3 id="NetLoadOnClient"><a href="#NetLoadOnClient" class="headerlink" title="NetLoadOnClient"></a>NetLoadOnClient</h3><p>这个标志位在之前就有讲过，本来以为是个不起眼的功能，没想到是为GameMode准备的。</p>
+<style>
+table th:first-of-type {
+    width: 15%;
+}
+table th:nth-of-type(2) {
+    width: 20%;
+}
+table th:nth-of-type(3) {
+    width:15%;
+}
+table th:nth-of-type(4) {
+    width:50%;
+}
+</style>
+
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>NetLoadOnClient</th>
+<th>bReplicates</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AGameMode</td>
+<td>false</td>
+<td>false</td>
+<td>Client上不生成</td>
+</tr>
+<tr>
+<td>ANavigationData</td>
+<td>false</td>
+<td>false</td>
+<td>Client上不生成</td>
+</tr>
+<tr>
+<td>APlayerState</td>
+<td>false</td>
+<td>true</td>
+<td>Level初始化的时候被从Client上删除然后再经由Server的Replication复制</td>
+</tr>
+<tr>
+<td>AGameState</td>
+<td>false</td>
+<td>true</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<h3 id="NetworkDriver"><a href="#NetworkDriver" class="headerlink" title="NetworkDriver"></a>NetworkDriver</h3><p>NetworkDriver是网络处理的源头，链接多人游戏世界(World)的主要部分。</p>
+<p>Server和Client都持有NetworkDriver。</p>
+<h4 id="NetConnection"><a href="#NetConnection" class="headerlink" title="NetConnection"></a>NetConnection</h4><p>NetConnection是不同World之间NetworkDriver的链接通道，Client生成一个，Server会根据连接的Player数量生成。</p>
+<p><img src="NetConnection.PNG" alt="NetConnection"></p>
+<h4 id="PlayerController"><a href="#PlayerController" class="headerlink" title="PlayerController"></a>PlayerController</h4><p>之前还是之后，这篇文章哪个地方有提到，PlayerController就是为了Connection而生的类，应该就是说的这个功能了。</p>
+<p>APlayerController会在登录到Server的时候生成，与NetworkConnection是一对一的关系。</p>
+<p>ServerRPC，ClientRPC能够向特定对象传送消息的前提是该Player属性持有有效的NetworkConnection。<br>(APawn::GetNetConnection &amp; APlayerController::GetNetConnection)</p>
+<h4 id="NetworkObjectList"><a href="#NetworkObjectList" class="headerlink" title="NetworkObjectList"></a>NetworkObjectList</h4><p>NetworkDriver中的存储需要进行网络通信的ActorList，类型是NetworkObjectInfo</p>
+<p>跟NetUpdateFrequency的计算有关，但是我还不是很清楚。</p>
+<p>貌似并不是每一个connection都会持有这样的列表。</p>
+<h4 id="ActorChannel-and-ChannelIndex"><a href="#ActorChannel-and-ChannelIndex" class="headerlink" title="ActorChannel and ChannelIndex"></a>ActorChannel and ChannelIndex</h4><p>ActorChannel是复制对象Actor一对一分配的通信管道，而ChannelIndex是静态的已经被确保的通信管道的序列索引。</p>
+<p>和通信的另一端的Actor，就是通过这个索引建立起来联系。</p>
+<h4 id="FNetworkGUID"><a href="#FNetworkGUID" class="headerlink" title="FNetworkGUID"></a>FNetworkGUID</h4><p>32位整数ID。用来建立进程间Object的联系。</p>
+<p>Level中的静态物体被分配为奇数，动态物体为偶数。</p>
+<blockquote>
+<p>サーバー側で初めてプロパティとして扱う必要が出た時Objectに対して割り当てられます。</p>
+</blockquote>
+<p>不止局限于复制对象的Actor，通信过程中的包含的所有Object都是其对象。（比如说玩家所站立的地板）</p>
+<p>使用<code>net.ListNetGUIDs</code>可以确认Actor的登录情况。</p>
+<p>使用Blueprint确认</p>
+<p><img src="FNetworkGUID.PNG" alt="BP_FNetworkGUID"></p>
+<p>传送的对象的World不存在的Actor的情况下是NULL</p>
+<h4 id="Bunch"><a href="#Bunch" class="headerlink" title="Bunch"></a>Bunch</h4><p>UE4的Replication状态复制处理的数据的输出单位。基本上就是</p>
+<p>1ReplicationActor = 1Bunch</p>
+<p>各个Bunch被送到上面提到的ChannelIndex那里，送到连接的另一端对应的Actor</p>
+<p>UNetConnection::ReceivedPacket 查看具体内容</p>
+<p>Network送信的包（Packet）中含有复数个Bunch</p>
+<h4 id="收信应答-ACK-NAK"><a href="#收信应答-ACK-NAK" class="headerlink" title="收信应答 ACK/NAK"></a>收信应答 ACK/NAK</h4><p>ACK - ACKnowledgement<br>NAK - Negative-Acknowledge</p>
+<p>是网络处理中的一般用语，并不是UE4专门术语。</p>
+<p>用来表示有没有接收到包（Packet）</p>
+<p>以bit数据的形式保存在包的Header部分，确认重要的包的送收信或者Reliable通信的确认等时候有用。</p>
+<h4 id="Variable-Replicate-amp-RPCs"><a href="#Variable-Replicate-amp-RPCs" class="headerlink" title="Variable Replicate &amp; RPCs"></a>Variable Replicate &amp; RPCs</h4><p>变量的复制</p>
+<p>不要过多的依赖PRCs，能用Property的Replication就尽量使用这个。</p>
+<p>こういうものはRPC向け</p>
+<ul>
+<li>RPCは「イベント」です<ul>
+<li>10秒後に無くてもいいもの</li>
+</ul>
+</li>
+<li>回数が重要なもの<ul>
+<li>音声</li>
+<li>VFX生成</li>
+</ul>
+</li>
+</ul>
+<p>ReliableRPC<br>RPCs函数被调用之后，会被立即放入包(Packet)的Buffer中。其他需要传送的数据就会被占用了空间而变少。</p>
+<p>非ReliableRPC会丢失，ReliableRPC则一定会送达。对方如果回答了<strong>Nak</strong>就会重新发送包数据。</p>
+<p>即使是Reliable，由于距离等的元素导致ActorChannel没有开启的情况下，RPC不会送信。</p>
+<p><img src="ReliableRPCs1.png" alt="ReliableRPC-1"><br><img src="ReliableRPC2.png" alt="ReliableRPC-2"></p>
+<p>変数の複製 PropertyReplication<br>「変数の複製」は裏切らない</p>
+<p>こういうものは変数の複製向け</p>
+<ul>
+<li>アクターの状態を表す変数 <ul>
+<li>途中参加したときに復元しないと困るプロパティ </li>
+</ul>
+</li>
+<li>10秒後に失われては困るもの <ul>
+<li>ライフ </li>
+<li>所持アイテム<br>-キャラクターの見た目</li>
+</ul>
+</li>
+</ul>
+<p>关于变量的赋值一定要慎重，Authority检查很有必要。</p>
+<p>总结：</p>
+<ul>
+<li>Stat net命令执行时表示的参数都在Driver中控制的</li>
+<li>NetworkDriver把Level串联起来实现了多人游戏的网络控制</li>
+</ul>
+<h3 id="CharacterMovement"><a href="#CharacterMovement" class="headerlink" title="CharacterMovement"></a>CharacterMovement</h3><p>关于CharacterMovement的问题在上面的那个Slide有涉及到，我准备花点时间另起一篇文章理解一下。</p>
+<p><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/CharacterMovementComponent/index.html" target="_blank" rel="noopener">Character Movement ComponentDetailed explanation of Character Movement Component</a></p>
+<h3 id="Replication-Graph"><a href="#Replication-Graph" class="headerlink" title="Replication Graph"></a>Replication Graph</h3><p>这是UE4为超多人游戏而准备的一个Plugin，具体使用方法不清楚，上面的Slide也有介绍。</p>
+<p><a href="https://docs.unrealengine.com/en-US/Engine/Networking/ReplicationGraph/index.html" target="_blank" rel="noopener">Replication Graph - Overview of the Replication Graph feature and Replication Graph Nodes.</a></p>
+<h1 id="重要的基础概念"><a href="#重要的基础概念" class="headerlink" title="重要的基础概念"></a>重要的基础概念</h1><p>关于理解UE4的多人框架的一些基础概念，由于不知道应该放在哪个部分好，就先放到这个里面，以后有更好的位置就再移动。</p>
+<h2 id="Owning-Connection"><a href="#Owning-Connection" class="headerlink" title="Owning Connection"></a>Owning Connection</h2><ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html" target="_blank" rel="noopener">Actor and their Oening Connection</a></li>
+</ul>
+<p>上面链接来自于官网。可能会经常听到说Actor的<em>owning Connection</em>(我反正之前没怎么听说过），我也不知道该怎么翻译，<strong>所属连接</strong>?反正叫OwningConnection就对了，每一个connection都有一个PlayerController，或者说PlayerController的创建正是为了这个connection的。想知道一个Actor是否属于这个connection，那么就查询这个Actor的outer owner是否是PlayerController，而且这个PlayerController和这个connection所拥有的PlayerController是同一个，如果是同一个PlayerController那么这个Actor就属于这个connection。</p>
+<p>Component在决定它的owning connection的时候有些特殊。它会向上遍历它的上级直到找到所属的Actor，然后像上面那样找到这个Actor的owning connection。这里原话是这样的我也不太确定自己理解的是否正确。</p>
+<blockquote>
+<p>Components are a little special in how they determine their owning connection. In this case, we first determine the components owner by walking the components outer chain until we find the owning actor, and then we continue as above by determining owning connection of this actor.</p>
+</blockquote>
+<p>理解OwningConnection对于一些功能非常重要：<br>RPCs需要知道并决定哪一个Client去执行run-on-clinet的命令，影响RPC Actor Repliation和connection relevancy * Actor property replication conditions等设定。</p>
+<p>这对RPC非常重要，因为当你尝试对一个Actor调用一个RPC函数的时候，除非这个函数的多播(multicast)，它需要知道是哪个一个client去执行这一条RPC指令，它会通过找到自己的owningconention来借由这个connection来发送这条RPC指令。</p>
+<p>ConnectionOwnership被用于Actor的Replication期间，决定了每个Actor所属的connection被更新。对于Actor来说，只有当<code>bOnlyRelevantToOwner</code>被设置为true的时候，connection才会为其所拥有的Actor接受属性更新( receive property update)。默认情况下，所有的PlayerController都设置了这个属性(bOnlyRelevantToOwner)，这就是为什么Client仅为他持有的PlayerController接收更新情报。这样做有很多原因，最主要的原因则是为了防止作弊和提高效率。</p>
+<p>ConnectionOwnership对于property replication involving conditions也很重要，但是我现在还不是很理解这句话。</p>
+<blockquote>
+<p>Connection ownership is important during property replication involving conditions that use the owner. For example. When COND_OnlyOwner is used, only the owners of that actor will receive these property updates.</p>
+</blockquote>
+<p>关于上面的property replication involving conditions,官方文档的说明;</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Properties/Conditions/index.html" target="_blank" rel="noopener">Conditional Property Replication</a></li>
+</ul>
+<p>貌似是对Actor的属性(Properties)进行进一步的细节设置Replication。</p>
+<p>最后，ConnectionOwnership对autonomous proxies的Actor(Role is ROLE_AutonomousProxy)很重要。对于这些Actor来说，如果它们的属性被Replicate到一个并不拥有这Actor的connect上的时候(这个connect并不拥有这些Actors)，它们就会被降格到ROLE_SimulatedProxy。</p>
+<p>在进行详细说明之前，我想对已经大概理解的内容进行巩固和深入理解。</p>
+<h2 id="PlayerController-1"><a href="#PlayerController-1" class="headerlink" title="PlayerController"></a>PlayerController</h2><p>这个部分是以PlayerController开头却是想引出UE4的GameplayFramework的内容的。刚开始的时候总是会遇见一些名词，GameMode，GameState什么的，之前完全不是很理解这些内容。</p>
+<p>在学习GameplayAbility的过程中又遇到了PlayerState这个东西，就觉得把这些很基础的内容串起来是很有必要的了。当然这些事情都有些好人帮我做了…</p>
+<p>我就直接贴上链接了</p>
+<ul>
+<li><a href="http://www.main-function.com/entry/2017/11/22/220527" target="_blank" rel="noopener">【UE4】GameMode、GameState、PlayerState、PlayerControllerの関連を確認してみる</a></li>
+</ul>
+<p>关于官网上对于GameplayFramework的介绍：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/QuickReference/index.html" target="_blank" rel="noopener">Gameplay Framework Quick Reference</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Framework/GameMode/index.html" target="_blank" rel="noopener">Game Mode and Game State</a></li>
+</ul>
+<p>我先把别人的劳动成果窃取过来，实在对不住。</p>
+<h3 id="GameMode"><a href="#GameMode" class="headerlink" title="GameMode"></a>GameMode</h3><ul>
+<li>这个只存在于服务器(Server)上。</li>
+</ul>
+<h3 id="GameState"><a href="#GameState" class="headerlink" title="GameState"></a>GameState</h3><ul>
+<li>每个Machine都存在实例</li>
+<li>拥有一个PlayerArray变量，是用来保存PlayerState的</li>
+<li>没有Owner(GetOwner() == nullptr)</li>
+</ul>
+<h3 id="PlayerState"><a href="#PlayerState" class="headerlink" title="PlayerState"></a>PlayerState</h3><ul>
+<li>每台machine上，所有的Player都存在一个PlayerState</li>
+<li>Owner就是PlayerController (GetOwner()会返回PlayerController)</li>
+</ul>
+<h3 id="PlayerController-2"><a href="#PlayerController-2" class="headerlink" title="PlayerController"></a>PlayerController</h3><ul>
+<li>没有Owner (GetOwner() == nullptr)</li>
+<li>持有玩家操作的Pawn (GetControlledPawn取得)</li>
+<li>OnPossess(Overridable native function for when this controller possesses a pawn)</li>
+</ul>
+<h3 id="Pawn"><a href="#Pawn" class="headerlink" title="Pawn"></a>Pawn</h3><p>实际操作生成的PlayerPawn。</p>
+<ul>
+<li>PossessedBy中指定PlayerController</li>
+</ul>
+<h3 id="SinglePlay的情况"><a href="#SinglePlay的情况" class="headerlink" title="SinglePlay的情况"></a>SinglePlay的情况</h3><p><img src="SinglePlay.png" alt="singleplay"></p>
+<h3 id="MultiPlay的情况"><a href="#MultiPlay的情况" class="headerlink" title="MultiPlay的情况"></a>MultiPlay的情况</h3><p><img src="MultiPlay-Server.png" alt="multiplay-server"></p>
+<p><img src="MultiPlay-Client1.png" alt="multiplay-client1"></p>
+<p><img src="MultiPlay-Client2.png" alt="multiplay-client2"></p>
+<p>后面还有一些检验正确性的部分，输出LOG什么的，我就省略了。</p>
+<h2 id="Instigator"><a href="#Instigator" class="headerlink" title="Instigator"></a>Instigator</h2><p>原意为”煽动者，始作俑者”，具体的我暂时还不是很清楚，是在Blueprint中遇到的：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetInstigator/index.html" target="_blank" rel="noopener">Get Instigator</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/BlueprintAPI/Game/GetInstigatorController/index.html" target="_blank" rel="noopener">Get Instigator Controller</a></li>
+</ul>
+<p>从官网的介绍貌似是可以取得负责造成Damage的Pawn对象。<a href="https://docs.unrealengine.com/en-US/API/Runtime/Engine/Engine/FActorSpawnParameters/Instigator/index.html" target="_blank" rel="noopener">Instigator</a></p>
+<p>具体的使用情况不明…</p>
+<h2 id="Replicated-and-ReplicatedUsing"><a href="#Replicated-and-ReplicatedUsing" class="headerlink" title="Replicated and ReplicatedUsing"></a>Replicated and ReplicatedUsing</h2><p>在这里讲讲这两个关键字，或者说<code>UPROPERTY()</code>的属性修饰符(Property Specifiers)</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Reference/Properties/Specifiers/index.html" target="_blank" rel="noopener">Proerty Specifiers - Keywords used when declaring UProperties to specify how the property behaves with various aspects of the Engine and Editor.</a></li>
+</ul>
+<p>在自己的Actor中想要Replicate自身的属性的时候，就需要自己手动操作的，这里我有一个地方不敢确定的是：</p>
+<ol>
+<li>自定义的变量类型需要手动登录该变量，内置类型的变量在设置了Replicated为true之后仍需要登录变量到Actor的Replicated中去吗？</li>
+</ol>
+<p>目前看来是要的。</p>
+<p>因为Actor的Replication是很重要的一部分内容，关于如何使用在GAS的文章中可能会记载一些实际的使用方法，而概念说明在上面应该也有涉及到。这里主要是对这两个属性修饰符的用法和不同进行一些记录。</p>
+<p>还有就是<code>OnRep_FUNCTION</code>跟RPCs之间又有什么区别，简单的先记录一下。</p>
+<p>首先，让一个Actor中的Property能够完成Replicate需要以下三步：</p>
+<ol>
+<li><code>bReplicates = true</code>开启Actor的Replication</li>
+<li><code>UPROPERTY(Replicated) float a</code> 添加属性修饰符</li>
+<li>重写Actor的<code>virtual void GetLifetimeReplicatedProps(TArray&lt;FLifetimeProperty&gt;&amp; OutLifetimeProps) const override;</code>函数</li>
+</ol>
+<p><code>GetLifetimeReplicatedProps</code>在有自定义的属性想要进行状态复制(Replication)的话，则需要把该属性登录到NetworkReplication上。</p>
+<blockquote>
+<p>GetLifetimeReplicatedProps 官网</p>
+<p>Returns the properties used for network replication, this needs to be overridden by all actor classes with native replicated properties</p>
+</blockquote>
+<p>当然重写也是有一些内容的:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> AmyActor::GetLifetimeReplicatedProps(TArray&lt;FLifetimeProperty&gt;&amp; OutLifetimeProps) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">    Super::GetLifetimeReplicatedProps(OutLifetimeProps);</span><br><span class="line"></span><br><span class="line">    DOREPLIFETIME(AMyActor, a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>DOREPLIFETIME</code>宏使用是必要的的。</p>
+<p>这样就能实现简单的<strong>PropertyReplication</strong>了。</p>
+<p>那么<strong>ReplicatedUsing</strong>又是做什么用的呢?</p>
+<p>简单看一下实现：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line">    UPROPERTY(ReplicatedUsing = OnRep_Change)</span><br><span class="line">    <span class="keyword">float</span> a;</span><br><span class="line"></span><br><span class="line">    UFUNCTION()</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnRep_Change</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .h</span></span><br><span class="line"><span class="keyword">void</span> AMyActor::OnRep_Change()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// UE_LOG(Log, Temp, TEXT("a value changed!"));</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>作用就是在变量Replicated之后可以添加一个Callback函数，可以做一些方便的事情。</p>
+<p>在这里还有两个需要注意的事情:</p>
+<ul>
+<li><p>上述的<code>OnRep_Change</code>函数的参数问题</p>
+<ul>
+<li><p>事实上在其它的地方我还看到了类似下面的写法：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 其它内容不变，但是函数声明的时候有了参数</span></span><br><span class="line">UFUNCTION()</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">OnRep_Change</span><span class="params">(<span class="keyword">float</span> PreviousA)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>也就是多了一个参数，应该是变更前的值，但是只是我的猜测。<br>-函数前的 <code>UFUNCTION()</code>是必须的</p>
+</li>
+</ul>
+</li>
+<li>关于<code>DOREPLIFETIME</code>宏的问题<ul>
+<li>需要<code>#include &quot;Net/UnrealNetwork.h&quot;</code> 头文件</li>
+<li>还有<code>DOREPLIFETIME_CONDITION</code>之类的宏</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/Properties/Conditions/index.html" target="_blank" rel="noopener">Conditional Property Replication - Detailed information about how to conditionally replicate Actor properties.</a></p>
+<p>关于属性的Replication条件控制上面的官方文档中有介绍，有时间要好好看。</p>
+<p>其实我还想在这里讨论一下RPCs的实现的，对比一下这之间的不同</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/25318-onrep-vs-multicast" target="_blank" rel="noopener">OnRep vs multicast</a></li>
+</ul>
+<p>先偷个懒，之后整理。</p>
+<h2 id="RPCs"><a href="#RPCs" class="headerlink" title="RPCs"></a>RPCs</h2><p>RPCs是一个很重要的部分，需要对其中的知识点进行理解和记录，先放一个占位符</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/RPCs/index.html" target="_blank" rel="noopener">RPCs</a></li>
+</ul>
+<h1 id="深入理解UE的Multiplayer-Online"><a href="#深入理解UE的Multiplayer-Online" class="headerlink" title="深入理解UE的Multiplayer Online"></a>深入理解UE的Multiplayer Online</h1><p>结合上面的内容，也随着项目越来越深入，逐渐想对UE4的多人游戏框架进行更深入的了解。</p>
+<p>首先是很不错的文章链接</p>
+<ul>
+<li><a href="https://historia.co.jp/archives/6750/https://historia.co.jp/archives/6750/" target="_blank" rel="noopener">[UE4] Multiplayer Online Deep Dive で講演してきました</a></li>
+</ul>
+<h2 id="Traveling理解"><a href="#Traveling理解" class="headerlink" title="Traveling理解"></a>Traveling理解</h2><p>参照的上面的文章中的一个Slide，这里直接贴出Slide的链接：</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/ue4-multiplayer-online-deep-dive-traveling-ue4dd?ref=https://historia.co.jp/" target="_blank" rel="noopener">UE4 MultiPlayer Online Deep Dive 基礎編2 -Traveling</a></li>
+</ul>
+<p>这一部分将对UE4中的Map的Traveling概念进行学习理解。有些在意的还有<strong>OnlineSubsystem</strong>和<strong>Session</strong>这两个部分，都是我目前还不了解的。</p>
+<p>时间有限我就简单对这个章节的内容做一些记录。</p>
+<p>普通的比如说单机模式在下，切换Map的情况的话只要简单的调用<code>OpenLevel</code>函数就可以实现了。但是多人情况下，简单的调用实现不了这个功能，那同时双方都调用这个函数肯定是可以的，但是这样耿直未免有些傻气。</p>
+<p>UE4提供了<strong>Traveling</strong>功能，可以实现多人游戏模式下的地图(Map)切换的同步。</p>
+<h3 id="以Listen-Server的形式打开Map"><a href="#以Listen-Server的形式打开Map" class="headerlink" title="以Listen Server的形式打开Map"></a>以Listen Server的形式打开Map</h3><p>首先我们多人模式需要Server端以<strong>Listen Server</strong>的的模式打开Map：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Start Server */</span></span><br><span class="line">UGameplayStatics::OpenLevel(GetWorld(), <span class="string">"LevelName"</span>, <span class="literal">true</span>, <span class="string">"listen"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>也算是重新打开一次map，只不过是带有<code>listen</code>命令</p>
+<h4 id="Option-String"><a href="#Option-String" class="headerlink" title="Option String"></a>Option String</h4><p>关于这个命令，我稍作了解，自己的理解就是创建<code>UWorld</code>的时候会带有一些<code>Option</code>,这些<code>Option</code>就是命令，有固定格式的写法，也有方法读取。</p>
+<p>这个<code>Option</code>中添加的字符串(也就是“listen“)会作为被加载的Level的<code>GameMode</code>的<code>OptionString</code>属性被保存。</p>
+<p>至于读取方法我没有验证过，这里只贴上链接：</p>
+<ul>
+<li><a href="http://monsho.blog63.fc2.com/blog-entry-121.html" target="_blank" rel="noopener">[UE4] Levelを開く</a></li>
+</ul>
+<p>我自己又稍微看过一点源码，所以我了解到在打开map的时候<code>UWorld</code>会更新一个WorldContent还是什么的结构体，这个结构体是由GameInstance保存的貌似，然后还有一个LastURL的属性，记录上次打开map的命令，我用这个来判断是否是ListenServer模式了，不知道对不对。</p>
+<p>上面我有空要准确的更新一下，找一找源码。</p>
+<h4 id="以ListenServer打开Level的流程图"><a href="#以ListenServer打开Level的流程图" class="headerlink" title="以ListenServer打开Level的流程图"></a>以ListenServer打开Level的流程图</h4><p><img src="ServerWithlisten.PNG" alt="Server"></p>
+<h3 id="ServerTravel"><a href="#ServerTravel" class="headerlink" title="ServerTravel"></a>ServerTravel</h3><p>然后Server端只要在想要进行map的的跳转是调用<code>ServerTravel</code>函数，与之相连的Client也会一起跳转。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Start ServerTravel */</span></span><br><span class="line">GetWorld()-&gt;ServerTravel(<span class="string">"LevelName"</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="Server端开始Traveling的流程"><a href="#Server端开始Traveling的流程" class="headerlink" title="Server端开始Traveling的流程"></a>Server端开始Traveling的流程</h4><p><img src="server1.PNG" alt="Server"></p>
+<p>Client的流程：<br><img src="client3.PNG" alt="Client"></p>
+<p>也就是说，根据上面的图得到的结论就是，每一次<code>ServerTravel</code>被调用跳转到下一个Map的时候，Client端向Server端的Login处理都要再执行一次。</p>
+<p><code>ServerTravel</code>这其实也就是UE4已经包装好的RPCs，而且在Server调用，Client接收到通知准备跳转之前还有一个Callback，我使用这个回调来实现Client端的加载界面表示。</p>
+<p>关于这个函数回调和这个RPCs的详细内容之后补上。</p>
+<h3 id="ClientTravel"><a href="#ClientTravel" class="headerlink" title="ClientTravel"></a>ClientTravel</h3><p>关于Client的Traveling内容目前我还不是非常的清楚，等到真正需要用到的时候再仔细验证整理吧。</p>
+<p>应该是重连的部分会用到。</p>
+<p><img src="ClientTraveling.PNG" alt="ClientTravel"></p>
+<h4 id="Cllient的Traveling流程图"><a href="#Cllient的Traveling流程图" class="headerlink" title="Cllient的Traveling流程图"></a>Cllient的Traveling流程图</h4><p><img src="client1.PNG" alt="client"><br><img src="client2.PNG" alt="client"></p>
+<h5 id="UPendingNetGame"><a href="#UPendingNetGame" class="headerlink" title="UPendingNetGame"></a>UPendingNetGame</h5><ul>
+<li>Control Channel で Server に Hello メッセージして待っている間、 UPendingNetGame オブジェクトが Server からの返答待ち及び、 Server が Closed になっていないかどうかの監視を行う</li>
+</ul>
+<h5 id="Control-Channel"><a href="#Control-Channel" class="headerlink" title="Control Channel"></a>Control Channel</h5><ul>
+<li>C/S 間の接続の制御に利用されるチャンネル</li>
+<li>UConnection 生成時に一つ生成される</li>
+</ul>
+<p>这个Slide的后面还有<strong>Network Version</strong>, <strong>PreLogin</strong>之类的看似很重要的内容，因为暂时还没有急切的需要用到，就先占个位，到时候再遇到再理解整理吧。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><img src="Server-Client-Traveling.PNG" alt="总结内容"></p>
+<h3 id="SeamlessTravel解决每次map跳转Client都要再Login的问题"><a href="#SeamlessTravel解决每次map跳转Client都要再Login的问题" class="headerlink" title="SeamlessTravel解决每次map跳转Client都要再Login的问题"></a>SeamlessTravel解决每次map跳转Client都要再Login的问题</h3><p>利用<strong>SeamlessTravel</strong>的特性，经由一个<strong>TransitionMap</strong>再跳转到目标Map，则可以保持Client的连接进行跳转，还可以保持一些对象一起跳转到下一个Map中。</p>
+<p>使用方法等到真正用到的时候再整理吧。这里有许多需要注意的地方，参照原文。</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文完-------------</div>
+    
+</div>
+
+      
+    </div>
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    stone
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://stonelzp.github.io/ue4-multiplay-framework/" title="UE4-多人游戏框架理解">http://stonelzp.github.io/ue4-multiplay-framework/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/stonelzp.github.io/tags/UE4/" rel="tag"><i class="fa fa-tag"></i> UE4</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/stonelzp.github.io/ue4-gameplay-ability-system/" rel="next" title="UE4-GameplayAbilitySystem学习">
+                <i class="fa fa-chevron-left"></i> UE4-GameplayAbilitySystem学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/stonelzp.github.io/ue4-actor-lifecycle/" rel="prev" title="UE4-一个Actor的生命周期">
+                UE4-一个Actor的生命周期 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/stonelzp.github.io/uploads/avatar.gif" alt="stone">
+            
+              <p class="site-author-name" itemprop="name">stone</p>
+              <p class="site-description motion-element" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/stonelzp.github.io/archives/">
+              
+                  <span class="site-state-item-count">97</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/stonelzp.github.io/categories/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/stonelzp.github.io/tags/index.html">
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/stonelzp" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+            <div class="cc-license motion-element" itemprop="license">
+              <a href="https://creativecommons.org/licenses/by/4.0/" class="cc-opacity" target="_blank">
+                <img src="/stonelzp.github.io/images/cc-by.svg" alt="Creative Commons">
+              </a>
+            </div>
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4框架总览"><span class="nav-number">1.</span> <span class="nav-text">UE4框架总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">1.1.</span> <span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Modes-and-Sever-Types"><span class="nav-number">1.1.1.</span> <span class="nav-text">Network Modes and Sever Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actor-Replication"><span class="nav-number">1.1.2.</span> <span class="nav-text">Actor Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Actor-Replication的方式"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">Actor Replication的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Replicates-NetLoadOnClient"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">Replicates NetLoadOnClient</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bReplicateFlag的动态切换"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">bReplicateFlag的动态切换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Network-Role-and-Authority"><span class="nav-number">1.1.3.</span> <span class="nav-text">Network Role and Authority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client-Ownership"><span class="nav-number">1.1.4.</span> <span class="nav-text">Client Ownership</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Relevance-and-Priority"><span class="nav-number">1.1.5.</span> <span class="nav-text">Relevance and Priority</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Variable-Replication"><span class="nav-number">1.1.6.</span> <span class="nav-text">Variable Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RepNotifies"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">RepNotifies</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remote-Procedure-Calls-RPCs"><span class="nav-number">1.1.7.</span> <span class="nav-text">Remote Procedure Calls (RPCs)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reliability"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">Reliability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Validation"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">Validation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tips-and-Further-Reading"><span class="nav-number">1.1.8.</span> <span class="nav-text">Tips and Further Reading</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Replicated-Actor-Checklist"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">Basic Replicated Actor Checklist</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Networking-Tips"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">Networking Tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network处理流程"><span class="nav-number">1.2.</span> <span class="nav-text">Network处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Replicating-an-Actor-to-a-Connection"><span class="nav-number">1.2.1.</span> <span class="nav-text">Replicating an Actor to a Connection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetDormancy-休眠"><span class="nav-number">1.2.2.</span> <span class="nav-text">NetDormancy 休眠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetRelevancy-关联性"><span class="nav-number">1.2.3.</span> <span class="nav-text">NetRelevancy 关联性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NetCullDistanceSquared"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">NetCullDistanceSquared</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AlwaysRelevant"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">AlwaysRelevant</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetPriority-通信优先级"><span class="nav-number">1.2.4.</span> <span class="nav-text">NetPriority 通信优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetUpdateFrequency"><span class="nav-number">1.2.5.</span> <span class="nav-text">NetUpdateFrequency</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MinNetUpdateFrequency"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">MinNetUpdateFrequency</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetLoadOnClient"><span class="nav-number">1.2.6.</span> <span class="nav-text">NetLoadOnClient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NetworkDriver"><span class="nav-number">1.2.7.</span> <span class="nav-text">NetworkDriver</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NetConnection"><span class="nav-number">1.2.7.1.</span> <span class="nav-text">NetConnection</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PlayerController"><span class="nav-number">1.2.7.2.</span> <span class="nav-text">PlayerController</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NetworkObjectList"><span class="nav-number">1.2.7.3.</span> <span class="nav-text">NetworkObjectList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ActorChannel-and-ChannelIndex"><span class="nav-number">1.2.7.4.</span> <span class="nav-text">ActorChannel and ChannelIndex</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FNetworkGUID"><span class="nav-number">1.2.7.5.</span> <span class="nav-text">FNetworkGUID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Bunch"><span class="nav-number">1.2.7.6.</span> <span class="nav-text">Bunch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收信应答-ACK-NAK"><span class="nav-number">1.2.7.7.</span> <span class="nav-text">收信应答 ACK/NAK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Variable-Replicate-amp-RPCs"><span class="nav-number">1.2.7.8.</span> <span class="nav-text">Variable Replicate &amp; RPCs</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CharacterMovement"><span class="nav-number">1.2.8.</span> <span class="nav-text">CharacterMovement</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Replication-Graph"><span class="nav-number">1.2.9.</span> <span class="nav-text">Replication Graph</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要的基础概念"><span class="nav-number">2.</span> <span class="nav-text">重要的基础概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Owning-Connection"><span class="nav-number">2.1.</span> <span class="nav-text">Owning Connection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PlayerController-1"><span class="nav-number">2.2.</span> <span class="nav-text">PlayerController</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GameMode"><span class="nav-number">2.2.1.</span> <span class="nav-text">GameMode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GameState"><span class="nav-number">2.2.2.</span> <span class="nav-text">GameState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerState"><span class="nav-number">2.2.3.</span> <span class="nav-text">PlayerState</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerController-2"><span class="nav-number">2.2.4.</span> <span class="nav-text">PlayerController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pawn"><span class="nav-number">2.2.5.</span> <span class="nav-text">Pawn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SinglePlay的情况"><span class="nav-number">2.2.6.</span> <span class="nav-text">SinglePlay的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MultiPlay的情况"><span class="nav-number">2.2.7.</span> <span class="nav-text">MultiPlay的情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Instigator"><span class="nav-number">2.3.</span> <span class="nav-text">Instigator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Replicated-and-ReplicatedUsing"><span class="nav-number">2.4.</span> <span class="nav-text">Replicated and ReplicatedUsing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPCs"><span class="nav-number">2.5.</span> <span class="nav-text">RPCs</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解UE的Multiplayer-Online"><span class="nav-number">3.</span> <span class="nav-text">深入理解UE的Multiplayer Online</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Traveling理解"><span class="nav-number">3.1.</span> <span class="nav-text">Traveling理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#以Listen-Server的形式打开Map"><span class="nav-number">3.1.1.</span> <span class="nav-text">以Listen Server的形式打开Map</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Option-String"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">Option String</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#以ListenServer打开Level的流程图"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">以ListenServer打开Level的流程图</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServerTravel"><span class="nav-number">3.1.2.</span> <span class="nav-text">ServerTravel</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Server端开始Traveling的流程"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">Server端开始Traveling的流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClientTravel"><span class="nav-number">3.1.3.</span> <span class="nav-text">ClientTravel</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cllient的Traveling流程图"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">Cllient的Traveling流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UPendingNetGame"><span class="nav-number">3.1.3.1.1.</span> <span class="nav-text">UPendingNetGame</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Control-Channel"><span class="nav-number">3.1.3.1.2.</span> <span class="nav-text">Control Channel</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.1.4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SeamlessTravel解决每次map跳转Client都要再Login的问题"><span class="nav-number">3.1.5.</span> <span class="nav-text">SeamlessTravel解决每次map跳转Client都要再Login的问题</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/stonelzp.github.io/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/stonelzp.github.io/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/stonelzp.github.io/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/stonelzp.github.io/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
