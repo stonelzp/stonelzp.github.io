@@ -406,6 +406,7 @@
 <h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><ul>
 <li>2020/11/20 : 对新建文章的模板进行了修改</li>
 <li>2021/02/19 : 把博客的配置及源文件上传到了Github仓库分支方便多台PC整理博客</li>
+<li>2021/03/21 : 对新电脑上的博客重新配置遇到了好多问题</li>
 </ul>
 <h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><p>果然UE4中的有些代码不会给你高亮，看起来就很不舒服，有时间填一下坑。</p>
 <h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
@@ -422,6 +423,12 @@
 <p>我加入了上面的代码，原先是什么都没有的…</p>
 <p>看了下效果，嗯，感觉什么都没变。</p>
 <p>寝るか</p>
+<h2 id="转移电脑的博客遇见的大坑"><a href="#转移电脑的博客遇见的大坑" class="headerlink" title="转移电脑的博客遇见的大坑"></a>转移电脑的博客遇见的大坑</h2><p>将自己的博客的内容转移到新的电脑遇见了不少的大坑，在这里稍作记录。</p>
+<p>首先是如何使用双分支管理博客的源文件和生成的静态网页文件。<strong>SourceBranch</strong>用来管理博客的源文件，<strong>master</strong>则用来上传博客的静态文件。</p>
+<p>平常的工作流程一般是先<code>pull origin SourceBranch</code>，嘛如果有在两个电脑上进行更新的话。先对源文件及<code>source/_post</code>文件夹下面的源文件进行博文的添加和书写。其次是<code>hexo d -g -m &quot;comment&quot;</code>对源文件进行镜头网页的生成和网页部署，即生成网页并推送到Github上。最后则是将本地的<strong>SourceBranch</strong>的内容改动commit结束。</p>
+<p>前提是自己的部署Deploy文件会默认将部署推送到远程的<strong>master</strong>的分支上。</p>
+<p>然后就是这个过程中遇到的大坑。首先是Window上需要运行Hexo的环境构建，Hexo的运行需要NodeJs，但是过高的版本Hexo并不支持。我自己选的版本是nodejs.v12.14版本。太新的版本没有办法将本地生成的网页部署到（推送）远程。安装完后基本上用到的命令就是<code>npm install</code>安装所有的node_module(注意要在博客的根目录，也就是这个文件夹所在的目录),<code>npm install hexo-cli -g</code>（Hexo不好用的时候重新安装Hexo）。</p>
+<p>其次是主题的版本，我用的next的主题但是又不能随便找一个网上的主题，只好沿用自己之前的主题，把之前的电脑的主题文件整个文件夹压缩转移到了新电脑，然后运行<code>hexo clean</code>重新配置生成网页，才解决了网页里出现了不知道是哪国语言的尴尬问题。</p>
 
       
     </div>
@@ -645,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">1.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">1.1.</span> <span class="nav-text">代码部分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">2.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#博文压缩"><span class="nav-number">2.1.</span> <span class="nav-text">博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义新建文章的模板"><span class="nav-number">2.2.</span> <span class="nav-text">定义新建文章的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改代码块自定义样式"><span class="nav-number">2.3.</span> <span class="nav-text">修改代码块自定义样式</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">1.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">1.1.</span> <span class="nav-text">代码部分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">2.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#博文压缩"><span class="nav-number">2.1.</span> <span class="nav-text">博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义新建文章的模板"><span class="nav-number">2.2.</span> <span class="nav-text">定义新建文章的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改代码块自定义样式"><span class="nav-number">2.3.</span> <span class="nav-text">修改代码块自定义样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转移电脑的博客遇见的大坑"><span class="nav-number">2.4.</span> <span class="nav-text">转移电脑的博客遇见的大坑</span></a></li></ol></li></ol></div>
             
 
           </div>
