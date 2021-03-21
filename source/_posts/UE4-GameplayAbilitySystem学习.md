@@ -1406,16 +1406,16 @@ UAbilitySystemComponent::GetActivatableGameplayAbilitySpecsByAllMatchingTags(con
 
 #### Instancing Policy
 GA的这个选项决定了GA被激活时的实例化操作有什么区别。
-![InstancingPolicy](InstancingPolicy.PNG)
+![InstancingPolicy](InstancingPolicy.png)
 
 #### Net Execution Policy
 这个项目决定了GA由谁执行和执行顺序。
-![NetExecutionPolicy](NetExecutionPolicy.PNG)
+![NetExecutionPolicy](NetExecutionPolicy.png)
 
 #### Ability Tags
 GA的内部也有内置的`GameplayTagContainer`，嘛，GA也可以对`GameplayTags`进行操作和存储就大致猜到了。虽然跟ASC一样有内置的`GameplayTagContainer`但是这里的`GameplayTags`都不会被**Replicated**。
-![AbilityTag01](AbilityTags1.PNG)
-![AbilityTag02](AbilityTags2.PNG)
+![AbilityTag01](AbilityTags1.png)
+![AbilityTag02](AbilityTags2.png)
 
 #### Gameplay Ability Spec
 当GA被生成的时候，`GameplayAbilitySpec`便会被实例化，用来收集GA之外的情报，与其说是生成GA，本质上就是生成这个`GameplayAbilitySpec`。关于这个结构体的情报

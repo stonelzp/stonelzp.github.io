@@ -31,15 +31,15 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/ListenForAttributeChange.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/abilityflowchartsimple.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/abilityflowchartcomplex.png">
-<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/InstancingPolicy.PNG">
-<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/NetExecutionPolicy.PNG">
-<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/AbilityTags1.PNG">
-<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/AbilityTags2.PNG">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/InstancingPolicy.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/NetExecutionPolicy.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/AbilityTags1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/AbilityTags2.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/PassDataToAbility.PNG">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/NetSecurityPolicy.PNG">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/WaitDelay.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-gameplay-ability-system/TaskWaitDelay.png">
-<meta property="og:updated_time" content="2021-03-21T11:48:19.923Z">
+<meta property="og:updated_time" content="2021-03-21T12:39:45.863Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-GameplayAbilitySystem学习">
 <meta name="twitter:description" content="这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中Action RPG这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。">
@@ -98,7 +98,7 @@
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="تشغيل شريط التصفح">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -133,7 +133,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/stonelzp.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+    <a href="/stonelzp.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>الأرشيفات</a>
 
   </li>
   </ul>
@@ -185,22 +185,22 @@
               <span class="post-meta-item-icon">
                 <i class="far fa-calendar"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">نُشر في</span>
 
-              <time title="Created: 2020-06-05 12:27:01" itemprop="dateCreated datePublished" datetime="2020-06-05T12:27:01+09:00">2020-06-05</time>
+              <time title="أُنشأ: 2020-06-05 12:27:01" itemprop="dateCreated datePublished" datetime="2020-06-05T12:27:01+09:00">2020-06-05</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-03-21 20:48:19" itemprop="dateModified" datetime="2021-03-21T20:48:19+09:00">2021-03-21</time>
+                <span class="post-meta-item-text">عُدل في</span>
+                <time title="عُدل: 2021-03-21 21:39:45" itemprop="dateModified" datetime="2021-03-21T21:39:45+09:00">2021-03-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">في</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/stonelzp.github.io/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
                 </span>
@@ -705,9 +705,9 @@
 <p>除此之外还有一种方法就是利用<code>GameplayTagContainer</code>，也就是<code>GameplayTags</code>来筛选我们想要的GA。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UAbilitySystemComponent::GetActivatableGameplayAbilitySpecsByAllMatchingTags(<span class="keyword">const</span> FGameplayTagContainer&amp; GameplayTagContainer, TArray &lt; struct FGameplayAbilitySpec* &gt;&amp; MatchingGameplayAbilities, <span class="keyword">bool</span> bOnlyAbilitiesThatSatisfyTagRequirements = <span class="literal">true</span>)</span><br></pre></td></tr></table></figure></p>
 <p>想要知道具体怎么使用的话直接找源码会比较快。</p>
 <p>在取到所有的GA之后，通过<code>IsActive()</code>函数来查看该GA是否已被激活。这里要注意的是<code>IsActive</code>中的并不是一个布尔值而是int值。</p>
-<h4 id="Instancing-Policy"><a href="#Instancing-Policy" class="headerlink" title="Instancing Policy"></a>Instancing Policy</h4><p>GA的这个选项决定了GA被激活时的实例化操作有什么区别。<br><img src="InstancingPolicy.PNG" alt="InstancingPolicy"></p>
-<h4 id="Net-Execution-Policy"><a href="#Net-Execution-Policy" class="headerlink" title="Net Execution Policy"></a>Net Execution Policy</h4><p>这个项目决定了GA由谁执行和执行顺序。<br><img src="NetExecutionPolicy.PNG" alt="NetExecutionPolicy"></p>
-<h4 id="Ability-Tags"><a href="#Ability-Tags" class="headerlink" title="Ability Tags"></a>Ability Tags</h4><p>GA的内部也有内置的<code>GameplayTagContainer</code>，嘛，GA也可以对<code>GameplayTags</code>进行操作和存储就大致猜到了。虽然跟ASC一样有内置的<code>GameplayTagContainer</code>但是这里的<code>GameplayTags</code>都不会被<strong>Replicated</strong>。<br><img src="AbilityTags1.PNG" alt="AbilityTag01"><br><img src="AbilityTags2.PNG" alt="AbilityTag02"></p>
+<h4 id="Instancing-Policy"><a href="#Instancing-Policy" class="headerlink" title="Instancing Policy"></a>Instancing Policy</h4><p>GA的这个选项决定了GA被激活时的实例化操作有什么区别。<br><img src="InstancingPolicy.png" alt="InstancingPolicy"></p>
+<h4 id="Net-Execution-Policy"><a href="#Net-Execution-Policy" class="headerlink" title="Net Execution Policy"></a>Net Execution Policy</h4><p>这个项目决定了GA由谁执行和执行顺序。<br><img src="NetExecutionPolicy.png" alt="NetExecutionPolicy"></p>
+<h4 id="Ability-Tags"><a href="#Ability-Tags" class="headerlink" title="Ability Tags"></a>Ability Tags</h4><p>GA的内部也有内置的<code>GameplayTagContainer</code>，嘛，GA也可以对<code>GameplayTags</code>进行操作和存储就大致猜到了。虽然跟ASC一样有内置的<code>GameplayTagContainer</code>但是这里的<code>GameplayTags</code>都不会被<strong>Replicated</strong>。<br><img src="AbilityTags1.png" alt="AbilityTag01"><br><img src="AbilityTags2.png" alt="AbilityTag02"></p>
 <h4 id="Gameplay-Ability-Spec"><a href="#Gameplay-Ability-Spec" class="headerlink" title="Gameplay Ability Spec"></a>Gameplay Ability Spec</h4><p>当GA被生成的时候，<code>GameplayAbilitySpec</code>便会被实例化，用来收集GA之外的情报，与其说是生成GA，本质上就是生成这个<code>GameplayAbilitySpec</code>。关于这个结构体的情报</p>
 <p>这里应该有<code>GameplayAbilitySpec</code>的源码截图。</p>
 <p>当一个GA在Server被生成(grant)，这个<code>GameplayAbilitySpec</code>会被生成，Server会将<code>GameplayAbilitySpec</code>复制到Replicate到<strong>OwningClient</strong>上。</p>
@@ -940,10 +940,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          المحتويات
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          عام
         </li>
       </ul>
 
@@ -964,18 +964,18 @@
           <a href="/stonelzp.github.io/archives/">
         
           <span class="site-state-item-count">97</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-name">المقالات</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/stonelzp.github.io/categories/">
         <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">التصنيفات</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/stonelzp.github.io/tags/">
         <span class="site-state-item-count">44</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">الوسوم</span></a>
       </div>
   </nav>
 </div>
@@ -1007,7 +1007,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">stone</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  <div class="powered-by">تطبيق الموقع <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
   </div>
 
         
