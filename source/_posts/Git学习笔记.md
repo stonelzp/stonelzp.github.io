@@ -58,7 +58,7 @@ Git的使用尤为重要，只要是做项目开发没有版本管理的话，�
 >
 >     `git update-index --assume-unchanged <path-name>`
 > 3. This is to tell git you want your own independent version of the file or folder. For instance, you don't want to overwrite (or delete) production/staging config files.
-> 
+>
 >     `git update-index --skip-worktree <path-name>`
 >
 > It's important to know that git update-index will not propagate with git, and each user will have to run it independently.
@@ -67,6 +67,25 @@ Git的使用尤为重要，只要是做项目开发没有版本管理的话，�
 
 但我感觉我实际上应该使用的是第二种方法，的确是使用了某个SDK，即Plugins，基本上不会再有改动，除非其他人对插件的内容进行了修改。
 
+### 删除远程分支
+多人一起工作的时候就会经常遇到需要删除自己提交的远程分支的情况，在这里做一下记录。
+
+首先先看一下自己本地的分支和远程的分支：
+```
+git branch -a
+```
+在确认了想要删除的分支的名字之后首先执行本地的分支删除操作吧：
+```
+git brance -d Branch-Name
+```
+如果没有什么问题本地的分支就会被删除。下一步是删除远程的分支
+```
+git push -d origin Branch-Name
+```
+这样就完成了，上面的`-d`跟`--delete`是等效的。
+
+参考文章：
+- [Git で不要になったローカルブランチ・リモートブランチを削除する方法](https://qiita.com/iorionda/items/c7e0aca399371068a9b8)
 
 ## SourceTree
 最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。
@@ -77,4 +96,3 @@ Git的使用尤为重要，只要是做项目开发没有版本管理的话，�
 
 参考了下面的文章：
 - [[[:space:]] seam to prevent Git lfs to work with SourceTree](https://github.com/git-lfs/git-lfs/issues/2668)
-
