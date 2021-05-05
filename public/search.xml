@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-DataTable的使用</title>
+    <url>/stonelzp.github.io/UE4-DataTable%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<a id="more"></a>
+]]></content>
+  </entry>
+  <entry>
     <title>C++中的函数指针理解</title>
     <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/</url>
     <content><![CDATA[<a id="more"></a>
@@ -3456,6 +3462,15 @@ table th:nth-of-type(4) {
 </blockquote>
 <p>我实际上使用的是第一种方法，但由于我是一个人开发的所以没有验证过是不是别人Pull的时候会删掉我取消Track的文件。</p>
 <p>但我感觉我实际上应该使用的是第二种方法，的确是使用了某个SDK，即Plugins，基本上不会再有改动，除非其他人对插件的内容进行了修改。</p>
+<h3 id="删除远程分支"><a href="#删除远程分支" class="headerlink" title="删除远程分支"></a>删除远程分支</h3><p>多人一起工作的时候就会经常遇到需要删除自己提交的远程分支的情况，在这里做一下记录。</p>
+<p>首先先看一下自己本地的分支和远程的分支：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -a</span><br></pre></td></tr></table></figure></p>
+<p>在确认了想要删除的分支的名字之后首先执行本地的分支删除操作吧：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git brance -d Branch-Name</span><br></pre></td></tr></table></figure></p>
+<p>如果没有什么问题本地的分支就会被删除。下一步是删除远程的分支<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git push -d origin Branch-Name</span><br></pre></td></tr></table></figure></p>
+<p>这样就完成了，上面的<code>-d</code>跟<code>--delete</code>是等效的。</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://qiita.com/iorionda/items/c7e0aca399371068a9b8" target="_blank" rel="noopener">Git で不要になったローカルブランチ・リモートブランチを削除する方法</a></li>
+</ul>
 <h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
 <p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
 <p>文件路径奇葩带空格又不是我的错，我只是导入一个插件而已。至于解决方案，那就是使用命令行工具来提交啊。关键时候还得是Bash。</p>
