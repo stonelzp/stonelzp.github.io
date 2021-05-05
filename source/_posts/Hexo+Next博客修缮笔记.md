@@ -48,7 +48,7 @@ description: 今后准备认真的做好自己Blog的维护，于是记下一些
 - [Hexo の 新規投稿テンプレート を カスタマイズ](https://azriton.github.io/2016/11/04/Hexo%E3%81%AE%E6%96%B0%E8%A6%8F%E6%8A%95%E7%A8%BF%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA/)
 
 
-## 修改``代码块自定义样式
+## 修改`code`代码块自定义样式
 `\themes\next\source\css\_custom\custom.styl`
 
 ```
@@ -87,3 +87,26 @@ code {
 然后就是这个过程中遇到的大坑。首先是Window上需要运行Hexo的环境构建，Hexo的运行需要NodeJs，但是过高的版本Hexo并不支持。我自己选的版本是nodejs.v12.14版本。太新的版本没有办法将本地生成的网页部署到（推送）远程。安装完后基本上用到的命令就是`npm install`安装所有的node_module(注意要在博客的根目录，也就是这个文件夹所在的目录),`npm install hexo-cli -g`（Hexo不好用的时候重新安装Hexo）。
 
 其次是主题的版本，我用的next的主题但是又不能随便找一个网上的主题，只好沿用自己之前的主题，把之前的电脑的主题文件整个文件夹压缩转移到了新电脑，然后运行`hexo clean`重新配置生成网页，才解决了网页里出现了不知道是哪国语言的尴尬问题。
+
+---
+- 2021/05/05 前来更新
+
+对于上面的问题，由于这之前遇到了博客界面格式没有了的问题，迫不得已逐个解决了。首先是上面的next主题文件的语言问题，主要是中文的解析没对上的原因。具体的解决问题的操作的是去next主题的language文件夹中找到自己在博客的整体`_config.yml`文件中设置的语言是否存在。
+
+我上面网页中出现了不知道哪国语言的问题，经过查看之后发现,`_config.yml`文件中设置的语言是**zh-Hans**,而主题中的语言没有这个，解决方案是把其中的`zh-CN.yml`重命名为`zh-Hans.yml`，文字的问题就解决了。
+
+参考文章：
+- [Hexo语言不生效问题](https://blog.csdn.net/science_Lee/article/details/84633237)
+
+然后就是格式的问题，我在本地运行的环境(`hexo s`)中博客的格式都会完美的显示，但是部署到Github之后格式就没有了，尝试了很多，最后是从CSS文件找不到路径的问题找到了答案。</br>
+原因则是网页的URL设置有些问题：
+```
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://stonelzp.github.io
+root: /
+```
+修改之后的结果。
+
+参考链接:
+- [生成路径的问题，导致css，js无法加载](https://github.com/hexojs/hexo/issues/1121)
