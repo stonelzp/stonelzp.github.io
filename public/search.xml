@@ -2,19 +2,19 @@
 <search>
   <entry>
     <title>UE4-DataTable的使用</title>
-    <url>/stonelzp.github.io/UE4-DataTable%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
+    <url>/UE4-DataTable%E7%9A%84%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<a id="more"></a>
 ]]></content>
   </entry>
   <entry>
     <title>C++中的函数指针理解</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/</url>
+    <url>/C++%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/</url>
     <content><![CDATA[<a id="more"></a>
 ]]></content>
   </entry>
   <entry>
     <title>C++中的函数指针理解</title>
-    <url>/stonelzp.github.io/c++-function-pointer/</url>
+    <url>/c++-function-pointer/</url>
     <content><![CDATA[<p>学会如何辨别和使用函数指针，还有与模板之间的应用。<br><a id="more"></a></p>
 <p>当遇见需要大面积使用某种操作，大体上需要的操作都是一样的，但是总有一些数据类型或者条件有些细微的不同，让我不能简单实现批次处理，但是一个一个进行复制粘贴调整费时还费力，而且犯错的几率非常高，这个时候求助大佬的时候，简单的使用了C++的template，函数指针之类的操作完成了这个需求，看得我心痒的不行。</p>
 <p>关于模板的内容我记得还在博客的别的文章中总结学习过，然而事实证明不是真正的使用就根本学不会。</p>
@@ -60,7 +60,7 @@
   </entry>
   <entry>
     <title>Vim学习笔记</title>
-    <url>/stonelzp.github.io/learning-vim/</url>
+    <url>/learning-vim/</url>
     <content><![CDATA[<p>记录一些Vim的常用的使用方法。</p>
 <a id="more"></a>
 <p>我使用Vim也很久了，但是要问我学的怎么样，我也只能说啥都不会，也就会一点特别基础的移动光标而已。所以这篇文章用来记录一些我使用Vim的命令。</p>
@@ -88,7 +88,7 @@
   </entry>
   <entry>
     <title>UE4-各种容器的介绍</title>
-    <url>/stonelzp.github.io/ue4-container/</url>
+    <url>/ue4-container/</url>
     <content><![CDATA[<p>UE4中提供了许多自定义的容器，比如说<code>TArray</code>，<code>TMap</code>等等，这篇文章主要想记录这些容器的使用。</p>
 <a id="more"></a>
 <h2 id="TMap的使用"><a href="#TMap的使用" class="headerlink" title="TMap的使用"></a>TMap的使用</h2><p>关于使用其实搜一下就好了，使用方法也很简单。</p>
@@ -107,7 +107,7 @@
   </entry>
   <entry>
     <title>UE4-正确使用LOG</title>
-    <url>/stonelzp.github.io/how-to-use-log/</url>
+    <url>/how-to-use-log/</url>
     <content><![CDATA[<p>关于UE4中的LOG的使用我一直都是经常使用，但是也只是只用了最常见的<code>UE_LOG</code>，这篇文章注意主要想集中记录UE4中的LOG的使用和日志文件的问题。</p>
 <a id="more"></a>
 <h1 id="UE4中的LOG"><a href="#UE4中的LOG" class="headerlink" title="UE4中的LOG"></a>UE4中的LOG</h1><p>在想要在游戏中使用LOG的时候，首先需要知道的是UE4的LOG可以做到哪一步。</p>
@@ -158,7 +158,7 @@
   </entry>
   <entry>
     <title>UE4-需要时常关注的文章更新和视频更新</title>
-    <url>/stonelzp.github.io/ue4-follow/</url>
+    <url>/ue4-follow/</url>
     <content><![CDATA[<p>不断地学习最新的知识，则需要集思广益而且要与时俱进，这篇文章主要是为了记录一些需要时时查看的文章和链接，学习最新的知识。<br><a id="more"></a></p>
 <h1 id="与时俱进的文章"><a href="#与时俱进的文章" class="headerlink" title="与时俱进的文章"></a>与时俱进的文章</h1><h2 id="Qitta"><a href="#Qitta" class="headerlink" title="Qitta"></a>Qitta</h2><ul>
 <li><a href="https://qiita.com/EGJ-Ken_Kuwano" target="_blank" rel="noopener">Ken Kuwano</a></li>
@@ -182,7 +182,7 @@
   </entry>
   <entry>
     <title>UE4-RayTracing学习</title>
-    <url>/stonelzp.github.io/ue4-learning-raytracing/</url>
+    <url>/ue4-learning-raytracing/</url>
     <content><![CDATA[<p>很久之前就听说过这个酷炫的功能了，但是一直都没有提笔记录和学习，可以建模？！那更应该赶紧学了。</p>
 <a id="more"></a>
 <p>先放文章</p>
@@ -200,7 +200,7 @@
   </entry>
   <entry>
     <title>UE4-UMG相关知识点</title>
-    <url>/stonelzp.github.io/ue4-learning-umg/</url>
+    <url>/ue4-learning-umg/</url>
     <content><![CDATA[<p>本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。</p>
 <a id="more"></a>
 <h1 id="UMG"><a href="#UMG" class="headerlink" title="UMG"></a>UMG</h1><p>首先是对UMG这个概念的解读，<strong>Unreal Motion Graphics UI设计</strong> 是UE4提供的可以方便展示UI的设计框架，这个框架本质上还是使用<strong>Slate</strong>搭建的。</p>
@@ -259,7 +259,7 @@
   </entry>
   <entry>
     <title>UE4-关于Subsystem</title>
-    <url>/stonelzp.github.io/ue4-subsystem/</url>
+    <url>/ue4-subsystem/</url>
     <content><![CDATA[<p>这次要学习的是UE4的Subsystem，由4.22版本实装的功能。简单来说就是被某个系统所管理，会被自动实例化并拥有生命周期的类。</p>
 <a id="more"></a>
 <h1 id="SububSystem概要"><a href="#SububSystem概要" class="headerlink" title="SububSystem概要"></a>SububSystem概要</h1><h2 id="GameInstanceSubsystem"><a href="#GameInstanceSubsystem" class="headerlink" title="GameInstanceSubsystem"></a>GameInstanceSubsystem</h2><p>多说无用，先介绍我目前最急迫使用的<strong>GameInstance Subsubsystem</strong>：</p>
@@ -291,7 +291,7 @@
   </entry>
   <entry>
     <title>UE4-ActionRPG解析</title>
-    <url>/stonelzp.github.io/ue4-actionrpg/</url>
+    <url>/ue4-actionrpg/</url>
     <content><![CDATA[<p>今天我们来聊聊UE4提供的一个开源工程-ActionRPG，一句话形容就是，浑身都是宝。</p>
 <a id="more"></a>
 <p>首先是先对ActionRPG有些了解</p>
@@ -424,7 +424,7 @@
   </entry>
   <entry>
     <title>UE4-ImGui使用</title>
-    <url>/stonelzp.github.io/ue4-imgui/</url>
+    <url>/ue4-imgui/</url>
     <content><![CDATA[<p>ImGui是一个UE4的插件，方便用来制作Debug的工具界面。</p>
 <a id="more"></a>
 <h1 id="Unreal-ImGui"><a href="#Unreal-ImGui" class="headerlink" title="Unreal ImGui"></a>Unreal ImGui</h1><ul>
@@ -448,7 +448,7 @@
   </entry>
   <entry>
     <title>UE4-反射机制</title>
-    <url>/stonelzp.github.io/ue4-reflection/</url>
+    <url>/ue4-reflection/</url>
     <content><![CDATA[<p>反射在其它的比如说C#，JAVA语言中比较常见。反射概况的来说是描述类在运行时的状态，反射中包含的信息有类名，类数据成员，数据成员类型，还有每个成员位于对象内存映像的偏移(offset)，类所有成员函数的信息。</p>
 <a id="more"></a>
 <p>C++本身是不支持反射的，4在C++的基础上搭建了自己的一套反射机制。</p>
@@ -494,7 +494,7 @@
   </entry>
   <entry>
     <title>UE4-版本4.25新特性</title>
-    <url>/stonelzp.github.io/ue4-4.25-version-newfunction/</url>
+    <url>/ue4-4.25-version-newfunction/</url>
     <content><![CDATA[<p>最近看了一些UE4.25版本更新内容的视频，不知道记录在哪个部分好就新开了一篇文章。用来记录我遇到的UE4 4.25版本的新特性。</p>
 <a id="more"></a>
 <h1 id="UE4-25版本新特性"><a href="#UE4-25版本新特性" class="headerlink" title="UE4.25版本新特性"></a>UE4.25版本新特性</h1><h2 id="IOStore"><a href="#IOStore" class="headerlink" title="IOStore"></a>IOStore</h2><ul>
@@ -514,7 +514,7 @@
   </entry>
   <entry>
     <title>UE4-对工程进行DEBUG的正确姿势</title>
-    <url>/stonelzp.github.io/ue4-debug-your-project/</url>
+    <url>/ue4-debug-your-project/</url>
     <content><![CDATA[<p>这篇文章目的是用来记录我在调查对UE4工程进行DEBUG需要的知识点的一些记录。一开始应该会非常杂乱，等有了更多的精力再好好整理吧。</p>
 <a id="more"></a>
 <h1 id="保留项目中的设定"><a href="#保留项目中的设定" class="headerlink" title="保留项目中的设定"></a>保留项目中的设定</h1><h2 id="对-ini-文件的读写"><a href="#对-ini-文件的读写" class="headerlink" title="对 ini 文件的读写"></a>对 ini 文件的读写</h2><p>UE4中的基本上所有的设定都是保存在ini文件中的。而我今天就要了解如何在UE4的Editor-ProjectSettings中对ini文件进行读写操作。</p>
@@ -718,7 +718,7 @@
   </entry>
   <entry>
     <title>UE4-一个Actor的生命周期</title>
-    <url>/stonelzp.github.io/ue4-actor-lifecycle/</url>
+    <url>/ue4-actor-lifecycle/</url>
     <content><![CDATA[<p>关于Actor的生命周期，与很多初始化的操作相关联，准备整理到这篇文章中。</p>
 <a id="more"></a>
 <h1 id="Actor-Lifecycle"><a href="#Actor-Lifecycle" class="headerlink" title="Actor Lifecycle"></a>Actor Lifecycle</h1><ul>
@@ -760,7 +760,7 @@
   </entry>
   <entry>
     <title>UE4-多人游戏框架理解</title>
-    <url>/stonelzp.github.io/ue4-multiplay-framework/</url>
+    <url>/ue4-multiplay-framework/</url>
     <content><![CDATA[<p>UE4中有对多人游戏模式的支持，本篇会记载一些与之相关的比较繁杂的知识点，一上来还是不可能就对所有的框架就能进行归纳总结的吧。</p>
 <a id="more"></a>
 <h1 id="UE4框架总览"><a href="#UE4框架总览" class="headerlink" title="UE4框架总览"></a>UE4框架总览</h1><p>首先是对UE4的框架进行认知，UE4是以什么样的模式来定义多人游戏的。首先是官方文档的描述</p>
@@ -1527,7 +1527,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-GameplayAbilitySystem学习</title>
-    <url>/stonelzp.github.io/ue4-gameplay-ability-system/</url>
+    <url>/ue4-gameplay-ability-system/</url>
     <content><![CDATA[<p>这次是UE4的学习，要学习如何在UE4中制作动作游戏，在UE4官方放出来的案例中<strong>Action RPG</strong>这个案例里面包含了大量有用的知识点，这篇文章就是就这个案例进行学习整理。</p>
 <a id="more"></a>
 <p>这里涉及到一个相当大的概念，<strong>GamePlay</strong>，这个应该是UE4模式的游戏架构，理解的话需要花费很多精力，大量的名词我都闻所未闻，只能一点点的啃了。</p>
@@ -2187,7 +2187,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>CSharp-Attribute的理解与使用</title>
-    <url>/stonelzp.github.io/csharp-attribute/</url>
+    <url>/csharp-attribute/</url>
     <content><![CDATA[<p>这次要学习的是CSharp中的属性(Attribute)，经常听见，也在Unity中使用过，却不知其为何物。<strong>属性</strong>是能够为类或者成员添加额外的信息的东西。</p>
 <a id="more"></a>
 <p>首先是入门文章的链接：</p>
@@ -2230,7 +2230,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity中的CSharp</title>
-    <url>/stonelzp.github.io/csharp-in-unity/</url>
+    <url>/csharp-in-unity/</url>
     <content><![CDATA[<p>跟CSharp打交道也很久了，但是有很多的东西我都从来未接触过，甚至是一些比较基础的用法我都不知道。这篇文章虽然带有Unity，但主要还是为了记录CSharp的使用，嘛，毕竟我主要的CSharp的使用场景就是Unity。</p>
 <a id="more"></a>
 <p>在另外的一篇文章，<strong>Unity知识点记录</strong>中也有一些零星的CSharp使用的记载，但是Unity相关的内容比较多。</p>
@@ -2259,7 +2259,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-DOTS学习记录</title>
-    <url>/stonelzp.github.io/unity-dots/</url>
+    <url>/unity-dots/</url>
     <content><![CDATA[<p>DOTS(Data Oriented Technology Stack)，Unity推出的一个新的Unity内核，个人的理解就是一种个以往的Unity完全不同的方式去制作内容。其代价就是不是那么好理解，但是带来了更高的性能（我也不知道）。</p>
 <a id="more"></a>
 <ul>
@@ -2284,7 +2284,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-ECS从入门到关门</title>
-    <url>/stonelzp.github.io/unity-entity-component-system/</url>
+    <url>/unity-entity-component-system/</url>
     <content><![CDATA[<p>ECS(Entity Component System)是<strong>Unity Data Oriented Tech Stack</strong>的一部分，是其默认的高性能编码方式。</p>
 <a id="more"></a>
 <p>也就是我经常看到的那个DOTS的一部分啦，其他部分的话暂时先不管（有点管不过来），这东西完全是一个新的概念，或者说试图用以前的Unity的GameObject，MonoBehavior的概念去理解的话，就会掉坑里，完全不知所云。拿面向对象的思想去套貌似也会吃点亏，当然我还没到这个地步只是听说的。</p>
@@ -2325,7 +2325,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>游戏中的渲染</title>
-    <url>/stonelzp.github.io/rendering-in-the-development-of-the-game/</url>
+    <url>/rendering-in-the-development-of-the-game/</url>
     <content><![CDATA[<p>游戏中的渲染是一个很大的概念，以至于我都不知道该怎么分类。于是便将其制作成了一个分类。因为在游戏的制作过程中关于渲染的知识无处不在，我在优化游戏的部分也记录了很多关于渲染流程的部分，但还是不够。</p>
 <a id="more"></a>
 <p>关于渲染，我所理解的是：</p>
@@ -2388,7 +2388,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>看起来很厉害的文章</title>
-    <url>/stonelzp.github.io/some-articles/</url>
+    <url>/some-articles/</url>
     <content><![CDATA[<p>公司大佬分享的一篇文章，看起来很厉害，实际上肯定也很厉害，但我应该是看不懂的，关掉又很可惜，先记下来，万一哪天能看懂了呢。</p>
 <a id="more"></a>
 <h1 id="更新履历"><a href="#更新履历" class="headerlink" title="更新履历"></a>更新履历</h1><ul>
@@ -2408,7 +2408,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-DeferredDecal的使用和理解</title>
-    <url>/stonelzp.github.io/ue4-how-to-use-deferred-decal/</url>
+    <url>/ue4-how-to-use-deferred-decal/</url>
     <content><![CDATA[<p>这次说一下UE4中的Decal的特效，我是没有遇到要我自己写Decal相关特效的任务的，只是觉得知道为好。</p>
 <a id="more"></a>
 <p>这个是Deferred Decal是UE4中的功能，我最先是在尝试优化程序的过程中了解到这个概念的，优化的部分在另一篇<a href>UE4-Performance提升–Forced by DBuffer</a>的部分总有提到。</p>
@@ -2429,7 +2429,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>VPN使用中的问题记录</title>
-    <url>/stonelzp.github.io/how-to-use-vpn/</url>
+    <url>/how-to-use-vpn/</url>
     <content><![CDATA[<p>最近回国有点需要便购买了VPN的服务，这篇文章目的是为了记录我使用VPN的过程中遇到的一些问题，应该以后也会频繁用到做个备忘，以应付一些相似的问题。</p>
 <a id="more"></a>
 <h2 id="VPN选择"><a href="#VPN选择" class="headerlink" title="VPN选择"></a>VPN选择</h2><p><strong>千针网络</strong></p>
@@ -2457,7 +2457,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>VR-脚步声检测功能实现</title>
-    <url>/stonelzp.github.io/vr-footstep-detection/</url>
+    <url>/vr-footstep-detection/</url>
     <content><![CDATA[<p>也算是业务相关吧，业务要求要只用HMD(Head Mounted Display, 这里就是VR头戴设备)检测脚步声，这里我根据公司前辈的工作内容进行了一些改良，主要是利用VR设备移动的时候的前后上下的加速度和速度来判定脚步。准确率正常情况下有90%以上吧。</p>
 <a id="more"></a>
 <p>对源码进行改良，我主要的灵感来源是这篇文章</p>
@@ -2492,7 +2492,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Assembly-CSharp中的程序集</title>
-    <url>/stonelzp.github.io/assembly-csharp/</url>
+    <url>/assembly-csharp/</url>
     <content><![CDATA[<p>在接触Unity的过程中，一直不清楚<code>Assembly</code>这个单词到底是什么意思，中文翻译是程序集，但是具体是个什么东西一直没有一个准确的概念。这次准备搞懂它并且对<strong>反射</strong>这个概念进行一次透彻的了解。</p>
 <a id="more"></a>
 <h1 id="Assembly-程序集"><a href="#Assembly-程序集" class="headerlink" title="Assembly-程序集"></a>Assembly-程序集</h1><ul>
@@ -2547,7 +2547,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-使物体旋转的功能脚本</title>
-    <url>/stonelzp.github.io/unity-make-object-rotating/</url>
+    <url>/unity-make-object-rotating/</url>
     <content><![CDATA[<p>记一个使物体旋转的功能脚本，感觉这个功能时不时的会遇到，每次写的时候都挺绕的，不如记下来。</p>
 <a id="more"></a>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><strong>功能实现：</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">using UnityEngine;</span><br><span class="line">using System;</span><br><span class="line"></span><br><span class="line">namespace Clown.Utility</span><br><span class="line">&#123;</span><br><span class="line">    [Serializable, AddComponentMenu(&quot;Clown/Utility/Make Object Rotating&quot;)]</span><br><span class="line">    public class MakeObjectRotating : MonoBehaviour</span><br><span class="line">    &#123;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private bool clockWise = false;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private bool rotateAxisY = true;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private bool rotateAxisX = false;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private bool rotateAxisZ = false;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private float rotateSpeed = 0.0f;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private bool hasEnterTime = false;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private float enterTime = 4.0f;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private bool hasExitTime = false;</span><br><span class="line">        [SerializeField]</span><br><span class="line">        private float exitTime = 2.0f;</span><br><span class="line"></span><br><span class="line">        bool isRotating = false;</span><br><span class="line">        float speed = 0.0f;</span><br><span class="line"></span><br><span class="line">        bool rotatingSwitch = false;</span><br><span class="line"></span><br><span class="line">        public void OnEnable()</span><br><span class="line">        &#123;</span><br><span class="line">            rotatingSwitch = true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        private void Update()</span><br><span class="line">        &#123;</span><br><span class="line">            var angles = transform.rotation.eulerAngles;</span><br><span class="line">            var anglesY = angles.y;</span><br><span class="line">            var anglesX = angles.x;</span><br><span class="line">            var anglesZ = angles.z;</span><br><span class="line"></span><br><span class="line">            if (isRotating)</span><br><span class="line">            &#123;</span><br><span class="line">                if (!rotatingSwitch)</span><br><span class="line">                &#123;</span><br><span class="line">                    if (hasExitTime)</span><br><span class="line">                    &#123;</span><br><span class="line">                        speed -= (rotateSpeed / exitTime * Time.deltaTime);</span><br><span class="line">                        if (speed &lt; 0.0f)</span><br><span class="line">                        &#123;</span><br><span class="line">                            speed = 0.0f;</span><br><span class="line">                            isRotating = false;</span><br><span class="line"></span><br><span class="line">                            return;</span><br><span class="line">                        &#125;</span><br><span class="line">                        anglesY -= rotateAxisY ? (speed * Time.deltaTime) : 0f;</span><br><span class="line">                        anglesX -= rotateAxisX ? (speed * Time.deltaTime) : 0f;</span><br><span class="line">                        anglesZ -= rotateAxisZ ? (speed * Time.deltaTime) : 0f;</span><br><span class="line">                    &#125;</span><br><span class="line">                    else</span><br><span class="line">                    &#123;</span><br><span class="line">                        isRotating = false;</span><br><span class="line">                        speed = 0.0f;</span><br><span class="line"></span><br><span class="line">                        return;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                else</span><br><span class="line">                &#123;</span><br><span class="line">                    anglesY -= rotateAxisY ? (rotateSpeed * Time.deltaTime) : 0f;</span><br><span class="line">                    anglesX -= rotateAxisX ? (rotateSpeed * Time.deltaTime) : 0f;</span><br><span class="line">                    anglesZ -= rotateAxisZ ? (rotateSpeed * Time.deltaTime) : 0f;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            else</span><br><span class="line">            &#123;</span><br><span class="line">                if(!rotatingSwitch)</span><br><span class="line">                &#123;</span><br><span class="line">                    enabled = false;</span><br><span class="line"></span><br><span class="line">                    return;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (hasEnterTime)</span><br><span class="line">                &#123;</span><br><span class="line">                    speed += (rotateSpeed / enterTime * Time.deltaTime);</span><br><span class="line">                    if (speed &gt; rotateSpeed)</span><br><span class="line">                    &#123;</span><br><span class="line">                        speed = rotateSpeed;</span><br><span class="line">                        isRotating = true;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    anglesY -= rotateAxisY ? (speed * Time.deltaTime) : 0f;</span><br><span class="line">                    anglesX -= rotateAxisX ? (speed * Time.deltaTime) : 0f;</span><br><span class="line">                    anglesZ -= rotateAxisZ ? (speed * Time.deltaTime) : 0f;</span><br><span class="line">                &#125;</span><br><span class="line">                else</span><br><span class="line">                &#123;</span><br><span class="line">                    isRotating = true;</span><br><span class="line">                    anglesY -= rotateAxisY ? (rotateSpeed * Time.deltaTime) : 0f;</span><br><span class="line">                    anglesX -= rotateAxisX ? (rotateSpeed * Time.deltaTime) : 0f;</span><br><span class="line">                    anglesZ -= rotateAxisZ ? (rotateSpeed * Time.deltaTime) : 0f;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            angles.y = anglesY;</span><br><span class="line">            angles.x = anglesX;</span><br><span class="line">            angles.z = anglesZ;</span><br><span class="line">            transform.rotation = Quaternion.Euler(angles);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public void SetValueToRotate(bool val)</span><br><span class="line">        &#123;</span><br><span class="line">            rotatingSwitch = val;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -2565,7 +2565,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-Timeline的使用</title>
-    <url>/stonelzp.github.io/unity-timeline/</url>
+    <url>/unity-timeline/</url>
     <content><![CDATA[<p>最近见到了好多Timeline的使用实例，但是对于Timeline的系统的学习和了解却没有。是时候仔细整理一下了。</p>
 <a id="more"></a>
 <h2 id="Timeline"><a href="#Timeline" class="headerlink" title="Timeline"></a>Timeline</h2><h2 id="Timeline中-「Marker」と「Signal、Signal-Receiver」"><a href="#Timeline中-「Marker」と「Signal、Signal-Receiver」" class="headerlink" title="Timeline中 「Marker」と「Signal、Signal Receiver」"></a>Timeline中 「Marker」と「Signal、Signal Receiver」</h2><p>参考<a href="http://tsubakit1.hateblo.jp/entry/2018/12/10/233146" target="_blank" rel="noopener">【Unity】Timelineからメソッドを呼ぶ新機能 「Marker」と「Signal、Signal Receiver」</a>这篇文章学习。</p>
@@ -2619,7 +2619,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-踩坑指南</title>
-    <url>/stonelzp.github.io/ue4-fucking-moment/</url>
+    <url>/ue4-fucking-moment/</url>
     <content><![CDATA[<p>在UE4中踩了不少的坑，这篇主要是用来介绍自己在使用过程中由于粗心或者知识浅薄而掉进去的大坑。<br><a id="more"></a></p>
 <h1 id="关于蓝图"><a href="#关于蓝图" class="headerlink" title="关于蓝图"></a>关于蓝图</h1><p>蓝图这个东西我看不顺眼好久了，方便那是非常方便，但是也不能只看脚下的路不是么，等到时间长了，写的多了，那变量维护起来就是爽到飞起了，前期轻松后期地狱。</p>
 <h2 id="GetDisplayName"><a href="#GetDisplayName" class="headerlink" title="GetDisplayName"></a>GetDisplayName</h2><blockquote>
@@ -2653,7 +2653,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-异步处理</title>
-    <url>/stonelzp.github.io/unity-async/</url>
+    <url>/unity-async/</url>
     <content><![CDATA[<p>主要为了理解async/await关键字的意义。</p>
 <a id="more"></a>
 <ul>
@@ -2670,7 +2670,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-Serialization理解</title>
-    <url>/stonelzp.github.io/unity-serialization/</url>
+    <url>/unity-serialization/</url>
     <content><![CDATA[<p>这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。</p>
 <a id="more"></a>
 <p>在最开始应该理解一下什么是序列化。</p>
@@ -2820,7 +2820,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-第三方库介绍和使用</title>
-    <url>/stonelzp.github.io/unity-plugins/</url>
+    <url>/unity-plugins/</url>
     <content><![CDATA[<p>这篇主要是介绍一些Unity的插件使用，Unity的插件库感觉很方便，而且确实很丰富。</p>
 <a id="more"></a>
 <h2 id="Dynamic-Bone"><a href="#Dynamic-Bone" class="headerlink" title="Dynamic Bone"></a>Dynamic Bone</h2><p>使用的话搜一下应该就能找到，我只是稍微使用这个库来模拟了下垂的线。移动的时候会像飘着那样移动。</p>
@@ -2835,7 +2835,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-DoTween-曲线的魅力</title>
-    <url>/stonelzp.github.io/Unity-DoTween-%E6%9B%B2%E7%BA%BF%E7%9A%84%E9%AD%85%E5%8A%9B/</url>
+    <url>/Unity-DoTween-%E6%9B%B2%E7%BA%BF%E7%9A%84%E9%AD%85%E5%8A%9B/</url>
     <content><![CDATA[<p>因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。</p>
 <a id="more"></a>
 <p>首先是曲线的基础：</p>
@@ -2876,7 +2876,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-枚举的使用</title>
-    <url>/stonelzp.github.io/ue4-enum/</url>
+    <url>/ue4-enum/</url>
     <content><![CDATA[<p>介绍关于枚举的使用。</p>
 <a id="more"></a>
 <ul>
@@ -2893,7 +2893,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-Editor扩展</title>
-    <url>/stonelzp.github.io/ue4-editor-extension/</url>
+    <url>/ue4-editor-extension/</url>
     <content><![CDATA[<p>今天这篇文章要写UE4的编辑器扩展内容的，我还没学会，有时间的话一定要整理一下。</p>
 <a id="more"></a>
 <p>在用了Unity的各种技巧之后，再回到UE4的时候不禁觉得要是UE4也有这些方便的扩展功能就好了。Unity中的自定义Inspector扩展就很方便，还有DebugMenu等等。</p>
@@ -2914,7 +2914,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-Editor扩展</title>
-    <url>/stonelzp.github.io/unity-editor-extension/</url>
+    <url>/unity-editor-extension/</url>
     <content><![CDATA[<p>编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)</p>
 <a id="more"></a>
 <p>由于是Editor的扩展功能在实际的项目中要注意不要把Editor的功能打包在项目的功能里面。</p>
@@ -3137,7 +3137,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-トレマーチング入門</title>
-    <url>/stonelzp.github.io/unityraymaching/</url>
+    <url>/unityraymaching/</url>
     <content><![CDATA[<p>一时兴起，仔细阅读了一下公司前辈的投稿，看到了这个陌生的名词，刚开始一头雾水，不知道是干什么的，但是仔细了解一下后知道真是マジヤバくね。(未整理)</p>
 <a id="more"></a>
 <p>主要是Unity最新的更新可以使用工具来使用<strong>トレマーチング</strong>了。</p>
@@ -3167,7 +3167,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity中的Prefab系统</title>
-    <url>/stonelzp.github.io/unity-prefab-system/</url>
+    <url>/unity-prefab-system/</url>
     <content><![CDATA[<p>关于Unity中的Prefab的使用。</p>
 <a id="more"></a>
 <ul>
@@ -3185,7 +3185,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-关于NativeArray</title>
-    <url>/stonelzp.github.io/unity-native-array/</url>
+    <url>/unity-native-array/</url>
     <content><![CDATA[<p>那一天，我听到了这个陌生的名词，不知道是什么，也不知道用来干什么的。它的名字叫”NativeArray”。</p>
 <a id="more"></a>
 <h2 id="NativeArray"><a href="#NativeArray" class="headerlink" title="NativeArray"></a>NativeArray</h2><ul>
@@ -3202,7 +3202,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-Performance提升</title>
-    <url>/stonelzp.github.io/unity-performance/</url>
+    <url>/unity-performance/</url>
     <content><![CDATA[<p>我知道这只是早晚的事儿。</p>
 <a id="more"></a>
 <ul>
@@ -3309,7 +3309,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity中的通信</title>
-    <url>/stonelzp.github.io/unity-data-transission/</url>
+    <url>/unity-data-transission/</url>
     <content><![CDATA[<p>这篇文章主要是因为一篇讲Unity的实时数据通信内容博文很重要。</p>
 <a id="more"></a>
 <h2 id="MagicOnion"><a href="#MagicOnion" class="headerlink" title="MagicOnion"></a>MagicOnion</h2><p>因为数据传输也很重要，所以这篇文章非常重要。</p>
@@ -3329,7 +3329,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity-Shader学习</title>
-    <url>/stonelzp.github.io/unity-shader-learning/</url>
+    <url>/unity-shader-learning/</url>
     <content><![CDATA[<p>关于Unity的Shader，能说的内容很多，因为我是真的不懂。之前用了好长时间看了关于Unity的书，能看懂一些内容了，但是还远不到立马就能写的程度。这次把自己所见所得写下来。</p>
 <a id="more"></a>
 <h1 id="PostProcessing"><a href="#PostProcessing" class="headerlink" title="PostProcessing"></a>PostProcessing</h1><p>不知道该起什么名字为好。</p>
@@ -3419,7 +3419,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Git学习笔记</title>
-    <url>/stonelzp.github.io/git-learning/</url>
+    <url>/git-learning/</url>
     <content><![CDATA[<p>Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。</p>
 <a id="more"></a>
 <p>这里就是要记下我在使用Git的过程中遇到的问题和解决方案。像记事本一样。</p>
@@ -3488,7 +3488,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的TraceFunctions</title>
-    <url>/stonelzp.github.io/ue4-trace-fnctions/</url>
+    <url>/ue4-trace-fnctions/</url>
     <content><![CDATA[<p>UE4中的Trace比我想象中的要重要，除了模拟交互之外，获取两点之间的距离，也可以起到非常大的作用。(未整理）</p>
 <a id="more"></a>
 <h2 id="如何知道物体离地面的高度？"><a href="#如何知道物体离地面的高度？" class="headerlink" title="如何知道物体离地面的高度？"></a>如何知道物体离地面的高度？</h2><p>这是我迫切想要知道的事情，搜了一下果然发现有人问了相同的问题。</p>
@@ -3512,7 +3512,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>我所理解的Unity-IK</title>
-    <url>/stonelzp.github.io/the-inverse-kinematics-wat-i-understand/</url>
+    <url>/the-inverse-kinematics-wat-i-understand/</url>
     <content><![CDATA[<p>在程序中人物模型出现很自然的运动的时候，大部分情况下我都觉得应该是动画的运动。由动作设计师准备好的动画，工程师将动画拆分组合这样的。然而实际上貌似并不是。</p>
 <a id="more"></a>
 <h2 id="Root-Motion"><a href="#Root-Motion" class="headerlink" title="Root Motion"></a>Root Motion</h2><ul>
@@ -3557,7 +3557,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UniRx从入门到放弃</title>
-    <url>/stonelzp.github.io/unirx-learning-note/</url>
+    <url>/unirx-learning-note/</url>
     <content><![CDATA[<p>时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。</p>
 <a id="more"></a>
 <h1 id="理解UniRx"><a href="#理解UniRx" class="headerlink" title="理解UniRx"></a>理解UniRx</h1><p>我来了，我表示我并没有理解UniRx，只知道是个什么东西远远不够。当出现Operator的使用的时候，我发现我根本不理解。</p>
@@ -3854,7 +3854,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>我所理解的Lambda表达式</title>
-    <url>/stonelzp.github.io/the-lambda-what-i-understand/</url>
+    <url>/the-lambda-what-i-understand/</url>
     <content><![CDATA[<p>纠结了好久，最终决定把lambda这个部分从Unity中分离出来单独总结。理解并能够使用Lambda表达式是这篇文章的目的。除此之外如果有关于lambda的拓展用法亦或者好的使用案例一并在这里记录。</p>
 <a id="more"></a>
 <p>首先是Lambda的基础概念</p>
@@ -3885,7 +3885,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>如何使用VisualStudio</title>
-    <url>/stonelzp.github.io/how-to-visual-studio/</url>
+    <url>/how-to-visual-studio/</url>
     <content><![CDATA[<p>我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。<br><a id="more"></a></p>
 <h1 id="VS中的DEBUG"><a href="#VS中的DEBUG" class="headerlink" title="VS中的DEBUG"></a>VS中的DEBUG</h1><p>如何使用VS进行Debug是非常重要的，致命的是我至今未能完全掌握，不要总是依靠Log的输出自己猜了。</p>
 <h2 id="在UE4中使用VS进行调试"><a href="#在UE4中使用VS进行调试" class="headerlink" title="在UE4中使用VS进行调试"></a>在UE4中使用VS进行调试</h2><p>首先要把UE4的源码下载，然后按照官方的指示操作生成VS的工程文件。</p>
@@ -3915,7 +3915,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Unity知识点记录</title>
-    <url>/stonelzp.github.io/unity-learning-note/</url>
+    <url>/unity-learning-note/</url>
     <content><![CDATA[<h1 id="更新内容"><a href="#更新内容" class="headerlink" title="更新内容"></a>更新内容</h1><ul>
 <li>(2019/05/29) 更新MenuItem的详细使用</li>
 <li>(2020/03/21) 更新CustomEditor的内容<h1 id="Unity的使用"><a href="#Unity的使用" class="headerlink" title="Unity的使用"></a>Unity的使用</h1>这次终于不是自己单枪匹马的干，而是真的项目中使用Unity引擎来做开发了。</li>
@@ -4054,7 +4054,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>学习OpenGL</title>
-    <url>/stonelzp.github.io/learn-opengl/</url>
+    <url>/learn-opengl/</url>
     <content><![CDATA[<p>再不赶上日程把OpenGL看了，那可就真的要懒死了啊。</p>
 <ul>
 <li><a href="https://learnopengl.com/Getting-started/OpenGL" target="_blank" rel="noopener">OpenGL</a></li>
@@ -4069,7 +4069,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的常见关键字记录</title>
-    <url>/stonelzp.github.io/c++-modifier-keyword/</url>
+    <url>/c++-modifier-keyword/</url>
     <content><![CDATA[<p>之后需要整理并理解的:</p>
 <ul>
 <li><a href="https://zh.cppreference.com/w/cpp/language/explicit" target="_blank" rel="noopener">explicit说明符</a></li>
@@ -4114,7 +4114,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Hexo+Next博客修缮笔记</title>
-    <url>/stonelzp.github.io/Hexo+Next-maintain-myblog-note/</url>
+    <url>/Hexo+Next-maintain-myblog-note/</url>
     <content><![CDATA[<p>自从发现自己写的东西被人原封不动的复制粘贴扔到了CSDN之后，曾经一度想要废了这个博客，写博客对我来说就是一个记笔记的过程，记录自己工作中遇到的问题和解决过程，顺便写写自己的心得什么的，就是很随意。未想着给别人看，但是要是写的某一个地方帮上了某个地方的某个人也是好事情，哪怕不知道有没有，但也是一种安慰了。所以博客自建成起，就根本没设置什么自欺欺人的评论功能点赞功能。也没想着会有。</p>
 <p>但是整篇文章直接贴走，连个转载链接都不留是不是就有些过分了，生气不可避免了但是也只是只能无能狂怒了。去CSDN注册个账户举报？说到底对于我去CSDN注册账户这件事情都很抵触。算了，就算了吧。</p>
 <a id="more"></a>
@@ -4155,7 +4155,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++编程思想-第一卷-第十五章-多态性和虚函数</title>
-    <url>/stonelzp.github.io/c++-chapter15-virtual/</url>
+    <url>/c++-chapter15-virtual/</url>
     <content><![CDATA[<p><em>多态性（在C++中通过虚函数来实现）是面向对象程序设计中数据抽象和继承之外的第三个基本特征。</em></p>
 <a id="more"></a>
 <h1 id="多态性和虚函数"><a href="#多态性和虚函数" class="headerlink" title="多态性和虚函数"></a>多态性和虚函数</h1><h2 id="15-1-C-程序员的演变"><a href="#15-1-C-程序员的演变" class="headerlink" title="15.1 C++程序员的演变"></a>15.1 C++程序员的演变</h2><p>虚函数增强了类型概念，而不是只在结构内部隐蔽的封装代码，所以毫无疑问，对于新的C++程序员来说，这些概念是最困难的。然而它们是理解面向对象程序设计的转折点。<strong>如果不用虚函数，就等于还不懂得面向对象程序设计（OOP）</strong>。</p>
@@ -4314,7 +4314,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-各种组件的学习使用</title>
-    <url>/stonelzp.github.io/ue4-components-learning/</url>
+    <url>/ue4-components-learning/</url>
     <content><![CDATA[<p>内容太少我决定把这篇合并一下，记录一些UE4中的插件亦或者某个组件（Component）的使用方法等等。</p>
 <a id="more"></a>
 <h1 id="Spline"><a href="#Spline" class="headerlink" title="Spline"></a>Spline</h1><p>偶然发现了一个很有趣的控件，<strong>Spline Component</strong>，感觉会很有用就记下来了。</p>
@@ -4352,7 +4352,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-Material学习</title>
-    <url>/stonelzp.github.io/ue4-material-shader-learning/</url>
+    <url>/ue4-material-shader-learning/</url>
     <content><![CDATA[<p>关于UE4中的材质，也有好多能说的，这里记录一些遇到的关于材质的知识点作为知识储备。</p>
 <a id="more"></a>
 <h1 id="更新履历"><a href="#更新履历" class="headerlink" title="更新履历"></a>更新履历</h1><ul>
@@ -4389,7 +4389,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-Performance提升</title>
-    <url>/stonelzp.github.io/ue4-performance/</url>
+    <url>/ue4-performance/</url>
     <content><![CDATA[<p>主要记录一些能够查看UE4的性能工具和提升性能的一些手段记录。</p>
 <a id="more"></a>
 <p>我在知乎看见一篇文章整理的非常好：</p>
@@ -5610,7 +5610,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4光照学习调查笔记</title>
-    <url>/stonelzp.github.io/UE4%E5%85%89%E7%85%A7%E5%AD%A6%E4%B9%A0%E8%B0%83%E6%9F%A5%E7%AC%94%E8%AE%B0/</url>
+    <url>/UE4%E5%85%89%E7%85%A7%E5%AD%A6%E4%B9%A0%E8%B0%83%E6%9F%A5%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<p>提高VR帧数的工作，需要对各个流程有所了解。光照，渲染等等，这篇文章就是用来记录我在试图理解光照流程中遇到的知识点。</p>
 <a id="more"></a>
 <h1 id="光照"><a href="#光照" class="headerlink" title="光照"></a>光照</h1><p>在UE4的官方文档中有很多说明，我只记录一些我可能会忘记的。</p>
@@ -5868,7 +5868,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的各种文件操作</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</url>
+    <url>/C++%E4%B8%AD%E7%9A%84%E5%90%84%E7%A7%8D%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<p>说到LOG的制作那么文件读写就肯定有大费周折了，当然不是我大费周折，我用的人家现成的东西。但是读起来其实挺费劲的，谁让我这么菜呢。</p>
 <a id="more"></a>
 <h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><h3 id="sopen-s-wsopen-s"><a href="#sopen-s-wsopen-s" class="headerlink" title="_sopen_s, _wsopen_s"></a>_sopen_s, _wsopen_s</h3><p>打开文件以供共享。</p>
@@ -5902,7 +5902,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>为什么要用size_t</title>
-    <url>/stonelzp.github.io/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8size-t/</url>
+    <url>/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8size-t/</url>
     <content><![CDATA[<p>总的来说就是为了提高代码的可移植性，有效性或者可读性。</p>
 <a id="more"></a>
 <ul>
@@ -5920,7 +5920,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>new与malloc的区别</title>
-    <url>/stonelzp.github.io/new%E4%B8%8Emalloc%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <url>/new%E4%B8%8Emalloc%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<p>new/delete与malloc/free显而易见的区别是，前者会调用对象的构造/析构函数，而后者不会。</p>
 <a id="more"></a>
 <p>再仔细说明就是new的操作是新建<em>对象</em> ，而malloc只是分配一块内存而已。</p>
@@ -5941,7 +5941,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的运算符重载</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</url>
+    <url>/C++%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</url>
     <content><![CDATA[<p>运算符重载(operator overloading)只是一种”语法上的方便“（syntactic sugar).也就是说它只是另一种函数调用的方式。</p>
 <a id="more"></a>
 <p>运算符重载有成员与算符和非成员运算符之分，那么这个之间有什么区别呢，应该选择哪一种呢？</p>
@@ -5972,7 +5972,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++-制作一个静态的单一实例</title>
-    <url>/stonelzp.github.io/C++-%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E7%9A%84%E5%8D%95%E4%B8%80%E5%AE%9E%E4%BE%8B/</url>
+    <url>/C++-%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AA%E9%9D%99%E6%80%81%E7%9A%84%E5%8D%95%E4%B8%80%E5%AE%9E%E4%BE%8B/</url>
     <content><![CDATA[<p>制作单一实例，就会想到Singleton，单例模式。在C++里面如何制作一个唯一的一个实例，我只是有一个想法，然后付诸实践。也许这个想法或许是错的。但是重要的是我将这个想法付诸实践的过程，这个过程中我明白了许多知识点，只是不想忘记而已。</p>
 <a id="more"></a>
 <h2 id="指定需要单例化的类"><a href="#指定需要单例化的类" class="headerlink" title="指定需要单例化的类"></a>指定需要单例化的类</h2><p>首先要选一个适合的类进行单一实例化。举例来说我现在正在制作一个日志系统，故而我希望有一个唯一的实例<strong>Logger</strong>来管理关于日志的一切。所以我声明了以下：</p>
@@ -6013,7 +6013,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++编程思想-第16章-模板介绍</title>
-    <url>/stonelzp.github.io/C++%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3-%E7%AC%AC16%E7%AB%A0-%E6%A8%A1%E6%9D%BF%E4%BB%8B%E7%BB%8D/</url>
+    <url>/C++%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3-%E7%AC%AC16%E7%AB%A0-%E6%A8%A1%E6%9D%BF%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<p>记下关于模板的知识与理解。</p>
 <p><em>继承和组合提供了重用对象代码的方法，而C++的模板特征提供了重用源代码的方法。</em></p>
 <a id="more"></a>
@@ -6057,7 +6057,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的强制类型转换-cast</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-cast/</url>
+    <url>/C++%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2-cast/</url>
     <content><![CDATA[<p>实在是遇见太多次了，遇见了还看不懂，再不整理就过分了。关于C++中的强制类型转换问题。这次的主角是:<code>stati_cast</code>,<code>dynamic_cast</code>,<code>const_cast</code>,<code>reinterpret_cast</code>。</p>
 <a id="more"></a>
 <h2 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h2><p>提笔要写，先看别人的总结</p>
@@ -6089,7 +6089,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的文字编码与文字存储类型</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97%E7%BC%96%E7%A0%81%E4%B8%8E%E6%96%87%E5%AD%97%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B/</url>
+    <url>/C++%E4%B8%AD%E7%9A%84%E6%96%87%E5%AD%97%E7%BC%96%E7%A0%81%E4%B8%8E%E6%96%87%E5%AD%97%E5%AD%98%E5%82%A8%E7%B1%BB%E5%9E%8B/</url>
     <content><![CDATA[<p>在准备把函数名字输出的时候遇到了输出乱码的问题。<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">TCHAR* text = <span class="string">"DLL内容テスト。"</span>;</span><br><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"TEXT: %s"</span>), text);</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>在我写这段代码之前我连<code>TCHAR</code>是什么类型都不知道，经过一番的调查，关于文字编码和文字的数据存储类型，了解到了很多。</p>
@@ -6152,7 +6152,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>初识DLL-在UE4与Unity中使用DLL</title>
-    <url>/stonelzp.github.io/use-dll-in-ue4-unity/</url>
+    <url>/use-dll-in-ue4-unity/</url>
     <content><![CDATA[<p>记录自己逐步认识和掌握DLL的过程。包含了创建DLL，在UE4中使用DLL，在Unity中使用DLL。</p>
 <a id="more"></a>
 <h1 id="新建DLL工程"><a href="#新建DLL工程" class="headerlink" title="新建DLL工程"></a>新建DLL工程</h1><p>先新建一个简单的DLL工程，然后在里面添加内容，方法可以参照：</p>
@@ -6358,7 +6358,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中得到函数名字</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E5%BE%97%E5%88%B0%E5%87%BD%E6%95%B0%E5%90%8D%E5%AD%97/</url>
+    <url>/C++%E4%B8%AD%E5%BE%97%E5%88%B0%E5%87%BD%E6%95%B0%E5%90%8D%E5%AD%97/</url>
     <content><![CDATA[<p>应某个要求，需要在运行过程中打印出运行的信息，即所谓的LOG收集，此时希望一起打印出来的内容包含调用的函数信息。</p>
 <a id="more"></a>
 <p>在Python中就有这种库，直接能得到函数的调信息名字全部打印出来。但是在C++中就没有现成的库。</p>
@@ -6388,7 +6388,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>EffectiveC++-Chapter01-Accustoming-Yourself-to-C++</title>
-    <url>/stonelzp.github.io/EffectiveC++-Chapter01-Accustoming-Yourself-to-C++/</url>
+    <url>/EffectiveC++-Chapter01-Accustoming-Yourself-to-C++/</url>
     <content><![CDATA[<p>Effective C++的第一章内容总结。</p>
 <a id="more"></a>
 <h2 id="条款01：View-C-as-a-federation-of-languages-视C-为一个语言联邦"><a href="#条款01：View-C-as-a-federation-of-languages-视C-为一个语言联邦" class="headerlink" title="条款01：View C++ as a federation of languages.(视C++为一个语言联邦)"></a>条款01：View C++ as a federation of languages.(视C++为一个语言联邦)</h2><ul>
@@ -6424,7 +6424,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>EffectC++-导读</title>
-    <url>/stonelzp.github.io/EffectiveC++-%E5%AF%BC%E8%AF%BB/</url>
+    <url>/EffectiveC++-%E5%AF%BC%E8%AF%BB/</url>
     <content><![CDATA[<p>Effective C++ 的导读章节的内容整理，知识点备忘吧。应该会将以后的章节归档到一起。</p>
 <a id="more"></a>
 <h2 id="术语（Terminology"><a href="#术语（Terminology" class="headerlink" title="术语（Terminology)"></a>术语（Terminology)</h2><p>关于<em>声明</em>与<em>定义</em>应该有了初步的认识，在其他的C++学习章节有提到过这之间的区分。</p>
@@ -6463,7 +6463,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++编程思想手抄</title>
-    <url>/stonelzp.github.io/C++%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E6%89%8B%E6%8A%84/</url>
+    <url>/C++%E7%BC%96%E7%A8%8B%E6%80%9D%E6%83%B3%E6%89%8B%E6%8A%84/</url>
     <content><![CDATA[<p>好久没有看书了，最近重拾看书的习惯，放着一大本的全局光照技术不看，想看看C++的内容。因为最近在调查一个工具，看那个人写的源码，深入看下去发现这个人写的代码是真的很好，跟我之前所在现场的时候看见的那个架构十分相似，但是一个是C#，一个是C++。</p>
 <a id="more"></a>
 <p>想要把那份源码记在脑子里似的，希望能够多过几遍，之后肯定会用的上的。</p>
@@ -6633,7 +6633,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的Casting</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E7%9A%84Casting/</url>
+    <url>/UE4%E4%B8%AD%E7%9A%84Casting/</url>
     <content><![CDATA[<p>关于<strong>Cast To</strong>节点在Blueprint中能够做什么的问题。下面是官方文档中的说明。</p>
 <a id="more"></a>
 <ul>
@@ -6654,7 +6654,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>git-rebases使用方法</title>
-    <url>/stonelzp.github.io/git-rebases%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <url>/git-rebases%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>git rebase的使用简介</p>
 ]]></content>
       <categories>
@@ -6666,7 +6666,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4:Error_Message整理</title>
-    <url>/stonelzp.github.io/UE4-Error-Message%E6%95%B4%E7%90%86/</url>
+    <url>/UE4-Error-Message%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<p>整理在学习UE4的过程中遇到的一些BUG。</p>
 <a id="more"></a>
 <h1 id="UE4中遇见的报错"><a href="#UE4中遇见的报错" class="headerlink" title="UE4中遇见的报错"></a>UE4中遇见的报错</h1><p>旨在记录UE4学习过程中遇见的各种报错。</p>
@@ -6704,7 +6704,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>为Actor添加Input事件</title>
-    <url>/stonelzp.github.io/%E4%B8%BAActor%E6%B7%BB%E5%8A%A0Input%E4%BA%8B%E4%BB%B6/</url>
+    <url>/%E4%B8%BAActor%E6%B7%BB%E5%8A%A0Input%E4%BA%8B%E4%BB%B6/</url>
     <content><![CDATA[<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
 <a id="more"></a>
 <p>参考链接：</p>
@@ -6731,7 +6731,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4-ConstructorHelpers::FObjectFinder</title>
-    <url>/stonelzp.github.io/UE4-ConstructorHelpers-FObjectFinder/</url>
+    <url>/UE4-ConstructorHelpers-FObjectFinder/</url>
     <content><![CDATA[<p>先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。</p>
 <a id="more"></a>
 <p>制作一个粒子表现的话首先要先实例化一个Instance，这个实例首先依附在一个Acor上。当然，像Unity的脚本函数一样，在Scene中制作一个Actor然后把脚本当做一个ActorComponent的方案是可行的。然后在脚本中使用<code>this-&gt;GetOwner()</code>即可以获取到这个Actor。可以使用<code>this-&gt;GetOwner()-&gt;GetName()</code>来获取到Actor的名字。</p>
@@ -6778,7 +6778,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>SSH原理知识普及</title>
-    <url>/stonelzp.github.io/SSH%E5%8E%9F%E7%90%86%E7%9F%A5%E8%AF%86%E6%99%AE%E5%8F%8A/</url>
+    <url>/SSH%E5%8E%9F%E7%90%86%E7%9F%A5%E8%AF%86%E6%99%AE%E5%8F%8A/</url>
     <content><![CDATA[<p>SSH的原理与运用。</p>
 <a id="more"></a>
 <p>参考链接：</p>
@@ -6797,7 +6797,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中读取Texture2D的像素值</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E8%AF%BB%E5%8F%96Texture2D%E7%9A%84%E5%83%8F%E7%B4%A0%E5%80%BC/</url>
+    <url>/UE4%E4%B8%AD%E8%AF%BB%E5%8F%96Texture2D%E7%9A%84%E5%83%8F%E7%B4%A0%E5%80%BC/</url>
     <content><![CDATA[<p>目的是在UE中获取到一张Texture2D图片的所有像素值，并将这些像素值进行某些处理并保存到另外一个Texture中。</p>
 <a id="more"></a>
 <h1 id="第一步：获取到Texture2D资源"><a href="#第一步：获取到Texture2D资源" class="headerlink" title="第一步：获取到Texture2D资源"></a>第一步：获取到Texture2D资源</h1><p>Unreal Engine 4 Documentation</p>
@@ -6839,7 +6839,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4的函数库</title>
-    <url>/stonelzp.github.io/UE4%E7%9A%84%E5%87%BD%E6%95%B0%E5%BA%93/</url>
+    <url>/UE4%E7%9A%84%E5%87%BD%E6%95%B0%E5%BA%93/</url>
     <content><![CDATA[<p>在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。</p>
 <a id="more"></a>
 <h1 id="UE4中的类"><a href="#UE4中的类" class="headerlink" title="UE4中的类"></a>UE4中的类</h1><h2 id="UTexture2D"><a href="#UTexture2D" class="headerlink" title="UTexture2D"></a>UTexture2D</h2><h3 id="TextureCompressionSettings"><a href="#TextureCompressionSettings" class="headerlink" title="TextureCompressionSettings"></a>TextureCompressionSettings</h3><h3 id="TextureMipGenSettings"><a href="#TextureMipGenSettings" class="headerlink" title="TextureMipGenSettings"></a>TextureMipGenSettings</h3><h3 id="UpdateResource-Functio作用"><a href="#UpdateResource-Functio作用" class="headerlink" title="UpdateResource() Functio作用"></a>UpdateResource() Functio作用</h3><h2 id="UTextureRenderTaget2D"><a href="#UTextureRenderTaget2D" class="headerlink" title="UTextureRenderTaget2D"></a>UTextureRenderTaget2D</h2><p>Ureal Engine 4 Documentation:</p>
@@ -6893,7 +6893,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的static关键字</title>
-    <url>/stonelzp.github.io/C++%E4%B8%AD%E7%9A%84static%E5%85%B3%E9%94%AE%E5%AD%97/</url>
+    <url>/C++%E4%B8%AD%E7%9A%84static%E5%85%B3%E9%94%AE%E5%AD%97/</url>
     <content><![CDATA[<p>static 关键字可用于声明变量、函数、类数据成员和类函数。</p>
 <a id="more"></a>
 <p>之后需要好好整理一下，static关键字的用法。</p>
@@ -6912,7 +6912,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4的Plugin使用</title>
-    <url>/stonelzp.github.io/UE4%E7%9A%84Plugin%E4%BD%BF%E7%94%A8/</url>
+    <url>/UE4%E7%9A%84Plugin%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<p>制作UE4的插件相当于给UE4引擎添加新的功能模块。UE4的功能模块组成是由Module组成的，关于Module具体是什么，中文翻译就是模块，自己的理解中可以说是文件的单位了。</p>
 <p>新建的插件代表着跟UE4本来的功能模块不是从属于一个Module，所以需要为自己制作的插件制作一个属性为Public的公开接口以供UE4引擎调用。</p>
 <a id="more"></a>
@@ -6955,7 +6955,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C++中的const修饰符</title>
-    <url>/stonelzp.github.io/c++-const-modifier/</url>
+    <url>/c++-const-modifier/</url>
     <content><![CDATA[<p>C++中经常会看到const关键字来修饰很多东西，在这里把自己遇到的一些情况收集并整理一下。</p>
 <a id="more"></a>
 <p>参考链接</p>
@@ -6979,7 +6979,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的静态库与动态库</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/</url>
+    <url>/UE4%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%8A%A8%E6%80%81%E5%BA%93/</url>
     <content><![CDATA[<p>库(Library)是什么,库是写好的现有的，成熟的，可以复用的代码。现实中每个程序都要依赖很多基础的底层库，不可能每个人的代码都从零开始，因此库的存在意义非同寻常。</p>
 <p>本质上来说库是一种可执行代码的二进制形式，可以被操作系统载入内存执行。库有两种：静态库（.a、.lib）和动态库（.so、.dll）。所谓静态、动态是指链接。</p>
 <a id="more"></a>
@@ -6999,7 +6999,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的异步处理</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86/</url>
+    <url>/UE4%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<p>能够熟练的使用UE4中的异步处理应该能够很好的利用程序运行的资源，和计算。除此之外还有并行的处理。目的是要理清UE4中的线程的同步异步，并行操作和标准C++中的线程同步异步，并行操作。</p>
 <a id="more"></a>
 <p>时间有限，暂时记录下关键字：</p>
@@ -7033,7 +7033,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的C++</title>
-    <url>/stonelzp.github.io/UE4-C++/</url>
+    <url>/UE4-C++/</url>
     <content><![CDATA[<p>UE C++拥有着自己的库，当然也可以使用C++的标准库(STL)，但是不同的地方还应该好好记载下来，同时也是对C++的一种复习。</p>
 <a id="more"></a>
 <h1 id="1-值类型？指针？"><a href="#1-值类型？指针？" class="headerlink" title="1.值类型？指针？"></a>1.值类型？指针？</h1><p>在标准C++中，类的声明可以<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">ClassExample ObjName;</span><br><span class="line"></span><br><span class="line">/或者是</span><br><span class="line"></span><br><span class="line">ClassExample* ObjPtr;</span><br></pre></td></tr></table></figure></p>
@@ -7192,7 +7192,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的智能指针</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/</url>
+    <url>/UE4%E4%B8%AD%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/</url>
     <content><![CDATA[<p>对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。</p>
 <a id="more"></a>
 <h1 id="UE4的智能指针"><a href="#UE4的智能指针" class="headerlink" title="UE4的智能指针"></a>UE4的智能指针</h1><p>智能指针并不能使用<code>UPROPERTY()</code>，<code>TSharedRef</code>,<code>TSharedPtr</code>,<code>TWeakPtr</code>等等。</p>
@@ -7249,7 +7249,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的函数回调实现</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E5%9B%9E%E8%B0%83%E5%AE%9E%E7%8E%B0/</url>
+    <url>/UE4%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E5%9B%9E%E8%B0%83%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<p>回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。</p>
 <p>说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。</p>
 <a id="more"></a>
@@ -7357,7 +7357,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>OpenGl学习内容整理</title>
-    <url>/stonelzp.github.io/OpenGl%E5%AD%A6%E4%B9%A0%E5%86%85%E5%AE%B9%E6%95%B4%E7%90%86/</url>
+    <url>/OpenGl%E5%AD%A6%E4%B9%A0%E5%86%85%E5%AE%B9%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<p>主要是记录自己学习OpenGl内容。</p>
 <a id="more"></a>
 <h3 id="OpenGL学习网站"><a href="#OpenGL学习网站" class="headerlink" title="OpenGL学习网站"></a>OpenGL学习网站</h3><p>参考：</p>
@@ -7372,7 +7372,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UnrealEngine着色器开发整理</title>
-    <url>/stonelzp.github.io/UnrealEngine%E7%9D%80%E8%89%B2%E5%99%A8%E5%BC%80%E5%8F%91%E6%95%B4%E7%90%86/</url>
+    <url>/UnrealEngine%E7%9D%80%E8%89%B2%E5%99%A8%E5%BC%80%E5%8F%91%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<p>整理自己在学习Unreal Engine 4着色器过程中遇到的问题和知识点。</p>
 <a id="more"></a>
 <h2 id="Unreal-Engine-4设定"><a href="#Unreal-Engine-4设定" class="headerlink" title="Unreal Engine 4设定"></a>Unreal Engine 4设定</h2><h3 id="1-UE4的内置材质Shader函数库位置"><a href="#1-UE4的内置材质Shader函数库位置" class="headerlink" title="1. UE4的内置材质Shader函数库位置"></a>1. UE4的内置材质Shader函数库位置</h3><p>UE4Shader的编写入门反而相对比较容易，使用自带的各种函数库拉拉线竟然就可以完成。函数库的位置都在:</p>
@@ -7393,7 +7393,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>UE4中的粒子特效</title>
-    <url>/stonelzp.github.io/UE4%E4%B8%AD%E7%9A%84%E7%B2%92%E5%AD%90%E7%89%B9%E6%95%88/</url>
+    <url>/UE4%E4%B8%AD%E7%9A%84%E7%B2%92%E5%AD%90%E7%89%B9%E6%95%88/</url>
     <content><![CDATA[<p>主要是用来记录学习虚幻引擎4的粒子的过程</p>
 <a id="more"></a>
 <h2 id="粒子系统"><a href="#粒子系统" class="headerlink" title="粒子系统"></a>粒子系统</h2><h3 id="Particles-with-Unreal-Engine-4"><a href="#Particles-with-Unreal-Engine-4" class="headerlink" title="Particles with Unreal Engine 4"></a>Particles with Unreal Engine 4</h3><p>先是在UE4提供的官方教程中整理基础的知识点。<a href="https://www.youtube.com/playlist?list=PLZlv_N0_O1gYDLyB3LVfjYIcbBe8NqR8t" target="_blank" rel="noopener">官方Youtube视频</a>。</p>
@@ -7431,12 +7431,12 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>关于学习UE4的粒子系统过程中遇到的疑问</title>
-    <url>/stonelzp.github.io/%E5%85%B3%E4%BA%8E%E5%AD%A6%E4%B9%A0UE4%E7%9A%84%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E7%96%91%E9%97%AE/</url>
+    <url>/%E5%85%B3%E4%BA%8E%E5%AD%A6%E4%B9%A0UE4%E7%9A%84%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E7%96%91%E9%97%AE/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>UE4中需要了解的基础概念</title>
-    <url>/stonelzp.github.io/ue4-basic-knowledge/</url>
+    <url>/ue4-basic-knowledge/</url>
     <content><![CDATA[<p>为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。<br><a id="more"></a></p>
 <h1 id="UE4中常见的知识点"><a href="#UE4中常见的知识点" class="headerlink" title="UE4中常见的知识点"></a>UE4中常见的知识点</h1><h2 id="更新历史"><a href="#更新历史" class="headerlink" title="更新历史"></a>更新历史</h2><ul>
 <li>~2020/06 入社现在的公司之前<ul>
@@ -7778,7 +7778,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>C#中的单例模式-SingletonPattern</title>
-    <url>/stonelzp.github.io/C#%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-SingletonPattern/</url>
+    <url>/C#%E4%B8%AD%E7%9A%84%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F-SingletonPattern/</url>
     <content><![CDATA[<p>这次来整理一下C的单例模式，参考的文章是<a href="http://csharpindepth.com/Articles/General/Singleton.ASPx" target="_blank" rel="noopener">Implementing the Singleton Pattern in C#</a>。</p>
 <p>曾经在做一个数据库管理类中经常多次使用了一个数据库管理的实例类对象，每次在新的不相关的类中需要使用数据库操作的时候都重新实例化一个数据库管理类对象，久而久之就觉得有些麻烦。便决定使用单例模式来管理，同时深究一下单例模式与C#中的使用。</p>
 <a id="more"></a>
@@ -7794,7 +7794,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Semaphore-信号量</title>
-    <url>/stonelzp.github.io/Semaphore-%E4%BF%A1%E5%8F%B7%E9%87%8F/</url>
+    <url>/Semaphore-%E4%BF%A1%E5%8F%B7%E9%87%8F/</url>
     <content><![CDATA[<p>Semaphore,中文叫信号量，日语叫セマフォ（= .=）。经常会在多线程的编程中用到。信号量说简单点就是为了线程同步，或者说是为了限制线程能运行的数量。</p>
 <p>仔细说明一下就是，信号量会在内部维护一个计数器，当一个线程调用了这个信号量，计数器就会减1，直到计数器减为0，调用这个信号量的线程将会被阻塞，直到有别的线程释放掉一个信号量使其计数器加1。</p>
 <a id="more"></a>
@@ -7810,7 +7810,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>iOS真机安装Build出错</title>
-    <url>/stonelzp.github.io/iOS%E7%9C%9F%E6%9C%BA%E5%AE%89%E8%A3%85Build%E5%87%BA%E9%94%99/</url>
+    <url>/iOS%E7%9C%9F%E6%9C%BA%E5%AE%89%E8%A3%85Build%E5%87%BA%E9%94%99/</url>
     <content><![CDATA[<p>为了面试，需要用尽一切手段了，把自己的毕业设计的时候做的2D游戏也拿出来了（捂脸）。找到了自己之前保存好的已经编译好的安装包，希望能够平安无事的安装到自己的系统高版本的iPhone7上。但是再次编译的时候果不其然还是要报错。<br><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line">'__declspec' attributes are not enabled; use '-fdeclspec' or '-fms-extensions' to enable support <span class="keyword">for</span> __declspec attributes</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>但是无论是Xcode还是Unity都已经升级的面目全非了，打开以前保存的Unity工程果不其然各种报错。想要解决出现的问题，第一个是NGUI的版本问题，代码中出现的一部分说是已经不支持Unity5.4+了…上网搜了一下，结果没有找到任何解答。</p>
@@ -7850,7 +7850,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>zsh找不到gulp工具包</title>
-    <url>/stonelzp.github.io/zsh%E6%89%BE%E4%B8%8D%E5%88%B0gulp%E5%B7%A5%E5%85%B7%E5%8C%85/</url>
+    <url>/zsh%E6%89%BE%E4%B8%8D%E5%88%B0gulp%E5%B7%A5%E5%85%B7%E5%8C%85/</url>
     <content><![CDATA[<p>不能上网，一上网问题就接踵而来。今天突然看到了hexo博文压缩这个功能，就想着这个可以有，就按照教程安装了gult。安装完运行<code>hexo g &amp;&amp; gulp</code>之后准备舒舒服服的打包的时候，我一向视同己出的zsh弹出来了这个提示<br><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">zsh: <span class="built_in">command</span> not found: gulp</span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>刚装的你跟我说找不到？我信了你的邪。</p>
@@ -7873,7 +7873,7 @@ table th:nth-of-type(4) {
   </entry>
   <entry>
     <title>Markdown文件转换为PDF文件</title>
-    <url>/stonelzp.github.io/Markdown%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF%E6%96%87%E4%BB%B6/</url>
+    <url>/Markdown%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E4%B8%BAPDF%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>最近闲来无事(实际上由于跳槽面试的原因忙的要死)，在知乎上看到了一篇搭建博客的文章，看了一眼发现对于我这种WEB盲还挺友好，于是就自己搭建了这个博客。</p>
 <p>就在ZH上捞鱼捞的正爽的时候，面试(未)公司发来了要看看我的作品的消息。我一看表现的时候到了，就掏出我刚学的Markdown来写了几篇我的作品的说明文。正当我想把刚build好的html文件打包压缩发送过去的时候，(自动脑补柯南的灵光一闪音效)我发觉事情并不是这么简单。</p>
 <a id="more"></a>
