@@ -8,12 +8,6 @@
   </entry>
   <entry>
     <title>C++中的函数指针理解</title>
-    <url>/C++%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/</url>
-    <content><![CDATA[<a id="more"></a>
-]]></content>
-  </entry>
-  <entry>
-    <title>C++中的函数指针理解</title>
     <url>/c++-function-pointer/</url>
     <content><![CDATA[<p>学会如何辨别和使用函数指针，还有与模板之间的应用。<br><a id="more"></a></p>
 <p>当遇见需要大面积使用某种操作，大体上需要的操作都是一样的，但是总有一些数据类型或者条件有些细微的不同，让我不能简单实现批次处理，但是一个一个进行复制粘贴调整费时还费力，而且犯错的几率非常高，这个时候求助大佬的时候，简单的使用了C++的template，函数指针之类的操作完成了这个需求，看得我心痒的不行。</p>
