@@ -8,7 +8,7 @@
 <h1 id="MetadataSpecifiers"><a href="#MetadataSpecifiers" class="headerlink" title="MetadataSpecifiers"></a>MetadataSpecifiers</h1><blockquote>
 <p>When declaring classes, interfaces, structs, enums, enum values, functions, or properties, you can add Metadata Specifiers to control how they interact with various aspects of the engine and editor. Each type of data structure or member has its own list of Metadata Specifiers.</p>
 </blockquote>
-<p>上面是官方文档的描述，当我声明UE4的数据结构的时候，基本上都可以添加Meta修饰符来实现一些动作，每种数据结构和成员都有它自己的一个Metadata修饰符的列表，而我的目的就是把自己遇到过的Meta修饰符整理，记录下使用方法。</p>
+<p>上面是官方文档<a href="https://docs.unrealengine.com/en-US/ProgrammingAndScripting/GameplayArchitecture/Metadata/index.html" target="_blank" rel="noopener">Metadata Specifiers</a>的描述，当我声明UE4的数据结构的时候，基本上都可以添加Meta修饰符来实现一些动作，每种数据结构和成员都有它自己的一个Metadata修饰符的列表，而我的目的就是把自己遇到过的Meta修饰符整理，记录下使用方法。</p>
 <p>需要注意的是，Metadata修饰符之存在于Editor部分，不要把Metadata修饰符的使用范围扩大到游戏中的逻辑，比如说游戏运行是变量数据的读取。仅仅是方便我们在UE4的Editor中开发的存在。</p>
 <h2 id="遇到的一些使用"><a href="#遇到的一些使用" class="headerlink" title="遇到的一些使用"></a>遇到的一些使用</h2><h3 id="Meta-EditCondition-“变量名”"><a href="#Meta-EditCondition-“变量名”" class="headerlink" title="Meta = (EditCondition = “变量名”)"></a>Meta = (EditCondition = “变量名”)</h3><p>这里的变量名大多是布尔类型。用途是控制Detail面板上的变量能否修改。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWirte)</span><br><span class="line">uint8 bCondition : 1;</span><br><span class="line"></span><br><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWirte, meta = (EditCondition = &quot;bCondition&quot;))</span><br><span class="line">float SettingsValue;</span><br></pre></td></tr></table></figure>
@@ -268,6 +268,23 @@
 <p>然后应用它：<br><img src="RichTextDataTableSample03.png" alt="sample03"></p>
 <p>就是<code>&lt;RowName&gt;Text&lt;/&gt;</code>的格式，把想要应用的文本包围起来就可以实现了。</p>
 <p>关于更多的RichText的使用，还有上面提到的Decorator类的内容，需要找时间整理学习。</p>
+<p>最近关于UE4的本地化策略(Localization)调查了很多，其中也涉及到了很多关于这个<strong>RichTextBlock</strong>的内容。</p>
+<p>对上面的内容进行一点点的总结，首先是上面的<strong>Appearence</strong>需要我们指定的<strong>TextStyleSet</strong>，在这里我们可以指定文本的格式，字体什么的设定内容，到这里为止我们只要创建一个DataTable，Row结构体是<code>RichTextStyleRow</code>的表填入相应的字体信息，增加各种行的信息，就可以在RichTextBlock中实现各种字体的效果。</p>
+<p>但是如果想在这个基础上添加图片等其他的数据则需要我们对<strong>Decorator</strong>进行深入的使用。</p>
+<p>首先是最简单的使用UE4原本提供的图片格式进行简单的应用，即对上面的<code>RichImageRow</code>表的内容进行简单的利用。为此我们需要为这个RichTextBlack添加DecoratorClass。<br><img src="DecoratorClassSample.png" alt="DecoratorClass"></p>
+<p>UE4为我们提供了式样案例<code>RichTextBlockImageDecorator</code>这个类，之后将会对这个类的源码实现进行学习。其实实现的方法很简单，就是新建一个BP继承<code>RichTextBlockImageDecorator</code>，然后把这个新建的类指定到上面RichTextBlock的DecoratorClass中。</p>
+<p>然后打开这个BP，会发现有一个<code>Appearence-&gt;ImageSet</code>的项目，这里指定我们上面创建的RichTextStyleRow的DataTable。在RichText中使用<code>&lt;img id=&quot;Row_Name&quot;/&gt;</code>这样的标签就可以指定表中的对应的行的图片进行显示了。</p>
+<p>到这里的参考资料</p>
+<ul>
+<li><a href="https://www.unrealengine.com/ja/tech-blog/advanced-text-styling-with-rich-text-block" target="_blank" rel="noopener">Rich Text Block を使ったテキストの高度なスタイル設定</a></li>
+<li><a href="https://docs.unrealengine.com/en-US/InteractiveExperiences/UMG/UserGuide/UMGRichTextBlock/index.html" target="_blank" rel="noopener">UMG Rich Text Block</a></li>
+</ul>
+<p>以上是简单的为RichTextBlock添加图片实现，如果要对Decorator进行自定义则需要参考这个<code>RichTextBlockImageDecorator</code>示例源码实现了。</p>
+<h4 id="新建我们自己的Decorator"><a href="#新建我们自己的Decorator" class="headerlink" title="新建我们自己的Decorator"></a>新建我们自己的Decorator</h4><p>首先是对UE4提供的<code>RichTextBlockImageDecorator</code>的示例源码进行解析。</p>
+<ul>
+<li><code>URichTextBlockDecorator</code></li>
+<li><code>FRichTextDecorator</code></li>
+</ul>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>

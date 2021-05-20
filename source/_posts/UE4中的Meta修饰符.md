@@ -14,7 +14,7 @@ UE4中的**MetadataSpecifiers**是个很邪门的东西，一开始的时候根�
 # MetadataSpecifiers
 > When declaring classes, interfaces, structs, enums, enum values, functions, or properties, you can add Metadata Specifiers to control how they interact with various aspects of the engine and editor. Each type of data structure or member has its own list of Metadata Specifiers.
 
-上面是官方文档的描述，当我声明UE4的数据结构的时候，基本上都可以添加Meta修饰符来实现一些动作，每种数据结构和成员都有它自己的一个Metadata修饰符的列表，而我的目的就是把自己遇到过的Meta修饰符整理，记录下使用方法。
+上面是官方文档[Metadata Specifiers](https://docs.unrealengine.com/en-US/ProgrammingAndScripting/GameplayArchitecture/Metadata/index.html)的描述，当我声明UE4的数据结构的时候，基本上都可以添加Meta修饰符来实现一些动作，每种数据结构和成员都有它自己的一个Metadata修饰符的列表，而我的目的就是把自己遇到过的Meta修饰符整理，记录下使用方法。
 
 需要注意的是，Metadata修饰符之存在于Editor部分，不要把Metadata修饰符的使用范围扩大到游戏中的逻辑，比如说游戏运行是变量数据的读取。仅仅是方便我们在UE4的Editor中开发的存在。
 

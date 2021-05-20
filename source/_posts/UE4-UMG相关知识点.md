@@ -84,26 +84,26 @@ RichTextBlock使用了UE4的**DataTable**来对其进行自定义和添加样式
 
 关于更多的RichText的使用，还有上面提到的Decorator类的内容，需要找时间整理学习。
 
+最近关于UE4的本地化策略(Localization)调查了很多，其中也涉及到了很多关于这个**RichTextBlock**的内容。
 
+对上面的内容进行一点点的总结，首先是上面的**Appearence**需要我们指定的**TextStyleSet**，在这里我们可以指定文本的格式，字体什么的设定内容，到这里为止我们只要创建一个DataTable，Row结构体是`RichTextStyleRow`的表填入相应的字体信息，增加各种行的信息，就可以在RichTextBlock中实现各种字体的效果。
 
+但是如果想在这个基础上添加图片等其他的数据则需要我们对**Decorator**进行深入的使用。
 
+首先是最简单的使用UE4原本提供的图片格式进行简单的应用，即对上面的`RichImageRow`表的内容进行简单的利用。为此我们需要为这个RichTextBlack添加DecoratorClass。
+![DecoratorClass](DecoratorClassSample.png)
 
+UE4为我们提供了式样案例`RichTextBlockImageDecorator`这个类，之后将会对这个类的源码实现进行学习。其实实现的方法很简单，就是新建一个BP继承`RichTextBlockImageDecorator`，然后把这个新建的类指定到上面RichTextBlock的DecoratorClass中。
 
+然后打开这个BP，会发现有一个`Appearence->ImageSet`的项目，这里指定我们上面创建的RichTextStyleRow的DataTable。在RichText中使用`<img id="Row_Name"/>`这样的标签就可以指定表中的对应的行的图片进行显示了。
 
+到这里的参考资料
+- [Rich Text Block を使ったテキストの高度なスタイル設定](https://www.unrealengine.com/ja/tech-blog/advanced-text-styling-with-rich-text-block)
+- [UMG Rich Text Block](https://docs.unrealengine.com/en-US/InteractiveExperiences/UMG/UserGuide/UMGRichTextBlock/index.html)
 
+以上是简单的为RichTextBlock添加图片实现，如果要对Decorator进行自定义则需要参考这个`RichTextBlockImageDecorator`示例源码实现了。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### 新建我们自己的Decorator
+首先是对UE4提供的`RichTextBlockImageDecorator`的示例源码进行解析。
+- `URichTextBlockDecorator`
+- `FRichTextDecorator`
