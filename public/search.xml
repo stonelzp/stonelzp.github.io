@@ -4224,6 +4224,18 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://github.com/hexojs/hexo/issues/1121" target="_blank" rel="noopener">生成路径的问题，导致css，js无法加载</a></li>
 </ul>
+<hr>
+<ul>
+<li>2021/06/01 更新</li>
+</ul>
+<p>博客换了电脑之后，主题虽然没变但是好多设定都丢了，包含我用的很顺手的本地搜索。实在是太常用了，没有的话很困扰，就前来解决了。</p>
+<p>需要检查的有两处：</p>
+<ol>
+<li>hexo-generator-search插件是否安装</li>
+<li>本地搜索是否开启</li>
+</ol>
+<p>第一个直接搜命令使用npm安装就好。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure></p>
+<p>第二个去主题的配置文件找到<strong>local_search</strong>条目<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Local search</span><br><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>备忘</category>

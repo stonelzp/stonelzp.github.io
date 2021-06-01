@@ -110,3 +110,23 @@ root: /
 
 参考链接:
 - [生成路径的问题，导致css，js无法加载](https://github.com/hexojs/hexo/issues/1121)
+
+---
+- 2021/06/01 更新
+
+博客换了电脑之后，主题虽然没变但是好多设定都丢了，包含我用的很顺手的本地搜索。实在是太常用了，没有的话很困扰，就前来解决了。
+
+需要检查的有两处：
+  1. hexo-generator-search插件是否安装
+  2. 本地搜索是否开启
+
+第一个直接搜命令使用npm安装就好。
+```
+$ npm install hexo-generator-search --save
+```
+第二个去主题的配置文件找到**local_search**条目
+```
+# Local search
+local_search:
+  enable: true
+```
