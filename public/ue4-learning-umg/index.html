@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/RichTextDataTableSample02.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/RichTextDataTableSample03.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/DecoratorClassSample.png">
-<meta property="og:updated_time" content="2021-05-10T10:50:12.325Z">
+<meta property="og:updated_time" content="2021-06-01T13:31:03.623Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-UMG相关知识点">
 <meta name="twitter:description" content="本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。">
@@ -199,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-10 19:50:12" itemprop="dateModified" datetime="2021-05-10T19:50:12+09:00">2021-05-10</time>
+                <time title="修改时间：2021-06-01 22:31:03" itemprop="dateModified" datetime="2021-06-01T22:31:03+09:00">2021-06-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,11 +255,18 @@
 <ul>
 <li><a href="https://www.slideshare.net/EpicGamesJapan/umg-80334310" target="_blank" rel="noopener">猫でも分かるUMG</a></li>
 </ul>
-<h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
+<h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><h3 id="BindWidget"><a href="#BindWidget" class="headerlink" title="BindWidget"></a>BindWidget</h3><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(BlueprintReadWirte, meta = (BindWidget))</span><br><span class="line">class UTextBlock* ItemText;</span><br></pre></td></tr></table></figure>
+<p>Meta信息设置为BindWidget之后，在继承这个C++类的蓝图中声明一个同名同类型的控件，编译之后就建立了联系。</p>
 <p>关于上面的邪门的知识，在使用过程中我遇见的坑，就是按照那个规则创建了控件之后蓝图编译总是报错，说是没有这个类型的控件，这个时候解决方案是，C++的那边修改一下变量名然后再编译。</p>
+<p>###<br>不光是Widget中的Widget控件，Widget中的Animation也一样是可以使用类似上面的方式绑定的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(BlueprintReadWirte, meta = (BindWidgetAnim))</span><br><span class="line">class UWidgetAnimation* WidgetAnimationA;</span><br></pre></td></tr></table></figure></p>
+<p>WidgetAnimation可以简单的在Widget中实现动画效果。</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/427948/get-widget-animation-in-c.html" target="_blank" rel="noopener">Get Widget Animation in C++</a></li>
+</ul>
 <h2 id="UMG中的一些控件介绍"><a href="#UMG中的一些控件介绍" class="headerlink" title="UMG中的一些控件介绍"></a>UMG中的一些控件介绍</h2><h3 id="UMG的RichTextBlock"><a href="#UMG的RichTextBlock" class="headerlink" title="UMG的RichTextBlock"></a>UMG的RichTextBlock</h3><p>UE4除了提供了提供了简单的文本显示的控件之外还提供了可以方便自定义格式的RichTextBlock。记录一下使用的方法。</p>
 <p>RichTextBlock使用了UE4的<strong>DataTable</strong>来对其进行自定义和添加样式。使用<strong>DataTable</strong>，我们可以创建想要的Style和自定义的<strong>Decorator类</strong>。UE4内置了一个样例Decorator类：<code>RichTextBlockImageDecorator</code>类，可以参考。</p>
 <p>想要使用自定义的文本格式之前先创建一个<strong>DataTableAsset</strong>方便我们使用。在创建DataTable的时候有两种行的结构供我们选择：</p>
@@ -377,7 +384,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UMG"><span class="nav-number">1.</span> <span class="nav-text">UMG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Widget"><span class="nav-number">1.1.</span> <span class="nav-text">Widget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG使用的Tips"><span class="nav-number">1.2.</span> <span class="nav-text">UMG使用的Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG中的一些控件介绍"><span class="nav-number">1.3.</span> <span class="nav-text">UMG中的一些控件介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UMG的RichTextBlock"><span class="nav-number">1.3.1.</span> <span class="nav-text">UMG的RichTextBlock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建我们自己的Decorator"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">新建我们自己的Decorator</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UMG"><span class="nav-number">1.</span> <span class="nav-text">UMG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Widget"><span class="nav-number">1.1.</span> <span class="nav-text">Widget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG使用的Tips"><span class="nav-number">1.2.</span> <span class="nav-text">UMG使用的Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BindWidget"><span class="nav-number">1.2.1.</span> <span class="nav-text">BindWidget</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG中的一些控件介绍"><span class="nav-number">1.3.</span> <span class="nav-text">UMG中的一些控件介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UMG的RichTextBlock"><span class="nav-number">1.3.1.</span> <span class="nav-text">UMG的RichTextBlock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建我们自己的Decorator"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">新建我们自己的Decorator</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

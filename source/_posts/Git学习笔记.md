@@ -96,3 +96,38 @@ git push -d origin Branch-Name
 
 参考了下面的文章：
 - [[[:space:]] seam to prevent Git lfs to work with SourceTree](https://github.com/git-lfs/git-lfs/issues/2668)
+
+## Git LFS 2
+在UE4中可以使用这个插件来完成项目的多人协作，割舍不下的功能就是在UE4中对Asset进行编辑时可以远程加锁，UE4的Asset版本管理很麻烦的，又不能像C++代码那样简单的Merge。
+- Github项目[Unreal Engine 4 Git Source Control Plugin](https://github.com/SRombauts/UE4GitPlugin)
+
+### Git LFS
+这东西用于管理大数据文件很有用，使用的时候也会遇到很多问题，当然是我的问题，上面SourceTree的内容就有提到。
+
+关于一些命令的使用：
+```
+$ git lfs locks             #获取现在加锁文件的一览
+$ git lfs unlock --id=555   #为555号id文件解锁，当然是自己加锁的文件
+```
+
+还有就是一些批量操作默认的GitLFS命令并不支持，这也是我要在这里记录这个的原因。
+
+在`ProjectName/.git/config`文件里面添加下面的内容
+```
+[alias]
+        lock = "!f(){ git pull ; for file in \"$@\"; do git lfs lock $file; done };f"
+        unlock = "!f(){ for file in \"$@\"; do git lfs unlock $file; done };f"
+        unlockall = "!f() { git lfs locks | grep [my-git-user-name] | cut -f 1 | while read -r file; do git lfs unlock $file; done; };f"
+        locks = "!f() { git lfs locks; };f"
+```
+这里的`[my-git-user-name]`根据自己的账户名字进行替换，使用`git lfs locks`就可以看到自己加锁的账户名字，`[]`是必须的，不要省略。
+
+这样在使用下面的命令的时候，就会把自己加锁的文件全部解锁。
+```
+$ git unlockall
+```
+
+`git unlock a.txt b.txt`和`git lock a.txt b.txt`这样可以对文件进行批量的加锁解锁操作，但还是需要指定路径，也许可以加以改造，指定id就可以简单的批量解锁文件，但是我也只是参照别人的文章复制过来的，对`.git/config`文件的内容语法也不是很了解。
+
+参考文章:
+- [Git LFS lockを使うためのエイリアス メモ](https://qiita.com/gecko655/items/89085bad77fb83c98267)

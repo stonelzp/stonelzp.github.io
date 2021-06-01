@@ -45,10 +45,27 @@ UE4提提供了许多有用的Widget部件，大概像这样
 - [猫でも分かるUMG](https://www.slideshare.net/EpicGamesJapan/umg-80334310)
 
 ## UMG使用的Tips
+
+### BindWidget
 先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系
 - [Connect C++ to UMG Blueprints with BindWidget](https://benui.ca/unreal/ui-bindwidget/)
 
+```
+UPROPERTY(BlueprintReadWirte, meta = (BindWidget))
+class UTextBlock* ItemText;
+```
+Meta信息设置为BindWidget之后，在继承这个C++类的蓝图中声明一个同名同类型的控件，编译之后就建立了联系。
+
 关于上面的邪门的知识，在使用过程中我遇见的坑，就是按照那个规则创建了控件之后蓝图编译总是报错，说是没有这个类型的控件，这个时候解决方案是，C++的那边修改一下变量名然后再编译。
+
+###
+不光是Widget中的Widget控件，Widget中的Animation也一样是可以使用类似上面的方式绑定的。
+```
+UPROPERTY(BlueprintReadWirte, meta = (BindWidgetAnim))
+class UWidgetAnimation* WidgetAnimationA;
+```
+WidgetAnimation可以简单的在Widget中实现动画效果。
+- [Get Widget Animation in C++](https://answers.unrealengine.com/questions/427948/get-widget-animation-in-c.html)
 
 ## UMG中的一些控件介绍
 

@@ -246,11 +246,18 @@
 <ul>
 <li><a href="https://www.slideshare.net/EpicGamesJapan/umg-80334310" target="_blank" rel="noopener">猫でも分かるUMG</a></li>
 </ul>
-<h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
+<h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><h3 id="BindWidget"><a href="#BindWidget" class="headerlink" title="BindWidget"></a>BindWidget</h3><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
 </ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UPROPERTY(BlueprintReadWirte, meta = (BindWidget))</span><br><span class="line">class UTextBlock* ItemText;</span><br></pre></td></tr></table></figure>
+<p>Meta信息设置为BindWidget之后，在继承这个C++类的蓝图中声明一个同名同类型的控件，编译之后就建立了联系。</p>
 <p>关于上面的邪门的知识，在使用过程中我遇见的坑，就是按照那个规则创建了控件之后蓝图编译总是报错，说是没有这个类型的控件，这个时候解决方案是，C++的那边修改一下变量名然后再编译。</p>
+<p>###<br>不光是Widget中的Widget控件，Widget中的Animation也一样是可以使用类似上面的方式绑定的。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UPROPERTY(BlueprintReadWirte, meta = (BindWidgetAnim))</span><br><span class="line">class UWidgetAnimation* WidgetAnimationA;</span><br></pre></td></tr></table></figure></p>
+<p>WidgetAnimation可以简单的在Widget中实现动画效果。</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/427948/get-widget-animation-in-c.html" target="_blank" rel="noopener">Get Widget Animation in C++</a></li>
+</ul>
 <h2 id="UMG中的一些控件介绍"><a href="#UMG中的一些控件介绍" class="headerlink" title="UMG中的一些控件介绍"></a>UMG中的一些控件介绍</h2><h3 id="UMG的RichTextBlock"><a href="#UMG的RichTextBlock" class="headerlink" title="UMG的RichTextBlock"></a>UMG的RichTextBlock</h3><p>UE4除了提供了提供了简单的文本显示的控件之外还提供了可以方便自定义格式的RichTextBlock。记录一下使用的方法。</p>
 <p>RichTextBlock使用了UE4的<strong>DataTable</strong>来对其进行自定义和添加样式。使用<strong>DataTable</strong>，我们可以创建想要的Style和自定义的<strong>Decorator类</strong>。UE4内置了一个样例Decorator类：<code>RichTextBlockImageDecorator</code>类，可以参考。</p>
 <p>想要使用自定义的文本格式之前先创建一个<strong>DataTableAsset</strong>方便我们使用。在创建DataTable的时候有两种行的结构供我们选择：</p>
@@ -3513,6 +3520,21 @@ table th:nth-of-type(4) {
 <p>参考了下面的文章：</p>
 <ul>
 <li>[<a href="https://github.com/git-lfs/git-lfs/issues/2668" target="_blank" rel="noopener">[:space:]] seam to prevent Git lfs to work with SourceTree</a></li>
+</ul>
+<h2 id="Git-LFS-2"><a href="#Git-LFS-2" class="headerlink" title="Git LFS 2"></a>Git LFS 2</h2><p>在UE4中可以使用这个插件来完成项目的多人协作，割舍不下的功能就是在UE4中对Asset进行编辑时可以远程加锁，UE4的Asset版本管理很麻烦的，又不能像C++代码那样简单的Merge。</p>
+<ul>
+<li>Github项目<a href="https://github.com/SRombauts/UE4GitPlugin" target="_blank" rel="noopener">Unreal Engine 4 Git Source Control Plugin</a></li>
+</ul>
+<h3 id="Git-LFS"><a href="#Git-LFS" class="headerlink" title="Git LFS"></a>Git LFS</h3><p>这东西用于管理大数据文件很有用，使用的时候也会遇到很多问题，当然是我的问题，上面SourceTree的内容就有提到。</p>
+<p>关于一些命令的使用：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git lfs locks             #获取现在加锁文件的一览</span><br><span class="line">$ git lfs unlock --id=555   #为555号id文件解锁，当然是自己加锁的文件</span><br></pre></td></tr></table></figure></p>
+<p>还有就是一些批量操作默认的GitLFS命令并不支持，这也是我要在这里记录这个的原因。</p>
+<p>在<code>ProjectName/.git/config</code>文件里面添加下面的内容<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[alias]</span><br><span class="line">        lock = &quot;!f()&#123; git pull ; for file in \&quot;$@\&quot;; do git lfs lock $file; done &#125;;f&quot;</span><br><span class="line">        unlock = &quot;!f()&#123; for file in \&quot;$@\&quot;; do git lfs unlock $file; done &#125;;f&quot;</span><br><span class="line">        unlockall = &quot;!f() &#123; git lfs locks | grep [my-git-user-name] | cut -f 1 | while read -r file; do git lfs unlock $file; done; &#125;;f&quot;</span><br><span class="line">        locks = &quot;!f() &#123; git lfs locks; &#125;;f&quot;</span><br></pre></td></tr></table></figure></p>
+<p>这里的<code>[my-git-user-name]</code>根据自己的账户名字进行替换，使用<code>git lfs locks</code>就可以看到自己加锁的账户名字，<code>[]</code>是必须的，不要省略。</p>
+<p>这样在使用下面的命令的时候，就会把自己加锁的文件全部解锁。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git unlockall</span><br></pre></td></tr></table></figure></p>
+<p><code>git unlock a.txt b.txt</code>和<code>git lock a.txt b.txt</code>这样可以对文件进行批量的加锁解锁操作，但还是需要指定路径，也许可以加以改造，指定id就可以简单的批量解锁文件，但是我也只是参照别人的文章复制过来的，对<code>.git/config</code>文件的内容语法也不是很了解。</p>
+<p>参考文章:</p>
+<ul>
+<li><a href="https://qiita.com/gecko655/items/89085bad77fb83c98267" target="_blank" rel="noopener">Git LFS lockを使うためのエイリアス メモ</a></li>
 </ul>
 ]]></content>
       <categories>
