@@ -44,6 +44,15 @@ UE4提提供了许多有用的Widget部件，大概像这样
 参考资料
 - [猫でも分かるUMG](https://www.slideshare.net/EpicGamesJapan/umg-80334310)
 
+### 给Widget添加动画
+在Widget的蓝图中可以很方便的制作Widget的animation片段动画，当我们使用了上面的绑定方式之后，就可以使用人家准备好的`UUserWidget::PlayAnimation`函数进行动画的再生了，C++的方式还是BP的方式都很容易找到。
+
+很好的参考文章
+- [[UE4] UMGのアニメーションと動的な配置](http://monsho.blog63.fc2.com/blog-entry-158.html)
+
+#### UUMGSequencePlayer
+在对Widget动画的PlayAnimation函数的使用过程中发现这个类`UUMGSequencePlayer`貌似是一个很重要的概念，有时间需要好好了解一下。
+
 ## UMG使用的Tips
 
 ### BindWidget

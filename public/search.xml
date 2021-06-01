@@ -246,6 +246,12 @@
 <ul>
 <li><a href="https://www.slideshare.net/EpicGamesJapan/umg-80334310" target="_blank" rel="noopener">猫でも分かるUMG</a></li>
 </ul>
+<h3 id="给Widget添加动画"><a href="#给Widget添加动画" class="headerlink" title="给Widget添加动画"></a>给Widget添加动画</h3><p>在Widget的蓝图中可以很方便的制作Widget的animation片段动画，当我们使用了上面的绑定方式之后，就可以使用人家准备好的<code>UUserWidget::PlayAnimation</code>函数进行动画的再生了，C++的方式还是BP的方式都很容易找到。</p>
+<p>很好的参考文章</p>
+<ul>
+<li><a href="http://monsho.blog63.fc2.com/blog-entry-158.html" target="_blank" rel="noopener">[UE4] UMGのアニメーションと動的な配置</a></li>
+</ul>
+<h4 id="UUMGSequencePlayer"><a href="#UUMGSequencePlayer" class="headerlink" title="UUMGSequencePlayer"></a>UUMGSequencePlayer</h4><p>在对Widget动画的PlayAnimation函数的使用过程中发现这个类<code>UUMGSequencePlayer</code>貌似是一个很重要的概念，有时间需要好好了解一下。</p>
 <h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><h3 id="BindWidget"><a href="#BindWidget" class="headerlink" title="BindWidget"></a>BindWidget</h3><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>

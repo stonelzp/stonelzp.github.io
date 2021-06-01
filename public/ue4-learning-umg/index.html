@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/RichTextDataTableSample02.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/RichTextDataTableSample03.png">
 <meta property="og:image" content="http://stonelzp.github.io/ue4-learning-umg/DecoratorClassSample.png">
-<meta property="og:updated_time" content="2021-06-01T13:31:03.623Z">
+<meta property="og:updated_time" content="2021-06-01T14:25:55.792Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-UMG相关知识点">
 <meta name="twitter:description" content="本篇文章用来记录使用UE4的UMG功能时遇到的问题和知识点。逐步了解UMG，UE4中的UI制作。">
@@ -199,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-01 22:31:03" itemprop="dateModified" datetime="2021-06-01T22:31:03+09:00">2021-06-01</time>
+                <time title="修改时间：2021-06-01 23:25:55" itemprop="dateModified" datetime="2021-06-01T23:25:55+09:00">2021-06-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -255,6 +255,12 @@
 <ul>
 <li><a href="https://www.slideshare.net/EpicGamesJapan/umg-80334310" target="_blank" rel="noopener">猫でも分かるUMG</a></li>
 </ul>
+<h3 id="给Widget添加动画"><a href="#给Widget添加动画" class="headerlink" title="给Widget添加动画"></a>给Widget添加动画</h3><p>在Widget的蓝图中可以很方便的制作Widget的animation片段动画，当我们使用了上面的绑定方式之后，就可以使用人家准备好的<code>UUserWidget::PlayAnimation</code>函数进行动画的再生了，C++的方式还是BP的方式都很容易找到。</p>
+<p>很好的参考文章</p>
+<ul>
+<li><a href="http://monsho.blog63.fc2.com/blog-entry-158.html" target="_blank" rel="noopener">[UE4] UMGのアニメーションと動的な配置</a></li>
+</ul>
+<h4 id="UUMGSequencePlayer"><a href="#UUMGSequencePlayer" class="headerlink" title="UUMGSequencePlayer"></a>UUMGSequencePlayer</h4><p>在对Widget动画的PlayAnimation函数的使用过程中发现这个类<code>UUMGSequencePlayer</code>貌似是一个很重要的概念，有时间需要好好了解一下。</p>
 <h2 id="UMG使用的Tips"><a href="#UMG使用的Tips" class="headerlink" title="UMG使用的Tips"></a>UMG使用的Tips</h2><h3 id="BindWidget"><a href="#BindWidget" class="headerlink" title="BindWidget"></a>BindWidget</h3><p>先来一个邪门的，快速的建立C++和UMG Blueprint中Widget控件的联系</p>
 <ul>
 <li><a href="https://benui.ca/unreal/ui-bindwidget/" target="_blank" rel="noopener">Connect C++ to UMG Blueprints with BindWidget</a></li>
@@ -384,7 +390,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UMG"><span class="nav-number">1.</span> <span class="nav-text">UMG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Widget"><span class="nav-number">1.1.</span> <span class="nav-text">Widget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG使用的Tips"><span class="nav-number">1.2.</span> <span class="nav-text">UMG使用的Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BindWidget"><span class="nav-number">1.2.1.</span> <span class="nav-text">BindWidget</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG中的一些控件介绍"><span class="nav-number">1.3.</span> <span class="nav-text">UMG中的一些控件介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UMG的RichTextBlock"><span class="nav-number">1.3.1.</span> <span class="nav-text">UMG的RichTextBlock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建我们自己的Decorator"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">新建我们自己的Decorator</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UMG"><span class="nav-number">1.</span> <span class="nav-text">UMG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Widget"><span class="nav-number">1.1.</span> <span class="nav-text">Widget</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#给Widget添加动画"><span class="nav-number">1.1.1.</span> <span class="nav-text">给Widget添加动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UUMGSequencePlayer"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">UUMGSequencePlayer</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG使用的Tips"><span class="nav-number">1.2.</span> <span class="nav-text">UMG使用的Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BindWidget"><span class="nav-number">1.2.1.</span> <span class="nav-text">BindWidget</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMG中的一些控件介绍"><span class="nav-number">1.3.</span> <span class="nav-text">UMG中的一些控件介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UMG的RichTextBlock"><span class="nav-number">1.3.1.</span> <span class="nav-text">UMG的RichTextBlock</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#新建我们自己的Decorator"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">新建我们自己的Decorator</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
