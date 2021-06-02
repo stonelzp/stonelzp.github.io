@@ -6036,7 +6036,7 @@ table th:nth-of-type(4) {
     <url>/C++%E4%B8%AD%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</url>
     <content><![CDATA[<p>运算符重载(operator overloading)只是一种”语法上的方便“（syntactic sugar).也就是说它只是另一种函数调用的方式。</p>
 <a id="more"></a>
-<p>运算符重载有成员与算符和非成员运算符之分，那么这个之间有什么区别呢，应该选择哪一种呢？</p>
+<h1 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h1><p>运算符重载有成员运算符和非成员运算符之分，那么这个之间有什么区别呢，应该选择哪一种呢？</p>
 <blockquote>
 <p>总的来说，如果没有什么差异，它们应该是成员运算符。这样做强调了运算符和类的结合。当左操作数是当前类的对象时，运算符会工作的很好。</p>
 </blockquote>
@@ -6053,6 +6053,18 @@ table th:nth-of-type(4) {
 <p>答案是肯定的，像类模板的使用那样，指定明确的模板参数类型来特化函数模板使用是可行的，也就是我觉得应该这样做的，但是<strong>让编译器从函数的参数中推断出它们的类型将会更方便。</strong></p>
 <p>后面的内容就更多了，在别的模板章节中展开更好。</p>
 <p>回到上面的代码，<code>m_message &lt;&lt; data</code> 的m_message是什么类型合适呢？是<code>ostringstream</code>。是C++标准库的东西，这样就省得自己一个一个重载数据类型了。方法是个好方法，但是最后我没用上。因为要处理宽字符的问题，涉及到宽窄字符互相转换的问题，试来试去总是出问题，我就Pass掉了，全部交给UE4里的FString类型和TEXT（）来处理了。</p>
+<h1 id="运算符重载时的friend关键字"><a href="#运算符重载时的friend关键字" class="headerlink" title="运算符重载时的friend关键字"></a>运算符重载时的friend关键字</h1><p>当我们在类(class)的定义外使用操作符(operator)的时候，操作符两边的参数都可以进行类型的隐式转换(implicit type conversions)。但是在类内定义操作符的时候，只有右手边的参数可以执行类型的隐式转换。</p>
+<p>比如说我们声明一个这样的类：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Message &#123;</span><br><span class="line">    std::string content;</span><br><span class="line">public:</span><br><span class="line">    Message(const std::string&amp; str);</span><br><span class="line">    bool operator==(const std::string&amp; rhs) const;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这种方式对运算符的重载，允许我们这样操作：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Message message(&quot;Test&quot;);</span><br><span class="line">std::string msg(&quot;Test&quot;);</span><br><span class="line">if (message == msg) &#123;   // Message类可以和std::string类型的字符串比较</span><br><span class="line">    // do stuff...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是当我们把比较顺序换一下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (msg == message) &#123; // this won&apos;t compile</span><br></pre></td></tr></table></figure></p>
+<p>就会编译出错，原因很明显，在类内定义操作符的时候只有右手边的参数可以执行隐式转换，上面明显没有匹配的类型。<br>解决方案就是增加一个匹配类型：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Message &#123;</span><br><span class="line">    std::string content;</span><br><span class="line">public:</span><br><span class="line">    Message(const std::string&amp; str);</span><br><span class="line">    bool operator==(const std::string&amp; rhs) const;</span><br><span class="line">    friend bool operator==(const std::string&amp; lhs, const Message&amp; rhs);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>或者声明一个隐式转换操作符转到我们想要的类型(嘛这里不是很熟悉，我也没完全明白)：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Message &#123;</span><br><span class="line">    std::string content;</span><br><span class="line">public:</span><br><span class="line">    Message(const std::string&amp; str);</span><br><span class="line">    bool operator==(const std::string&amp; rhs) const;</span><br><span class="line">    operator std::string() const;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>除此之外，还有一个需要注意的是，当我们重载操作符需要参照到类的私有成员的时候也必须使用friend限定。</p>
+<p>至于操作符重载最好是以内联函数的形式这种结论我没有依据，还是要注意一些为好。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/6255825/what-operators-should-be-declared-as-friends/6255899" target="_blank" rel="noopener">What operators should be declared as friends?</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>C++</category>
@@ -7346,7 +7358,7 @@ table th:nth-of-type(4) {
 <p>说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。</p>
 <a id="more"></a>
 <p>上面的话是<a href="http://sourcecodereadingofunreal.readthedocs.io/en/latest/content/programmingSkill.html" target="_blank" rel="noopener">Unreal用到一些编程技巧</a>里的内容。</p>
-<h1 id="1-先理解什么是”函数回调”"><a href="#1-先理解什么是”函数回调”" class="headerlink" title="1.先理解什么是”函数回调”"></a>1.先理解什么是”函数回调”</h1><blockquote>
+<h1 id="先理解什么是”函数回调”"><a href="#先理解什么是”函数回调”" class="headerlink" title="先理解什么是”函数回调”"></a>先理解什么是”函数回调”</h1><blockquote>
 <p>A “callback” is any function that is called by another function whitch takes the first function as a parameter. A lot of the time, a “callback” is a function that is called when something happens. That something can be called an “event” in programmer-speak.</p>
 </blockquote>
 <p>摘自Stack Overflow：</p>
@@ -7357,7 +7369,7 @@ table th:nth-of-type(4) {
 <p>用简单的代码来表示CallBack就是：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"B work has done."</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void B( void (A_prt) (void))&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>学了C++的虚函数之后，理解起来就是快 =。=</p>
-<h1 id="2-UE4中的函数回调-CallBack"><a href="#2-UE4中的函数回调-CallBack" class="headerlink" title="2.UE4中的函数回调(CallBack)"></a>2.UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
+<h1 id="UE4中的函数回调-CallBack"><a href="#UE4中的函数回调-CallBack" class="headerlink" title="UE4中的函数回调(CallBack)"></a>UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
 <p>关于UE C++的代理，存在着以下的几种方式：</p>
 <ul>
 <li>静态的Single-cast Delegates</li>
@@ -7399,7 +7411,7 @@ table th:nth-of-type(4) {
 <p>应为时间有限，就快速记录一下。</p>
 <p>像上面那样函数的定义和实现都是在同一个文件的<code>.h</code>,<code>.cpp</code>中实现的，就是说：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleA::Execute_Implementation(<span class="keyword">int</span> value) <span class="keyword">const</span>&#123; &#125;</span><br><span class="line"><span class="comment">// auto SampleA::Execute_Implementation(int value) const&#123;// default Implementation &#125;   // 类型推断还能这么用的吗</span></span><br></pre></td></tr></table></figure></p>
 <p>这样的是好像也没有什么太大的问题，好像也很容易理解，但是当这个类似于事件的提供移到子类的时候，就有些让人摸不到头脑了。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp </span></span><br><span class="line"><span class="comment">// 这里应该没有实现，但是这个函数是有默认实现的，没错，蓝图那边有默认实现，如果我们没有这个C++的_Implementation实现，那么就是蓝图的默认实现被调用，但是我们对C++的_Implementation进行了实现，那么就是C++这部分实现会被调用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.h</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleB</span> :</span> <span class="keyword">public</span> SampleA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 没有这个子类的声明会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Execute_Implementation</span><span class="params">(ine value)</span> <span class="keyword">const</span> override</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleB::Execute_Implementation(ine value) <span class="keyword">const</span>&#123; <span class="comment">// 函数实现&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="comment">// 这里应该没有实现，但是这个函数是有默认实现的，没错，蓝图那边有默认实现，如果我们没有这个C++的_Implementation实现，那么就是蓝图的默认实现被调用，但是我们对C++的_Implementation进行了实现，那么就是C++这部分实现会被调用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.h</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleB</span> :</span> <span class="keyword">public</span> SampleA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 没有这个子类的声明会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Execute_Implementation</span><span class="params">(ine value)</span> <span class="keyword">const</span> override</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleB::Execute_Implementation(ine value) <span class="keyword">const</span>&#123; <span class="comment">// 函数实现&#125;</span></span><br></pre></td></tr></table></figure>
 <p>如果是继承来的<code>Execute</code>就需要这样的样子，总之就是，带有</p>
 <ul>
 <li>UFUNCTION(BlueprintImplementableEvent, Category = “Foo”)</li>
@@ -7410,15 +7422,29 @@ table th:nth-of-type(4) {
 <li><a href="https://www.epicgames.com/unrealtournament/forums/unreal-tournament-development/ut-development-programming/11600-what-s-the-deal-with-appending-_implementation-to-functions" target="_blank" rel="noopener">What’s the deal with appending ‘_Implementation’ to functions?</a></li>
 </ul>
 <blockquote>
-<p>FUNCTION_Implementation is for the UnrealEngine framework. Calling FUNCTION will also call the _Implementation part. FUNCTION is only a wrapper generated by the UHT. CPP includes the generated classes/headers. </p>
+<p>FUNCTION_Implementation is for the UnrealEngine framework. Calling FUNCTION will also call the _Implementation part. FUNCTION is only a wrapper generated by the UHT. CPP includes the generated classes/headers.</p>
 </blockquote>
 <hr>
-<h2 id="UE-C-之间简单的函数回调实现"><a href="#UE-C-之间简单的函数回调实现" class="headerlink" title="UE C++之间简单的函数回调实现"></a>UE C++之间简单的函数回调实现</h2><p>说实话，函数回调跟代理的概念我还是没太理清。在许多的实际应用上，有些操作你叫它代理也行，叫它函数回调也行。用自己的感受就好比是参考系不同一样。就像上面举的函数回调的例子来说：</p>
+<h2 id="UE-C-的函数回调实现"><a href="#UE-C-的函数回调实现" class="headerlink" title="UE C++的函数回调实现"></a>UE C++的函数回调实现</h2><p>说实话，函数回调跟代理的概念我还是没太理清。在许多的实际应用上，有些操作你叫它代理也行，叫它函数回调也行。用自己的感受就好比是参考系不同一样。就像上面举的函数回调的例子来说：</p>
 <p>函数回调就是类A想要在类B在运行中达成某种条件的时候调用类A提供的函数。这个时候类A是主参考系。</p>
 <p>代理就是类B在运行中达成某种条件的时候想要通知类A，但是不知道方法，而且觉得这个方法还是由类A决定为好，于是就提供给类A一个纸条(代理)，类A要实现代理内容。这个时候类B就是主参考系了。</p>
 <p>我是这样理解的，不知道是否正确。但是在UE4之中delegate的出现比较多，之后就用代理来称呼了。</p>
 <p>在Blueprint和AnimationBlueprint中可以很容易的实现代理，利用Blueprint自带的<strong>Event Dispatchers</strong>就可以快速的实现。函数绑定的时候需要注意的是要Cast正确的对象。</p>
 <p>在UE C++实现代理就稍微有些复杂。但还是很简单的。</p>
+<h2 id="一些代理之间的区别"><a href="#一些代理之间的区别" class="headerlink" title="一些代理之间的区别"></a>一些代理之间的区别</h2><p>在对UE4的代理越来越多的使用之后，对代理这个概念有了深入的了解，或者说是开始一点点接受并认同<strong>代理(delegate)</strong>这个概念的存在了。</p>
+<p>关于UE4中的各种类型的代理准备在上面逐一记录使用方法(TODO)，这里主要是用来记录我调查了某种代理之间的使用区别。</p>
+<h3 id="AddDynamic-amp-AddUniqueDynamic"><a href="#AddDynamic-amp-AddUniqueDynamic" class="headerlink" title="AddDynamic &amp; AddUniqueDynamic"></a>AddDynamic &amp; AddUniqueDynamic</h3><p>据网上的资料所说，<code>AddUniqueDynamic</code>类型的代理绑定了函数之后，相同对象的相同函数被重复绑定也只会被调用一次，而<code>AddDynamic</code>则是会被调用绑定次数。</p>
+<blockquote>
+<p>Consider the following fabricated situations :</p>
+<p>Situation 1 :<br>Tank-&gt;OnTankDeath.AddDynamic(this, &amp;ATankPlayerController::OnTankDeath);<br>Tank-&gt;OnTankDeath.AddDynamic(this, &amp;ATankPlayerController::OnTankDeath);</p>
+<p>Situation 2 :<br>Tank-&gt;OnTankDeath.AddUniqueDynamic(this, &amp;ATankPlayerController::OnTankDeath);<br>Tank-&gt;OnTankDeath.AddUniqueDynamic(this, &amp;ATankPlayerController::OnTankDeath);</p>
+<p>If you were to then call : OnTankDeath.Broadcast();</p>
+<p>For situation 1 , ATankPlayerController::OnTankDeath would be invoked or called twice.<br>For situation 2 , ATankPlayerController::OnTankDeath would be invoked or called only once.</p>
+<p>Essentially AddUniqueDynamic adds the dynamic delegate only if it isnt already present in the &gt; list of invocable dynamic delegates associated with OnTankDeath.</p>
+</blockquote>
+<ul>
+<li><a href="https://community.gamedev.tv/t/difference-between-adddynamic-adduniquedynamic/37003" target="_blank" rel="noopener">Difference between AddDynamic &amp; AddUniqueDynamic?</a></li>
+</ul>
 <h1 id="为什么要使用Delegate和Event？"><a href="#为什么要使用Delegate和Event？" class="headerlink" title="为什么要使用Delegate和Event？"></a>为什么要使用Delegate和Event？</h1><p>关于代理的实现，就算明白了也需要知道需要在什么情况下使用代理，否则没有意义。</p>
 <h2 id="关于Event"><a href="#关于Event" class="headerlink" title="关于Event"></a>关于Event</h2><p>在UE4中的Blueprint中应没有委托这一说，全部是以Event的名字来称呼的。</p>
 <h2 id="Delegate的使用情况"><a href="#Delegate的使用情况" class="headerlink" title="Delegate的使用情况"></a>Delegate的使用情况</h2><h3 id="推测1"><a href="#推测1" class="headerlink" title="推测1"></a>推测1</h3><p>面向对象的说法只是一种理想的情况，总会有想要实现别人功能的情况。比如说ClassA想要实现一个功能，但是明显这个功能是由ClassB负责的部分，要是自己来实现的话不好，所以自己的话，声明一个Delegate，想用的时候就把这个广播出去(Broadcast)，实现了这接口的内容会被调用。</p>

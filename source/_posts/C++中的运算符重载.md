@@ -13,7 +13,9 @@ tags:
 
 <!--more-->
 
-运算符重载有成员与算符和非成员运算符之分，那么这个之间有什么区别呢，应该选择哪一种呢？
+# 运算符重载
+
+运算符重载有成员运算符和非成员运算符之分，那么这个之间有什么区别呢，应该选择哪一种呢？
 
 > 总的来说，如果没有什么差异，它们应该是成员运算符。这样做强调了运算符和类的结合。当左操作数是当前类的对象时，运算符会工作的很好。
 
@@ -51,3 +53,57 @@ Record& operator<<(const T& data)
 后面的内容就更多了，在别的模板章节中展开更好。
 
 回到上面的代码，`m_message << data` 的m_message是什么类型合适呢？是`ostringstream`。是C++标准库的东西，这样就省得自己一个一个重载数据类型了。方法是个好方法，但是最后我没用上。因为要处理宽字符的问题，涉及到宽窄字符互相转换的问题，试来试去总是出问题，我就Pass掉了，全部交给UE4里的FString类型和TEXT（）来处理了。
+
+# 运算符重载时的friend关键字
+当我们在类(class)的定义外使用操作符(operator)的时候，操作符两边的参数都可以进行类型的隐式转换(implicit type conversions)。但是在类内定义操作符的时候，只有右手边的参数可以执行类型的隐式转换。
+
+比如说我们声明一个这样的类：
+```
+class Message {
+    std::string content;
+public:
+    Message(const std::string& str);
+    bool operator==(const std::string& rhs) const;
+};
+```
+这种方式对运算符的重载，允许我们这样操作：
+```
+Message message("Test");
+std::string msg("Test");
+if (message == msg) {   // Message类可以和std::string类型的字符串比较
+    // do stuff...
+}
+```
+
+但是当我们把比较顺序换一下：
+```
+if (msg == message) { // this won't compile
+```
+就会编译出错，原因很明显，在类内定义操作符的时候只有右手边的参数可以执行隐式转换，上面明显没有匹配的类型。
+解决方案就是增加一个匹配类型：
+```
+class Message {
+    std::string content;
+public:
+    Message(const std::string& str);
+    bool operator==(const std::string& rhs) const;
+    friend bool operator==(const std::string& lhs, const Message& rhs);
+};
+```
+或者声明一个隐式转换操作符转到我们想要的类型(嘛这里不是很熟悉，我也没完全明白)：
+```
+class Message {
+    std::string content;
+public:
+    Message(const std::string& str);
+    bool operator==(const std::string& rhs) const;
+    operator std::string() const;
+};
+```
+
+除此之外，还有一个需要注意的是，当我们重载操作符需要参照到类的私有成员的时候也必须使用friend限定。
+
+至于操作符重载最好是以内联函数的形式这种结论我没有依据，还是要注意一些为好。
+
+参考资料
+- [What operators should be declared as friends?](https://stackoverflow.com/questions/6255825/what-operators-should-be-declared-as-friends/6255899)
