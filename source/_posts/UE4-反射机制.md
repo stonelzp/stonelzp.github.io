@@ -47,7 +47,7 @@ UField
     // Debug settings UI
     bool show_about_app = true;
     ImGui::Begin("DebugSettings", &show_about_app, ImGuiWindowFlags_AlwaysAutoResize);
-        
+
     // Creaete DebugUI for UObject
     bool AnyPropertiesEdited = false;
     UClass* obj = DebugSettings->GetClass();
@@ -123,7 +123,4 @@ void UMyClass::ListAllObjectUFunctions(const UObject* Object) {
 - [《InsideUE4》UObject（四）类型系统代码生成](https://zhuanlan.zhihu.com/p/25098685)
 
 感觉上面的文章都很重要。尤其是最后一篇。
-
-
-
-
+ 
