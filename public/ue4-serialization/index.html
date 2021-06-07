@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这一次要好好的理解UE4中的Serialization这个概念。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4中的Serialization">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-serialization/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="这一次要好好的理解UE4中的Serialization这个概念。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-06-07T15:28:04.030Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4中的Serialization">
+<meta name="twitter:description" content="这一次要好好的理解UE4中的Serialization这个概念。">
+
+<link rel="canonical" href="http://stonelzp.github.io/ue4-serialization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4中的Serialization | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue4-serialization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4中的Serialization
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-06-07 22:53:31" itemprop="dateCreated datePublished" datetime="2021-06-07T22:53:31+09:00">2021-06-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-06-08 00:28:04" itemprop="dateModified" datetime="2021-06-08T00:28:04+09:00">2021-06-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这一次要好好的理解UE4中的Serialization这个概念。<br><a id="more"></a></p>
+<h1 id="Serialization"><a href="#Serialization" class="headerlink" title="Serialization"></a>Serialization</h1><h1 id="NetWorking-Serialization"><a href="#NetWorking-Serialization" class="headerlink" title="NetWorking Serialization"></a>NetWorking Serialization</h1><p>关于Networking的序列化操作是一个很久之前就困扰我的谜题，有那么一段代码我经常会看见，知道是为了什么而存在的但是不知道需要怎么用，这次就让我彻底的了解这些个代码。</p>
+<h2 id="Custom-Struct-Serialization"><a href="#Custom-Struct-Serialization" class="headerlink" title="Custom Struct Serialization"></a>Custom Struct Serialization</h2><p>关于UE4中的自定义的<code>USTRUCT</code>类型的网络序列化问题，为了缩减RPC调用的带宽(bandwidth)，UE4提供了很强大的序列化功能。但是这不是自动的，需要我们做一些设置。</p>
+<p>很早以前就一直发现但是一直没有仔细看和整理的文章</p>
+<ul>
+<li><a href="http://www.aclockworkberry.com/custom-struct-serialization-for-networking-in-unreal-engine/" target="_blank" rel="noopener">Custom Struct Serialization for Networking in Unreal Engine</a></li>
+</ul>
+<p>当我们使用UE4提供的<strong>USTRUCT</strong>自定义了一个结构体之后，我们可以为其添加一个<code>NetSerialize</code>函数，来为UE4的Networking中<strong>属性复制(Properties Replication)</strong>和<strong>RPC</strong>提供序列化(Serialization)和反序列化(Deserialization)方法。</p>
+<p>这是基于UE4所提供的<strong>struct trait system</strong>之上的。</p>
+<p>关于如何使用这个函数其实在UE4的源码中也有大量的使用案例和Mannual，最集中的就是源码了。</p>
+<ul>
+<li><strong>Runtime/Engine/Classes/Engine/NetSerialization.h</strong></li>
+</ul>
+<p>关于这个方法的定义：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @param Ar FArchive to read or write from.</span></span><br><span class="line"><span class="comment"> * @param Map PackageMap used to resolve references to UObject*</span></span><br><span class="line"><span class="comment"> * @param bOutSuccess return value to signify if the serialization was succesfull (if false, an error will be logged by the calling function)</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return return true if the serialization was fully mapped. If false, the property will be considered 'dirty' and will replicate again on the next update.</span></span><br><span class="line"><span class="comment"> * This is needed for UActor* properties. If an actor's Actorchannel is not fully mapped, properties referencing it must stay dirty.</span></span><br><span class="line"><span class="comment"> * Note that UPackageMap::SerializeObject returns false if an object is unmapped. Generally, you will want to return false from your ::NetSerialize</span></span><br><span class="line"><span class="comment"> * if you make any calls to ::SerializeObject that return false.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> <span class="function"><span class="keyword">bool</span> <span class="title">NetSerialize</span><span class="params">(FArchive&amp; Ar, class UPackageMap* Map, <span class="keyword">bool</span>&amp; bOutSuccess)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>结构体中的使用：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">USTRUCT()</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FMyCustomNetSerializableStruct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	UPROPERTY()</span><br><span class="line">	<span class="keyword">float</span> SomeProperty;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">NetSerialize</span><span class="params">(FArchive&amp; Ar, class UPackageMap* Map, <span class="keyword">bool</span>&amp; bOutSuccess)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TStructOpsTypeTraits</span>&lt;FMyCustomNetSerializableStruct&gt; :</span> <span class="keyword">public</span> TStructOpsTypeTraitsBase2&lt;FMyCustomNetSerializableStruct&gt;</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">enum</span></span><br><span class="line">	&#123;</span><br><span class="line">		WithNetSerializer = <span class="literal">true</span></span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>上面的模板类型匹配是UE4会自动调用我们自定义结构体中<code>NetSerialize</code>函数的关键，如果我们不提供这样的类型匹配不将<code>WithNetSerializer</code>设为true，那这个函数不会被调用，当然自己在别的函数中手动调用的话除外。</p>
+<p>除了<code>WithNetSerializer</code>这个之外，UE4还提供了许多其他的特征(type traits):<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Runtime/CoreUObject/Public/UObject/Class.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** type traits to cover the custom aspects of a script struct **/</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TStructOpsTypeTraitsBase</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">enum</span></span><br><span class="line">	&#123;</span><br><span class="line">		WithZeroConstructor            = <span class="literal">false</span>, <span class="comment">// struct can be constructed as a valid object by filling its memory footprint with zeroes.</span></span><br><span class="line">		WithNoInitConstructor          = <span class="literal">false</span>, <span class="comment">// struct has a constructor which takes an EForceInit parameter which will force the constructor to perform initialization, where the default constructor performs 'uninitialization'.</span></span><br><span class="line">		WithNoDestructor               = <span class="literal">false</span>, <span class="comment">// struct will not have its destructor called when it is destroyed.</span></span><br><span class="line">		WithCopy                       = <span class="literal">false</span>, <span class="comment">// struct can be copied via its copy assignment operator.</span></span><br><span class="line">		WithIdenticalViaEquality       = <span class="literal">false</span>, <span class="comment">// struct can be compared via its operator==.  This should be mutually exclusive with WithIdentical.</span></span><br><span class="line">		WithIdentical                  = <span class="literal">false</span>, <span class="comment">// struct can be compared via an Identical(const T* Other, uint32 PortFlags) function.  This should be mutually exclusive with WithIdenticalViaEquality.</span></span><br><span class="line">		WithExportTextItem             = <span class="literal">false</span>, <span class="comment">// struct has an ExportTextItem function used to serialize its state into a string.</span></span><br><span class="line">		WithImportTextItem             = <span class="literal">false</span>, <span class="comment">// struct has an ImportTextItem function used to deserialize a string into an object of that class.</span></span><br><span class="line">		WithAddStructReferencedObjects = <span class="literal">false</span>, <span class="comment">// struct has an AddStructReferencedObjects function which allows it to add references to the garbage collector.</span></span><br><span class="line">		WithSerializer                 = <span class="literal">false</span>, <span class="comment">// struct has a Serialize function for serializing its state to an FArchive.</span></span><br><span class="line">		WithPostSerialize              = <span class="literal">false</span>, <span class="comment">// struct has a PostSerialize function which is called after it is serialized</span></span><br><span class="line">		WithNetSerializer              = <span class="literal">false</span>, <span class="comment">// struct has a NetSerialize function for serializing its state to an FArchive used for network replication.</span></span><br><span class="line">		WithNetDeltaSerializer         = <span class="literal">false</span>, <span class="comment">// struct has a NetDeltaSerialize function for serializing differences in state from a previous NetSerialize operation.</span></span><br><span class="line">		WithSerializeFromMismatchedTag = <span class="literal">false</span>, <span class="comment">// struct has a SerializeFromMismatchedTag function for converting from other property tags.</span></span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>关于原文中有这样一段：</p>
+<blockquote>
+<p>The <code>FArchive</code> is a class which implements a common pattern for data serialization, allowing the writing of two-way functions. Basically, when it comes to serialization, you have to make sure that the way you serialize your data is exactly the same you use for deserialization. The best way to ensure this behavior is to write one single context-sensitive function that does both. The black magic of the <code>FArchive</code> lays in its overloaded <code>&lt;&lt;</code> operator. This operator is at the base of the creation of two-way functions. Its behavior is context-sensitive: when the <code>FArchive</code> is in write mode, it copies data from right to left, when the <code>FArchive</code> is in read mode, it copies data from left to right.</p>
+</blockquote>
+<p><code>&lt;&lt;</code>看似是单向的其实是双向的，真的神奇。</p>
+<p>作者用这里的代码作为参考：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Runtime/Core/Private/Math/UnrealMath.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> FRotator::SerializeCompressed( FArchive&amp; Ar )</span><br><span class="line">&#123;</span><br><span class="line">	uint8 BytePitch = FRotator::CompressAxisToByte(Pitch);</span><br><span class="line">	uint8 ByteYaw = FRotator::CompressAxisToByte(Yaw);</span><br><span class="line">	uint8 ByteRoll = FRotator::CompressAxisToByte(Roll);</span><br><span class="line"></span><br><span class="line">	uint8 B = (BytePitch!=<span class="number">0</span>);</span><br><span class="line">	Ar.SerializeBits( &amp;B, <span class="number">1</span> );</span><br><span class="line">	<span class="keyword">if</span>( B )</span><br><span class="line">	&#123;</span><br><span class="line">		Ar &lt;&lt; BytePitch;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		BytePitch = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	B = (ByteYaw!=<span class="number">0</span>);</span><br><span class="line">	Ar.SerializeBits( &amp;B, <span class="number">1</span> );</span><br><span class="line">	<span class="keyword">if</span>( B )</span><br><span class="line">	&#123;</span><br><span class="line">		Ar &lt;&lt; ByteYaw;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		ByteYaw = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	B = (ByteRoll!=<span class="number">0</span>);</span><br><span class="line">	Ar.SerializeBits( &amp;B, <span class="number">1</span> );</span><br><span class="line">	<span class="keyword">if</span>( B )</span><br><span class="line">	&#123;</span><br><span class="line">		Ar &lt;&lt; ByteRoll;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		ByteRoll = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 这里就是context-sensitive：只有在archive处于read mode的时候数据会被还原到结构体的属性中</span></span><br><span class="line">	<span class="keyword">if</span>( Ar.IsLoading() )</span><br><span class="line">	&#123;</span><br><span class="line">		Pitch = FRotator::DecompressAxisFromByte(BytePitch);</span><br><span class="line">		Yaw	= FRotator::DecompressAxisFromByte(ByteYaw);</span><br><span class="line">		Roll = FRotator::DecompressAxisFromByte(ByteRoll);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这在我们MultiplayerNetworking中是一个相当有用的特性。比如说当我们想要复制玩家的control的时候，我们需要将这些数据同步到其他客户端上，我们可以像上面的例子一样，将每一个control的数据压缩到一个字节中，而且仅当这个数据不为0，由于我们的控制也许大部分时间都是处于0的状态，这样就可以节省大量的带宽。下面是作者给出的例子：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">NetSerialize</span><span class="params">(FArchive&amp; Ar, class UPackageMap* Map, <span class="keyword">bool</span>&amp; bOutSuccess)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    uint8 ByteAcceleration  = FMath::Quantize8UnsignedByte(Acceleration);</span><br><span class="line">    uint8 ByteBrake         = FMath::Quantize8UnsignedByte(Brake);</span><br><span class="line">    uint8 ByteTurn          = FMath::Quantize8SignedByte(Turn);</span><br><span class="line">    uint8 BytePitch         = FMath::Quantize8SignedByte(Pitch);</span><br><span class="line">    uint8 ByteRoll          = FMath::Quantize8SignedByte(Roll);</span><br><span class="line"></span><br><span class="line">    uint8 B = (ByteAcceleration != <span class="number">0</span>);</span><br><span class="line">    Ar.SerializeBits(&amp;B, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (B)  Ar &lt;&lt; ByteAcceleration; <span class="keyword">else</span> ByteAcceleration = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    B = (ByteBrake != <span class="number">0</span>);</span><br><span class="line">    Ar.SerializeBits(&amp;B, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (B) Ar &lt;&lt; ByteBrake; <span class="keyword">else</span> ByteBrake = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    B = (ByteTurn != <span class="number">0</span>);</span><br><span class="line">    Ar.SerializeBits(&amp;B, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (B) Ar &lt;&lt; ByteTurn; <span class="keyword">else</span> ByteTurn = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    B = (BytePitch != <span class="number">0</span>);</span><br><span class="line">    Ar.SerializeBits(&amp;B, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (B) Ar &lt;&lt; BytePitch; <span class="keyword">else</span> BytePitch = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    B = (ByteRoll != <span class="number">0</span>);</span><br><span class="line">    Ar.SerializeBits(&amp;B, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (B) Ar &lt;&lt; ByteRoll; <span class="keyword">else</span> ByteRoll = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Ar.IsLoading())</span><br><span class="line">    &#123;</span><br><span class="line">        Acceleration    = Decompress8UnsignedByte(ByteAcceleration);</span><br><span class="line">        Brake           = Decompress8UnsignedByte(ByteBrake);</span><br><span class="line">        Turn            = Decompress8SignedByte(ByteTurn);</span><br><span class="line">        Pitch           = Decompress8SignedByte(BytePitch);</span><br><span class="line">        Roll            = Decompress8SignedByte(ByteRoll);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于UE4中提供的可以快速序列化和反序列化的类型：</p>
+<blockquote>
+<p>Unreal Engine implements a generic data serialization for atomic properties of an Actor like ints, floats, objects* and a generic delta serialization for dynamic properties like TArrays. Delta serialization is performed by comparing a previous base state with the current state and generating a diff state and a full state to be used as a base state for the next delta serialization.</p>
+</blockquote>
+<p>可以知道的有<code>ints</code>,<code>floats</code>,<code>object*</code>,还有<code>TArray</code>。数组对应的应该也是那些基础类型。</p>
+<p>数组的实现有些特殊，<strong>DeltaSerialization for Dynamic properties</strong>，DeltaSerialization是通过之前的<strong>base state</strong>和现在的<strong>current state</strong>进行对比生成一个<strong>diff state</strong>和一个<strong>full state</strong>,这个<strong>full state</strong>则会作为下次的<strong>DeltaSerialization</strong>的<strong>base state</strong>。</p>
+<p>而在<strong>USTRUCT</strong>中也是可以对上面的<strong>DeltaSerialization</strong>实现自定义的。通过定义一个<code>NetDeltaSerialize</code>函数。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @param DeltaParms	Generic struct of input parameters for delta serialization</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @return return true if the serialization was fully mapped. If false, the property will be considered 'dirty' and will replicate again on the next update.</span></span><br><span class="line"><span class="comment"> *	This is needed for UActor* properties. If an actor's Actorchannel is not fully mapped, properties referencing it must stay dirty.</span></span><br><span class="line"><span class="comment"> *	Note that UPackageMap::SerializeObject returns false if an object is unmapped. Generally, you will want to return false from your ::NetSerialize</span></span><br><span class="line"><span class="comment"> *  if you make any calls to ::SerializeObject that return false.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">NetDeltaSerialize</span><span class="params">(FNetDeltaSerializeInfo &amp; DeltaParms)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<p>上面提到的UE4的Serialization源码中有很多实现的教程。</p>
+<p><strong>Custom net delta serialization</strong>主要是跟<strong>Fast TArray Replication(FTR)</strong>结合使用的。<br>基本上如果我们想要有效的对<strong>TArray</strong>进行复制(replicated)，又或者想要在客户端检测到add和remove的事件，那么就非常推荐我们在struct中使用FTR。</p>
+<p>下面是关于FTR的代码源码的注释说明：</p>
+<blockquote>
+<p>Fast TArray Replication is a custom implementation of NetDeltaSerialize that is suitable for TArrays of UStructs. It offers performance improvements for large data sets, it serializes removals from anywhere in the array optimally, and allows events to be called on clients for adds and removals. The downside is that you will need to have game code mark items in the array as dirty, and well as the order of the list is not guaranteed to be identical between client and server in all cases.</p>
+</blockquote>
+<p>这是关于如何在自定义的struct中使用FTR的例子，来自于UE4的源码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** Step 1: Make your struct inherit from FFastArraySerializerItem */</span></span><br><span class="line">USTRUCT()</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FExampleItemEntry</span> :</span> <span class="keyword">public</span> FFastArraySerializerItem</span><br><span class="line">&#123;</span><br><span class="line">	GENERATED_USTRUCT_BODY()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Your data:</span></span><br><span class="line">	UPROPERTY()</span><br><span class="line">	int32		ExampleIntProperty;</span><br><span class="line"></span><br><span class="line">	UPROPERTY()</span><br><span class="line">	<span class="keyword">float</span>		ExampleFloatProperty;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Optional functions you can implement for client side notification of changes to items;</span></span><br><span class="line"><span class="comment">	 * Parameter type can match the type passed as the 2nd template parameter in associated call to FastArrayDeltaSerialize</span></span><br><span class="line"><span class="comment">	 *</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">NOTE:</span> It is not safe to modify the contents of the array serializer within these functions, nor to rely on the contents of the array</span></span><br><span class="line"><span class="comment">	 * being entirely up-to-date as these functions are called on items individually as they are updated, and so may be called in the middle of a mass update.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PreReplicatedRemove</span><span class="params">(<span class="keyword">const</span> struct FExampleArray&amp; InArraySerializer)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PostReplicatedAdd</span><span class="params">(<span class="keyword">const</span> struct FExampleArray&amp; InArraySerializer)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PostReplicatedChange</span><span class="params">(<span class="keyword">const</span> struct FExampleArray&amp; InArraySerializer)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Step 2: You MUST wrap your TArray in another struct that inherits from FFastArraySerializer */</span></span><br><span class="line">USTRUCT()</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FExampleArray</span>:</span> <span class="keyword">public</span> FFastArraySerializer</span><br><span class="line">&#123;</span><br><span class="line">	GENERATED_USTRUCT_BODY()</span><br><span class="line"></span><br><span class="line">	UPROPERTY()</span><br><span class="line">	TArray&lt;FExampleItemEntry&gt;	Items;	<span class="comment">/** Step 3: You MUST have a TArray named Items of the struct you made in step 1. */</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/** Step 4: Copy this, replace example with your names */</span></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">NetDeltaSerialize</span><span class="params">(FNetDeltaSerializeInfo &amp; DeltaParms)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">	   <span class="keyword">return</span> FFastArraySerializer::FastArrayDeltaSerialize&lt;FExampleItemEntry, FExampleArray&gt;( Items, DeltaParms, *<span class="keyword">this</span> );</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Step 5: Copy and paste this struct trait, replacing FExampleArray with your Step 2 struct. */</span></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TStructOpsTypeTraits</span>&lt; FExampleArray &gt; :</span> <span class="keyword">public</span> TStructOpsTypeTraitsBase</span><br><span class="line">&#123;</span><br><span class="line">       <span class="keyword">enum</span></span><br><span class="line">       &#123;</span><br><span class="line">			WithNetDeltaSerializer = <span class="literal">true</span>,</span><br><span class="line">       &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Step 6 and beyond:</span></span><br><span class="line"><span class="comment"> *		-Declare a UPROPERTY of your FExampleArray (step 2) type.</span></span><br><span class="line"><span class="comment"> *		-You MUST call MarkItemDirty on the FExampleArray when you change an item in the array. You pass in a reference to the item you dirtied.</span></span><br><span class="line"><span class="comment"> *			See FFastArraySerializer::MarkItemDirty.</span></span><br><span class="line"><span class="comment"> *		-You MUST call MarkArrayDirty on the FExampleArray if you remove something from the array.</span></span><br><span class="line"><span class="comment"> *		-In your classes GetLifetimeReplicatedProps, use DOREPLIFETIME(YourClass, YourArrayStructPropertyName);</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *		You can override the following virtual functions in your structure (step 1) to get notifies before add/deletes/removes:</span></span><br><span class="line"><span class="comment"> *			-void PreReplicatedRemove(const FFastArraySerializer&amp; Serializer)</span></span><br><span class="line"><span class="comment"> *			-void PostReplicatedAdd(const FFastArraySerializer&amp; Serializer)</span></span><br><span class="line"><span class="comment"> *			-void PostReplicatedChange(const FFastArraySerializer&amp; Serializer)</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *		Thats it!</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure></p>
+<p>关于上面的第六步及以后，作者给了示例：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// adding a FExampleArray property to an Actor</span></span><br><span class="line">UCLASS()</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyActor</span> :</span> <span class="keyword">public</span> AActor</span><br><span class="line">&#123;</span><br><span class="line">	GENERATED_UCLASS_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	UPROPERTY(Replicated)</span><br><span class="line">	FExampleArray DeltaTest;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Adding DOREPLIFETIME to the GetLifetimeReplicatedProps method</span></span><br><span class="line"><span class="keyword">void</span> MyActor::GetLifetimeReplicatedProps(TArray&lt; FLifetimeProperty &gt; &amp; OutLifetimeProps) <span class="keyword">const</span></span><br><span class="line">&#123;</span><br><span class="line">	Super::GetLifetimeReplicatedProps(OutLifetimeProps);</span><br><span class="line"></span><br><span class="line">	DOREPLIFETIME(MyActor, DeltaTest);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Adding an element to the array</span></span><br><span class="line"><span class="keyword">void</span> MyActor::AddItem() &#123;</span><br><span class="line">	FExampleItemEntry a;</span><br><span class="line">	a.ExampleFloatProperty = <span class="number">3.14</span>;</span><br><span class="line">	a.ExampleIntProperty = <span class="number">1234</span>;		</span><br><span class="line">	DeltaTest.MarkItemDirty(DeltaTest.Items.Add_GetRef(a));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Modifying an element</span></span><br><span class="line"><span class="keyword">void</span> MyActor::ChangeItem(int32 ItemID) &#123;</span><br><span class="line">	<span class="keyword">if</span> (DeltaTest.Items.Num() &gt; ItemID) &#123;</span><br><span class="line">		DeltaTest.Items[ItemID].ExampleFloatProperty = <span class="number">6.28</span>;</span><br><span class="line">		DeltaTest.Items[ItemID].ExampleIntProperty = <span class="number">5678</span>;</span><br><span class="line">		DeltaTest.MarkItemDirty(DeltaTest.Items[ItemID]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Removing an element</span></span><br><span class="line"><span class="keyword">void</span> MyActor::RemoveLastItem() &#123;</span><br><span class="line">	<span class="keyword">if</span> (DeltaTest.Items.Num() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		DeltaTest.Items.RemoveAt(DeltaTest.Items.Num()<span class="number">-1</span>, <span class="number">1</span>);</span><br><span class="line">		DeltaTest.MarkArrayDirty();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>作者将一个Item标志为Dirty位，当新添加一个Item或者修改了一个Item的时候。<br>作者将整个Array标志为Dirty位，当移除了某个Item的时候。</p>
+<p>这里我也不清楚这篇文章的作者是有意为之还是说移除某个对象的时候，其整体Array都需要标志为Dirty位是必须操作。不过我感觉这个是必须操作。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/ue4-meta-data-specifiers/" rel="prev" title="UE4中的Meta修饰符">
+      <i class="fa fa-chevron-left"></i> UE4中的Meta修饰符
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Serialization"><span class="nav-number">1.</span> <span class="nav-text">Serialization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NetWorking-Serialization"><span class="nav-number">2.</span> <span class="nav-text">NetWorking Serialization</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Custom-Struct-Serialization"><span class="nav-number">2.1.</span> <span class="nav-text">Custom Struct Serialization</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
