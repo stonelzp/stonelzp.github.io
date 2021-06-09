@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记录一些Vim的常用的使用方法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.523Z">
+<meta property="og:updated_time" content="2021-06-09T14:06:30.556Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vim学习笔记">
 <meta name="twitter:description" content="记录一些Vim的常用的使用方法。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 01:09:45" itemprop="dateModified" datetime="2021-02-19T01:09:45+09:00">2021-02-19</time>
+                <time title="修改时间：2021-06-09 23:06:30" itemprop="dateModified" datetime="2021-06-09T23:06:30+09:00">2021-06-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,6 +266,25 @@
 <p>参考资料：</p>
 <ul>
 <li><a href="https://stackoverflow.com/questions/1497958/how-do-i-use-vim-registers" target="_blank" rel="noopener">How do I use vim registers?</a></li>
+</ul>
+<h3 id="Vim中代码的整体移动"><a href="#Vim中代码的整体移动" class="headerlink" title="Vim中代码的整体移动"></a>Vim中代码的整体移动</h3><p>VS中对于代码的格式调整不是太智能，尤其是函数体大括号的调整急死强迫症。只好自己手动调整整块代码的缩进和反向缩进。</p>
+<p>使用Vim的Visual模式选中想要移动的代码块，</p>
+<ul>
+<li><code>v</code>进入可视化模式移动光标选择想要移动的内容</li>
+<li><code>V</code>进入行可视化模式上下移动光标快速选择行内容</li>
+<li><code>shift</code>+<code>&gt;</code> :选中区域向右移动(实际上就是<code>&gt;</code>)</li>
+<li><code>shift</code>+<code>&lt;</code> :选中区域向左移动(实际上就是<code>&lt;</code>)</li>
+</ul>
+<p><code>&gt;</code>和<code>&lt;</code>本身就可以用来移动字符(基本上是光标行整行左移右移这样)。位移量可以通过设置<code>~/.vimrc</code>文件中的<code>set shiftwidth=4</code>内容来变更。</p>
+<p>难得记录了一点可视化的内容稍微记录一下可视化状态下的选中操作，我自己认为会经常用到的：</p>
+<ul>
+<li><code>va{</code> : 这会选中当前光标所在的<code>{}</code>大括号范围内的所有内容包含大括号。</li>
+<li><code>vi{</code> : 这会选中当前光标所在的<code>{}</code>大括号范围内的所有内容不包含大括号。<ul>
+<li><code>a</code>和<code>i</code>的区别就是是否包含后面的范围字符</li>
+<li>拓展一下就可以猜到<code>va&lt;</code>,<code>va[</code>,<code>vi&lt;</code>,<code>vi[</code>的使用</li>
+</ul>
+</li>
+<li><code>viw</code> : 选中当前光标所在的单词，跟我之前使用的的<code>bve</code>差不多。</li>
 </ul>
 
     </div>
@@ -350,7 +369,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#替换字符"><span class="nav-number">1.</span> <span class="nav-text">替换字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用寄存器中的内容进行替换"><span class="nav-number">2.</span> <span class="nav-text">使用寄存器中的内容进行替换</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#替换字符"><span class="nav-number">1.</span> <span class="nav-text">替换字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用寄存器中的内容进行替换"><span class="nav-number">2.</span> <span class="nav-text">使用寄存器中的内容进行替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim中代码的整体移动"><span class="nav-number">3.</span> <span class="nav-text">Vim中代码的整体移动</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
