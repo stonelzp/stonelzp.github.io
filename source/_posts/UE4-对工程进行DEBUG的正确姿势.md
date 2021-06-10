@@ -303,7 +303,7 @@ AssetRegistryModule.Get().GetAssetsByClass(Class, AssetData);
 FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
         TArray<FAssetData> AssetDatas;
         /*
-        // const FName ClassName = 
+        // const FName ClassName =
         AssetRegistryModule.Get().GetAssetsByClass("StaticMesh", AssetDatas);
         if(AssetDatas.Num() > 0)
         {
@@ -343,36 +343,36 @@ FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FA
 - [What is Asset Registry used for?](https://answers.unrealengine.com/questions/877592/what-is-asset-registry-used-for.html)
 
 > To understand what asset registry is you need to understand what asset is in technical term.
-> 
+>
 > Asset is a UObject that can be dumped down to file (uasset package) and can be loaded back to the memory from that file and in is mainly used to store game resources, when you load them they are avable in memory as UObject objects like UBlueprint, UTexture2D, USkeletalMesh. USoundWave and so on. Every type of asset you see in content browser has corresponding class and each asset you see in "content Browser" is a UObject that is in memory or can be loaded in memory.
-> 
+>
 > As assets are UObjects normally you would seek them out from reflection system. But because assets exists also on files and don't need to be loaded to memory all the time when they are unused (they would just waste memory space), there need to be object that needs to keep track of them regardless if they are loaded or not. Searching them in reflection system is pointless if they are not loaded first. And that what AsssetRegistry is. it allows you to list out assets, get there regestry entry (FAssetData) and load them up, it also a to more optimized way to seek assets that are loaded already, as well as edit there registry information. And yes "Content Browser" in reality is Asset Registry explorer and it mainly use AssetRegistry to list and edit assets in there. It also provides event delegates which let you track live any changes done to asset registry.
-> 
+>
 > Best way to just look in API refrence to see what function it gives:
-> 
+>
 > https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/index.html
-> 
+>
 > You can always access from anywhere via:
-> 
+>
 >  ```
 >  AssetRegistryModule.Get()->...
 >  ```
 > Assets in registry are stored in paths (which you see as folder structure in content browser), if you want to request specific asset you need to know path for it (you can get it by right clicking asset and clicking Copy Reference). but you can also whole sets of assets using diffrent identificators. for example you can get all assets of specific class (class name as name if the asset class without U prefix:
-> 
+>
 > https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/IAssetRegistry/GetAssetsByClass/index.html
-> 
+>
 > ```
 >  TArray<FAssetData> Assets;
 >  AssetRegistryModule.Get()->GetAssetsByClass(FName("Texture2D"),Assets,true);
 > ```
 > And oyu will get registry entires of assets in form of array of FAssetData structures:
-> 
+>
 > https://api.unrealengine.com/INT/API/Runtime/AssetRegistry/FAssetData/index.html
-> 
+>
 > And you can load and get asset UObject it self by calling GetAsset()
-> 
+>
 > LoadObject is a function that loads UObject form the file, it function is useful if you want to load asset (or not) that is outside of asset registry.
-> 
+>
 > Find Object on other hand finds assets that is already loaded in memory.
 
 
@@ -475,3 +475,29 @@ uint8 bCanBeDamaged : 1;
 
 参考链接：
 - [Uint8 Confusion .. Why not bool?](https://answers.unrealengine.com/questions/888947/uint8-confusion-why-not-bool.html)
+
+## WITH_EDITOR and WITH_EDITORONLY_DATA
+~在对项目工程进行DEBUG的时候免不了添加一些DEBUG函数，但是这些个DEBUG函数也只是会在UE4的Editor上使用，这种依存于UE4Editor的DEBUG代码，就可以利用标题的宏，当最终进行shipping的编译时，这些代码都不会被编译(应该)。~
+
+刨除上面我自己的肤浅的理解，关于这两个宏的使用在网上调查了一下也没有完全明白这两个宏使用的区别，使用条件还是不清楚，还是不要使用的好。
+
+```
+// CoreMiscDefines.h
+#ifndef WITH_EDITORONLY_DATA
+	#if !PLATFORM_CAN_SUPPORT_EDITORONLY_DATA || UE_SERVER || PLATFORM_IOS
+		#define WITH_EDITORONLY_DATA	0
+	#else
+		#define WITH_EDITORONLY_DATA	1
+	#endif
+#endif
+
+// PCH.Engin.h
+#define WITH_EDITOR 1
+```
+
+还是老老实实的用下面的这个包含DEBUG的代码吧。
+
+```
+#if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
+#endif
+```

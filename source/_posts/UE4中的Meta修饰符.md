@@ -36,3 +36,64 @@ float SettingsValue;
 `meta = (EditCondition = "!bCondition")`这样的写法也是可以的。
 
 - 参考文章：[【UE4】詳細パネルでの編集可・不可を制御する](https://qiita.com/Dv7Pavilion/items/6f86134587b3ad6ff396)
+
+### meta=(WorldContext="WorldContextObject", CallableWithoutWorldContext)
+这个我用来定义BlueprintCallable函数时调用省略`WorldContextObject`。
+
+想要记录下这个meta的原因是，我想得到当前调用函数所在的Blueprint的名字。在C++中直接使用`__Function__`写个宏就可以直接得到调用函数的名字，但是在Blueprint中，没有宏当参数这么便利的方法，得顺便把self当参数传进去。
+
+这就导致我想输出蓝图名字的时候，无论如何都得额外做一个把self传进去的操作。
+
+但是有一天我发现，为什么UE4自带的`Print`函数就没有传这样的参，而且还把调用蓝图的名字输出来了。看代码就知道了。
+
+在下面的源代码中可以找到UE4自带的Print函数声明定义：
+- `Engine\Source\Runtime\Engine\Classes\Kismet\KismetSystemLibrary.h`
+- `Engine\Source\Runtime\Engine\Private\KismetSystemLibrary.cpp`
+
+会找到下面的声明：
+```C++
+UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContextObject", CallableWithoutWorldContext, Keywords = "log print", AdvancedDisplay = "2", DevelopmentOnly), Category="Utilities|String")
+static void PrintString(UObject* WorldContextObject, const FString& InString = FString(TEXT("Hello")), bool bPrintToScreen = true, bool bPrintToLog = true, FLinearColor TextColor = FLinearColor(0.0, 0.66, 1.0), float Duration = 2.f);
+```
+
+重点是下面:
+**WorldContext="WorldContextObject", CallableWithoutWorldContext** 这部分。
+
+受这个启发，这个让我们可以不用传入额外的参数（self），并且使用`GetNameSafe`函数得到名字。
+
+**Tips:**
+1. Keywords关键字可以设置搜索的关键字。细节上面的官方文档中有。
+2. `GEngine->AddOnScreenDebugMessage((uint64)-1, Duration, TextColor.ToFColor(true), FinalDisplayString);`向屏幕输出LOG，来自上面`PrintString()`函数的实现。
+
+
+# Class Specifier
+除了一些meta限定，其它的地方UE4也提供了许多修饰符。这个是**UCLASS**定义的时候使用的修饰符，可以定义UCLASS在Engine和Editor中的一些行为。
+- [Class Specifiers](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/GameplayArchitecture/Classes/Specifiers/)
+
+## 一些我用过的
+
+### hidecategories=("category1|category2")
+官网上也这样写
+```
+HideCategories=(Category1, Category2, ...)
+```
+
+作用就是可以隐藏定义的Category，由于这个修饰符是会影响到子类的，所以被我用来在子类的蓝图中隐藏父类中的Category。
+
+# Property Specifiers
+这一部分用来记录`UPROPERTY()`，修饰属性的各种修饰符。
+
+## 一些我用过的
+
+### Transient
+根据官网的描述：
+> Property is transient, meaing it will not be saved or loaded. Properties tagged this way will be zero-filled at loat time.
+
+```c++
+    UPROPERTY(Transient)
+    int32 ValueX;
+```
+
+说实话，在没有对UE4的多人模式进行学习的时候真是一头雾水。被标记了这个属性修饰符的变量，意味着变量存储的是一个暂时的值，我们并不想永久的保存它，比如说这个变量保存的是其它类中的内容，就好像是弱指针一样，只是暂时的保留这个变量的值。
+
+还有一个作用就是，标记了这个修饰符的变量，它不会被Serialize(见UE4的Net Serialize)。
