@@ -4061,6 +4061,11 @@ table th:nth-of-type(4) {
 <h1 id="VS中的DEBUG"><a href="#VS中的DEBUG" class="headerlink" title="VS中的DEBUG"></a>VS中的DEBUG</h1><p>如何使用VS进行Debug是非常重要的，致命的是我至今未能完全掌握，不要总是依靠Log的输出自己猜了。</p>
 <h2 id="在UE4中使用VS进行调试"><a href="#在UE4中使用VS进行调试" class="headerlink" title="在UE4中使用VS进行调试"></a>在UE4中使用VS进行调试</h2><p>首先要把UE4的源码下载，然后按照官方的指示操作生成VS的工程文件。</p>
 <p>~打开文件之后开始build，这里我遇见的一个问题是当我编译成功之后，不知道该怎么运行了。~</p>
+<h3 id="Build-SolutionConfigutarions"><a href="#Build-SolutionConfigutarions" class="headerlink" title="Build SolutionConfigutarions"></a>Build SolutionConfigutarions</h3><p>关于UE4开发过程中对项目的编译构成的选择就有些讲究了。默认的就是<code>Development Editor</code>，这种默认的编译构成方式优化了许多的内容导致对项目进行Debug的时候会有些断点（BreakPoint）不管用或者无法看到数值，超级不方便。</p>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://qiita.com/4_mio_11/items/8b04879d5e0ebeed681a" target="_blank" rel="noopener">UE4のコードをVisual Studioからビルドする際の推奨設定(定期更新)</a></li>
+</ul>
 <h3 id="UnrealVS-UBT编译-amp-UE4热更新"><a href="#UnrealVS-UBT编译-amp-UE4热更新" class="headerlink" title="UnrealVS - UBT编译&amp;UE4热更新"></a>UnrealVS - UBT编译&amp;UE4热更新</h3><ul>
 <li>2021/06/07 前来更新</li>
 </ul>
@@ -4270,10 +4275,19 @@ table th:nth-of-type(4) {
   <entry>
     <title>C++中的常见关键字记录</title>
     <url>/c++-modifier-keyword/</url>
-    <content><![CDATA[<p>之后需要整理并理解的:</p>
+    <content><![CDATA[<h1 id="一些常见的修饰符"><a href="#一些常见的修饰符" class="headerlink" title="一些常见的修饰符"></a>一些常见的修饰符</h1><h2 id="explicit-禁止隐式类型转换"><a href="#explicit-禁止隐式类型转换" class="headerlink" title="explicit 禁止隐式类型转换"></a>explicit 禁止隐式类型转换</h2><p>标题只是最常用的用法，参考下面网址的描述:</p>
+<ol>
+<li>指定构造函数或转换函数 (C++11 起)或推导指引 (C++17 起)为显式，即它不能用于<strong>隐式转换</strong>和<strong>复制初始化</strong>。</li>
+<li><code>explicit</code>说明符可以与常量表达式一同使用。当且仅当该常量表达式求值为<code>true</code>时函数为显式。<br>(C++20 起)</li>
+</ol>
+<p>explicit 说明符只可出现于在<strong>类定义之内的构造函数</strong>或<strong>转换函数</strong>(C++11 起)的<em>声明说明符序列</em> 中。</p>
+<p>※<em>声明时不带函数说明符 explicit 的拥有单个无默认值形参的 (C++11 前)构造函数被称作转换构造函数。</em><br>※<em>构造函数（除了复制/移动）和用户定义转换函数都可以是函数模板；explicit 的含义不变。</em></p>
+<p>上面的概念还是很复杂，直接把下面网址上的示例代码复制过来了：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">struct A</span><br><span class="line">&#123;</span><br><span class="line">    A(int) &#123; &#125;      // 转换构造函数</span><br><span class="line">    A(int, int) &#123; &#125; // 转换构造函数 (C++11)</span><br><span class="line">    operator bool() const &#123; return true; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct B</span><br><span class="line">&#123;</span><br><span class="line">    explicit B(int) &#123; &#125;</span><br><span class="line">    explicit B(int, int) &#123; &#125;</span><br><span class="line">    explicit operator bool() const &#123; return true; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    A a1 = 1;      // OK：复制初始化选择 A::A(int)</span><br><span class="line">    A a2(2);       // OK：直接初始化选择 A::A(int)</span><br><span class="line">    A a3 &#123;4, 5&#125;;   // OK：直接列表初始化选择 A::A(int, int)</span><br><span class="line">    A a4 = &#123;4, 5&#125;; // OK：复制列表初始化选择 A::A(int, int)</span><br><span class="line">    A a5 = (A)1;   // OK：显式转型进行 static_cast</span><br><span class="line">    if (a1) ;      // OK：A::operator bool()</span><br><span class="line">    bool na1 = a1; // OK：复制初始化选择 A::operator bool()</span><br><span class="line">    bool na2 = static_cast&lt;bool&gt;(a1); // OK：static_cast 进行直接初始化</span><br><span class="line"></span><br><span class="line">//  B b1 = 1;      // 错误：复制初始化不考虑 B::B(int)</span><br><span class="line">    B b2(2);       // OK：直接初始化选择 B::B(int)</span><br><span class="line">    B b3 &#123;4, 5&#125;;   // OK：直接列表初始化选择 B::B(int, int)</span><br><span class="line">//  B b4 = &#123;4, 5&#125;; // 错误：复制列表初始化不考虑 B::B(int,int)</span><br><span class="line">    B b5 = (B)1;   // OK：显式转型进行 static_cast</span><br><span class="line">    if (b2) ;      // OK：B::operator bool()</span><br><span class="line">//  bool nb1 = b2; // 错误：复制初始化不考虑 B::operator bool()</span><br><span class="line">    bool nb2 = static_cast&lt;bool&gt;(b2); // OK：static_cast 进行直接初始化</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我在EffectC++那个书里也有看到过这个关键字的使用说明，说不定以后有时间会整理那本书的内容作为笔记。</p>
 <ul>
 <li><a href="https://zh.cppreference.com/w/cpp/language/explicit" target="_blank" rel="noopener">explicit说明符</a></li>
 </ul>
+<p>等待整理：</p>
 <p>偶然看见的:</p>
 <ul>
 <li><p><a href="http://c-crad.wktk.so/td/?p=250" target="_blank" rel="noopener">explicitとvolatileキーワード(C++)</a></p>
@@ -4285,7 +4299,6 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://qiita.com/1024chon/items/f17ee5afc6644cfd33f1" target="_blank" rel="noopener">*p++のお話(インクリメント演算子って不思議だね</a></li>
 </ul>
-<p>哇这篇文章根本没怎么更新呢..</p>
 <p>这一天我在公司的项目中看到了大佬使用了<code>*&amp;</code>这个运算符，没用过这啊，看看什么意思</p>
 <ul>
 <li><a href="https://stackoverflow.com/questions/5789806/meaning-of-and-in-c" target="_blank" rel="noopener">Meaning of *&amp; and **&amp; in C++</a></li>
@@ -4295,7 +4308,7 @@ table th:nth-of-type(4) {
 <li><a href="https://stackoverflow.com/questions/28778625/whats-the-difference-between-and-in-c/28778902" target="_blank" rel="noopener">What’s the difference between * and &amp; in C?</a><br>这里是这两种关键字出现在函数的参数修饰符的位置。关于作为函数的参数，有什么区别的问题：<blockquote>
 <p><code>funct(int a)</code></p>
 <p>Creates a copy of a</p>
-<p><code>funct(int * a)</code> </p>
+<p><code>funct(int * a)</code></p>
 <p>Takes a pointer to an int as input. But makes a copy of the pointer.</p>
 <p><code>funct(int&amp; a)</code></p>
 <p>Takes an int, but by reference. a is now the exact same int that was given. Not a copy. Not a pointer.</p>
@@ -7242,6 +7255,7 @@ table th:nth-of-type(4) {
     <url>/UE4%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5%E5%A4%84%E7%90%86/</url>
     <content><![CDATA[<p>能够熟练的使用UE4中的异步处理应该能够很好的利用程序运行的资源，和计算。除此之外还有并行的处理。目的是要理清UE4中的线程的同步异步，并行操作和标准C++中的线程同步异步，并行操作。</p>
 <a id="more"></a>
+<h1 id="UE4的异步处理的实现"><a href="#UE4的异步处理的实现" class="headerlink" title="UE4的异步处理的实现"></a>UE4的异步处理的实现</h1><p>首先从UE4的异步处理实现的部分，当然现在还没有用过，也没有整理~</p>
 <p>时间有限，暂时记录下关键字：</p>
 <ul>
 <li>UE C++ ThreadPool</li>
@@ -7262,6 +7276,25 @@ table th:nth-of-type(4) {
 </ul>
 </li>
 </ul>
+<h2 id="资源的排他处理-FScopeLock"><a href="#资源的排他处理-FScopeLock" class="headerlink" title="资源的排他处理(FScopeLock)"></a>资源的排他处理(FScopeLock)</h2><p>虽然我上面的关于UE4多线程的使用处理都还没有完成，但是我先遇到了多线程的资源竞争问题，如果说内存上的一块资源是线程共享的，那么多线程操作的时候不加上锁的话数据就会变得很奇怪，老生常谈了。</p>
+<p>UE4貌似提供了一个快速为数据加锁的实现方式：<strong>FScopeLock</strong></p>
+<p>使用方法也是很简单</p>
+<ol>
+<li><p>声明一个<code>CriticalSection</code>，这又是一个相当重要的概念，但不是UE4专有的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private：</span><br><span class="line">  FCriticalSection Mutex;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在访问资源的函数内的开头使用<code>FScopeLock</code>进行处理</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 参考各种参考资料的时候发现有好多种写法</span><br><span class="line">// Way1：最直接也是参考引擎源码的写法</span><br><span class="line">func()</span><br><span class="line">&#123;</span><br><span class="line">  FScopeLock ScopeLock(&amp;Mutex); // 运行到大括号外资源互斥就会失效</span><br><span class="line">  // FScopeLock ScopeLock(Mutex) // 或者这种写法，但是UE4引擎中没有看到这种值传递的方式</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">// Engine\Source\Runtime\CoreUObject\Private\UObject\Obj.cpp 中的源码</span><br><span class="line">bool IsExcluded(UClass* InClass)</span><br><span class="line">&#123;</span><br><span class="line">  // ...</span><br><span class="line">  FScopeLock ScopeLock(&amp;ExclusionListCrit); // CriticalSection声明的都一样的方式</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Way2:</span><br><span class="line">func()</span><br><span class="line">&#123;</span><br><span class="line">  Mutex.Lock();</span><br><span class="line">  // 这里的资源是线程互斥的</span><br><span class="line"></span><br><span class="line">  Mutex.UnLock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>关于线程资源排他(互斥)处理的方式还有其它方式，<code>FThreadSafeCounter</code>,<code>FThreadSafeBool</code>等，虽然我完全是第一次听说。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://qiita.com/unknown_ds/items/72c910888877995b3a85" target="_blank" rel="noopener">UE4 非同期処理についてのメモ</a></li>
+<li><a href="https://michaeljcole.github.io/wiki.unrealengine.com/MultiThreading_and_synchronization_Guide/" target="_blank" rel="noopener">MultiThreading and synchronization Guide</a></li>
+</ul>
+<p>上面文章基本没看…需要找时间验证多线程处理的实现。<br>不过说实话，这里的资源互斥处理，我只是照着写，也不知道该怎么验证。</p>
+<h1 id="拓展内容"><a href="#拓展内容" class="headerlink" title="拓展内容"></a>拓展内容</h1><h2 id="CriticalSection"><a href="#CriticalSection" class="headerlink" title="CriticalSection"></a>CriticalSection</h2><p>关于这个概念需要找一篇文章好好理解了。</p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>

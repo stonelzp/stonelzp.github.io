@@ -24,6 +24,12 @@ descriptions: 记录一些自己在VS使用过程中遇到的问题或者是之�
 
 ~打开文件之后开始build，这里我遇见的一个问题是当我编译成功之后，不知道该怎么运行了。~
 
+### Build SolutionConfigutarions
+关于UE4开发过程中对项目的编译构成的选择就有些讲究了。默认的就是`Development Editor`，这种默认的编译构成方式优化了许多的内容导致对项目进行Debug的时候会有些断点（BreakPoint）不管用或者无法看到数值，超级不方便。
+
+参考资料:
+- [UE4のコードをVisual Studioからビルドする際の推奨設定(定期更新)](https://qiita.com/4_mio_11/items/8b04879d5e0ebeed681a)
+
 ### UnrealVS - UBT编译&UE4热更新
 - 2021/06/07 前来更新
 

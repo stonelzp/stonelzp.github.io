@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="能够熟练的使用UE4中的异步处理应该能够很好的利用程序运行的资源，和计算。除此之外还有并行的处理。目的是要理清UE4中的线程的同步异步，并行操作和标准C++中的线程同步异步，并行操作。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.365Z">
+<meta property="og:updated_time" content="2021-06-15T15:00:26.832Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的异步处理">
 <meta name="twitter:description" content="能够熟练的使用UE4中的异步处理应该能够很好的利用程序运行的资源，和计算。除此之外还有并行的处理。目的是要理清UE4中的线程的同步异步，并行操作和标准C++中的线程同步异步，并行操作。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 01:09:45" itemprop="dateModified" datetime="2021-02-19T01:09:45+09:00">2021-02-19</time>
+                <time title="修改时间：2021-06-16 00:00:26" itemprop="dateModified" datetime="2021-06-16T00:00:26+09:00">2021-06-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,6 +252,7 @@
       
         <p>能够熟练的使用UE4中的异步处理应该能够很好的利用程序运行的资源，和计算。除此之外还有并行的处理。目的是要理清UE4中的线程的同步异步，并行操作和标准C++中的线程同步异步，并行操作。</p>
 <a id="more"></a>
+<h1 id="UE4的异步处理的实现"><a href="#UE4的异步处理的实现" class="headerlink" title="UE4的异步处理的实现"></a>UE4的异步处理的实现</h1><p>首先从UE4的异步处理实现的部分，当然现在还没有用过，也没有整理~</p>
 <p>时间有限，暂时记录下关键字：</p>
 <ul>
 <li>UE C++ ThreadPool</li>
@@ -272,6 +273,25 @@
 </ul>
 </li>
 </ul>
+<h2 id="资源的排他处理-FScopeLock"><a href="#资源的排他处理-FScopeLock" class="headerlink" title="资源的排他处理(FScopeLock)"></a>资源的排他处理(FScopeLock)</h2><p>虽然我上面的关于UE4多线程的使用处理都还没有完成，但是我先遇到了多线程的资源竞争问题，如果说内存上的一块资源是线程共享的，那么多线程操作的时候不加上锁的话数据就会变得很奇怪，老生常谈了。</p>
+<p>UE4貌似提供了一个快速为数据加锁的实现方式：<strong>FScopeLock</strong></p>
+<p>使用方法也是很简单</p>
+<ol>
+<li><p>声明一个<code>CriticalSection</code>，这又是一个相当重要的概念，但不是UE4专有的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private：</span><br><span class="line">  FCriticalSection Mutex;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在访问资源的函数内的开头使用<code>FScopeLock</code>进行处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">// 参考各种参考资料的时候发现有好多种写法</span><br><span class="line">// Way1：最直接也是参考引擎源码的写法</span><br><span class="line">func()</span><br><span class="line">&#123;</span><br><span class="line">  FScopeLock ScopeLock(&amp;Mutex); // 运行到大括号外资源互斥就会失效</span><br><span class="line">  // FScopeLock ScopeLock(Mutex) // 或者这种写法，但是UE4引擎中没有看到这种值传递的方式</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line">// Engine\Source\Runtime\CoreUObject\Private\UObject\Obj.cpp 中的源码</span><br><span class="line">bool IsExcluded(UClass* InClass)</span><br><span class="line">&#123;</span><br><span class="line">  // ...</span><br><span class="line">  FScopeLock ScopeLock(&amp;ExclusionListCrit); // CriticalSection声明的都一样的方式</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Way2:</span><br><span class="line">func()</span><br><span class="line">&#123;</span><br><span class="line">  Mutex.Lock();</span><br><span class="line">  // 这里的资源是线程互斥的</span><br><span class="line"></span><br><span class="line">  Mutex.UnLock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>关于线程资源排他(互斥)处理的方式还有其它方式，<code>FThreadSafeCounter</code>,<code>FThreadSafeBool</code>等，虽然我完全是第一次听说。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://qiita.com/unknown_ds/items/72c910888877995b3a85" target="_blank" rel="noopener">UE4 非同期処理についてのメモ</a></li>
+<li><a href="https://michaeljcole.github.io/wiki.unrealengine.com/MultiThreading_and_synchronization_Guide/" target="_blank" rel="noopener">MultiThreading and synchronization Guide</a></li>
+</ul>
+<p>上面文章基本没看…需要找时间验证多线程处理的实现。<br>不过说实话，这里的资源互斥处理，我只是照着写，也不知道该怎么验证。</p>
+<h1 id="拓展内容"><a href="#拓展内容" class="headerlink" title="拓展内容"></a>拓展内容</h1><h2 id="CriticalSection"><a href="#CriticalSection" class="headerlink" title="CriticalSection"></a>CriticalSection</h2><p>关于这个概念需要找一篇文章好好理解了。</p>
 
     </div>
 
@@ -356,6 +376,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的异步处理的实现"><span class="nav-number">1.</span> <span class="nav-text">UE4的异步处理的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源的排他处理-FScopeLock"><span class="nav-number">1.1.</span> <span class="nav-text">资源的排他处理(FScopeLock)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拓展内容"><span class="nav-number">2.</span> <span class="nav-text">拓展内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CriticalSection"><span class="nav-number">2.1.</span> <span class="nav-text">CriticalSection</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
