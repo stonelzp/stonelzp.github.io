@@ -13,7 +13,119 @@ tags:
 <!--more-->
 
 # Serialization
+序列化的概念和UE4的反射概念息息相关，而且我在另一篇*UE4-反射机制*这篇文章稍微展开了一点内容，这一篇主要是对UE4.25的新功能**UnversionedPropertySerialization**进行深入了解的同时，希望对序列化的概念如何在UE4中发挥作用这个问题有更深入的了解。
 
+## 何为Serialization（序列化）
+在其他的文章应该也有提到过就是序列化这个概念并不是UE4独有的，而是整个程序领域中存在的概念。
+
+资料中举了一个例子：`ABananaCharacter`:
+![Serialization_Sample01](SerializationSample01.png)
+
+ 可以看到UE4中分为**Property**和普通的**C++变量**两个部分。区别就是普通的C++变量只能在RunTime的时候进行读写，而Property则可以通过UE4的Editor蓝图等进行修改等操作。
+
+ 持有Property属性的变量，会被保存在`UClass`这个容器中，这个UClass就像是这些个属性的说明书一样，由于UClass会将所有的属性必要的信息保存起来，我们可以很容易的通过它来追踪到各个属性在内存里的状态，保存的值。而将这些必要的信息进行收集方便我们处理，以便于之后追踪各个属性变量在内存中展开的状态的过程，就是序列化。可以进行序列化的对象非常的多，包括但不限于普通的变量，容器，复杂的结构体(UStruct等等)。当这个过程结束之后，便可以得到一串加工过的连续的数据。
+![Serialization_Sample02](SerializationSample02.png)
+
+再附上日语的解说：
+![Serialization_Sample03](SerializationSample03.png)
+
+反序列化就是将上面序列化过的数据重新复原到内存上的过程。
+![Deserialization_Sample04](SerializationSample04.png)
+
+了解了序列化的工作之后，UE4又是如何利用这个特性的呢？或者说UE4用这个特性来做什么呢？
+图片中的内容不是全部：
+![Deserialization_Sample05](SerializationSample05.png)
+
+## UE4中的Serializer
+目前在UE4中完成序列化处理的Serializer有两种，应该说是UE4.25开始导入了第二种Serializer
+![Deserialization_Sample06](SerializationSample06.png)
+
+### TaggedPropertySerializer(TPS)
+在4.25之前，UE4使用的都是TPS这个Serializer，相比于UPS来说，操作的代价比较昂贵。
+
+TaggedPropertySerializer:
+- Editor的Asset保存和读取等操作
+- Cook时Asset的保存
+- Cook済みビルドでアセットを読み込む(具体我还是不知道是个什么阶段)
+
+UPS导入之后，后两个操作则可以由UPS来处理了。Cook完后的Asset操作使用UPS的话，效率就会大大提升，相比于原来的Serializer来说。
+
+#### 序列化过程(TPS)
+简单说明一下TPS的序列化过程：
+![Deserialization_Sample07](SerializationSample07.png)
+
+结合上面的图片，TPS首先找到`UClass`中的持有`FProperty`属性的变量，这个FProperty属性保存着这个变量的**名字**，**类型**，**类中的位置**，**meta修饰符数据** 等等的数据情报。根据变量的FProperty属性，TPS会为其创建一个`FPropertyTag`的数据。随后Serializer将创建好的`FPropertyTag`数据和经过特定处理的已经直列化(日语直列化的说法，就是数据被整齐的排成没有多余空间的连续的数据)的数据针对每一个变量都一起保存到Asset文件(uasset)中。
+
+这个`FPropertyTag`是这样的东西
+![Deserialization_Sample08](SerializationSample08.png)
+
+`FPropertyTag`里面包含了很多的信息，或者说，`FPropertyTag`包含了GUID数据的结构等数据，使得在我们对其数据结构进行修改，升级UE4版本或者对已经Release的游戏版本的数据结构进行修改的时候，我们的数据也不会丢失。比如说游戏内的各种设置设定，都不会消失，这也是UE4的引擎在背后默默实现的重要功能之一。
+
+#### 反序列化过程(TPS)
+反序列化的过程就是跟上面的相反
+
+首先是从Asset文件(uasset)中取出直列化的数据和`FPropertyTag`数据：
+![Deserialization_Sample09](SerializationSample09.png)
+
+然后根据`FPropertyTag`中保存的数据(GUID和名字等数据)在UClass中进行检索，找到了相应的位置数据之后，按照顺序将每一个变量的直列化数据展开到内存中数据对象的适当位置。
+![Deserialization_Sample10](SerializationSample10.png)
+![Deserialization_Sample11](SerializationSample11.png)
+
+#### 总结
+TPS实现的内容：
+- PropertyTag的存在使得数据等到了更好的**互换性**
+- 需要对每一个变量添加一个PropertyTag
+- 将数据再展开到内存的时候会有检索开销
+
+![Deserialization_Sample12](SerializationSample12.png)
+
+### UnversionedPropertySerializer(UPS)
+来到UPS的方式，则主要是为了应对以下的问题：
+![Deserialization_Sample13](SerializationSample13.png)
+
+#### 序列化过程(UPS)
+首先是按照顺序收集UClass中的FProperty情报，然后将数据直列化之后，按照顺序直接保存到Asset(uasset)文件中去。(这里没有考虑无效数据的情况，直列化的数据都是有效数据的情况，如果存在无效数据的时候是什么样的视频里面没有说)
+![Deserialization_Sample14](SerializationSample14.png)
+
+当所有的FProperty的直列化数据都保存之后，为这些直列化完毕的数据生成**Header**数据情报。
+![Deserialization_Sample15](SerializationSample15.png)
+
+#### 反序列化过程(UPS)
+反序列化的过程就是上面的相反的操作，根据生成的**Header**的情报将直列化的数据按照顺序展开到对象的内存数据中去。
+
+视频中倒是没有说明这个关键的**Header**中具体保存了什么样的数据。
+
+#### 总结
+从序列化的过程就可以看出来UPS是一种超级高速的简单的实装方式。但是简单就意味着使用过程中如果不注意一些东西就会出现错误。
+
+料想到的容易发生的case就是Editor编译的对象与Cook完毕之后的Asset文件对象数据结构发生改变的情形：
+![Deserialization_Sample16](SerializationSample16.png)
+
+由于UPS的序列化过程和反序列化过程并没有提供数据结构发生修改的互换性，所以当反序列化的时候将数据展开到内存的时候就会发生严重的错误。
+![Deserialization_Sample17](SerializationSample17.png)
+
+很明显TPS方式应该就可以对应这种情况，当我们使用了UPS的方式来对Asset进行Cook的时候发生了上面那种事情的话，首先Debug的第一个就是先看看有没有会发生上面那种操作的代码。
+
+#### UPS的使用方式
+这种序列化的方式由上面的内容可以知道这是针对Cook素材的内容，同时想要使用的时候也需要手动开启。
+
+开启的方式有两种：
+![Deserialization_Sample18](SerializationSample18.png)
+
+关于`-unversion`的拓展知识：
+当我们创建新的Asset的时候，UE4的版本内容也会被包含在Asset的信息里面，当我们进行引擎的升级等的操作之后，版本情报也会改变，会导致当我们在进行Biniary的差分Patch的时候，明明没有对Asset进行额外的数据修改却使得Patch的体积变得很大。
+这个`-unversion`option会把表示引擎版本的数值变得无效，代表现在的版本一直都是最新的版本。
+
+不光是使用UPS的情况，用到需要进行差分Patch的场合或者一些我不知道的场合的时候，都是推荐使用的。
+
+视频的剩下内容是对UPS方式的效率进行了验证，我就不赘述了。
+
+最后是视频的总结：
+![Deserialization_Sample18](SerializationSample18.png)
+
+参考资料：
+- [【UE4.25 新機能】新しいシリアライゼーション機能「Unversioned Property Serialization」について](https://www.youtube.com/watch?v=V5tUNlfiJ5s)
+- [【UE4.25 新機能】新しいシリアライゼーション機能「Unversioned Property Serialization」について](https://www2.slideshare.net/EpicGamesJapan/new-loadingsystem-unversionedpropertyserializationv2/)
 
 # NetWorking Serialization
 关于Networking的序列化操作是一个很久之前就困扰我的谜题，有那么一段代码我经常会看见，知道是为了什么而存在的但是不知道需要怎么用，这次就让我彻底的了解这些个代码。
