@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-06-22T14:33:59.170Z">
+<meta property="og:updated_time" content="2021-07-18T13:12:58.382Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何使用VisualStudio">
 <meta name="twitter:description" content="我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-22 23:33:59" itemprop="dateModified" datetime="2021-06-22T23:33:59+09:00">2021-06-22</time>
+                <time title="修改时间：2021-07-18 22:12:58" itemprop="dateModified" datetime="2021-07-18T22:12:58+09:00">2021-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,14 +288,30 @@
 </li>
 </ol>
 <p>再就是UnrealVS提供的其他命令的使用方式我不是太明白，就是上面那个链接的其他内容。</p>
-<h2 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h2><h3 id="VsVim"><a href="#VsVim" class="headerlink" title="VsVim"></a>VsVim</h3><h3 id="Productivity-Power-Tools"><a href="#Productivity-Power-Tools" class="headerlink" title="Productivity Power Tools"></a>Productivity Power Tools</h3><ul>
+<h2 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h2><p>这里稍微对自己使用VS插件的功能进行一些记录。</p>
+<h3 id="VsVim"><a href="#VsVim" class="headerlink" title="VsVim"></a>VsVim</h3><p>使用很方便，具体的文本之类的操作属于Vim的操作范畴，会在另外的文章记录</p>
+<h3 id="VisualAssist"><a href="#VisualAssist" class="headerlink" title="VisualAssist"></a>VisualAssist</h3><p>我觉得是UE4开发必不可少的插件，其它的都可以忍，但是UE4开发的时候VS默认的IntelliSence不能忍，这家伙实在是太慢了。</p>
+<h4 id="快捷键篇"><a href="#快捷键篇" class="headerlink" title="快捷键篇"></a>快捷键篇</h4><p>快捷键是使用的关键了，首先是去<code>Extensions -&gt; VAssistX -&gt; Help -&gt; Keyboard Shortcuts</code>，确认一下已有的快捷键设置。</p>
+<p>具体的描述可以参照官网，暂时不过多赘述，我只能说个个都是我用的上的，必须要记住的：</p>
+<ul>
+<li><a href="https://www.wholetomato.com/learn/top10" target="_blank" rel="noopener">Top 10 features that improve productivity</a></li>
+</ul>
+<h3 id="Productivity-Power-Tools"><a href="#Productivity-Power-Tools" class="headerlink" title="Productivity Power Tools"></a>Productivity Power Tools</h3><ul>
 <li><a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioPlatformTeam.ProductivityPowerPack2017" target="_blank" rel="noopener">Productivity Power Tools 2017/2019</a></li>
 </ul>
 <p>具体的功能之后有时间整理一下。</p>
-<h2 id="关于注释"><a href="#关于注释" class="headerlink" title="关于注释"></a>关于注释</h2><ul>
+<h2 id="一些其它的VS功能记录"><a href="#一些其它的VS功能记录" class="headerlink" title="一些其它的VS功能记录"></a>一些其它的VS功能记录</h2><h3 id="关于注释"><a href="#关于注释" class="headerlink" title="关于注释"></a>关于注释</h3><ul>
 <li><a href="https://docs.microsoft.com/ja-jp/visualstudio/ide/reference/generate-xml-documentation-comments?view=vs-2019" target="_blank" rel="noopener">How to: Insert XML comments for documentation generation</a></li>
 </ul>
 <p>主要是我想知道使用<code>///</code>来插入一段完整的段落注释的方法。</p>
+<h3 id="VS的Snippets"><a href="#VS的Snippets" class="headerlink" title="VS的Snippets"></a>VS的Snippets</h3><p>这个东西是我找类似的功能时候偶然发现的，真的别人不说我都不知道，这么重要的功能：<strong>Visual Studio Snippets</strong></p>
+<p>UE4也为其提供了许多Snippets方便我们使用，需要做的是</p>
+<p>去VS的<code>Tools -&gt; Code Snippets Manager -&gt; Language(Visual C++) -&gt; My Code Snippets -&gt; Add</code>，这会允许你导入已经准备好的Snippets，由于UE4<code>\Engine\extras\VisualStudioSnippets</code>路径下已经有很多，可以直接导入。</p>
+<p>至于如何制作自己的Snippet，参照那些例子就好了，有兴趣我再作记录。</p>
+<ul>
+<li><a href="https://nerivec.github.io/old-ue4-wiki/pages/visual-studio-snippets.html" target="_blank" rel="noopener">Visual Studio Snippets</a></li>
+<li><a href="https://papersloth.hatenablog.com/entry/2018/09/19/224110" target="_blank" rel="noopener">VisualStudio UE4のCode Snippets登録について</a></li>
+</ul>
 <h1 id="简单的设置VS"><a href="#简单的设置VS" class="headerlink" title="简单的设置VS"></a>简单的设置VS</h1><h2 id="Solution-Configurations"><a href="#Solution-Configurations" class="headerlink" title="Solution Configurations"></a>Solution Configurations</h2><p>使用VS的时候，尤其是我在使用UE4的时候可能会切换编译的模式，什么<strong>Development Editor</strong>, <strong>Debug Editor</strong>等等，又长又短，长了就看不清自己设置的什么模式。</p>
 <p>就想让他变长，我说那个drop-down list。</p>
 <ul>
@@ -386,7 +402,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VS中的DEBUG"><span class="nav-number">1.</span> <span class="nav-text">VS中的DEBUG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在UE4中使用VS进行调试"><span class="nav-number">1.1.</span> <span class="nav-text">在UE4中使用VS进行调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-SolutionConfigutarions"><span class="nav-number">1.1.1.</span> <span class="nav-text">Build SolutionConfigutarions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UnrealVS-UBT编译-amp-UE4热更新"><span class="nav-number">1.1.2.</span> <span class="nav-text">UnrealVS - UBT编译&amp;UE4热更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UE4这边"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">UE4这边</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VS这边"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">VS这边</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Plugins"><span class="nav-number">1.2.</span> <span class="nav-text">Plugins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VsVim"><span class="nav-number">1.2.1.</span> <span class="nav-text">VsVim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Productivity-Power-Tools"><span class="nav-number">1.2.2.</span> <span class="nav-text">Productivity Power Tools</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于注释"><span class="nav-number">1.3.</span> <span class="nav-text">关于注释</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简单的设置VS"><span class="nav-number">2.</span> <span class="nav-text">简单的设置VS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution-Configurations"><span class="nav-number">2.1.</span> <span class="nav-text">Solution Configurations</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#VS中的DEBUG"><span class="nav-number">1.</span> <span class="nav-text">VS中的DEBUG</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在UE4中使用VS进行调试"><span class="nav-number">1.1.</span> <span class="nav-text">在UE4中使用VS进行调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Build-SolutionConfigutarions"><span class="nav-number">1.1.1.</span> <span class="nav-text">Build SolutionConfigutarions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UnrealVS-UBT编译-amp-UE4热更新"><span class="nav-number">1.1.2.</span> <span class="nav-text">UnrealVS - UBT编译&amp;UE4热更新</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UE4这边"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">UE4这边</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VS这边"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">VS这边</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Plugins"><span class="nav-number">1.2.</span> <span class="nav-text">Plugins</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VsVim"><span class="nav-number">1.2.1.</span> <span class="nav-text">VsVim</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VisualAssist"><span class="nav-number">1.2.2.</span> <span class="nav-text">VisualAssist</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#快捷键篇"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">快捷键篇</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Productivity-Power-Tools"><span class="nav-number">1.2.3.</span> <span class="nav-text">Productivity Power Tools</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些其它的VS功能记录"><span class="nav-number">1.3.</span> <span class="nav-text">一些其它的VS功能记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于注释"><span class="nav-number">1.3.1.</span> <span class="nav-text">关于注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VS的Snippets"><span class="nav-number">1.3.2.</span> <span class="nav-text">VS的Snippets</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#简单的设置VS"><span class="nav-number">2.</span> <span class="nav-text">简单的设置VS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution-Configurations"><span class="nav-number">2.1.</span> <span class="nav-text">Solution Configurations</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
