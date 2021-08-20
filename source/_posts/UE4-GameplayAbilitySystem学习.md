@@ -216,7 +216,7 @@ GiveAbility需要一个FGameplayAbilitySpec作为参数，FGameplayAbilitySpec�
 - level: 系统已经内置的关卡变量，对RPGs/MOBAs类的游戏非常友好。也就是关卡的标志，或许我以后会经常用到。
 - input ID: 这里终于跟上面连起来了，那个自定义的ENUM已经跟我们的AbilitySystem的AbilitySlots进行了绑定，这个Input ID则是可以对AbilitySlot进行指定（这是目前为止自己的理解）
 
-FGameplayAbilitySpec需要一个GameplayAbility对象作为参数，我们可以使用Ability的默认对象（class's default object），就文章的作者而已：
+FGameplayAbilitySpec需要一个GameplayAbility对象作为参数，我们可以使用Ability的默认对象（class's default object），依文章的作者所言：
 > There is very little reason to use anything other than the default object of a GameplayAbility class as far as I've understood it from going through the source.
 
 关于默认对象的描述贴一段来自官网的内容：
@@ -1081,16 +1081,17 @@ void UGSAttributeSetBase::OnAttributeAggregatorCreated(const FGameplayAttribute&
 
 自定义的`AggregatorEvaluateMeteData`貌似还需要一些额外的操作。
 
+
 ### Gameplay Efffects
 关于GE的内容实在是太多了，没有办法完全整理，集中精力去整理这些的话又要花费好多时间，而且最近也没有太多时间整理，其它的想要整理的东西就完全赶不上日程。
 
 由于目前并没有需要使用这一部分的知识，我也是大致的了解，等到下次有机会的时候再好好进行整理和验证。
 
 #### GameplayEffect定义
-
-
+之后更新。
 
 ### Gameplay Abilities
+这一部分详细介绍GA的内容。
 
 #### Gameplay Ability定义
 `GameplayAbility`(GA)概括的形容就是game中`Actor`可以做什么。动作也好，技能也好都可被称为是一个GA。这一部分是C++和BP都可以实现的。
@@ -1136,13 +1137,11 @@ Epic不推荐使用这个选项，而是推荐使用另一种方法：如果我�
 
 > Epic's comment:
 >
->```c++
 > /** Direct Input state replication. These will be called if
 > bReplicateInputDirectly is true on the ability and is generally not a good
 >  thing to use. (Instead, prefer to use Generic Replicated Events). */
 >
 >  UAbilitySystemComponent::ServerSetInputPressed()，
-> ```
 
 #### 绑定输入到AbilitySystemComponent
 ASC允许我们直接绑定用户输入到`GameplayAbilities`上，当我们绑定完毕之后检测到输入的ASC会自动帮我们激活被绑定对象的GA。被绑定的**InputAction**则是用到了内置的检测输入的**AbilityTask**。
@@ -1431,7 +1430,7 @@ Ability的使用流程一般为`Activate->Generate Data->Apply->End`，有的时
 
 而除了上面我们提到过的使用Event方式激活Ability可以传递**Payload**之外，还有其他的方法。
 
-![PassingDatatoAbilities](PassDataToAbility.PNG)
+![PassingDataToAbilities](PassDataToAbility.PNG)
 
 用的时候再理解我就不翻译了。
 
@@ -1703,7 +1702,7 @@ AGDCharacterBase::AGDCharacterBase(const class FObjectInitializer& ObjectInitial
 
 第三种，要在什么情况下使用呢？
 
-> as long you dont have to replace any base component (such as replacing the MovementComponent class) that basic constructor works just fine if you don't use the GENERATED_CLASS_BODY() macro. (using GENERATED_BODY() instead).
+> as long you dont have to replace any base component (such as replacing the MovementComponent class) that basic constructor works just fine if you do not use the GENERATED_CLASS_BODY() macro. (using GENERATED_BODY() instead).
 
 来自问题[Constructor with or without FObjectInitializer](https://forums.unrealengine.com/development-discussion/c-gameplay-programming/97550-constructor-with-or-without-fobjectinitializer)
 
@@ -1866,6 +1865,5 @@ void AGDHeroCharacter::MoveRight(float Value)
     AddMovementInput(UKismetMathLibrary::GetRightVector(FRotator(0, GetControlRotation().Yaw, 0)), Value);
 }
 ```
-
 
 我就粘贴上大概的实现，反正要找的话都能找到。

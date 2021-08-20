@@ -37,7 +37,7 @@ float SettingsValue;
 
 - 参考文章：[【UE4】詳細パネルでの編集可・不可を制御する](https://qiita.com/Dv7Pavilion/items/6f86134587b3ad6ff396)
 
-### meta=(WorldContext="WorldContextObject", CallableWithoutWorldContext)
+### Meta = (WorldContext="WorldContextObject", CallableWithoutWorldContext)
 这个我用来定义BlueprintCallable函数时调用省略`WorldContextObject`。
 
 想要记录下这个meta的原因是，我想得到当前调用函数所在的Blueprint的名字。在C++中直接使用`__Function__`写个宏就可以直接得到调用函数的名字，但是在Blueprint中，没有宏当参数这么便利的方法，得顺便把self当参数传进去。
@@ -65,6 +65,10 @@ static void PrintString(UObject* WorldContextObject, const FString& InString = F
 1. Keywords关键字可以设置搜索的关键字。细节上面的官方文档中有。
 2. `GEngine->AddOnScreenDebugMessage((uint64)-1, Duration, TextColor.ToFColor(true), FinalDisplayString);`向屏幕输出LOG，来自上面`PrintString()`函数的实现。
 
+### Meta = (MakeEditWidget=true)
+> Used for Transform or Rotator properties, or Arrays of Transforms or Rotators. Indicates that the property should be exposed in the viewport as a movable widget.
+
+来自官网的描述，跟Transform和Rorator属性很搭。感觉用处很大，我看别的文章FVector也可以用？没有验证过。
 
 # Class Specifier
 除了一些meta限定，其它的地方UE4也提供了许多修饰符。这个是**UCLASS**定义的时候使用的修饰符，可以定义UCLASS在Engine和Editor中的一些行为。
@@ -79,11 +83,26 @@ HideCategories=(Category1, Category2, ...)
 ```
 
 作用就是可以隐藏定义的Category，由于这个修饰符是会影响到子类的，所以被我用来在子类的蓝图中隐藏父类中的Category。
+在蓝图里面也可以直接添加隐藏的Categories。
 
 # Property Specifiers
 这一部分用来记录`UPROPERTY()`，修饰属性的各种修饰符。
 
 ## 一些我用过的
+
+### 常用的属性读写权限EditAnywhere等
+这些是最常使用的属性：
+
+| | Level Editor</br>:可读 | Level Editor<br>:可写 | Blueprint Editor<br>:可读 | Blueprint Editor<br>:可写|
+:----|:----:|:----:|:----:|:----:
+| EditAnywhere | <span style="color:green">〇<span> | <span style="color:green">〇<span> | <span style="color:green">〇<span>| <span style="color:green">〇<span> |
+| EditDefaultOnly| <span style="color:red">✖<span> | <span style="color:red">✖<span> | <span style="color:green">〇<span> | <span style="color:green">〇<span> |
+| EditInstanceOnly | <span style="color:green">〇<span> | <span style="color:green">〇<span> | <span style="color:red">✖<span> | <span style="color:red">✖<span> |
+| VisibleAnywhere | <span style="color:green">〇<span> | <span style="color:red">✖<span> | <span style="color:green">〇<span> | <span style="color:red">✖<span> |
+| VisableDefaultsOnly | <span style="color:red">✖<span> | <span style="color:red">✖<span> | <span style="color:green">〇<span> | <span style="color:red">✖<span> |
+| VisbaleInstanceOnly | <span style="color:green">〇<span> | <span style="color:red">✖<span> | <span style="color:red">✖<span> | <span style="color:red">✖<span> |
+
+
 
 ### Transient
 根据官网的描述：
@@ -97,3 +116,11 @@ HideCategories=(Category1, Category2, ...)
 说实话，在没有对UE4的多人模式进行学习的时候真是一头雾水。被标记了这个属性修饰符的变量，意味着变量存储的是一个暂时的值，我们并不想永久的保存它，比如说这个变量保存的是其它类中的内容，就好像是弱指针一样，只是暂时的保留这个变量的值。
 
 还有一个作用就是，标记了这个修饰符的变量，它不会被Serialize(见UE4的Net Serialize)。
+
+
+### EditFixedSize
+禁止在LevelEditor对TArray进行元素添加操作。具体使用情况还不清楚，可能哪一天会派上用场。
+```
+UPROPERTY(EditAnywhere, EditFixedSize)
+TArray<FName> FixedSizeArray;
+```

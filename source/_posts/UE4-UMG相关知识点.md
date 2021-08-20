@@ -103,10 +103,7 @@ RichTextBlock使用了UE4的**DataTable**来对其进行自定义和添加样式
 但是我们想要在一个TextBlock中有多个文字样式，那么就需要在上面我们制作的DataTable中添加新的样式数据并应用它。添加一个新的格式;
 ![sample02](RichTextDataTableSample02.png)
 
-然后应用它：
-![sample03](RichTextDataTableSample03.png)
-
-就是`<RowName>Text</>`的格式，把想要应用的文本包围起来就可以实现了。
+然后应用它,就是`<RowName>Text</>`的格式，把想要应用的文本包围起来就可以实现了。
 
 关于更多的RichText的使用，还有上面提到的Decorator类的内容，需要找时间整理学习。
 
