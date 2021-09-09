@@ -35,6 +35,8 @@ float SettingsValue;
 
 `meta = (EditCondition = "!bCondition")`这样的写法也是可以的。
 
+UE4.23版本之后EditCondition也可以对**布尔表达式**进行评估了，也就是说`EditCondition = "EnumType == ETestEnumType::TypeA"`这种写法也是支持了。
+
 - 参考文章：[【UE4】詳細パネルでの編集可・不可を制御する](https://qiita.com/Dv7Pavilion/items/6f86134587b3ad6ff396)
 
 ### Meta = (WorldContext="WorldContextObject", CallableWithoutWorldContext)

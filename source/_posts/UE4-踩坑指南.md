@@ -32,11 +32,11 @@ tags:
 > Create C++ class,
 >
 > Create Blueprint based on it.
-> 
+>
 > Add component in C++.
 >
 > BUG: Component doesn't have details in Blueprints!
-> 
+>
 > Solution:
 >
 > un-parent, and then re-parent the BP to the C++ class.
@@ -45,3 +45,29 @@ tags:
 
 解决来源： [Cant't see details in Blueprint](https://answers.unrealengine.com/questions/869223/cantt-see-details-in-blueprint.html)
 
+## ForEachLoop的陷阱
+今天介绍一个UE4蓝图里的ForEachLoop的陷阱。
+也可以说是BlueprintPure的陷阱。
+
+假设有这样的测试案例：
+![GetTestArray](GetTestArray.png)
+
+我们准备了一个`GetTestArray`函数，并在内部打印输出字符串`Get Test Array!`，用来验证这个函数的调用次数，同时返回一个包含四个元素的数组。
+
+然后我们使用`ForEachLoop`来遍历这个返回的数组：
+![TestArray](TestArray.png)
+
+我们在Loop里面也添加测试打印输出`Hello`,这种情况下执行之后我们会各自得到执行几次的输出结果呢？
+![TestArrayCase1](TestArrayCase1.png)
+
+如上图所示，Loop内部是四次，而`GetTestArray`函数是一次，也是我们所预想的结果。
+
+如果我们变一下，`GetTestArray`函数是Pure的话会怎样呢？
+![GetTestArrayPure](GetTestArrayPure.png)
+
+像上面的图片显示的那样，Pure函数返回结果直接与`ForEachLoop`进行连接，此时的测试结果则是：
+![TestArrayCase2](TestArrayCase2.png)
+
+我们会发现`GetTestArray`函数执行了Loop的次数。
+
+以上，就是我遇见的关于ForEachLoop的大坑。
