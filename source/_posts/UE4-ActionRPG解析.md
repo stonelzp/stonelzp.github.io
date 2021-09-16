@@ -86,10 +86,10 @@ PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
     #include "SStandardSlateWidget.h"
 
     // ++ The SWeakWidget we are using
-    #include "Widgets/SWeakWidget.h" 
+    #include "Widgets/SWeakWidget.h"
 
     // ++ To use GEngine. You can also import just "Engine.h" but some people mention this compiles slower than this header.
-    #include "Runtime/Engine/Classes/Engine/Engine.h" 
+    #include "Runtime/Engine/Classes/Engine/Engine.h"
 
 
     void AStandardHUD::BeginPlay()
@@ -101,7 +101,7 @@ PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 
         // Pass our viewport a weak ptr to our widget
         // Viewport's weak ptr will not give Viewport ownership of Widget
-        GEngine->GameViewport->AddViewportWidgetContent( 
+        GEngine->GameViewport->AddViewportWidgetContent(
             SNew(SWeakWidget)
             .PossiblyNullContent(MyUIWidget.ToSharedRef())
         );
@@ -137,7 +137,7 @@ public:
     void Construct(const FArguments& InArgs);
 
 private:
-    
+
     // ++ Pointer to our parent HUD. To make sure HUD's lifetime is controlled elsewhere, use "weak" ptr.
     // ++ HUD has a "strong" pointer to Widget, circular ownership would prevent/break self-destruction of hud/widget (cause a memory leak).
     TWeakObjectPtr<class AStandardHUD> OwnerHUD;
@@ -191,13 +191,13 @@ void SStandardSlateWidget::Construct(const FArguments& InArgs)
             SNew(STextBlock)
             .ShadowColorAndOpacity(FLinearColor::Black)
             .ColorAndOpacity(FLinearColor::Red)
-            .ShadowOffset(FIntPoint(-1, 1)) 
+            .ShadowOffset(FIntPoint(-1, 1))
             .Font(FSlateFontInfo("Veranda", 16))
                         // localized text to be translated with a generic name HelloSlateText
-            .Text(LOCTEXT("HelloSlateText", "Hello, Slate!")) 
+            .Text(LOCTEXT("HelloSlateText", "Hello, Slate!"))
         ]
     ];
-    
+
 }
 
 // ++ We need to undefine this namespace after we finish creating the Slate widget
@@ -239,8 +239,107 @@ C++的接口的一些特性使用方法更为重要。
 #### IModuleInterface
 
 #### UInterface
-UINTERFACE()
+关于UE4中的`UINTERFACE()`使用的频率十分之高，熟悉之后就会发现接口这个功能或者说书习惯显得十分重要。
 
+这一部分是跟ActionRPG项目没有关系的整理：
+- [UE4/C++ Interface の作り方](https://usagi.hatenablog.jp/entry/2017/07/04/042417)
+
+上面的文章相当的有用。从零创建一个UE4可以使用的UInterface的方法。
+
+最省力的方式是用UE4Editor里面新建C++的方式，下拉到最后一行找到**Unreal Interface**，直接创建一个接口就可以了。
+如何添加接口的函数就是一个难点了。
+
+创建接口的函数就有些看自己的习惯了
+
+##### 后续希望蓝图实现的接口函数
+也是最常见的一种方式
+```
+// === MyInterface.h ===
+// 手間暇(1): UINTERFACE で UInterface を public 継承した U プリフィックスのクラスを定義する
+UINTERFACE(BlueprintType)
+class MyApp_API UMyInterface: public UInterface
+{
+  // 要注意: ここでもこちらは U プリフィックス版を使う
+  GENERATED_UINTERFACE_BODY()
+};
+
+// 手間暇(2): UE4のクラス定義マクロを付けずに先に定義した U プリフィックスのクラスの I プリフィックス版のクラスを定義する
+class MyApp_API IMyInterface
+{
+  // 要注意: ここでもこちらは I プリフィックス版を使う
+  GENERATED_IINTERFACE_BODY()
+public:
+  // 手間暇(3) Blueprint へ関数を公開するめんどくさいマクロをだらだら書く（めんどくさいでござる＠ｗ＠）
+  UFUNCTION( BlueprintNativeEvent, BlueprintCallable, Category = "MyInterface" )
+  float GetMyValue();
+};
+```
+上面的代码直接从上面的文章链接中复制过来的。
+可以看到接口函数的声明添加了`BlueprintNativeEvent`这个Meta修饰符，当然上面的代码不是使用上面说的最省力的方式的代码，这里`UMyInterface`里的UClass的meta修饰符使用了`BlueprintType`，UE4默认创建的话是`MinimalAPI`。
+
+至于使用哪种的话，`MinimalAPI`Meta修饰符好像是为了把UClass类**类型**的情报显示给其它module的，由于只是导出类型信息给其它module，可以减少编译时间，我也不知道该不该使用这个。不过想要在BP中使用的话`BlueprintType`肯定是需要的哇。
+
+然后是实现
+```
+// === MyInterface.cpp ===
+// 手間暇(4): GENERATED_UINTERFACE_BODY が宣言だけ自動的に生成する U プリフィックス版の方の ctor を定義する
+UMyInterface::UMyInterface( const class FObjectInitializer& ObjectInitializer ): Super( ObjectInitializer ) { }
+
+// 手間暇(5): ここでようやく C++ 的な virtual-override における virtual 宣言された基底クラスのメンバー関数を定義
+// Note: どこで↓の宣言に相当する virtual retur_type FunctionName_Implementation(); が行われているのかは後述。
+float GetMyValue_Implementation() { return 3.14159265358979f; }
+```
+
+这里需要注意的是，我们在定义UInterface的时候使用的是`GENERATED_IINTERFACE_BODY`这个宏，所以我们需要再添加一个`FObjectInitializer`参数的构造函数定义，貌似不加的话会报错（我记不太清了如果说错了对不起）。构造函数的声明不显式声明没问题，宏那里帮忙做了好像。
+
+最后是接口的使用:
+```
+// === MyImplementation.h ===
+// 手間暇(6): インターフェースを実装する UE4 オブジェクトクラスでの override 実装の宣言
+float GetMyValue_Implementation() override;
+
+// === MyImplementation.cpp
+// 手間暇(7): インターフェースを実装する UE4 オブジェクトクラスでの override 実装の定義
+float MyImplementation::GetMyValue_Implementation() { return 1.41421356f; }
+```
+
+需要注意的是声明的是`GetMyValue`而Override的则是`GetMyValue_Implementation`，这就是UE里的黑魔法了，记住就行。
+
+相比上面的写法我更喜欢下面的方法
+##### 只想C++实现的接口函数
+```
+#pragma once
+
+#include "CoreMinimal.h"
+
+#include "UObject/Interface.h"
+#include "GRAIDebugMoveToInterface.generated.h"
+
+UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))
+class UMyInterface : public UInterface
+{
+	GENERATED_BODY()
+};
+
+class GOLEMRAIDERS_API IMyInterface
+{
+	GENERATED_BODY()
+
+	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+public:
+    virtual void DebugGetMyValue() {} // 纯虚函数应该不支持
+};
+```
+像上面的虚函数写法就很简洁，而且cpp文件什么都不需要了。
+`GENERATED_BODY`帮我们把构造函数的定义也一起做了。
+
+接口的使用就是
+```
+// === MyImplementation.cpp
+virtual void DebugGetMyValue() override;
+```
+
+我感觉这种写法就是披着UE4C++皮的很普通的C++的接口使用方式，泛用性不是很高，至少像再UE4中实现的话还是用第一种方式。
 
 ##### UINTERFACE修饰符
 
@@ -305,16 +404,16 @@ bool HandleSaveGameLoaded(USaveGame* SaveGameObject);
 bool URPGGameInstanceBase::HandleSaveGameLoaded(USaveGame* SaveGameObject)
 {
     bool bLoaded = false;
- 
+
     if (!bSavingEnabled)
     {
         // If saving is disabled, ignore passed in object
         SaveGameObject = nullptr;
     }
- 
+
     // Replace current save, old object will GC out
     CurrentSaveGame = Cast<URPGSaveGame>(SaveGameObject);
- 
+
     if (CurrentSaveGame)
     {
         // Make sure it has any newly added default inventory
@@ -325,13 +424,13 @@ bool URPGGameInstanceBase::HandleSaveGameLoaded(USaveGame* SaveGameObject)
     {
         // This creates it on demand
         CurrentSaveGame = Cast<URPGSaveGame>(UGameplayStatics::CreateSaveGameObject(URPGSaveGame::StaticClass()));
- 
+
         AddDefaultInventory(CurrentSaveGame, true);
     }
- 
+
     OnSaveGameLoaded.Broadcast(CurrentSaveGame);
     OnSaveGameLoadedNative.Broadcast(CurrentSaveGame);
- 
+
     return bLoaded;
 }
 ```
@@ -358,10 +457,10 @@ bool URPGGameInstanceBase::WriteSaveGame()
             bPendingSaveRequested = true;
             return true;
         }
- 
+
         // Indicate that we're currently doing an async save
         bCurrentlySaving = true;
- 
+
         // This goes off in the background
         UGameplayStatics::AsyncSaveGameToSlot(GetCurrentSaveGame(), SaveSlot, SaveUserIndex, FAsyncSaveGameToSlotDelegate::CreateUObject(this, &URPGGameInstanceBase::HandleAsyncSave));
         return true;
@@ -381,7 +480,7 @@ void URPGGameInstanceBase::HandleAsyncSave(const FString& SlotName, const int32 
 {
     ensure(bCurrentlySaving);
     bCurrentlySaving = false;
- 
+
     if (bPendingSaveRequested)
     {
         // Start another save as we got a request while saving
@@ -438,41 +537,3 @@ Pointer类型的数据没有办法保存。`UObject*`或者`AActor*`类型，取
 - [Passing arguments to constructors in UE4?](https://answers.unrealengine.com/questions/156055/passing-arguments-to-constructors-in-ue4.html)这里的回答
 
 我觉得这个想法特别重要，于是便那么做了。主要是我不知道在UE4中直接使用**new**关键字生成UObject好不好用。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

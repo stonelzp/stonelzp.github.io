@@ -78,6 +78,12 @@ static void PrintString(UObject* WorldContextObject, const FString& InString = F
 
 ## 一些我用过的
 
+### MinimalAPI
+> 	
+他のモジュールで使用するために、クラスの型情報のみエクスポートさせます。クラスはキャスト可能ですが、クラスの関数を呼び出すことはできません (インライン メソッドは除く)。これにより、他のモジュールからすべての関数にアクセス可能である必要のないクラスで何もかもをエクスポートしないことでコンパイル時間を短縮できます。
+
+官网上的内容。
+
 ### hidecategories=("category1|category2")
 官网上也这样写
 ```
