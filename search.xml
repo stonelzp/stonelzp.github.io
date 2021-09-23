@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4种的EQS使用</title>
+    <url>/ue4-how-to-use-eqs/</url>
+    <content><![CDATA[<p>EQS(Environment Query System)的简称，主要应用场景就是制作游戏角色的AI了。<br><a id="more"></a></p>
+<p>使用EQS的启动条件还需要AIController和BehaviourTree的知识，这部分就在其它文章中展开了。</p>
+<h1 id="在UE4中使用EQS"><a href="#在UE4中使用EQS" class="headerlink" title="在UE4中使用EQS"></a>在UE4中使用EQS</h1><h2 id="EQS是什么"><a href="#EQS是什么" class="headerlink" title="EQS是什么"></a>EQS是什么</h2><ul>
+<li><a href="https://qiita.com/manuo/items/cc332b71aedb70ad6bfc" target="_blank" rel="noopener">Unreal Engine 4 でEQSを使えるようになる</a></li>
+</ul>
+<p>上面的文章介绍了EQS中的基础概念，和两个组成部分<strong>Generator</strong>和<strong>Test</strong>。</p>
+<h2 id="自定义使用"><a href="#自定义使用" class="headerlink" title="自定义使用"></a>自定义使用</h2><p>标准的功能肯定是不能满足项目需求的，如何自定义EQS的功能也是必修课。</p>
+<h3 id="自定义Test"><a href="#自定义Test" class="headerlink" title="自定义Test"></a>自定义Test</h3><p>新建一个<code>EnvQueryTest</code>类，从UE4Editor创建就可以了。</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://qiita.com/4_mio_11/items/419a614c81bc05381f2c" target="_blank" rel="noopener">【UE4】AIを作るのに必要不可欠なEQSのテストをC++で作成できるようになろう！</a></li>
+<li><a href="http://com04.sakura.ne.jp/unreal/wiki/index.php?EQS-%A5%C6%A5%B9%A5%C8%BC%AB%BA%EE" target="_blank" rel="noopener">EQS-テスト自作</a></li>
+</ul>
+<p>基本上需要定义的函数：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#pragma once</span><br><span class="line"></span><br><span class="line">#include &quot;CoreMinimal.h&quot;</span><br><span class="line">#include &quot;EnvironmentQuery/EnvQueryTest.h&quot;</span><br><span class="line">#include &quot;MyEnvQueryTest.generated.h&quot;</span><br><span class="line"></span><br><span class="line">UCLASS()</span><br><span class="line">class NPC_CREATE_API UMyEnvQueryTest : public UEnvQueryTest</span><br><span class="line">&#123;</span><br><span class="line">    GENERATED_UCLASS_BODY()</span><br><span class="line"></span><br><span class="line">    virtual void RunTest(FEnvQueryInstance&amp; QueryInstance) const override;</span><br><span class="line"></span><br><span class="line">    virtual FText GetDescriptionTitle() const override;</span><br><span class="line">    virtual FText GetDescriptionDetails() const override;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>实现：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;EnvironmentQuery/Items/EnvQueryItemType_VectorBase.h&quot;</span><br><span class="line"></span><br><span class="line">UMyEnvQueryTest::UMyEnvQueryTest(const FObjectInitializer&amp; ObjectInitializer) : Super(ObjectInitializer)</span><br><span class="line">&#123;</span><br><span class="line">	//</span><br><span class="line">	Cost = EEnvTestCost::Low;</span><br><span class="line"></span><br><span class="line">	//</span><br><span class="line">	ValidItemType = UEnvQueryItemType_VectorBase::StaticClass();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void UMyEnvQueryTest::RunTest(FEnvQueryInstance&amp; QueryInstance) const</span><br><span class="line">&#123;</span><br><span class="line">	// オーナーが居ない</span><br><span class="line">	UObject* QueryOwner = QueryInstance.Owner.Get();</span><br><span class="line">	if (QueryOwner == nullptr)</span><br><span class="line">	&#123;</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	FloatValueMin.BindData(QueryOwner, QueryInstance.QueryID);</span><br><span class="line">	float MinThresholdValue = FloatValueMin.GetValue();</span><br><span class="line"></span><br><span class="line">	FloatValueMax.BindData(QueryOwner, QueryInstance.QueryID);</span><br><span class="line">	float MaxThresholdValue = FloatValueMax.GetValue();</span><br><span class="line"></span><br><span class="line">	// アイテムの数だけブン回す</span><br><span class="line">	float score = 0.0f;  // いい感じにする</span><br><span class="line">	for (FEnvQueryInstance::ItemIterator It(this, QueryInstance); It; ++It)</span><br><span class="line">	&#123;</span><br><span class="line">		score += 0.05f;  // いい感じにする</span><br><span class="line">		It.SetScore(TestPurpose, FilterType, score, MinThresholdValue, MaxThresholdValue);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">FText UMyEnvQueryTest::GetDescriptionTitle() const</span><br><span class="line">&#123;</span><br><span class="line">	return Super::GetDescriptionTitle();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">FText UMyEnvQueryTest::GetDescriptionDetails() const</span><br><span class="line">&#123;</span><br><span class="line">	return DescribeFloatTestParams();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>关于构造函数里的初始化操作</p>
+<h4 id="Cost"><a href="#Cost" class="headerlink" title="Cost"></a>Cost</h4><p>这个设定是用来设置Test的优先执行顺序的，有<code>Low</code>,<code>Medium</code>,<code>High</code>,优先级越低就会被优先执行，默认情况下时Low。这个某种程度上可以提升一点执行的效率，将执行效率低的处理设置为高优先级尽可能的减少处理次数。</p>
+<h4 id="ValidItemType"><a href="#ValidItemType" class="headerlink" title="ValidItemType"></a>ValidItemType</h4><p>这个暂时还不是很清楚。</p>
+<h3 id="自定义Generator"><a href="#自定义Generator" class="headerlink" title="自定义Generator"></a>自定义Generator</h3>]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4中的Serialization</title>
     <url>/ue4-serialization/</url>
     <content><![CDATA[<p>这一次要好好的理解UE4中的Serialization这个概念。<br><a id="more"></a></p>
@@ -1037,7 +1066,17 @@
 <li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Actors/ActorLifecycle/index.html" target="_blank" rel="noopener">Actor Lifecycle - What actually happens when an Actor is loaded or spawned, and eventually dies.</a></li>
 </ul>
 <p>首先是官方文档。</p>
-<h1 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h1><h3 id="SpawnActorDeferred"><a href="#SpawnActorDeferred" class="headerlink" title="SpawnActorDeferred"></a>SpawnActorDeferred</h3><p>遇到了一个Actor的生成问题，不过关于物体的动态生成一直都是一个非常重要的问题。</p>
+<h1 id="记录一些使用"><a href="#记录一些使用" class="headerlink" title="记录一些使用"></a>记录一些使用</h1><h2 id="Actor的生成"><a href="#Actor的生成" class="headerlink" title="Actor的生成"></a>Actor的生成</h2><h3 id="SpawnActor"><a href="#SpawnActor" class="headerlink" title="SpawnActor"></a>SpawnActor</h3><p>在C++中如何进行一个Actor的生成</p>
+<ul>
+<li><a href="https://usagi.hatenablog.jp/entry/2017/10/17/123000" target="_blank" rel="noopener">UE4: C++ コード から C++ クラスまたは Blueprint のアクターを FindObject して SpawnActor する方法</a></li>
+</ul>
+<h4 id="SpawnActor生成对象是c-的情况"><a href="#SpawnActor生成对象是c-的情况" class="headerlink" title="SpawnActor生成对象是c++的情况"></a>SpawnActor生成对象是c++的情况</h4><p><code>FActorSpawnParameters</code>这个必要参数的各个属性含义还不明白<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FActorSpawnParameters params;</span><br><span class="line"></span><br><span class="line">// 必要に応じてパラメーターを設定する。</span><br><span class="line">params.bAllowDuringConstructionScript = true;</span><br><span class="line">params.bDeferConstruction = false;</span><br><span class="line">params.bNoFail = true;</span><br><span class="line">params.Instigator = this;</span><br><span class="line">params.Name = &#123; &#125;;</span><br><span class="line">params.ObjectFlags = EObjectFlags::RF_NoFlags;</span><br><span class="line">params.OverrideLevel = nullptr;</span><br><span class="line">params.Owner = this;</span><br><span class="line">params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;</span><br><span class="line">params.Template = nullptr;</span><br></pre></td></tr></table></figure></p>
+<p>生成：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 事前に用意した params と必要な SpawnActor のオーバーロードを使う。</span><br><span class="line">// ASomethingActor は必要に応じて #include &quot;SomethingActor.h&quot; など参照可能にしておく。</span><br><span class="line">auto something =</span><br><span class="line">  GetWorld()-&gt;SpawnActor&lt; ASomethingActor &gt;</span><br><span class="line">  ( GetActorLocation()</span><br><span class="line">  , GetActorRotation()</span><br><span class="line">  , params</span><br><span class="line">  );</span><br></pre></td></tr></table></figure></p>
+<h4 id="SpawnActor生成对象是Blueprint的情况"><a href="#SpawnActor生成对象是Blueprint的情况" class="headerlink" title="SpawnActor生成对象是Blueprint的情况"></a>SpawnActor生成对象是Blueprint的情况</h4><p>跟上面的文章有些不一样的地方是构造函数里并不会把蓝图类的路径写死到程序里，这并不利于代码的维护</p>
+<p>首先是指定我们需要生成的蓝图类<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">protected:</span><br><span class="line">  // 例えば目的の Blurprint クラスが AStaticMeshActor ならそのオブジェクトの SpawnActor 用に参照させるオブジェクトの保持はこんな感じ。</span><br><span class="line">  // （よりゆるくは AActor* でもよい。）</span><br><span class="line">  UPROPERTY(EditDefaultOnly)</span><br><span class="line">  TSubclassOf&lt; class AStaticMeshActor &gt; something_object;</span><br></pre></td></tr></table></figure></p>
+<p>对指定的蓝图类进行生成<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 仕込みで用意しておいた something_object を使う SpawnActor のオーバーロードを使う。</span><br><span class="line">auto something =</span><br><span class="line">  GetWorld()-&gt;SpawnActor&lt; AStaticMeshActor&gt;</span><br><span class="line">  ( something_object // &lt;-- ここで UClass* なオブジェクトを渡すために事前の仕込みが必要</span><br><span class="line">  , GetActorLocation()</span><br><span class="line">  , GetActorRotation()</span><br><span class="line">  , params</span><br><span class="line">  );</span><br></pre></td></tr></table></figure></p>
+<p>也不是说上面的文章就是不对的，只是个人的使用习惯而已。</p>
+<h3 id="SpawnActorDeferred"><a href="#SpawnActorDeferred" class="headerlink" title="SpawnActorDeferred"></a>SpawnActorDeferred</h3><p>遇到了一个Actor的生成问题，不过关于物体的动态生成一直都是一个非常重要的问题。</p>
 <p>首先看一下GASDocumentation中的一段代码：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EditAnywhere, Meta = (ExposeOnSpawn = <span class="literal">true</span>))</span><br><span class="line">    <span class="keyword">float</span> Range;</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = <span class="literal">true</span>))</span><br><span class="line">    FGameplayEffectSpecHandle DamageEffectSpecHandle;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line">    AGDProjectile* Projectile = GetWorld()-&gt;SpawnActorDeferred&lt;AGDProjectile&gt;(ProjectileClass, MuzzleTransform, GetOwningActorFromActorInfo(), Hero, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);</span><br><span class="line">    Projectile-&gt;DamageEffectSpecHandle = DamageEffectSpecHandle;</span><br><span class="line">    Projectile-&gt;Range = Range;</span><br><span class="line">    Projectile-&gt;FinishSpawning(MuzzleTransform);</span><br></pre></td></tr></table></figure></p>
 <h4 id="Deferred-Spawn"><a href="#Deferred-Spawn" class="headerlink" title="Deferred Spawn"></a>Deferred Spawn</h4><p>这种生成Actor的方法被这样称为</p>
 <blockquote>
@@ -1055,7 +1094,7 @@
 </blockquote>
 <p>就像上面描述的和那样的使用方法。</p>
 <h4 id="Expose-on-Spawn"><a href="#Expose-on-Spawn" class="headerlink" title="Expose on Spawn"></a>Expose on Spawn</h4><p>上面的例子提到了了这个属性修饰符，在Blueprint中也能找到这个条目。</p>
-<p>感觉就是因为这个属性才会用到<strong>DeferredSpaen</strong>，经常在Blueprint中会有<code>SpawnActorByClass</code>的时候，当我们在C++使用了上面的修饰符和写法之后，在这个函数的里面就会出现”Exposed“属性。</p>
+<p>感觉就是因为这个属性才会用到<strong>DeferredSpawn</strong>，经常在Blueprint中会有<code>SpawnActorByClass</code>的时候，当我们在C++使用了上面的修饰符和写法之后，在这个函数的里面就会出现”Exposed“属性。</p>
 <p>所以就像上面说的那样，允许在BP的Construction之前做一些设置。</p>
 <p>嘛先记住吧总归是有好处的。</p>
 <ul>
