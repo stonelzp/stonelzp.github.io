@@ -686,6 +686,9 @@
 <p>像上面的虚函数写法就很简洁，而且cpp文件什么都不需要了。<br><code>GENERATED_BODY</code>帮我们把构造函数的定义也一起做了。</p>
 <p>接口的使用就是<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// === MyImplementation.cpp</span><br><span class="line">virtual void DebugGetMyValue() override;</span><br></pre></td></tr></table></figure></p>
 <p>我感觉这种写法就是披着UE4C++皮的很普通的C++的接口使用方式，泛用性不是很高，至少像再UE4中实现的话还是用第一种方式。</p>
+<h5 id="蓝图UINTERFACE的使用"><a href="#蓝图UINTERFACE的使用" class="headerlink" title="蓝图UINTERFACE的使用"></a>蓝图UINTERFACE的使用</h5><p>当使用BluepintNativeEvent创建好了Interface之后就是使用了，导入头文件什么的就不说了</p>
+<p>假定我们现在有一个实现了这个接口的实例Actor:<code>SampleActor</code>,调用这个接口的操作<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if(SampleActor-&gt;GetClass()-&gt;ImplementsInterface(UMyInterface::StaticClass()))</span><br><span class="line">&#123;</span><br><span class="line">    IMyInterface::Execute_DebugMyValue(SampleActor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用函数的方法就很简单。</p>
 <h5 id="UINTERFACE修饰符"><a href="#UINTERFACE修饰符" class="headerlink" title="UINTERFACE修饰符"></a>UINTERFACE修饰符</h5><h3 id="FGCObject"><a href="#FGCObject" class="headerlink" title="FGCObject"></a>FGCObject</h3><ul>
 <li><a href="https://qiita.com/go_astrayer/items/11b99ef8849b43796fee" target="_blank" rel="noopener">UPROPERTY を使わずにオブジェクトをガーベジ コレクションの対象から外す方法</a></li>
 </ul>
