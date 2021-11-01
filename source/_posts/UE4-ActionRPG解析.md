@@ -341,6 +341,20 @@ virtual void DebugGetMyValue() override;
 
 我感觉这种写法就是披着UE4C++皮的很普通的C++的接口使用方式，泛用性不是很高，至少像再UE4中实现的话还是用第一种方式。
 
+##### 蓝图UINTERFACE的使用
+当使用BluepintNativeEvent创建好了Interface之后就是使用了，导入头文件什么的就不说了
+
+假定我们现在有一个实现了这个接口的实例Actor:`SampleActor`,调用这个接口的操作
+```
+if(SampleActor->GetClass()->ImplementsInterface(UMyInterface::StaticClass()))
+{
+    IMyInterface::Execute_DebugMyValue(SampleActor);
+}
+```
+
+调用函数的方法就很简单。
+
+
 ##### UINTERFACE修饰符
 
 
