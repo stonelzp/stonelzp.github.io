@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="记录一些Vim的常用的使用方法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-06-09T14:06:30.556Z">
+<meta property="og:updated_time" content="2021-09-13T15:07:24.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vim学习笔记">
 <meta name="twitter:description" content="记录一些Vim的常用的使用方法。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-09 23:06:30" itemprop="dateModified" datetime="2021-06-09T23:06:30+09:00">2021-06-09</time>
+                <time title="修改时间：2021-09-14 00:07:24" itemprop="dateModified" datetime="2021-09-14T00:07:24+09:00">2021-09-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -286,6 +286,9 @@
 </li>
 <li><code>viw</code> : 选中当前光标所在的单词，跟我之前使用的的<code>bve</code>差不多。</li>
 </ul>
+<h3 id="Vim中Tab替换"><a href="#Vim中Tab替换" class="headerlink" title="Vim中Tab替换"></a>Vim中Tab替换</h3><p>TAB替换为空格<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:set ts=4</span><br><span class="line">:set expandtab</span><br><span class="line">:%retab!</span><br></pre></td></tr></table></figure></p>
+<p>空格替换为TAB<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:set ts=4</span><br><span class="line">:set noexpandtab</span><br><span class="line">:%retab!</span><br></pre></td></tr></table></figure></p>
+<p>加<code>!</code>是用于处理非空白字符之后的TAB，即所有的TAB，若不加<code>!</code>，则只处理行首的TAB。</p>
 
     </div>
 
@@ -369,7 +372,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#替换字符"><span class="nav-number">1.</span> <span class="nav-text">替换字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用寄存器中的内容进行替换"><span class="nav-number">2.</span> <span class="nav-text">使用寄存器中的内容进行替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim中代码的整体移动"><span class="nav-number">3.</span> <span class="nav-text">Vim中代码的整体移动</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#替换字符"><span class="nav-number">1.</span> <span class="nav-text">替换字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用寄存器中的内容进行替换"><span class="nav-number">2.</span> <span class="nav-text">使用寄存器中的内容进行替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim中代码的整体移动"><span class="nav-number">3.</span> <span class="nav-text">Vim中代码的整体移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim中Tab替换"><span class="nav-number">4.</span> <span class="nav-text">Vim中Tab替换</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -385,7 +388,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -429,7 +432,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

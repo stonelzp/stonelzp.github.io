@@ -28,10 +28,16 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="在UE4中踩了不少的坑，这篇主要是用来介绍自己在使用过程中由于粗心或者知识浅薄而掉进去的大坑。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.365Z">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-fucking-moment/GetTestArray.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-fucking-moment/TestArray.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-fucking-moment/TestArrayCase1.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-fucking-moment/GetTestArrayPure.png">
+<meta property="og:image" content="http://stonelzp.github.io/ue4-fucking-moment/TestArrayCase2.png">
+<meta property="og:updated_time" content="2021-09-09T13:23:19.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-踩坑指南">
 <meta name="twitter:description" content="在UE4中踩了不少的坑，这篇主要是用来介绍自己在使用过程中由于粗心或者知识浅薄而掉进去的大坑。">
+<meta name="twitter:image" content="http://stonelzp.github.io/ue4-fucking-moment/GetTestArray.png">
 
 <link rel="canonical" href="http://stonelzp.github.io/ue4-fucking-moment/">
 
@@ -220,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 01:09:45" itemprop="dateModified" datetime="2021-02-19T01:09:45+09:00">2021-02-19</time>
+                <time title="修改时间：2021-09-09 22:23:19" itemprop="dateModified" datetime="2021-09-09T22:23:19+09:00">2021-09-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,6 +278,16 @@
 <p>fixed!</p>
 </blockquote>
 <p>解决来源： <a href="https://answers.unrealengine.com/questions/869223/cantt-see-details-in-blueprint.html" target="_blank" rel="noopener">Cant’t see details in Blueprint</a></p>
+<h2 id="ForEachLoop的陷阱"><a href="#ForEachLoop的陷阱" class="headerlink" title="ForEachLoop的陷阱"></a>ForEachLoop的陷阱</h2><p>今天介绍一个UE4蓝图里的ForEachLoop的陷阱。<br>也可以说是BlueprintPure的陷阱。</p>
+<p>假设有这样的测试案例：<br><img src="GetTestArray.png" alt="GetTestArray"></p>
+<p>我们准备了一个<code>GetTestArray</code>函数，并在内部打印输出字符串<code>Get Test Array!</code>，用来验证这个函数的调用次数，同时返回一个包含四个元素的数组。</p>
+<p>然后我们使用<code>ForEachLoop</code>来遍历这个返回的数组：<br><img src="TestArray.png" alt="TestArray"></p>
+<p>我们在Loop里面也添加测试打印输出<code>Hello</code>,这种情况下执行之后我们会各自得到执行几次的输出结果呢？<br><img src="TestArrayCase1.png" alt="TestArrayCase1"></p>
+<p>如上图所示，Loop内部是四次，而<code>GetTestArray</code>函数是一次，也是我们所预想的结果。</p>
+<p>如果我们变一下，<code>GetTestArray</code>函数是Pure的话会怎样呢？<br><img src="GetTestArrayPure.png" alt="GetTestArrayPure"></p>
+<p>像上面的图片显示的那样，Pure函数返回结果直接与<code>ForEachLoop</code>进行连接，此时的测试结果则是：<br><img src="TestArrayCase2.png" alt="TestArrayCase2"></p>
+<p>我们会发现<code>GetTestArray</code>函数执行了Loop的次数。</p>
+<p>以上，就是我遇见的关于ForEachLoop的大坑。</p>
 
     </div>
 
@@ -356,7 +372,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于蓝图"><span class="nav-number">1.</span> <span class="nav-text">关于蓝图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GetDisplayName"><span class="nav-number">1.1.</span> <span class="nav-text">GetDisplayName</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Can-not-see-the-detail-panel"><span class="nav-number">1.2.</span> <span class="nav-text">Can not see the detail panel</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于蓝图"><span class="nav-number">1.</span> <span class="nav-text">关于蓝图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GetDisplayName"><span class="nav-number">1.1.</span> <span class="nav-text">GetDisplayName</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Can-not-see-the-detail-panel"><span class="nav-number">1.2.</span> <span class="nav-text">Can not see the detail panel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ForEachLoop的陷阱"><span class="nav-number">1.3.</span> <span class="nav-text">ForEachLoop的陷阱</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -372,7 +388,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -416,7 +432,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

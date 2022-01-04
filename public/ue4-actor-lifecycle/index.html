@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="关于Actor的生命周期，与很多初始化的操作相关联，准备整理到这篇文章中。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.341Z">
+<meta property="og:updated_time" content="2021-09-23T02:00:43.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-一个Actor的生命周期">
 <meta name="twitter:description" content="关于Actor的生命周期，与很多初始化的操作相关联，准备整理到这篇文章中。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 01:09:45" itemprop="dateModified" datetime="2021-02-19T01:09:45+09:00">2021-02-19</time>
+                <time title="修改时间：2021-09-23 11:00:43" itemprop="dateModified" datetime="2021-09-23T11:00:43+09:00">2021-09-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,7 +256,17 @@
 <li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/Actors/ActorLifecycle/index.html" target="_blank" rel="noopener">Actor Lifecycle - What actually happens when an Actor is loaded or spawned, and eventually dies.</a></li>
 </ul>
 <p>首先是官方文档。</p>
-<h1 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h1><h3 id="SpawnActorDeferred"><a href="#SpawnActorDeferred" class="headerlink" title="SpawnActorDeferred"></a>SpawnActorDeferred</h3><p>遇到了一个Actor的生成问题，不过关于物体的动态生成一直都是一个非常重要的问题。</p>
+<h1 id="记录一些使用"><a href="#记录一些使用" class="headerlink" title="记录一些使用"></a>记录一些使用</h1><h2 id="Actor的生成"><a href="#Actor的生成" class="headerlink" title="Actor的生成"></a>Actor的生成</h2><h3 id="SpawnActor"><a href="#SpawnActor" class="headerlink" title="SpawnActor"></a>SpawnActor</h3><p>在C++中如何进行一个Actor的生成</p>
+<ul>
+<li><a href="https://usagi.hatenablog.jp/entry/2017/10/17/123000" target="_blank" rel="noopener">UE4: C++ コード から C++ クラスまたは Blueprint のアクターを FindObject して SpawnActor する方法</a></li>
+</ul>
+<h4 id="SpawnActor生成对象是c-的情况"><a href="#SpawnActor生成对象是c-的情况" class="headerlink" title="SpawnActor生成对象是c++的情况"></a>SpawnActor生成对象是c++的情况</h4><p><code>FActorSpawnParameters</code>这个必要参数的各个属性含义还不明白<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">FActorSpawnParameters params;</span><br><span class="line"></span><br><span class="line">// 必要に応じてパラメーターを設定する。</span><br><span class="line">params.bAllowDuringConstructionScript = true;</span><br><span class="line">params.bDeferConstruction = false;</span><br><span class="line">params.bNoFail = true;</span><br><span class="line">params.Instigator = this;</span><br><span class="line">params.Name = &#123; &#125;;</span><br><span class="line">params.ObjectFlags = EObjectFlags::RF_NoFlags;</span><br><span class="line">params.OverrideLevel = nullptr;</span><br><span class="line">params.Owner = this;</span><br><span class="line">params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;</span><br><span class="line">params.Template = nullptr;</span><br></pre></td></tr></table></figure></p>
+<p>生成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 事前に用意した params と必要な SpawnActor のオーバーロードを使う。</span><br><span class="line">// ASomethingActor は必要に応じて #include &quot;SomethingActor.h&quot; など参照可能にしておく。</span><br><span class="line">auto something =</span><br><span class="line">  GetWorld()-&gt;SpawnActor&lt; ASomethingActor &gt;</span><br><span class="line">  ( GetActorLocation()</span><br><span class="line">  , GetActorRotation()</span><br><span class="line">  , params</span><br><span class="line">  );</span><br></pre></td></tr></table></figure></p>
+<h4 id="SpawnActor生成对象是Blueprint的情况"><a href="#SpawnActor生成对象是Blueprint的情况" class="headerlink" title="SpawnActor生成对象是Blueprint的情况"></a>SpawnActor生成对象是Blueprint的情况</h4><p>跟上面的文章有些不一样的地方是构造函数里并不会把蓝图类的路径写死到程序里，这并不利于代码的维护</p>
+<p>首先是指定我们需要生成的蓝图类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">protected:</span><br><span class="line">  // 例えば目的の Blurprint クラスが AStaticMeshActor ならそのオブジェクトの SpawnActor 用に参照させるオブジェクトの保持はこんな感じ。</span><br><span class="line">  // （よりゆるくは AActor* でもよい。）</span><br><span class="line">  UPROPERTY(EditDefaultOnly)</span><br><span class="line">  TSubclassOf&lt; class AStaticMeshActor &gt; something_object;</span><br></pre></td></tr></table></figure></p>
+<p>对指定的蓝图类进行生成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 仕込みで用意しておいた something_object を使う SpawnActor のオーバーロードを使う。</span><br><span class="line">auto something =</span><br><span class="line">  GetWorld()-&gt;SpawnActor&lt; AStaticMeshActor&gt;</span><br><span class="line">  ( something_object // &lt;-- ここで UClass* なオブジェクトを渡すために事前の仕込みが必要</span><br><span class="line">  , GetActorLocation()</span><br><span class="line">  , GetActorRotation()</span><br><span class="line">  , params</span><br><span class="line">  );</span><br></pre></td></tr></table></figure></p>
+<p>也不是说上面的文章就是不对的，只是个人的使用习惯而已。</p>
+<h3 id="SpawnActorDeferred"><a href="#SpawnActorDeferred" class="headerlink" title="SpawnActorDeferred"></a>SpawnActorDeferred</h3><p>遇到了一个Actor的生成问题，不过关于物体的动态生成一直都是一个非常重要的问题。</p>
 <p>首先看一下GASDocumentation中的一段代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// .h</span></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EditAnywhere, Meta = (ExposeOnSpawn = <span class="literal">true</span>))</span><br><span class="line">    <span class="keyword">float</span> Range;</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, Meta = (ExposeOnSpawn = <span class="literal">true</span>))</span><br><span class="line">    FGameplayEffectSpecHandle DamageEffectSpecHandle;</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp</span></span><br><span class="line">    AGDProjectile* Projectile = GetWorld()-&gt;SpawnActorDeferred&lt;AGDProjectile&gt;(ProjectileClass, MuzzleTransform, GetOwningActorFromActorInfo(), Hero, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);</span><br><span class="line">    Projectile-&gt;DamageEffectSpecHandle = DamageEffectSpecHandle;</span><br><span class="line">    Projectile-&gt;Range = Range;</span><br><span class="line">    Projectile-&gt;FinishSpawning(MuzzleTransform);</span><br></pre></td></tr></table></figure></p>
 <h4 id="Deferred-Spawn"><a href="#Deferred-Spawn" class="headerlink" title="Deferred Spawn"></a>Deferred Spawn</h4><p>这种生成Actor的方法被这样称为</p>
 <blockquote>
@@ -274,7 +284,7 @@
 </blockquote>
 <p>就像上面描述的和那样的使用方法。</p>
 <h4 id="Expose-on-Spawn"><a href="#Expose-on-Spawn" class="headerlink" title="Expose on Spawn"></a>Expose on Spawn</h4><p>上面的例子提到了了这个属性修饰符，在Blueprint中也能找到这个条目。</p>
-<p>感觉就是因为这个属性才会用到<strong>DeferredSpaen</strong>，经常在Blueprint中会有<code>SpawnActorByClass</code>的时候，当我们在C++使用了上面的修饰符和写法之后，在这个函数的里面就会出现”Exposed“属性。</p>
+<p>感觉就是因为这个属性才会用到<strong>DeferredSpawn</strong>，经常在Blueprint中会有<code>SpawnActorByClass</code>的时候，当我们在C++使用了上面的修饰符和写法之后，在这个函数的里面就会出现”Exposed“属性。</p>
 <p>所以就像上面说的那样，允许在BP的Construction之前做一些设置。</p>
 <p>嘛先记住吧总归是有好处的。</p>
 <ul>
@@ -364,7 +374,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor-Lifecycle"><span class="nav-number">1.</span> <span class="nav-text">Actor Lifecycle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遇到的一些问题"><span class="nav-number">2.</span> <span class="nav-text">遇到的一些问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpawnActorDeferred"><span class="nav-number">2.0.1.</span> <span class="nav-text">SpawnActorDeferred</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Deferred-Spawn"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">Deferred Spawn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Expose-on-Spawn"><span class="nav-number">2.0.1.2.</span> <span class="nav-text">Expose on Spawn</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Actor-Lifecycle"><span class="nav-number">1.</span> <span class="nav-text">Actor Lifecycle</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#记录一些使用"><span class="nav-number">2.</span> <span class="nav-text">记录一些使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Actor的生成"><span class="nav-number">2.1.</span> <span class="nav-text">Actor的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpawnActor"><span class="nav-number">2.1.1.</span> <span class="nav-text">SpawnActor</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SpawnActor生成对象是c-的情况"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">SpawnActor生成对象是c++的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpawnActor生成对象是Blueprint的情况"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">SpawnActor生成对象是Blueprint的情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpawnActorDeferred"><span class="nav-number">2.1.2.</span> <span class="nav-text">SpawnActorDeferred</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Deferred-Spawn"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">Deferred Spawn</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Expose-on-Spawn"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">Expose on Spawn</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -380,7 +390,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">99</span>
+          <span class="site-state-item-count">100</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -424,7 +434,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
