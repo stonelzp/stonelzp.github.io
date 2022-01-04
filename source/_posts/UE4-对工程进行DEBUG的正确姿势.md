@@ -12,6 +12,24 @@ tags:
 
 <!--more-->
 
+# 项目的编译选项
+在使用VS对工程进行编译的时候就会看见**SolutionConfigurations**这个下拉菜单有许多选项，不知道选哪一个就会很迷茫。其实这个东西早就应该在学习UE4当时深入理解一下了。
+
+说是深入理解，其实也就是好好的读一下官方文档。
+- [Build Configurations Reference](https://docs.unrealengine.com/4.27/en-US/ProductionPipelines/DevelopmentSetup/BuildConfigurations/)
+
+UE4中的编译选项包含两个关键字，第一个关键字代表了**Build Configuration-State**，第二个关键字代表了**Build Configuration-Target**。
+直接用我们最常见的两个编译选项来说就是：
+- Debug Editor ： 会将UE4引擎源码和项目里面的DebugSymbols全部包含在内供我们Debug
+  - Debug -State，可以对项目或者工程进行Debug的状态
+  - Editor -Target，可以在UE4的Editor中打开我们的项目
+- DebugGame Editor ： UE4的引擎源码编译会被优化，只有项目(game code)可以被很好的Debug
+  - DebugGame -State，可以Debug game code
+  - Editor -Target，可以在UE4的Editor中打开我们的项目
+
+UE4默认的是Development Editor的编译方式，怎么说呢，Editor用起来变快了一点？但是开发的话经常Debug就不是那么友好了。单纯的把自己的Code内容编译好再反映到Editor上的话，这个应该是最适合的了，如果说UE4源码本身的编译时间不是那么的长的话，倒可以频繁的切换到这个模式试试呢。
+
+
 # 保留项目中的设定
 
 ## 对 ini 文件的读写
