@@ -114,6 +114,24 @@ UE4也为其提供了许多Snippets方便我们使用，需要做的是
 - [Visual Studio Snippets](https://nerivec.github.io/old-ue4-wiki/pages/visual-studio-snippets.html)
 - [VisualStudio UE4のCode Snippets登録について](https://papersloth.hatenablog.com/entry/2018/09/19/224110)
 
+### 关于命令行
+VS是有命令行窗口的，虽然我基本上没怎么用过（甚至可以在VS里打开PowerShell执行系统命令）。那么要怎么打开命令行窗口呢？
+
+去**View->Other Windows->Command Window**第一个就能找到,
+快捷键是`Ctrl + Alt + A`
+
+至于上面说的打开Window系统命令行，打开**View->Terminal**就是，快捷键是 **Ctrl+`**
+
+### 关于Diff工具
+为什么要用到VS的命令行呢？因为我突然要用到Diff工具，但是手头有没有想起来好用的工具。
+
+VS打开命令行输入`Tools.DiffFiles` 后面跟上两个文件的绝对路径就可以了。
+
+突然想起来我现在用的文本编辑器Atom也是有Diff工具的，同理SublimeText也肯定是有的。
+
+参考链接
+- [Compare two files in Visual Studio](https://stackoverflow.com/questions/13752998/compare-two-files-in-visual-studio)
+
 # 简单的设置VS
 
 ## Solution Configurations
