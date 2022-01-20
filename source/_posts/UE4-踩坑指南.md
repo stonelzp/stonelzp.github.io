@@ -71,3 +71,29 @@ tags:
 我们会发现`GetTestArray`函数执行了Loop的次数。
 
 以上，就是我遇见的关于ForEachLoop的大坑。
+
+## 通过Editor添加C++文件编译错误的问题
+UE默认的情况下头文件与实现是分开的，各自放到public和private分类中，如果创建的时候不去选择的话，编译就会出错，因为在cpp文件中找不到添加的头文件路径了。
+UE的这种源码分布方式怎么说呢，看起来貌似是好看了但其实不是很方便管理，找起来很麻烦的。
+
+解决每次添加C++文件编译都出错，不想听Editor报错的那一声叮的解决方案是：
+
+去工程的Build.cs文件里把工程的Include路径添加进去:
+```
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+using UnrealBuildTool;
+
+public class UETestProject : ModuleRules
+{
+	public UETestProject(ReadOnlyTargetRules Target) : base(Target)
+	{
+		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+
+		PublicIncludePaths.Add("UETestProject");
+	}
+
+}
+```

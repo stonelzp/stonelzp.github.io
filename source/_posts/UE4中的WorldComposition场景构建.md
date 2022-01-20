@@ -19,4 +19,4 @@ tags:
 
 WorldComposition不是立马就可以使用的，想要使用这个功能的话需要去`WorldSettings -> World -> EnableWorldComposition`开启。
 
-开启之后会自动检测你当前加载中的Level的同级文件夹中的所有Level并将其自动加载到SubLevel。
+开启之后会自动检测你当前加载中的Level的同级文件夹中的所有Level并将其自动加载到SubLevel。所以在开启的时候保证同级文件夹下没有其它的Level最好。
