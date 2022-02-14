@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-06-01T14:07:56.791Z">
+<meta property="og:updated_time" content="2022-02-14T00:41:53.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git学习笔记">
 <meta name="twitter:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-01 23:07:56" itemprop="dateModified" datetime="2021-06-01T23:07:56+09:00">2021-06-01</time>
+                <time title="修改时间：2022-02-14 09:41:53" itemprop="dateModified" datetime="2022-02-14T09:41:53+09:00">2022-02-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -300,6 +300,30 @@
 <p>参考文章：</p>
 <ul>
 <li><a href="https://qiita.com/iorionda/items/c7e0aca399371068a9b8" target="_blank" rel="noopener">Git で不要になったローカルブランチ・リモートブランチを削除する方法</a></li>
+</ul>
+<h3 id="添加远程分支"><a href="#添加远程分支" class="headerlink" title="添加远程分支"></a>添加远程分支</h3><p>为初始的仓库添加远程分支。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git-url</span><br></pre></td></tr></table></figure></p>
+<p>删除远程分支<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rm git-url</span><br></pre></td></tr></table></figure></p>
+<p>修改远程分支<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote set-url origin git-url</span><br></pre></td></tr></table></figure></p>
+<p>也是修改远程分支的指令。</p>
+<p>修改仓库名称<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rename name-before name-after</span><br></pre></td></tr></table></figure></p>
+<p>顺便一提查看远程分支的指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure></p>
+<p>还有查看远程ping得通得指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-remote</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><a href="https://superuser.com/questions/227509/git-ping-check-if-remote-repository-exists" target="_blank" rel="noopener">git “ping”: check if remote repository exists</a></li>
+</ul>
+<p>要说为什么想起来写这个部分的内容，公司的一个Gitlab的仓库我是死活连接不上，原因则是用的ssh的路径而不是http的路径。<br>话说回来，我也是不太清楚ssh和http路径在gitlab中使用的区别，至少我目前遇到的都是ssh路径不行的情况下http就可以，而SourceTree中使用的基本上都是http路径。</p>
+<h3 id="Add操作"><a href="#Add操作" class="headerlink" title="Add操作"></a>Add操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>这个算是最常用的命令之一了，这个命令的含义是将当前文件夹下的所有的变动（<strong>增删改</strong>）都执行add操作。</p>
+<p>无关当前文件夹，当前Repo里所有的变动都执行add操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -A</span><br><span class="line">// or</span><br><span class="line">git add --all</span><br></pre></td></tr></table></figure></p>
+<p>无关当前文件夹，所有变动（只有<strong>删改</strong>）执行add操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -u</span><br><span class="line">// or</span><br><span class="line">git add --update</span><br></pre></td></tr></table></figure></p>
+<p>参考文章<br>-<a href="https://note.nkmk.me/git-add-u-a-period/" target="_blank" rel="noopener">git add -u と git add -A と git add . の違い</a></p>
+<h3 id="取消已经add的操作"><a href="#取消已经add的操作" class="headerlink" title="取消已经add的操作"></a>取消已经add的操作</h3><p>有的时候习惯性就会在commit之前add，真正准备commit的时候才发现有不想提交的内容。<br>结论就是使用这个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git rm --cached .</span><br><span class="line">// or</span><br><span class="line">git rm --cached &lt;added_file_to_undo&gt;</span><br></pre></td></tr></table></figure></p>
+<p>或者需要递归操作的话用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rm -r --cached .</span><br></pre></td></tr></table></figure></p>
+<p>这会清除所有add的内容。</p>
+<p>在执行add的时候推荐用这个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add -n .</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/348170/how-do-i-undo-git-add-before-commit" target="_blank" rel="noopener">How do I undo ‘git add’ before commit?</a><br>回答里的最高赞内容，只能说是跟我的情况一模一样了。</li>
 </ul>
 <h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
 <p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
@@ -406,7 +430,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于忽略文件的变动"><span class="nav-number">2.3.</span> <span class="nav-text">关于忽略文件的变动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程分支"><span class="nav-number">2.4.</span> <span class="nav-text">删除远程分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SourceTree"><span class="nav-number">3.</span> <span class="nav-text">SourceTree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-LFS-2"><span class="nav-number">4.</span> <span class="nav-text">Git LFS 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-LFS"><span class="nav-number">4.1.</span> <span class="nav-text">Git LFS</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于忽略文件的变动"><span class="nav-number">2.3.</span> <span class="nav-text">关于忽略文件的变动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程分支"><span class="nav-number">2.4.</span> <span class="nav-text">删除远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加远程分支"><span class="nav-number">2.5.</span> <span class="nav-text">添加远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add操作"><span class="nav-number">2.6.</span> <span class="nav-text">Add操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消已经add的操作"><span class="nav-number">2.7.</span> <span class="nav-text">取消已经add的操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SourceTree"><span class="nav-number">3.</span> <span class="nav-text">SourceTree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-LFS-2"><span class="nav-number">4.</span> <span class="nav-text">Git LFS 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-LFS"><span class="nav-number">4.1.</span> <span class="nav-text">Git LFS</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -422,19 +446,19 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

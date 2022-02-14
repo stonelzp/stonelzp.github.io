@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE5-踩坑指南</title>
+    <url>/ue5-the-fucking-moment/</url>
+    <content><![CDATA[<p>记录一些在UE5中遇见的BUG，目前是UE5EA阶段。</p>
+<a id="more"></a>
+<h1 id="报错记录"><a href="#报错记录" class="headerlink" title="报错记录"></a>报错记录</h1><h2 id="error-CS0579"><a href="#error-CS0579" class="headerlink" title="error CS0579"></a>error CS0579</h2><blockquote>
+<p>DotNetCore\obj\Release\netcoreapp2.0.NETCoreApp,Version=v2.0.AssemblyAttributes.cs(4,12): error CS0579: global::System.Runtime.Versioning.TargetFrameworkAttribute’ 属性が重複しています。</p>
+</blockquote>
+<p>在UE4版本升为UE5的时候，准备打开UE5的工程文件的时候就打不开了，VS的报错就像上面的错误内容。<br>按照上面报错的路径，去引擎源码的文件夹下找到这个文件，由于这个文件是自动生成的文件，删除再重新打开VS编译就解决了。</p>
+<p>参考文章:</p>
+<ul>
+<li><a href="http://nanoappli.com/blog/archives/2040" target="_blank" rel="noopener">【C#】.NETFramework,Version=v4.0.AssemblyAttributes.csでコンパイルエラーが発生する</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine5</category>
+      </categories>
+      <tags>
+        <tag>UE5</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4中的WorldComposition场景构建</title>
     <url>/ue4-world-composition/</url>
     <content><![CDATA[<p>关于在UE4中的超大场景构建就不得不提WorldComposition特性，就我所理解的WorldComposition其实就是利用LevelStreaming功能来实现的。</p>
@@ -3877,6 +3898,30 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://qiita.com/iorionda/items/c7e0aca399371068a9b8" target="_blank" rel="noopener">Git で不要になったローカルブランチ・リモートブランチを削除する方法</a></li>
 </ul>
+<h3 id="添加远程分支"><a href="#添加远程分支" class="headerlink" title="添加远程分支"></a>添加远程分支</h3><p>为初始的仓库添加远程分支。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote add origin git-url</span><br></pre></td></tr></table></figure></p>
+<p>删除远程分支<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote rm git-url</span><br></pre></td></tr></table></figure></p>
+<p>修改远程分支<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote set-url origin git-url</span><br></pre></td></tr></table></figure></p>
+<p>也是修改远程分支的指令。</p>
+<p>修改仓库名称<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote rename name-before name-after</span><br></pre></td></tr></table></figure></p>
+<p>顺便一提查看远程分支的指令：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure></p>
+<p>还有查看远程ping得通得指令<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git ls-remote</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><a href="https://superuser.com/questions/227509/git-ping-check-if-remote-repository-exists" target="_blank" rel="noopener">git “ping”: check if remote repository exists</a></li>
+</ul>
+<p>要说为什么想起来写这个部分的内容，公司的一个Gitlab的仓库我是死活连接不上，原因则是用的ssh的路径而不是http的路径。<br>话说回来，我也是不太清楚ssh和http路径在gitlab中使用的区别，至少我目前遇到的都是ssh路径不行的情况下http就可以，而SourceTree中使用的基本上都是http路径。</p>
+<h3 id="Add操作"><a href="#Add操作" class="headerlink" title="Add操作"></a>Add操作</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>这个算是最常用的命令之一了，这个命令的含义是将当前文件夹下的所有的变动（<strong>增删改</strong>）都执行add操作。</p>
+<p>无关当前文件夹，当前Repo里所有的变动都执行add操作：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add -A</span><br><span class="line">// or</span><br><span class="line">git add --all</span><br></pre></td></tr></table></figure></p>
+<p>无关当前文件夹，所有变动（只有<strong>删改</strong>）执行add操作：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add -u</span><br><span class="line">// or</span><br><span class="line">git add --update</span><br></pre></td></tr></table></figure></p>
+<p>参考文章<br>-<a href="https://note.nkmk.me/git-add-u-a-period/" target="_blank" rel="noopener">git add -u と git add -A と git add . の違い</a></p>
+<h3 id="取消已经add的操作"><a href="#取消已经add的操作" class="headerlink" title="取消已经add的操作"></a>取消已经add的操作</h3><p>有的时候习惯性就会在commit之前add，真正准备commit的时候才发现有不想提交的内容。<br>结论就是使用这个<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rm --cached .</span><br><span class="line">// or</span><br><span class="line">git rm --cached &lt;added_file_to_undo&gt;</span><br></pre></td></tr></table></figure></p>
+<p>或者需要递归操作的话用<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rm -r --cached .</span><br></pre></td></tr></table></figure></p>
+<p>这会清除所有add的内容。</p>
+<p>在执行add的时候推荐用这个<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add -n .</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/348170/how-do-i-undo-git-add-before-commit" target="_blank" rel="noopener">How do I undo ‘git add’ before commit?</a><br>回答里的最高赞内容，只能说是跟我的情况一模一样了。</li>
+</ul>
 <h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
 <p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
 <p>文件路径奇葩带空格又不是我的错，我只是导入一个插件而已。至于解决方案，那就是使用命令行工具来提交啊。关键时候还得是Bash。</p>
@@ -6948,8 +6993,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>笔记</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -6987,8 +7032,8 @@ table th:nth-of-type(4) {
       </categories>
       <tags>
         <tag>C++</tag>
-        <tag>笔记</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -8075,6 +8120,7 @@ table th:nth-of-type(4) {
 <p>The other difference is that, in comparison to GENERATED_UCLASS_BODY(), GENERATED_BODY() doesn’t have the public specifier in it, so any class members that are declared after it are private by default (you can explicitly declare them as public). In your situation, please make sure that you have your constructor declared and defined correctly:</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//.h file</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    AFPSGameMode(<span class="keyword">const</span> class FObjectInitializer&amp; ObjectInitializer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp file</span></span><br><span class="line">AFPSGameMode::AFPSGameMode(<span class="keyword">const</span> class FObjectInitializer&amp; ObjectInitializer)</span><br><span class="line">&#123;</span><br><span class="line">       <span class="comment">// constructor functionality</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>目前<code>GENERATED_BODY()</code>这个使用方式是UE4更推荐的。</p>
 <h4 id="3-UPROPERTY-UFUNCTION"><a href="#3-UPROPERTY-UFUNCTION" class="headerlink" title="3.UPROPERTY() UFUNCTION()"></a>3.UPROPERTY() UFUNCTION()</h4><p>使用这个声明的属性跟方法UE的Blueprint可以使用。</p>
 <h5 id="UPROPERTY-宏"><a href="#UPROPERTY-宏" class="headerlink" title="UPROPERTY()宏"></a>UPROPERTY()宏</h5><p><code>UPROPERTY()</code>的参数的含义</p>
 <ul>
