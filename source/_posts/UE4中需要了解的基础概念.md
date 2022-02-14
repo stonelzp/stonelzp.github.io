@@ -198,6 +198,7 @@ enum class ECppExampleEnum : uint8 {
  }
 ```
 
+目前`GENERATED_BODY()`这个使用方式是UE4更推荐的。
 
 #### 3.UPROPERTY() UFUNCTION()
 使用这个声明的属性跟方法UE的Blueprint可以使用。

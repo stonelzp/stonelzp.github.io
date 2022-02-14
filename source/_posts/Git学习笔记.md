@@ -87,6 +87,90 @@ git push -d origin Branch-Name
 参考文章：
 - [Git で不要になったローカルブランチ・リモートブランチを削除する方法](https://qiita.com/iorionda/items/c7e0aca399371068a9b8)
 
+### 添加远程分支
+为初始的仓库添加远程分支。
+```
+git remote add origin git-url
+```
+
+删除远程分支
+```
+git remote rm git-url
+```
+
+修改远程分支
+```
+git remote set-url origin git-url
+```
+也是修改远程分支的指令。
+
+修改仓库名称
+```
+git remote rename name-before name-after
+```
+
+顺便一提查看远程分支的指令：
+```
+git remote -v
+```
+还有查看远程ping得通得指令
+```
+git ls-remote
+```
+- [git "ping": check if remote repository exists](https://superuser.com/questions/227509/git-ping-check-if-remote-repository-exists)
+
+
+要说为什么想起来写这个部分的内容，公司的一个Gitlab的仓库我是死活连接不上，原因则是用的ssh的路径而不是http的路径。
+话说回来，我也是不太清楚ssh和http路径在gitlab中使用的区别，至少我目前遇到的都是ssh路径不行的情况下http就可以，而SourceTree中使用的基本上都是http路径。
+
+### Add操作
+```
+git add .
+```
+这个算是最常用的命令之一了，这个命令的含义是将当前文件夹下的所有的变动（**增删改**）都执行add操作。
+
+无关当前文件夹，当前Repo里所有的变动都执行add操作：
+```
+git add -A
+// or
+git add --all
+```
+
+无关当前文件夹，所有变动（只有**删改**）执行add操作：
+```
+git add -u
+// or
+git add --update
+```
+
+参考文章
+-[git add -u と git add -A と git add . の違い](https://note.nkmk.me/git-add-u-a-period/)
+
+
+### 取消已经add的操作
+有的时候习惯性就会在commit之前add，真正准备commit的时候才发现有不想提交的内容。
+结论就是使用这个
+```
+git rm --cached .
+// or
+git rm --cached <added_file_to_undo>
+```
+或者需要递归操作的话用
+```
+git rm -r --cached .
+```
+这会清除所有add的内容。
+
+在执行add的时候推荐用这个
+```
+git add -n .
+```
+
+参考资料：
+- [How do I undo 'git add' before commit?](https://stackoverflow.com/questions/348170/how-do-i-undo-git-add-before-commit)
+回答里的最高赞内容，只能说是跟我的情况一模一样了。
+
+
 ## SourceTree
 最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。
 

@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-06-10T15:31:05.537Z">
+<meta property="og:updated_time" content="2022-02-14T00:51:56.551Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中需要了解的基础概念">
 <meta name="twitter:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-06-11 00:31:05" itemprop="dateModified" datetime="2021-06-11T00:31:05+09:00">2021-06-11</time>
+                <time title="修改时间：2022-02-14 09:51:56" itemprop="dateModified" datetime="2022-02-14T09:51:56+09:00">2022-02-14</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -324,6 +324,7 @@
 <p>The other difference is that, in comparison to GENERATED_UCLASS_BODY(), GENERATED_BODY() doesn’t have the public specifier in it, so any class members that are declared after it are private by default (you can explicitly declare them as public). In your situation, please make sure that you have your constructor declared and defined correctly:</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.h file</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    AFPSGameMode(<span class="keyword">const</span> class FObjectInitializer&amp; ObjectInitializer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp file</span></span><br><span class="line">AFPSGameMode::AFPSGameMode(<span class="keyword">const</span> class FObjectInitializer&amp; ObjectInitializer)</span><br><span class="line">&#123;</span><br><span class="line">       <span class="comment">// constructor functionality</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>目前<code>GENERATED_BODY()</code>这个使用方式是UE4更推荐的。</p>
 <h4 id="3-UPROPERTY-UFUNCTION"><a href="#3-UPROPERTY-UFUNCTION" class="headerlink" title="3.UPROPERTY() UFUNCTION()"></a>3.UPROPERTY() UFUNCTION()</h4><p>使用这个声明的属性跟方法UE的Blueprint可以使用。</p>
 <h5 id="UPROPERTY-宏"><a href="#UPROPERTY-宏" class="headerlink" title="UPROPERTY()宏"></a>UPROPERTY()宏</h5><p><code>UPROPERTY()</code>的参数的含义</p>
 <ul>
@@ -653,19 +654,19 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">101</span>
+          <span class="site-state-item-count">102</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">44</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
