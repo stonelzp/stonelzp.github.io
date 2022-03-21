@@ -82,6 +82,20 @@ descriptions: 记录一些自己在VS使用过程中遇到的问题或者是之�
 ### VisualAssist
 我觉得是UE4开发必不可少的插件，其它的都可以忍，但是UE4开发的时候VS默认的IntelliSence不能忍，这家伙实在是太慢了。
 
+Visual Assist Option->Enhanced Listboxes -> Source of C/C++ content ->Visual Assist
+
+开启了VisualAssist之后不要忘了把原来的IntelliSense功能关掉。具体操作是
+> Visual Studio 2010 and newer
+> Disable IntelliSense for all solutions by adjusting the following two settings in the specified order, i.e. set the interval to zero before disabling the database:
+>
+> IDE Tools menu -> Options -> Text Editor -> C/C++ -> Advanced -> Rescan Solution Interval = 0
+>
+> IDE Tools menu -> Options -> Text Editor -> C/C++ -> Advanced -> Disable Database = True
+>
+> More information is available in this post on the Visual C++ Team Blog.
+
+参考文章:
+- [Disable or pause default IntelliSense for C/C++](https://docs.wholetomato.com/default.asp?W133)
 #### 快捷键篇
 快捷键是使用的关键了，首先是去`Extensions -> VAssistX -> Help -> Keyboard Shortcuts`，确认一下已有的快捷键设置。
 

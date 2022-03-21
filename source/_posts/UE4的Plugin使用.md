@@ -13,6 +13,18 @@ tags:
 
 <!--more-->
 
+# 什么是Module？
+看了一眼这篇文章的创建时间是2018年，而2022年我又来更新了。
+
+在创建Plugin之前，应该了解一下Module这个概念，当时的我也是赶鸭子上架，Module是什么都不太清楚。
+在自己的项目中可以创建很多个Module，Plugin里面也可以创建很多个Module。至于什么时候应该用Plugin什么时候该直接在自己的项目里创建Module，这区别我在UE4的Editor扩展里面有提到过一些。
+
+关于Module的基础概念：
+- [UE4 Modulles](https://docs.google.com/presentation/d/1rSFFQk7RxNAHevROfVvUNviUfIntLkO_HpdvzHLkNEs/view#slide=id.g6e0e4b3bcf_5_213)
+
+偶然发现的这个文档，总结了一些，算是很珍贵的资源了。
+
+
 # Plugin的Public公开权限
 一般一个Module中不想公开的源文件都会设置为Private权限，不允许外界的Module访问。要把权限公开，使得其他的模块能够访问的话需要以下两步。
 
@@ -53,4 +65,3 @@ Tips：
 - [Github](https://github.com/ictusbrucks/ImpostorBaker)
 
 这个插件在工程中使用过不过不太清楚是做什么的，不是我使用的部分，只是看到了。（需要整理）
-
