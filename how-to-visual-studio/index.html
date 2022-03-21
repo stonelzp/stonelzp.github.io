@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-01-13T11:52:23.965Z">
+<meta property="og:updated_time" content="2022-03-17T03:08:58.108Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何使用VisualStudio">
 <meta name="twitter:description" content="我觉得我应该好好钻研一下这个“宇宙第一”的各种用法了，好多意想不到的插件甚至是快捷键我都不知道。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-13 20:52:23" itemprop="dateModified" datetime="2022-01-13T20:52:23+09:00">2022-01-13</time>
+                <time title="修改时间：2022-03-17 12:08:58" itemprop="dateModified" datetime="2022-03-17T12:08:58+09:00">2022-03-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -291,7 +291,18 @@
 <h2 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h2><p>这里稍微对自己使用VS插件的功能进行一些记录。</p>
 <h3 id="VsVim"><a href="#VsVim" class="headerlink" title="VsVim"></a>VsVim</h3><p>使用很方便，具体的文本之类的操作属于Vim的操作范畴，会在另外的文章记录</p>
 <h3 id="VisualAssist"><a href="#VisualAssist" class="headerlink" title="VisualAssist"></a>VisualAssist</h3><p>我觉得是UE4开发必不可少的插件，其它的都可以忍，但是UE4开发的时候VS默认的IntelliSence不能忍，这家伙实在是太慢了。</p>
-<h4 id="快捷键篇"><a href="#快捷键篇" class="headerlink" title="快捷键篇"></a>快捷键篇</h4><p>快捷键是使用的关键了，首先是去<code>Extensions -&gt; VAssistX -&gt; Help -&gt; Keyboard Shortcuts</code>，确认一下已有的快捷键设置。</p>
+<p>Visual Assist Option-&gt;Enhanced Listboxes -&gt; Source of C/C++ content -&gt;Visual Assist</p>
+<p>开启了VisualAssist之后不要忘了把原来的IntelliSense功能关掉。具体操作是</p>
+<blockquote>
+<p>Visual Studio 2010 and newer<br>Disable IntelliSense for all solutions by adjusting the following two settings in the specified order, i.e. set the interval to zero before disabling the database:</p>
+<p>IDE Tools menu -&gt; Options -&gt; Text Editor -&gt; C/C++ -&gt; Advanced -&gt; Rescan Solution Interval = 0</p>
+<p>IDE Tools menu -&gt; Options -&gt; Text Editor -&gt; C/C++ -&gt; Advanced -&gt; Disable Database = True</p>
+<p>More information is available in this post on the Visual C++ Team Blog.</p>
+</blockquote>
+<p>参考文章:</p>
+<ul>
+<li><a href="https://docs.wholetomato.com/default.asp?W133" target="_blank" rel="noopener">Disable or pause default IntelliSense for C/C++</a><h4 id="快捷键篇"><a href="#快捷键篇" class="headerlink" title="快捷键篇"></a>快捷键篇</h4>快捷键是使用的关键了，首先是去<code>Extensions -&gt; VAssistX -&gt; Help -&gt; Keyboard Shortcuts</code>，确认一下已有的快捷键设置。</li>
+</ul>
 <p>具体的描述可以参照官网，暂时不过多赘述，我只能说个个都是我用的上的，必须要记住的：</p>
 <ul>
 <li><a href="https://www.wholetomato.com/learn/top10" target="_blank" rel="noopener">Top 10 features that improve productivity</a></li>
