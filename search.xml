@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4中的AI寻路</title>
+    <url>/UE4%E4%B8%AD%E7%9A%84AI%E5%AF%BB%E8%B7%AF/</url>
+    <content><![CDATA[<p>介绍一些关于AI制作的时候遇到的问题。主要是寻路算法。</p>
+<a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>这种博文能否写好实在是没有自信，因为算法的确不是我的强项，已经玩不转算法的逻辑了。但是在制作角色AI的时候，寻路是必不可少的一环。</p>
+<p>在项目的开发中，我了解了许多关于AI的插件，UE4本身开源的免费插件，像是<strong>DoNPathFinding</strong>这样的还有不少，寻路足够用但是很多只有寻路。效率也没有什么保障，项目早就从几年前就停止更新了。</p>
+<p>之后的许多提供商用的AI插件，就不方便写在这里。</p>
+<p>当然也不是来介绍插件的，而是想简单的记录一下A星算法。</p>
+<h1 id="A-算法"><a href="#A-算法" class="headerlink" title="A*算法"></a>A*算法</h1><p>据我所知，绝大部分的AI寻路算法都是使用的A星寻路亦或者其衍生的算法。这些算法具体有什么不同我自己也不是很清楚。<br>目的是能简单的用C++来实现一个简单的A星寻路，2D与3D都是基于相同的思想。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/technology/archive/2011/05/26/2058842.html" target="_blank" rel="noopener">理解A*寻路算法具体过程</a></li>
+</ul>
+<p>一个超级可以帮助理解的视图化网站：</p>
+<ul>
+<li><a href="http://qiao.github.io/PathFinding.js/visual/" target="_blank" rel="noopener">PathFinding</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>AI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>UE4中的C++之技巧篇</title>
+    <url>/UE4%E4%B8%AD%E7%9A%84C++%E4%B9%8B%E6%8A%80%E5%B7%A7%E7%AF%87/</url>
+    <content><![CDATA[<a id="more"></a>
+]]></content>
+  </entry>
+  <entry>
     <title>UE5-踩坑指南</title>
     <url>/ue5-the-fucking-moment/</url>
     <content><![CDATA[<p>记录一些在UE5中遇见的BUG，目前是UE5EA阶段。</p>
@@ -46,7 +79,7 @@
       </tags>
   </entry>
   <entry>
-    <title>UE4种的EQS使用</title>
+    <title>UE4中的EQS使用</title>
     <url>/ue4-how-to-use-eqs/</url>
     <content><![CDATA[<p>EQS(Environment Query System)的简称，主要应用场景就是制作游戏角色的AI了。<br><a id="more"></a></p>
 <p>使用EQS的启动条件还需要AIController和BehaviourTree的知识，这部分就在其它文章中展开了。</p>
@@ -360,8 +393,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -3312,16 +3345,22 @@ table th:nth-of-type(4) {
     <url>/ue4-enum/</url>
     <content><![CDATA[<p>介绍关于枚举的使用。</p>
 <a id="more"></a>
-<ul>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><ul>
 <li><a href="http://papersloth.hatenablog.com/entry/2017/07/07/005225" target="_blank" rel="noopener">UE4 C++とUnreal C++の列挙型の扱い</a></li>
+</ul>
+<h1 id="UE为UENUM提供的一些宏的记录"><a href="#UE为UENUM提供的一些宏的记录" class="headerlink" title="UE为UENUM提供的一些宏的记录"></a>UE为UENUM提供的一些宏的记录</h1><h2 id="ENUM-RANGE-BY-COUNT"><a href="#ENUM-RANGE-BY-COUNT" class="headerlink" title="ENUM_RANGE_BY_COUNT()"></a>ENUM_RANGE_BY_COUNT()</h2><p>为定义的枚举类型添加一个For-Loop方便使用的宏。<br>声明：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;Misc/EnumRange.h&quot;</span><br><span class="line"></span><br><span class="line">UENUM()</span><br><span class="line">enum class EElementType : uint8</span><br><span class="line">&#123;</span><br><span class="line">	Earth,</span><br><span class="line">	Fire,</span><br><span class="line">	Wind,</span><br><span class="line">	Water,</span><br><span class="line">	Count	UMETA(Hidden)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ENUM_RANGE_BY_COUNT(EElementType, EElementType::Count);</span><br></pre></td></tr></table></figure></p>
+<p>使用：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for (EElementType ElementType : TEnumRange&lt;EElementType&gt;())</span><br><span class="line">&#123;</span><br><span class="line">	SettingArray.Add(LoadInitialSettings(ElementType));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://qiita.com/Rinderon/items/253e780fe4bd1297abb8" target="_blank" rel="noopener">【UE4】UEnumで範囲ベースforを行うメモ</a></li>
 </ul>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -3372,8 +3411,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7005,8 +7044,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7298,7 +7337,11 @@ table th:nth-of-type(4) {
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/701590/syntax-error-missing-before-first-person-shooter-c.html" target="_blank" rel="noopener">syntax error: missing ‘;’ before ‘*’ (First Person Shooter C++ Tutorial)</a></li>
 </ul>
-<p>加了一个关键字<code>class</code>就解决了。虽然不知道是为什么。</p>
+<p>加了一个关键字<code>class</code>就解决了。</p>
+<p>在UE4C++里面，ForwardDeclaration是非常常见的，要铭记于心才行。<br>关于ForwardDeclaration:</p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/what-are-forward-declarations-in-c/" target="_blank" rel="noopener">What are Forward declarations in C++</a></li>
+</ul>
 <h2 id="bUsedWithInstancedStaticMeshes"><a href="#bUsedWithInstancedStaticMeshes" class="headerlink" title="bUsedWithInstancedStaticMeshes"></a>bUsedWithInstancedStaticMeshes</h2><p>时间太过于久远再加上自己的懒惰，这个错误到底是在说什么我也不清楚了。</p>
 <p><code>LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game.</code></p>
 <h2 id="包含头文件的问题"><a href="#包含头文件的问题" class="headerlink" title="包含头文件的问题"></a>包含头文件的问题</h2><p>就像下面的信息描述的，我使用了一个<code>TWeakObjectPtr</code>来进行值的初始化，于是便报错了，各种调查结果显示，是赋值的值的类型的头文件没有好好的包含进去，以至于找不到该类型。</p>
@@ -7312,7 +7355,23 @@ table th:nth-of-type(4) {
 <p>一般需要检查Build.cs文件中的依赖项是否添加。</p>
 <p>亦或者出现在利用另一个<strong>Module</strong>中的函数的时候，找不到函数的实现，出现上面的错误编译不通过。实际上调用的函数是虚函数的话就没有问题，关键是不是虚函数的情况。</p>
 <p>所以问我怎么办我也不太清楚，这一部分好好参考如何添加Module或者ActionRPG的LoadScreen部分的源码好好实现应该就没有问题了。</p>
-<p>另外贴一个别人整理的一些报错的文章</p>
+<h2 id="蓝图的编译错误"><a href="#蓝图的编译错误" class="headerlink" title="蓝图的编译错误"></a>蓝图的编译错误</h2><p><code>Can’t parse default value ‘none’ for ...</code>这样的错误，发生在变量的地方，一把都是Array的情况，就是明明没有问题，编译就是通不过。</p>
+<p>搜了一下发现UE4.26版本会经常出现这个问题，我也的确用的就是UE4.26。解决方案就是:</p>
+<ul>
+<li>向这个Array里添加一个元素</li>
+<li>移除这个元素</li>
+<li>再编译保存，编译错误就会消失</li>
+</ul>
+<p>出现这个问题的原因：</p>
+<blockquote>
+<p>It has kept the original value of “none” instead of updating it to be an “Empty Array”</p>
+<p>To fix you need to modify the default value and save.</p>
+</blockquote>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/t/cant-parse-default-value-none-for-cameras/478596" target="_blank" rel="noopener"> Can’t parse default value ‘none’ for Cameras?</a></li>
+</ul>
+<h1 id="别人的劳动成果"><a href="#别人的劳动成果" class="headerlink" title="别人的劳动成果"></a>别人的劳动成果</h1><p>另外贴一个别人整理的一些报错的文章</p>
 <ul>
 <li><a href="https://finap.hateblo.jp/entry/2019/12/06/000000" target="_blank" rel="noopener">UE4 C++ビルドエラー対応覚書</a></li>
 </ul>
@@ -7348,8 +7407,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7395,8 +7454,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7510,8 +7569,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7623,8 +7682,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7677,8 +7736,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7836,8 +7895,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7935,8 +7994,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8057,8 +8116,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8451,9 +8510,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
