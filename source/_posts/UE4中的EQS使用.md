@@ -1,5 +1,5 @@
 ---
-title: UE4种的EQS使用
+title: UE4中的EQS使用
 date: 2021-09-16 21:59:42
 permalink: ue4-how-to-use-eqs
 categories:

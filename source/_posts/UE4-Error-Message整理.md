@@ -22,7 +22,11 @@ tags:
 参考链接：
 - [syntax error: missing ';' before '*' (First Person Shooter C++ Tutorial)](https://answers.unrealengine.com/questions/701590/syntax-error-missing-before-first-person-shooter-c.html)
 
-加了一个关键字`class`就解决了。虽然不知道是为什么。
+加了一个关键字`class`就解决了。
+
+在UE4C++里面，ForwardDeclaration是非常常见的，要铭记于心才行。
+关于ForwardDeclaration:
+- [What are Forward declarations in C++](https://www.geeksforgeeks.org/what-are-forward-declarations-in-c/)
 
 ## bUsedWithInstancedStaticMeshes
 时间太过于久远再加上自己的懒惰，这个错误到底是在说什么我也不清楚了。
@@ -57,9 +61,22 @@ tags:
 
 所以问我怎么办我也不太清楚，这一部分好好参考如何添加Module或者ActionRPG的LoadScreen部分的源码好好实现应该就没有问题了。
 
+## 蓝图的编译错误
+`Can’t parse default value ‘none’ for ...`这样的错误，发生在变量的地方，一把都是Array的情况，就是明明没有问题，编译就是通不过。
+
+搜了一下发现UE4.26版本会经常出现这个问题，我也的确用的就是UE4.26。解决方案就是:
+- 向这个Array里添加一个元素
+- 移除这个元素
+- 再编译保存，编译错误就会消失
+
+出现这个问题的原因：
+> It has kept the original value of “none” instead of updating it to be an “Empty Array”
+>
+> To fix you need to modify the default value and save.
+
+参考资料：
+- [ Can’t parse default value ‘none’ for Cameras?](https://forums.unrealengine.com/t/cant-parse-default-value-none-for-cameras/478596)
+
+# 别人的劳动成果
 另外贴一个别人整理的一些报错的文章
 - [UE4 C++ビルドエラー対応覚書](https://finap.hateblo.jp/entry/2019/12/06/000000)
-
-
-
-
