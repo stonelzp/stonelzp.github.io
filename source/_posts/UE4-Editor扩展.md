@@ -205,10 +205,32 @@ tags:
 由于我验证的版本是UE5EA2，如果你去`Tools->Debug->Modules`下面能找到你创建的新的Module，那么就成功了。
 
 # Editor扩展，添加自定义界面
+
+## 快速的蓝图实现
 在UE5中添加自定义的窗口方便定义一些Debug功能，想快速入手基本上逃不过EditorUtilityWidget这个东西。
+
+这个地方真的快找个时间好好整理一下。
+
+- [【UE4】【UE5】”真”Blueprintだけで、Editor上にメニューを追加する【★★★】](https://kinnaji.com/2021/12/17/editormenu/)
+
 
 参考文章:
 - [Using tool menus for editor extension](https://unrealcommunity.wiki/using-tool-menus-for-editor-extension-ipmtgt9o)
 -[Did you know UnrealEngine 4.26 brought in the ability to extend editor menus and toolbars using Blueprints?](https://twitter.com/milkyengineer/status/1379644279480446982)
 -[How to Make Tools in UE4](https://lxjk.github.io/2019/10/01/How-to-Make-Tools-in-U-E.html#_setup_editor_module)
 -[【UE4】Editor Utility Widgetについてのあれこれ](http://anapurna.co.jp/ue4/641/)
+
+
+## 正统的C++实现
+但是如果你不想碰蓝图，就想用C++来实现怎么办？（我就是想用C++来实现）。
+
+
+# 完成Editor扩展之后
+那就是随心所欲的添加一些Debug功能啦。
+
+1. 获取当前Level中的Actor
+- [How to list all of the actors in ULevelStreaming?](https://stackoverflow.com/questions/59568657/how-to-list-all-of-the-actors-in-ulevelstreaming)
+
+2. 获取Landscape的各自数据
+- [[UnrealC++]LandscapeのHeightmapをC++から変更する](http://unwitherer.blogspot.com/2017/07/unrealclandscapeheightmapc.html)
+- [Calculate the size of the default landscapes in Unreal Engine](https://www.motionforgepictures.com/calculate-unreal-engine-landscape-sizes/#:~:text=1%20Quad%20%3D%20100%20cm%20or,56%20%2F%201000%20%3D%200.056km.)

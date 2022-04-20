@@ -21,14 +21,14 @@
   </script>
 
   <meta name="description" content="今天这篇文章要写UE4的编辑器扩展内容的，我还没学会，有时间的话一定要整理一下。">
-<meta name="keywords" content="UE4,C++">
+<meta name="keywords" content="C++,UE4">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UE4-Editor扩展">
 <meta property="og:url" content="http://stonelzp.github.io/ue4-editor-extension/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="今天这篇文章要写UE4的编辑器扩展内容的，我还没学会，有时间的话一定要整理一下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-02-23T09:55:55.780Z">
+<meta property="og:updated_time" content="2022-04-20T13:30:24.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4-Editor扩展">
 <meta name="twitter:description" content="今天这篇文章要写UE4的编辑器扩展内容的，我还没学会，有时间的话一定要整理一下。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-23 18:55:55" itemprop="dateModified" datetime="2022-02-23T18:55:55+09:00">2022-02-23</time>
+                <time title="修改时间：2022-04-20 22:30:24" itemprop="dateModified" datetime="2022-04-20T22:30:24+09:00">2022-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -285,10 +285,29 @@
 </li>
 </ol>
 <p>由于我验证的版本是UE5EA2，如果你去<code>Tools-&gt;Debug-&gt;Modules</code>下面能找到你创建的新的Module，那么就成功了。</p>
-<h1 id="Editor扩展，添加自定义界面"><a href="#Editor扩展，添加自定义界面" class="headerlink" title="Editor扩展，添加自定义界面"></a>Editor扩展，添加自定义界面</h1><p>在UE5中添加自定义的窗口方便定义一些Debug功能，想快速入手基本上逃不过EditorUtilityWidget这个东西。</p>
+<h1 id="Editor扩展，添加自定义界面"><a href="#Editor扩展，添加自定义界面" class="headerlink" title="Editor扩展，添加自定义界面"></a>Editor扩展，添加自定义界面</h1><h2 id="快速的蓝图实现"><a href="#快速的蓝图实现" class="headerlink" title="快速的蓝图实现"></a>快速的蓝图实现</h2><p>在UE5中添加自定义的窗口方便定义一些Debug功能，想快速入手基本上逃不过EditorUtilityWidget这个东西。</p>
+<p>这个地方真的快找个时间好好整理一下。</p>
+<ul>
+<li><a href="https://kinnaji.com/2021/12/17/editormenu/" target="_blank" rel="noopener">【UE4】【UE5】”真”Blueprintだけで、Editor上にメニューを追加する【★★★】</a></li>
+</ul>
 <p>参考文章:</p>
 <ul>
 <li><a href="https://unrealcommunity.wiki/using-tool-menus-for-editor-extension-ipmtgt9o" target="_blank" rel="noopener">Using tool menus for editor extension</a><br>-<a href="https://twitter.com/milkyengineer/status/1379644279480446982" target="_blank" rel="noopener">Did you know UnrealEngine 4.26 brought in the ability to extend editor menus and toolbars using Blueprints?</a><br>-<a href="https://lxjk.github.io/2019/10/01/How-to-Make-Tools-in-U-E.html#_setup_editor_module" target="_blank" rel="noopener">How to Make Tools in UE4</a><br>-<a href="http://anapurna.co.jp/ue4/641/" target="_blank" rel="noopener">【UE4】Editor Utility Widgetについてのあれこれ</a></li>
+</ul>
+<h2 id="正统的C-实现"><a href="#正统的C-实现" class="headerlink" title="正统的C++实现"></a>正统的C++实现</h2><p>但是如果你不想碰蓝图，就想用C++来实现怎么办？（我就是想用C++来实现）。</p>
+<h1 id="完成Editor扩展之后"><a href="#完成Editor扩展之后" class="headerlink" title="完成Editor扩展之后"></a>完成Editor扩展之后</h1><p>那就是随心所欲的添加一些Debug功能啦。</p>
+<ol>
+<li>获取当前Level中的Actor</li>
+</ol>
+<ul>
+<li><a href="https://stackoverflow.com/questions/59568657/how-to-list-all-of-the-actors-in-ulevelstreaming" target="_blank" rel="noopener">How to list all of the actors in ULevelStreaming?</a></li>
+</ul>
+<ol start="2">
+<li>获取Landscape的各自数据</li>
+</ol>
+<ul>
+<li><a href="http://unwitherer.blogspot.com/2017/07/unrealclandscapeheightmapc.html" target="_blank" rel="noopener">[UnrealC++]LandscapeのHeightmapをC++から変更する</a></li>
+<li><a href="https://www.motionforgepictures.com/calculate-unreal-engine-landscape-sizes/#:~:text=1%20Quad%20%3D%20100%20cm%20or,56%20%2F%201000%20%3D%200.056km." target="_blank" rel="noopener">Calculate the size of the default landscapes in Unreal Engine</a></li>
 </ul>
 
     </div>
@@ -299,8 +318,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/UE4/" rel="tag"># UE4</a>
               <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
           </div>
 
         
@@ -374,7 +393,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overvirew"><span class="nav-number">1.</span> <span class="nav-text">Overvirew</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加ModuleEd"><span class="nav-number">2.</span> <span class="nav-text">添加ModuleEd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Editor扩展，添加自定义界面"><span class="nav-number">3.</span> <span class="nav-text">Editor扩展，添加自定义界面</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overvirew"><span class="nav-number">1.</span> <span class="nav-text">Overvirew</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加ModuleEd"><span class="nav-number">2.</span> <span class="nav-text">添加ModuleEd</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Editor扩展，添加自定义界面"><span class="nav-number">3.</span> <span class="nav-text">Editor扩展，添加自定义界面</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速的蓝图实现"><span class="nav-number">3.1.</span> <span class="nav-text">快速的蓝图实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正统的C-实现"><span class="nav-number">3.2.</span> <span class="nav-text">正统的C++实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完成Editor扩展之后"><span class="nav-number">4.</span> <span class="nav-text">完成Editor扩展之后</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -390,7 +409,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -402,7 +421,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

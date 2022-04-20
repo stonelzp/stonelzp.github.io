@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-02-14T00:41:53.054Z">
+<meta property="og:updated_time" content="2022-04-20T13:36:34.797Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git学习笔记">
 <meta name="twitter:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-14 09:41:53" itemprop="dateModified" datetime="2022-02-14T09:41:53+09:00">2022-02-14</time>
+                <time title="修改时间：2022-04-20 22:36:34" itemprop="dateModified" datetime="2022-04-20T22:36:34+09:00">2022-04-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -336,7 +336,7 @@
 <ul>
 <li>Github项目<a href="https://github.com/SRombauts/UE4GitPlugin" target="_blank" rel="noopener">Unreal Engine 4 Git Source Control Plugin</a></li>
 </ul>
-<h3 id="Git-LFS"><a href="#Git-LFS" class="headerlink" title="Git LFS"></a>Git LFS</h3><p>这东西用于管理大数据文件很有用，使用的时候也会遇到很多问题，当然是我的问题，上面SourceTree的内容就有提到。</p>
+<h3 id="Git-LFS"><a href="#Git-LFS" class="headerlink" title="Git LFS"></a>Git LFS</h3><h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h4><p>这东西用于管理大数据文件很有用，使用的时候也会遇到很多问题，当然是我的问题，上面SourceTree的内容就有提到。</p>
 <p>关于一些命令的使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git lfs locks             #获取现在加锁文件的一览</span><br><span class="line">$ git lfs unlock --id=555   #为555号id文件解锁，当然是自己加锁的文件</span><br></pre></td></tr></table></figure></p>
 <p>还有就是一些批量操作默认的GitLFS命令并不支持，这也是我要在这里记录这个的原因。</p>
 <p>在<code>ProjectName/.git/config</code>文件里面添加下面的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[alias]</span><br><span class="line">        lock = &quot;!f()&#123; git pull ; for file in \&quot;$@\&quot;; do git lfs lock $file; done &#125;;f&quot;</span><br><span class="line">        unlock = &quot;!f()&#123; for file in \&quot;$@\&quot;; do git lfs unlock $file; done &#125;;f&quot;</span><br><span class="line">        unlockall = &quot;!f() &#123; git lfs locks | grep [my-git-user-name] | cut -f 1 | while read -r file; do git lfs unlock $file; done; &#125;;f&quot;</span><br><span class="line">        locks = &quot;!f() &#123; git lfs locks; &#125;;f&quot;</span><br></pre></td></tr></table></figure></p>
@@ -346,6 +346,11 @@
 <p>参考文章:</p>
 <ul>
 <li><a href="https://qiita.com/gecko655/items/89085bad77fb83c98267" target="_blank" rel="noopener">Git LFS lockを使うためのエイリアス メモ</a></li>
+</ul>
+<h4 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git lfs prune</span><br></pre></td></tr></table></figure>
+<p>当项目发展到一定规模之后，使用GitLFS自己的仓库空间就会越来越大，电脑空间再大早晚就会被吃空，一个T两个T的SSD都被吃的干干净净，看着变红的硬盘，再看看空空的钱包，还是想想技术吧。</p>
+<ul>
+<li><a href="https://zenn.dev/rossam/articles/73d4f14d368caf02fd9a" target="_blank" rel="noopener">【Git】Git LFSを使用したリポジトリが肥大化した場合に使いたい「git lfs prune」</a></li>
 </ul>
 
     </div>
@@ -430,7 +435,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于忽略文件的变动"><span class="nav-number">2.3.</span> <span class="nav-text">关于忽略文件的变动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程分支"><span class="nav-number">2.4.</span> <span class="nav-text">删除远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加远程分支"><span class="nav-number">2.5.</span> <span class="nav-text">添加远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add操作"><span class="nav-number">2.6.</span> <span class="nav-text">Add操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消已经add的操作"><span class="nav-number">2.7.</span> <span class="nav-text">取消已经add的操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SourceTree"><span class="nav-number">3.</span> <span class="nav-text">SourceTree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-LFS-2"><span class="nav-number">4.</span> <span class="nav-text">Git LFS 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-LFS"><span class="nav-number">4.1.</span> <span class="nav-text">Git LFS</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于忽略文件的变动"><span class="nav-number">2.3.</span> <span class="nav-text">关于忽略文件的变动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程分支"><span class="nav-number">2.4.</span> <span class="nav-text">删除远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加远程分支"><span class="nav-number">2.5.</span> <span class="nav-text">添加远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add操作"><span class="nav-number">2.6.</span> <span class="nav-text">Add操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消已经add的操作"><span class="nav-number">2.7.</span> <span class="nav-text">取消已经add的操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SourceTree"><span class="nav-number">3.</span> <span class="nav-text">SourceTree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-LFS-2"><span class="nav-number">4.</span> <span class="nav-text">Git LFS 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-LFS"><span class="nav-number">4.1.</span> <span class="nav-text">Git LFS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本使用"><span class="nav-number">4.1.1.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进阶使用"><span class="nav-number">4.1.2.</span> <span class="nav-text">进阶使用</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -446,7 +451,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -458,7 +463,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

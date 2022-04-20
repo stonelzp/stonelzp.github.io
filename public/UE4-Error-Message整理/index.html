@@ -29,7 +29,7 @@
 <meta property="og:description" content="整理在学习UE4的过程中遇到的一些BUG。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://stonelzp.github.io/UE4-Error-Message整理/Annotation%202020-07-16%20181212.jpg">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.324Z">
+<meta property="og:updated_time" content="2022-03-28T13:49:11.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4:Error_Message整理">
 <meta name="twitter:description" content="整理在学习UE4的过程中遇到的一些BUG。">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 01:09:45" itemprop="dateModified" datetime="2021-02-19T01:09:45+09:00">2021-02-19</time>
+                <time title="修改时间：2022-03-28 22:49:11" itemprop="dateModified" datetime="2022-03-28T22:49:11+09:00">2022-03-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -260,7 +260,11 @@
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/701590/syntax-error-missing-before-first-person-shooter-c.html" target="_blank" rel="noopener">syntax error: missing ‘;’ before ‘*’ (First Person Shooter C++ Tutorial)</a></li>
 </ul>
-<p>加了一个关键字<code>class</code>就解决了。虽然不知道是为什么。</p>
+<p>加了一个关键字<code>class</code>就解决了。</p>
+<p>在UE4C++里面，ForwardDeclaration是非常常见的，要铭记于心才行。<br>关于ForwardDeclaration:</p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/what-are-forward-declarations-in-c/" target="_blank" rel="noopener">What are Forward declarations in C++</a></li>
+</ul>
 <h2 id="bUsedWithInstancedStaticMeshes"><a href="#bUsedWithInstancedStaticMeshes" class="headerlink" title="bUsedWithInstancedStaticMeshes"></a>bUsedWithInstancedStaticMeshes</h2><p>时间太过于久远再加上自己的懒惰，这个错误到底是在说什么我也不清楚了。</p>
 <p><code>LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game.</code></p>
 <h2 id="包含头文件的问题"><a href="#包含头文件的问题" class="headerlink" title="包含头文件的问题"></a>包含头文件的问题</h2><p>就像下面的信息描述的，我使用了一个<code>TWeakObjectPtr</code>来进行值的初始化，于是便报错了，各种调查结果显示，是赋值的值的类型的头文件没有好好的包含进去，以至于找不到该类型。</p>
@@ -274,7 +278,23 @@
 <p>一般需要检查Build.cs文件中的依赖项是否添加。</p>
 <p>亦或者出现在利用另一个<strong>Module</strong>中的函数的时候，找不到函数的实现，出现上面的错误编译不通过。实际上调用的函数是虚函数的话就没有问题，关键是不是虚函数的情况。</p>
 <p>所以问我怎么办我也不太清楚，这一部分好好参考如何添加Module或者ActionRPG的LoadScreen部分的源码好好实现应该就没有问题了。</p>
-<p>另外贴一个别人整理的一些报错的文章</p>
+<h2 id="蓝图的编译错误"><a href="#蓝图的编译错误" class="headerlink" title="蓝图的编译错误"></a>蓝图的编译错误</h2><p><code>Can’t parse default value ‘none’ for ...</code>这样的错误，发生在变量的地方，一把都是Array的情况，就是明明没有问题，编译就是通不过。</p>
+<p>搜了一下发现UE4.26版本会经常出现这个问题，我也的确用的就是UE4.26。解决方案就是:</p>
+<ul>
+<li>向这个Array里添加一个元素</li>
+<li>移除这个元素</li>
+<li>再编译保存，编译错误就会消失</li>
+</ul>
+<p>出现这个问题的原因：</p>
+<blockquote>
+<p>It has kept the original value of “none” instead of updating it to be an “Empty Array”</p>
+<p>To fix you need to modify the default value and save.</p>
+</blockquote>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/t/cant-parse-default-value-none-for-cameras/478596" target="_blank" rel="noopener"> Can’t parse default value ‘none’ for Cameras?</a></li>
+</ul>
+<h1 id="别人的劳动成果"><a href="#别人的劳动成果" class="headerlink" title="别人的劳动成果"></a>别人的劳动成果</h1><p>另外贴一个别人整理的一些报错的文章</p>
 <ul>
 <li><a href="https://finap.hateblo.jp/entry/2019/12/06/000000" target="_blank" rel="noopener">UE4 C++ビルドエラー対応覚書</a></li>
 </ul>
@@ -362,7 +382,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中遇见的报错"><span class="nav-number">1.</span> <span class="nav-text">UE4中遇见的报错</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#class关键字的使用"><span class="nav-number">1.1.</span> <span class="nav-text">class关键字的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bUsedWithInstancedStaticMeshes"><span class="nav-number">1.2.</span> <span class="nav-text">bUsedWithInstancedStaticMeshes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含头文件的问题"><span class="nav-number">1.3.</span> <span class="nav-text">包含头文件的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unresolved-eternal-symbol类型"><span class="nav-number">1.4.</span> <span class="nav-text">unresolved eternal symbol类型</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中遇见的报错"><span class="nav-number">1.</span> <span class="nav-text">UE4中遇见的报错</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#class关键字的使用"><span class="nav-number">1.1.</span> <span class="nav-text">class关键字的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bUsedWithInstancedStaticMeshes"><span class="nav-number">1.2.</span> <span class="nav-text">bUsedWithInstancedStaticMeshes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含头文件的问题"><span class="nav-number">1.3.</span> <span class="nav-text">包含头文件的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unresolved-eternal-symbol类型"><span class="nav-number">1.4.</span> <span class="nav-text">unresolved eternal symbol类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝图的编译错误"><span class="nav-number">1.5.</span> <span class="nav-text">蓝图的编译错误</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#别人的劳动成果"><span class="nav-number">2.</span> <span class="nav-text">别人的劳动成果</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -378,7 +398,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">102</span>
+          <span class="site-state-item-count">106</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -390,7 +410,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

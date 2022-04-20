@@ -189,6 +189,8 @@ git add -n .
 - Github项目[Unreal Engine 4 Git Source Control Plugin](https://github.com/SRombauts/UE4GitPlugin)
 
 ### Git LFS
+
+#### 基本使用
 这东西用于管理大数据文件很有用，使用的时候也会遇到很多问题，当然是我的问题，上面SourceTree的内容就有提到。
 
 关于一些命令的使用：
@@ -218,3 +220,12 @@ $ git unlockall
 
 参考文章:
 - [Git LFS lockを使うためのエイリアス メモ](https://qiita.com/gecko655/items/89085bad77fb83c98267)
+
+
+#### 进阶使用
+```
+git lfs prune
+```
+当项目发展到一定规模之后，使用GitLFS自己的仓库空间就会越来越大，电脑空间再大早晚就会被吃空，一个T两个T的SSD都被吃的干干净净，看着变红的硬盘，再看看空空的钱包，还是想想技术吧。
+
+- [【Git】Git LFSを使用したリポジトリが肥大化した場合に使いたい「git lfs prune」](https://zenn.dev/rossam/articles/73d4f14d368caf02fd9a)

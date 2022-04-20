@@ -646,6 +646,17 @@ timer.SetTimer(timer_handle, this, &USampleActorComponent::TimerMethodWnted, 1.0
 参考资料：
 [Association .uproject / unreal are broken](https://forums.unrealengine.com/development-discussion/content-creation/81964-association-uproject-unreal-are-broken?109862-Association-uproject-unreal-are-broken=)
 
+### UE4的uproject文件中EngineAssociation项目版本管理的问题
+基本上在项目版本管理也就是使用Git之类，使用自定义引擎的时候避免不了遇到这个问题。
+
+一时之计是去RegistryEditor那里 `HKEY_CURRENT_USER\SOFTWARE\Epic Games\Unreal Engine\Builds` 路径下面找到自己自定义的引擎的名字，修改为跟版本管理攻击一样的数列，这样差分就消失了。等下次有人又更新了就随之更新，反正uproject文件的更新频率不会高的。
+
+但是这也是权宜之计，我也知道。
+
+也许会有更好的方法。
+
+貌似可以有直接修改源码的方式，只不过我没有试过。
+- [[UE4] エンジンをコードからビルドした場合のバージョン表記](https://historia.co.jp/archives/3113/)
 
 ## UE4知识拓展
 主要用来记录一些常见但是需要理解的优先级不高或者不太常用的知识点的拓展。
