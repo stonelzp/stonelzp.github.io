@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-Packaging设置的注意点</title>
+    <url>/ue4-packaging-settings/</url>
+    <content><![CDATA[<p>记录一下UnrealEngine在打包的时候一些设定的注意点。</p>
+<a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>目前对于UE的打包经历的不是很多，关于UE4的打包设定也只是使用了最简单的设置，或者默认设置。关于各自设置也应该深入了解一下了。</p>
+<p>其实在项目开发的时候自己验证的东西放到哪里确实有些头疼。但是本质上还是我对UE4的Packaing不甚了解。哪一部分会被打包，哪一部分会被摘除，在项目的最后摘除所有的内容虽然可以，但是如果平常开发的时候工作的环境很不整洁的话，后面的工作可能会变成不可能完成的工作量了。</p>
+<p>关于C++的代码部分，如果是在Editor部分的话放到项目的Editor的部分Module中就可以。可是uasset之类的二进制文件我就有些迷茫了。</p>
+<h1 id="Developers-Folder"><a href="#Developers-Folder" class="headerlink" title="Developers Folder"></a>Developers Folder</h1><ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/Basics/ContentBrowser/UserGuide/DevelopersFolder/" target="_blank" rel="noopener">Developers Folder</a></li>
+</ul>
+<p>上面是官网上对DevelopersFolder的介绍。这个文件下的东西完全应该放置属于自己的东西，使用的原则有以下几个：</p>
+<ol>
+<li>在这个文件夹下只放置自己的东西</li>
+<li>外部不可以参照任何该文件夹下的任何资源</li>
+<li>该文件夹下的资源不可以参照除这个文件夹下之外的资源，如果需要的话把资源复制到该文件夹下</li>
+</ol>
+<p>第三步执行起来说实话有些困难。</p>
+<p>如果之后我对UE的打包方式有了更好的理解，明确了那个部分不会被打包到游戏中的话，或许会有更好的办法。</p>
+<h1 id="Packaging"><a href="#Packaging" class="headerlink" title="Packaging"></a>Packaging</h1><p>暂未整理。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://unrealengine.hatenablog.com/entry/2015/08/14/211733" target="_blank" rel="noopener">UE4 リリース向けパッケージを作る際にやるべきこと</a></li>
+<li><a href="https://unrealengine.hatenablog.com/entry/2015/10/13/220000" target="_blank" rel="noopener">UE4 一番お手軽にパッケージング時のサイズを最適化する方法</a></li>
+<li><a href="https://wakanya.hatenablog.com/entry/TinyPackage" target="_blank" rel="noopener">Tinyなパッケージに挑戦してみよう</a></li>
+<li><a href="https://qiita.com/O_Y_G/items/b74f54205cfe4c6cf8f0" target="_blank" rel="noopener">UE4.27.2 プラグイン、パッケージ化時容量測定結果</a></li>
+<li><a href="https://www.unrealengine.com/marketplace/ja/product/assets-cleaner-project-cleaning-tool" target="_blank" rel="noopener">Assets Cleaner - Project Cleaning Tool</a></li>
+</ul>
+<p>上面的那个付费的AssetsCleaning工具有可能会用到。</p>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>Packaging</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4-关于DerivedDataCache的使用</title>
     <url>/ue4-deverieddatacache/</url>
     <content><![CDATA[<p>当项目变大之后，新环境启动UE4的Editor需要很长时间，造成这个的原因有很多。在Material被渲染之前，里面包含的Shader都要被编译一下就是原因之一。本篇主要介绍如何使用UE4的DDC(DerivedDataCache)功能，用来大幅削减启动时间和Shader的编译时间。</p>
@@ -983,16 +1021,31 @@
   <entry>
     <title>UE4-ImGui使用</title>
     <url>/ue4-imgui/</url>
-    <content><![CDATA[<p>ImGui是一个UE4的插件，方便用来制作Debug的工具界面。</p>
+    <content><![CDATA[<p>ImGui，或者说DearImGui，是一个非常优秀的使用C++构筑的Gui的框架。功能非常全面，很适合用来当作Debug的界面工具。更加让人激动的是在Github上有人公开了支持UE4和UE5的UnrealImGui插件。本篇就是主要介绍这个插件的使用。</p>
 <a id="more"></a>
-<h1 id="Unreal-ImGui"><a href="#Unreal-ImGui" class="headerlink" title="Unreal ImGui"></a>Unreal ImGui</h1><ul>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>由于是一种方便的Debug用的UI，所以需要在最后的Shipping打包的时候要全部摘除出去，所以在写代码的时候别忘了<code>#if !UE_BUILD_SHIPPING</code>。当然想在哪个配置里保留根据项目自由选择就是。</p>
+<p>这篇文章主要是关注UnrealImGui插件如何在虚幻引擎上的使用。DearImGui的内容如果感兴趣直接参考Github<a href="https://github.com/ocornut/imGui" target="_blank" rel="noopener">Dear ImGui</a></p>
+<p>UnrealImGui的master分支已经更新最新的UE5的支持。</p>
+<ul>
 <li><a href="https://github.com/segross/UnrealImGui" target="_blank" rel="noopener">Unreal ImGui</a></li>
+<li><a href="https://pafuhana1213.hatenablog.com/entry/UnrealImGui-HowTo-Basic" target="_blank" rel="noopener">【UE4】GUIフレームワーク「Dear ImGui」を使ってデバッグ・ツール用UIを作ってみよう！ &lt; 導入・基本編 &gt;</a></li>
 </ul>
-<h1 id="Dear-ImGui"><a href="#Dear-ImGui" class="headerlink" title="Dear ImGui"></a>Dear ImGui</h1><ul>
-<li><a href="https://github.com/ocornut/imgui" target="_blank" rel="noopener">Dear ImGui</a></li>
+<h1 id="Unreal-ImGui的使用"><a href="#Unreal-ImGui的使用" class="headerlink" title="Unreal ImGui的使用"></a>Unreal ImGui的使用</h1><p>据说是可以远程实机操控imgui的插件，配合UnrealImGui一起使用的插件。也是需要调查使用方法的。</p>
+<ul>
+<li><a href="https://github.com/sammyfreg/netImgui" target="_blank" rel="noopener">netimgui</a></li>
 </ul>
 <h2 id="ImGui各种控件的实现"><a href="#ImGui各种控件的实现" class="headerlink" title="ImGui各种控件的实现"></a>ImGui各种控件的实现</h2><ul>
 <li><a href="https://qiita.com/ousttrue/items/ae7c8d5715adffc5b1fa" target="_blank" rel="noopener">ImGuiのWidgets</a></li>
+</ul>
+<p>我在调查的过程中有一个很在意的东西，下面的这个文章里的一个叫cereal的东西：</p>
+<blockquote>
+<p>cerealとは、C++11用のjson, xml, binaryシリアライズライブラリです。</p>
+</blockquote>
+<p>感觉可能以后会用到。</p>
+<ul>
+<li><a href="https://qiita.com/Ushio/items/446d78c881334919e156" target="_blank" rel="noopener">OpenGLやDirectXなGUIにimguiが最強すぎる</a></li>
+<li><a href="https://qiita.com/Ushio/items/827cf026dcf74328efb7" target="_blank" rel="noopener">C++のcerealのシリアライズが快適すぎるやばい</a></li>
+<li><a href="https://github.com/USCiLab/cereal" target="_blank" rel="noopener">cereal - A C++11 library for serialization</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -3532,16 +3585,27 @@ table th:nth-of-type(4) {
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">using UnrealBuildTool;</span><br><span class="line"></span><br><span class="line">public class TestHelloEd : ModuleRules</span><br><span class="line">&#123;</span><br><span class="line">  public TestHelloEd(ReadOnlyTargetRules Target) : base(Target)</span><br><span class="line">  &#123;</span><br><span class="line">      PublicDependencyModuleNames.AddRange(</span><br><span class="line">          new string[]</span><br><span class="line">          &#123;</span><br><span class="line">              &quot;Core&quot;,</span><br><span class="line">              &quot;CoreUObject&quot;,</span><br><span class="line">              &quot;Engine&quot;,</span><br><span class="line">              &quot;InputCore&quot;,</span><br><span class="line">              &quot;TestHello&quot;     // &lt;-添加项目依赖</span><br><span class="line">          &#125;);</span><br><span class="line">      PrivateDependencyModuleNames.AddRange(</span><br><span class="line">          new string[]</span><br><span class="line">          &#123;</span><br><span class="line">          &#125;);</span><br><span class="line">      PublicIncludePaths.AddRange(</span><br><span class="line">          new string[]</span><br><span class="line">          &#123;</span><br><span class="line">              &quot;TestHelloEd&quot;</span><br><span class="line">          &#125;);</span><br><span class="line">      PrivateIncludePaths.AddRange(</span><br><span class="line">          new string[]</span><br><span class="line">          &#123;</span><br><span class="line">              “UnrealEd”,</span><br><span class="line">          &#125;);</span><br><span class="line">      PrivateIncludePathModuleNames.AddRange(</span><br><span class="line">          new string[]</span><br><span class="line">          &#123;</span><br><span class="line">          &#125;);</span><br><span class="line">      DynamicallyLoadedModuleNames.AddRange(</span><br><span class="line">          new string[]</span><br><span class="line">          &#123;</span><br><span class="line">          &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>对新创建的TestHelloEd.h/TestHelloEd.cpp文件进行配置<br>其实目前为止没有什么需求，只要修正一些编译错误就可以了</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// TestHelloEd.h</span><br><span class="line">#pragma once</span><br><span class="line">#include &quot;Engine.h&quot;</span><br><span class="line">#include &quot;Modules/ModuleInterface.h&quot;</span><br><span class="line">#include &quot;Modules/ModuleManager.h&quot;</span><br><span class="line">#include &quot;UnrealEd.h&quot;</span><br><span class="line"></span><br><span class="line">DECLARE_LOG_CATEGORY_EXTERN(TestHelloEd, All, All)</span><br><span class="line"></span><br><span class="line">class FTestHelloEdModule: public IModuleInterface</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void StartupModule() override;</span><br><span class="line">    virtual void ShutdownModule() override;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// TestHelloEd.cpp</span><br><span class="line">#include &quot;TestHelloEd.h&quot;</span><br><span class="line">#include &quot;Modules/ModuleManager.h&quot;</span><br><span class="line">#include &quot;Modules/ModuleInterface.h&quot;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">At the top of the file use the IMPLEMENT_GAME_MODULE macro, the first argument is the name of the module class you created in the header file, the second argument is the name of the module as you declared it in the uproject file.</span><br><span class="line">*/</span><br><span class="line">IMPLEMENT_GAME_MODULE(FTestHelloEdModule, TestHelloEd);</span><br><span class="line"></span><br><span class="line">DEFINE_LOG_CATEGORY(TestHelloEd)</span><br><span class="line"></span><br><span class="line">#define LOCTEXT_NAMESPACE &quot;TestHelloEd&quot;</span><br><span class="line"></span><br><span class="line">void FTestHelloEdModule::StartupModule()</span><br><span class="line">&#123;</span><br><span class="line">    UE_LOG(TestHelloEd, Warning, TEXT(&quot;TestHelloEd: Log Started&quot;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void FTestHelloEdModule::ShutdownModule()</span><br><span class="line">&#123;</span><br><span class="line">    UE_LOG(TestHelloEd, Warning, TEXT(&quot;TestHelloEd: Log Ended&quot;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#undef LOCTEXT_NAMESPACE</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// TestHelloEd.h</span><br><span class="line">#pragma once</span><br><span class="line">#include &quot;Engine.h&quot;</span><br><span class="line">#include &quot;Modules/ModuleInterface.h&quot;</span><br><span class="line">#include &quot;Modules/ModuleManager.h&quot;</span><br><span class="line">#include &quot;UnrealEd.h&quot;</span><br><span class="line"></span><br><span class="line">DECLARE_LOG_CATEGORY_EXTERN(TestHelloEd, All, All)</span><br><span class="line"></span><br><span class="line">class FTestHelloEdModule: public IModuleInterface</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    virtual void StartupModule() override;</span><br><span class="line">    virtual void ShutdownModule() override;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// TestHelloEd.cpp</span><br><span class="line">#include &quot;TestHelloEd.h&quot;</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line">At the top of the file use the IMPLEMENT_GAME_MODULE macro, the first argument is the name of the module class you created in the header file, the second argument is the name of the module as you declared it in the uproject file.</span><br><span class="line">*/</span><br><span class="line">IMPLEMENT_GAME_MODULE(FTestHelloEdModule, TestHelloEd);</span><br><span class="line"></span><br><span class="line">DEFINE_LOG_CATEGORY(TestHelloEd)</span><br><span class="line"></span><br><span class="line">#define LOCTEXT_NAMESPACE &quot;TestHelloEd&quot;</span><br><span class="line"></span><br><span class="line">void FTestHelloEdModule::StartupModule()</span><br><span class="line">&#123;</span><br><span class="line">    UE_LOG(TestHelloEd, Warning, TEXT(&quot;TestHelloEd: Log Started&quot;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void FTestHelloEdModule::ShutdownModule()</span><br><span class="line">&#123;</span><br><span class="line">    UE_LOG(TestHelloEd, Warning, TEXT(&quot;TestHelloEd: Log Ended&quot;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">#undef LOCTEXT_NAMESPACE</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>配置工程Source下的Target.cs文件<br>大概像下面这样，添加我们新增的Module就可以</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// TestHello.Target.cs</span><br><span class="line">using UnrealBuildTool;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line"></span><br><span class="line">public class TestHelloTarget : TargetRules</span><br><span class="line">&#123;</span><br><span class="line">    public TestHelloTarget(TargetInfo Target) : base(Target)</span><br><span class="line">    &#123;</span><br><span class="line">        Type = TargetType.Game;</span><br><span class="line">        DefaultBuildSettings = BuildSettingsVersion.V2;</span><br><span class="line">        ExtraModuleNames.Add(&quot;TestHello&quot;);</span><br><span class="line"></span><br><span class="line">        // Editor的扩展所以只在Editor的情况下才编译这个Module</span><br><span class="line">        if (Target.Configuration != UnrealTargetConfiguration.Shipping)</span><br><span class="line">        &#123;</span><br><span class="line">            ExtraModuleNames.AddRange(new string[] &#123;&quot;TestHelloEd&quot;&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// TestHelloEditor.Target.cs</span><br><span class="line">using UnrealBuildTool;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line"></span><br><span class="line">public class TestHelloEditorTarget : TargetRules</span><br><span class="line">&#123;</span><br><span class="line">	public TestHelloEditorTarget(TargetInfo Target) : base(Target)</span><br><span class="line">	&#123;</span><br><span class="line">		Type = TargetType.Editor;</span><br><span class="line">		DefaultBuildSettings = BuildSettingsVersion.V2;</span><br><span class="line"></span><br><span class="line">		ExtraModuleNames.AddRange(new string[] &#123; &quot;TestHello&quot;, &quot;TestHelloEd&quot; &#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// TestHello.Target.cs</span><br><span class="line">using UnrealBuildTool;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line"></span><br><span class="line">public class TestHelloTarget : TargetRules</span><br><span class="line">&#123;</span><br><span class="line">    public TestHelloTarget(TargetInfo Target) : base(Target)</span><br><span class="line">    &#123;</span><br><span class="line">        Type = TargetType.Game;</span><br><span class="line">        DefaultBuildSettings = BuildSettingsVersion.V2;</span><br><span class="line">        ExtraModuleNames.Add(&quot;TestHello&quot;);</span><br><span class="line"></span><br><span class="line">        // Editor的扩展所以只在Editor的情况下才编译这个Module</span><br><span class="line">        if (Target.Configuration != UnrealTargetConfiguration.Shipping)</span><br><span class="line">        &#123;</span><br><span class="line">            ExtraModuleNames.AddRange(new string[] &#123;&quot;TestHelloEd&quot;&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// TestHelloEditor.Target.cs</span><br><span class="line">using UnrealBuildTool;</span><br><span class="line">using System.Collections.Generic;</span><br><span class="line"></span><br><span class="line">public class TestHelloEditorTarget : TargetRules</span><br><span class="line">&#123;</span><br><span class="line">	public TestHelloEditorTarget(TargetInfo Target) : base(Target)</span><br><span class="line">	&#123;</span><br><span class="line">		Type = TargetType.Editor;</span><br><span class="line">		DefaultBuildSettings = BuildSettingsVersion.V2;</span><br><span class="line"></span><br><span class="line">		ExtraModuleNames.AddRange(new string[] &#123; &quot;TestHello&quot;, &quot;TestHelloEd&quot; &#125;);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>最后，添加Module到.uproject文件中<br>跟项目工程放在一起的感觉</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;FileVersion&quot;: 3,</span><br><span class="line">  &quot;EngineAssociation&quot;: &quot;4.7&quot;,</span><br><span class="line">  &quot;Category&quot;: &quot;&quot;,</span><br><span class="line">  &quot;Description&quot;: &quot;&quot;,</span><br><span class="line">  &quot;Modules&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">          &quot;Name&quot;: &quot;TestHello&quot;,</span><br><span class="line">          &quot;Type&quot;: &quot;Runtime&quot;,</span><br><span class="line">          &quot;LoadingPhase&quot;: &quot;Default&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">          &quot;Name&quot;: &quot;TestHelloEd&quot;,</span><br><span class="line">          &quot;Type&quot;: &quot;Editor&quot;,</span><br><span class="line">          &quot;LoadingPhase&quot;:  &quot;PostEngineInit&quot;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>由于我验证的版本是UE5EA2，如果你去<code>Tools-&gt;Debug-&gt;Modules</code>下面能找到你创建的新的Module，那么就成功了。</p>
+<p>在UE5中，可能会找不到这个<strong>Modules</strong>这个标签界面，我第一次按照上面的路径打开了之后，然后重启Editor，再就找不到这个窗口了，<code>Tools-&gt;Debug-&gt;Modules</code>这个路径下根本找不到这个界面了。</p>
+<p>然后我查了一下发现UE4的版本也有这个问题？这个是什么鬼BUG。<br>无奈之下发现还可以用命令行</p>
+<ul>
+<li><code>module list</code> - 列出所有Modules</li>
+<li><code>module load modulename</code> - 指定Module名字加载</li>
+<li><code>module unload modulename</code> - 指定Module名字卸载</li>
+<li><code>module recompile modulename</code> - 指定Module名字重新编译（这个命令是我试出来你敢信？）</li>
+</ul>
+<p>我找不到是否还有其它命令，源码无从找起……</p>
 <h1 id="Editor扩展，添加自定义界面"><a href="#Editor扩展，添加自定义界面" class="headerlink" title="Editor扩展，添加自定义界面"></a>Editor扩展，添加自定义界面</h1><h2 id="快速的蓝图实现"><a href="#快速的蓝图实现" class="headerlink" title="快速的蓝图实现"></a>快速的蓝图实现</h2><p>在UE5中添加自定义的窗口方便定义一些Debug功能，想快速入手基本上逃不过EditorUtilityWidget这个东西。</p>
 <p>这个地方真的快找个时间好好整理一下。</p>
 <ul>
@@ -3549,7 +3613,10 @@ table th:nth-of-type(4) {
 </ul>
 <p>参考文章:</p>
 <ul>
-<li><a href="https://unrealcommunity.wiki/using-tool-menus-for-editor-extension-ipmtgt9o" target="_blank" rel="noopener">Using tool menus for editor extension</a><br>-<a href="https://twitter.com/milkyengineer/status/1379644279480446982" target="_blank" rel="noopener">Did you know UnrealEngine 4.26 brought in the ability to extend editor menus and toolbars using Blueprints?</a><br>-<a href="https://lxjk.github.io/2019/10/01/How-to-Make-Tools-in-U-E.html#_setup_editor_module" target="_blank" rel="noopener">How to Make Tools in UE4</a><br>-<a href="http://anapurna.co.jp/ue4/641/" target="_blank" rel="noopener">【UE4】Editor Utility Widgetについてのあれこれ</a></li>
+<li><a href="https://unrealcommunity.wiki/using-tool-menus-for-editor-extension-ipmtgt9o" target="_blank" rel="noopener">Using tool menus for editor extension</a></li>
+<li><a href="https://twitter.com/milkyengineer/status/1379644279480446982" target="_blank" rel="noopener">Did you know UnrealEngine 4.26 brought in the ability to extend editor menus and toolbars using Blueprints?</a></li>
+<li><a href="https://lxjk.github.io/2019/10/01/How-to-Make-Tools-in-U-E.html#_setup_editor_module" target="_blank" rel="noopener">How to Make Tools in UE4</a></li>
+<li><a href="http://anapurna.co.jp/ue4/641/" target="_blank" rel="noopener">【UE4】Editor Utility Widgetについてのあれこれ</a></li>
 </ul>
 <h2 id="正统的C-实现"><a href="#正统的C-实现" class="headerlink" title="正统的C++实现"></a>正统的C++实现</h2><p>但是如果你不想碰蓝图，就想用C++来实现怎么办？（我就是想用C++来实现）。</p>
 <h1 id="完成Editor扩展之后"><a href="#完成Editor扩展之后" class="headerlink" title="完成Editor扩展之后"></a>完成Editor扩展之后</h1><p>那就是随心所欲的添加一些Debug功能啦。</p>
@@ -7244,9 +7311,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -7283,9 +7350,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -7454,8 +7521,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>笔记</tag>
         <tag>C++</tag>
+        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
