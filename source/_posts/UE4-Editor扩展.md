@@ -113,11 +113,10 @@ tags:
       virtual void ShutdownModule() override;
 
   };
-
+  ```
+  ```
   // TestHelloEd.cpp
   #include "TestHelloEd.h"
-  #include "Modules/ModuleManager.h"
-  #include "Modules/ModuleInterface.h"
 
   /*
   At the top of the file use the IMPLEMENT_GAME_MODULE macro, the first argument is the name of the module class you created in the header file, the second argument is the name of the module as you declared it in the uproject file.
@@ -163,7 +162,8 @@ tags:
           }
       }
   }
-
+  ```
+  ```
   // TestHelloEditor.Target.cs
   using UnrealBuildTool;
   using System.Collections.Generic;
@@ -204,6 +204,18 @@ tags:
 
 由于我验证的版本是UE5EA2，如果你去`Tools->Debug->Modules`下面能找到你创建的新的Module，那么就成功了。
 
+在UE5中，可能会找不到这个**Modules**这个标签界面，我第一次按照上面的路径打开了之后，然后重启Editor，再就找不到这个窗口了，`Tools->Debug->Modules`这个路径下根本找不到这个界面了。
+
+然后我查了一下发现UE4的版本也有这个问题？这个是什么鬼BUG。
+无奈之下发现还可以用命令行
+
+- `module list` - 列出所有Modules
+- `module load modulename` - 指定Module名字加载
+- `module unload modulename` - 指定Module名字卸载
+- `module recompile modulename` - 指定Module名字重新编译（这个命令是我试出来你敢信？）
+
+我找不到是否还有其它命令，源码无从找起......
+
 # Editor扩展，添加自定义界面
 
 ## 快速的蓝图实现
@@ -216,9 +228,9 @@ tags:
 
 参考文章:
 - [Using tool menus for editor extension](https://unrealcommunity.wiki/using-tool-menus-for-editor-extension-ipmtgt9o)
--[Did you know UnrealEngine 4.26 brought in the ability to extend editor menus and toolbars using Blueprints?](https://twitter.com/milkyengineer/status/1379644279480446982)
--[How to Make Tools in UE4](https://lxjk.github.io/2019/10/01/How-to-Make-Tools-in-U-E.html#_setup_editor_module)
--[【UE4】Editor Utility Widgetについてのあれこれ](http://anapurna.co.jp/ue4/641/)
+- [Did you know UnrealEngine 4.26 brought in the ability to extend editor menus and toolbars using Blueprints?](https://twitter.com/milkyengineer/status/1379644279480446982)
+- [How to Make Tools in UE4](https://lxjk.github.io/2019/10/01/How-to-Make-Tools-in-U-E.html#_setup_editor_module)
+- [【UE4】Editor Utility Widgetについてのあれこれ](http://anapurna.co.jp/ue4/641/)
 
 
 ## 正统的C++实现
