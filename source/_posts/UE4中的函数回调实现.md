@@ -259,8 +259,238 @@ void SampleB::Execute_Implementation(ine value) const{ // 函数实现}
 >
 > 试问：如果没有委托，你如何解决这个问题？
 
-# C++中的代理实现
-代理应该涉及了许多知识，完全理解需要后续的更新整理。
+# UEC++中的Delegate实现
+上面的内容对于UE4/UE5中的代理（Delegate）这个概念有些大概的了解了。但是再UnrealEngine中，提供了一些类型的代理，什么时间用什么样的代理如果不深入理解的话，虽然可以一招鲜吃遍天但是未必太单调了。
+而且为什么需要根据场景选择不同的代理的理由会在后面进行说明和佐证。
+
+首先是官方文档：
+- [Delegates - Data types that reference and execute member functions on C++ Objects](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/)
+
+文档的干货说明：
+- **Delegates can call member functions on C++ objects in a generic, type-safe way.** ：代理的调用时线程安全的。
+- **Delegates are safe to copy. whenever possible, pass delegates by reference.** ：代理可以复制，代价是需要再Heap中申请内存，所以尽可能的使用引用。
+
+
+UE引擎中提供了大致三种类型的代理：
+- Single
+- Multicast
+  - Events
+- Dynamic(UObject,serializable)
+
+**UE的代理都是对Object的弱引用。**Dynamic的代理不敢确定。
+
+代理的作用域(Scope)可以存在于:
+- Global Scope
+- namespace
+- class
+
+下面就对这三种代理类型进行说明。
+
+## Delegates - Single
+Single，也是通常的代理类型。通常的代理类型可以拥有以下几种特征：
+- **Functions returning a value**：Delegate可以拥有返回值
+- **Functions declared as `const`**：Delegate的对象可以是`const`函数
+- **Up to four "payload" variables**：至多4个"payload"变量
+- **Up to eight function parameters**：支持最多8个函数参数
+
+### Single代理的声明
+一般的写法(参考官方文档)：
+
+| Function signature | Declaration macro |
+| ---- | ---- |
+| void Function() | DECLARE_DELEGATE(DelegateName) |
+| void Function(Param1) | DECLARE_DELEGATE_OneParam(DelegateName, Param1Type) |
+| void Function(Param1, Param2) | DECLARE_DELEGATE_TwoParams(DelegateName, Param1Type, Param2Type) |
+| void Function(Param1, Param2, ...) | DECLARE_DELEGATE_<Num>Params(DelegateName, Param1Type, Param2Type, ...) |
+| <RetValType> Function() | DECLARE_DELEGATE_RetVal(RetValType, DelegateName) |
+| <RetValType> Function(Param1) | DECLARE_DELEGATE_RetVal_OneParam(RetValType, DelegateName, Param1Type) |
+| <RetValType> Function(Param1, Param2) | DECLARE_DELEGATE_RetVal_TwoParams(RetValType, DelegateName, Param1Type, Param2Type) |
+| <RetValType> Function(Param1, Param2, ...) | DECLARE_DELEGATE_RetVal_<Num>Params(RetValType, DelegateName, Param1Type, Param2Type, ...) |
+
+关于Delegate的一个就是属性修饰符，我真的是没见过，只在官方文档里见到了
+```
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FInstigatedAnyDamageSignature, float, Damage, const UDamageType*, DamageType, AActor*, DamagedActor, AActor*, DamageCauser);
+```
+这个`UDELEGATE`有时间我得调查一下。
+
+### Single代理的绑定
+
+| Function | Description |
+| ---- | ---- |
+| Bind | Binds to an existing delegate object. |
+| BindStatic | Binds a raw C++ pointer global function delegate. |
+| BindRaw | Binds a raw C++ pointer delegate. Since raw pointers do not use any sort of reference, calling `Execute` or `ExecuteIfBound` after deleting the target object is unsafe. |
+| BindLambda | Binds a functor. This is generally used for lambda functions. |
+| BindSP | Binds a shared pointer-based member function delegate. Shared pointer delegates keep a weak reference to your object. You can use `ExecuteIfBound` to call them. |
+| BindUObject | Binds a `UObject` member function delegate. `UObject` delegates keep a weak reference to the `UObject` you target. You can use `ExecuteIfBound` to call them. |
+| UnBind | Unbinds this delegate. |
+
+使用Delegate的例子<span style="color: red">（随时补全）</span>：
+
+
+关于Delegate的**PayLoad Data**，这又是一个我未曾见过的写法，也就是说在Bind的阶段可以传递Payload数据
+> When binding to a delegate, you can pass payload data along. These are arbitrary variables that will be passed directly to any bound function when it is invoked. This is really useful as it allows you to store parameters within the delegate itself at bind-time. All delegate types (except for "dynamic") supports payload variables automatically.
+>
+> This example passes two custom variables, a bool and an int32 to a delegate. Then when the delegate is invoked, these parameters will be passed to your bound function. The extra variable arguments must always be accepted after the delegate type parameter arguments.
+> ```
+> MyDelegate.BindRaw( &MyFunction, true, 20 );
+> ```
+
+我暂时没有找到具体的使用案例<span style="color: red">（随时补全）</span>。
+
+### Single代理执行
+由于对未绑定的代理执行`Execute()`可能会造成未定义的程序行为（比如说未被初始化的成员变量被访问到），需要在使用之前`IsBound()`进行判断。
+对于没有返回值的代理可以使用`ExecuteIfBound()`执行。
+**代理的使用的时候需要注意避免对未初始化的变量进行访问。**
+
+| Execution Functions | Description |
+| ---- | ---- |
+| Execute | Executes a delegate without checking its bindings |
+| ExecuteIfBound | Checks that a delegate is bound, and if so, calls Execute |
+| IsBound | Checks whether or not a delegate is bound, often before code that includes an `Execute` call |
+
+## Delegate - Multicast
+官方文档
+- [Multi-cast Delegates - Delegates that can be bound to multiple functions and execute them all at once.](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Multicast/)
+
+**Multicast类型的代理不可使用返回值**，特性大致上都与Single类型相同。使用上通常是为了方便传递一个代理的集合。
+
+### Multicast代理声明
+Multicast类型分为两种，基于Dynamic类型的特殊性，分为第三类型的代理，将在下一个章节部分进行说明。
+
+| Declaration Macro | Description |
+| ---- | ---- |
+| DECLARE_MULTICAST_DELEGATE( DelegateName ) | Creates a multi-cast delegate. |
+| DECLARE_MULTICAST_DELEGATE_<Num>Params( DelegateName, Param1Type, Param2Type, ... ) | Creates a multi-cast delegate with N parameters. |
+
+### Multicast类型代理的绑定
+Multicast的绑定语义上类似与数组。
+
+| Function | Description |
+| ---- | ---- |
+| Add() | Adds a function delegate to this multi-cast delegate's invocation list. |
+| AddStatic() | Adds a raw C++ pointer global function delegate. |
+| AddRaw() | Adds a raw C++ pointer delegate. Raw pointer does not use any sort of reference, so may be unsafe to call if the object was deleted out from underneath your delegate. Be careful when calling Execute()! |
+| AddSP() | Adds a shared pointer-based (fast, not thread-safe) member function delegate. Shared pointer delegates keep a weak reference to your object. |
+| AddUObject() | Adds a UObject-based member function delegate. UObject delegates keep a weak reference to your object. |
+| Remove() | Removes a function from this multi-cast delegate's invocation list (performance is O(N)). Note that the order of the delegates may not be preserved! |
+| RemoveAll() | Removes all functions from this multi-cast delegate's invocation list that are bound to the specified UserObject. Note that the order of the delegates may not be preserved! |
+
+关于`RemoveAll()`这个函数在使用**Raw delegate**有一点需要注意：
+> `RemoveAll()` will remove all registered delegates bound to the provided pointer. Keep in mind that Raw delegates that are not bound to an object pointer will not be removed by this function!
+
+### Multicast类型代理执行
+我们可以安全的使用`Broadcast()`执行这个类型的代理，即使它没有任何的绑定。Multicast代理的执行顺序是没有保障的，不要想当然的认为是绑定的顺序。
+
+| Declaration Macro | Description |
+| ---- | ---- |
+| Broadcast() | Broadcasts this delegate to all bound objects, except to those that may have expired. |
+
+关于官方文档的：
+> The only time you need to be careful is if you are using a delegate to initialize output variables, which is generally very bad to do.
+
+这句话我很在意，但是我又搞不明白他说的具体是什么样的情况。
+
+## Delegate - Events
+官方文档
+- [Events - Delegates that can be bound to multiple functions and execute them all at once.](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Events/)
+
+Events类型的代理是一种类型特化的Multicast代理类型。也就是说只有该代理声明的类的类型才能使用该代理。这减少了该对象暴露在外面世界的时候内部的一些比较敏感的代理实现不会被指定类之外的对象调用。
+
+### Events类型代理声明
+`OwningType`的声明就是指定该代理从属的类，只有指定的类才能调用`Broadcast()`。
+
+| Declaration Macro | Description |
+| ---- | ---- |
+| DECLARE_EVENT( OwningType, EventName ) | Creates an event. |
+| DECLARE_EVENT_OneParam( OwningType, EventName, Param1Type ) | Creates an event with one parameter. |
+| DECLARE_EVENT_TwoParams( OwningType, EventName, Param1Type, Param2Type ) | Creates an event with two parameters. |
+| DECLARE_EVENT_<Num>Params( OwningType, EventName, Param1Type, Param2Type, ... ) | Creates an event with N parameters. |
+
+### Events类型代理绑定
+与Multicast类型的代理绑定一样。此处省略。
+
+### Events类型代理执行
+与Multicast类型的代理执行一样。此处省略。
+
+
+
+## Delegate - Dynamic
+官方文档
+- [Dynamic Delegates - Delegates that can be serialized and support reflection.](https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Dynamic/)
+
+Dynamic类型的代理数据会被序列化(serialized)，可以通过函数名找到。也就是说它们的执行效率要比普通的代理慢许多。
+
+本质上Dynamic代理类型不是独立于Single/Multicast代理类型的第三个类型，而是基于其特殊性放在第三个位来说。
+Single/Multicast类型代理分别有着**General**与**Dynamic**的差别。
+
+### Dynamic类型代理的声明
+官方文档的写法貌似是Dynamic类型代理不支持返回值的写法，但是我也不完全确定。
+
+| Declaration Macro | Description |
+| ---- | ---- |
+| DECLARE_DYNAMIC_DELEGATE( DelegateName ) | Creates a dynamic delegate. |
+| DECLARE_DELEGATE_<Num>Params( DelegateName , Param1Type, Param2Type, ...) | Creates a dynamic delegate with N parameters. |
+| DECLARE_DYNAMIC_MULTICAST_DELEGATE( DelegateName ) | Creates a dynamic multi-cast delegate. |
+| DECLARE_DYNAMIC_MULTICAST_DELEGATE_<Num>Params( DelegateName, Param1Type, Param2Type, ... ) | Create a dynamic multi-cast delegate with N parameters |
+
+### Dynamic类型代理的绑定
+
+| Helper Macro | Description |
+| ---- | ---- |
+| BindDynamic( UserObject, FuncName ) | Helper macro for calling BindDynamic() on dynamic delegates. Automatically generates the function name string. |
+| AddDynamic( UserObject, FuncName ) | Helper macro for calling AddDynamic() on dynamic multi-cast delegates. Automatically generates the function name string. |
+| RemoveDynamic( UserObject, FuncName ) | Helper macro for calling RemoveDynamic() on dynamic multi-cast delegates. Automatically generates the function name string. |
+
+### Dynamic类型代理的执行
+执行方式与各自Single/Multicast类型代理的执行方式相同。此处省略。
+
+关于各项代理的源码实现可以直接参考引擎的源码：
+UE4/UE5：`Engine\Source\Runtime\Core\Public\Delegates\DelegateSignatureImpl.inl`
+
+## Delegate的Sample实现
+未必避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。
+
+### Events代理的sample
+这一段是来自官网上的
+```
+public:
+/** Broadcasts whenever the layer changes */
+DECLARE_EVENT( FLayerViewModel, FChangedEvent )
+FChangedEvent& OnChanged() { return ChangedEvent; }
+```
+
+```
+private:
+/** Broadcasts whenever the layer changes */
+FChangedEvent ChangedEvent;
+```
+
+官网这里需要注意的是下面的一个TIP：
+> Accessors for events should follow an OnXXX pattern instead of the usual GetXXX pattern.
+
+我一直觉得把代理的变量直接放在Public或者Protected有一些抵触，刚好以后就参考这种写法了。
+
+#### 抽象Events代理
+关于这个**Inherited Abstract Event**也是官方文档的内容
+
+**Base Class Implementation:**
+```
+/** Register/Unregister a callback for when assets are added to the registry */
+DECLARE_EVENT_OneParam( IAssetRegistry, FAssetAddedEvent, const FAssetData&);
+virtual FAseetAddedEvent& OnAssetAdded() = 0;
+```
+
+**Derived Class Implementation:**
+```
+DECLARE_DERIVED_EVENT( FAssetRegistry, IAssetRegistry::FAssetAddedEvent, FAssetAddedEvent);
+virtual FAssetAddedEvent& OnAssetAdded() override { return AssetAddedEvent; }
+```
+在派生类中声明派生的Events代理的时候，貌似函数的语言不需要重复定义了(我理解的函数参数的数量和类型)，使用`DECLARE_DERIVED_EVENT`宏就足够了，该宏的第三个参数是定义该Events代理的新名字，一般跟父类的名字相同就可以了。
+
+这种写法的话我能想到的就是开放子类也可使用这个Events代理，只不过需要自己实现罢了。
+（只不过需要自己实现罢了，可以约束子类一定要实现这个代理？）
 
 
 参考链接：

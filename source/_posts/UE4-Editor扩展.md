@@ -237,6 +237,10 @@ tags:
 但是如果你不想碰蓝图，就想用C++来实现怎么办？（我就是想用C++来实现）。
 
 
+
+- [Template:Slate Style Sets Part 2](https://nerivec.github.io/old-ue4-wiki/pages/templateslate-style-sets-part-2.html)
+
+
 # 完成Editor扩展之后
 那就是随心所欲的添加一些Debug功能啦。
 

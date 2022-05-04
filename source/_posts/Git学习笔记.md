@@ -170,8 +170,32 @@ git add -n .
 - [How do I undo 'git add' before commit?](https://stackoverflow.com/questions/348170/how-do-i-undo-git-add-before-commit)
 回答里的最高赞内容，只能说是跟我的情况一模一样了。
 
+### Git Stash
+可以一时间保存本地的修改，在切换分支的时候也可以保留自己的修改。
 
+指定文件进行stash操作：
+```
+// 指定文件进行stash操作
+$ git stash push -- <filepath>
 
+// 指定stash的id进行复原
+$ git stash pop stash@{0}
+```
+
+参考：
+- [[Git] ファイル単位でstashする](https://qiita.com/yukitaka13-1110/items/935bfa233c6e024f82dc)
+
+这里再稍微罗嗦一下：
+```
+// Stash当前所有的修改
+git stash
+
+// 查看stash列表
+git stash list
+
+// 应该是选择最上面的那样stash进行复原（我没有试过，需要验证的）
+git stash pop
+```
 
 
 ## SourceTree

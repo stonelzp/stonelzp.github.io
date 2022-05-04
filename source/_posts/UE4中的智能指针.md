@@ -249,12 +249,13 @@ TSharedPtr<FAssetDragDropOp> DragDropOp = StaticCastSharedPtr<FAssetDragDropOp>(
 ## C++11中的智能指针
 主要在用的智能指针有：unique_ptr, shared_ptr, weak_ptr。
 
-这3种指针组件就是采用了boost里的智能指针方案。很多有用过boost智能指针的朋友，很容易地就能发现它们之间的关间：
-|std|boost|功能说明|
-|----|----|----|
-|unique_ptr|scoped_ptr|独占指针对象，并保证指针所指对象生命周期与其一致|
-|shared_ptr|shared_ptr|可共享指针对象，可以赋值给shared_ptr或weak_ptr。<br>指针所指对象在所有的相关联的shared_ptr生命周期结束时结束，是强引用。|
-|weak_ptr|weak_ptr|它不能决定所指对象的生命周期，引用所指对象时，需要lock()成shared_ptr才能使用。|
+这3种指针组件就是采用了boost里的智能指针方案。很多有用过boost智能指针的朋友，很容易地就能发现它们之间的关系：
+
+| std | boost | 功能说明 |
+| ---- | ---- | ---- |
+| unique_ptr | scoped_ptr | 独占指针对象，并保证指针所指对象生命周期与其一致 |
+| shared_ptr |shared_ptr |可共享指针对象，可以赋值给shared_ptr或weak_ptr。<br>指针所指对象在所有的相关联的shared_ptr生命周期结束时结束，是强引用。 |
+| weak_ptr | weak_ptr | 它不能决定所指对象的生命周期，引用所指对象时，需要lock()成shared_ptr才能使用。 |
 
 参考链接：
 - [C++11中的智能指针](https://my.oschina.net/hevakelcj/blog/465978)
