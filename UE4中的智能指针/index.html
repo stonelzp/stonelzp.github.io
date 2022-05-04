@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-03-21T07:05:37.575Z">
+<meta property="og:updated_time" content="2022-05-01T10:43:15.102Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的智能指针">
 <meta name="twitter:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-21 16:05:37" itemprop="dateModified" datetime="2022-03-21T16:05:37+09:00">2022-03-21</time>
+                <time title="修改时间：2022-05-01 19:43:15" itemprop="dateModified" datetime="2022-05-01T19:43:15+09:00">2022-05-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -317,7 +317,33 @@
 </ul>
 <p>所以不是说只要程序员足够谨慎就能够避免指针造成的内存泄漏的问题。</p>
 <h2 id="C-11中的智能指针"><a href="#C-11中的智能指针" class="headerlink" title="C++11中的智能指针"></a>C++11中的智能指针</h2><p>主要在用的智能指针有：unique_ptr, shared_ptr, weak_ptr。</p>
-<p>这3种指针组件就是采用了boost里的智能指针方案。很多有用过boost智能指针的朋友，很容易地就能发现它们之间的关间：<br>|std|boost|功能说明|<br>|—-|—-|—-|<br>|unique_ptr|scoped_ptr|独占指针对象，并保证指针所指对象生命周期与其一致|<br>|shared_ptr|shared_ptr|可共享指针对象，可以赋值给shared_ptr或weak_ptr。<br>指针所指对象在所有的相关联的shared_ptr生命周期结束时结束，是强引用。|<br>|weak_ptr|weak_ptr|它不能决定所指对象的生命周期，引用所指对象时，需要lock()成shared_ptr才能使用。|</p>
+<p>这3种指针组件就是采用了boost里的智能指针方案。很多有用过boost智能指针的朋友，很容易地就能发现它们之间的关系：</p>
+<table>
+<thead>
+<tr>
+<th>std</th>
+<th>boost</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unique_ptr</td>
+<td>scoped_ptr</td>
+<td>独占指针对象，并保证指针所指对象生命周期与其一致</td>
+</tr>
+<tr>
+<td>shared_ptr</td>
+<td>shared_ptr</td>
+<td>可共享指针对象，可以赋值给shared_ptr或weak_ptr。<br>指针所指对象在所有的相关联的shared_ptr生命周期结束时结束，是强引用。</td>
+</tr>
+<tr>
+<td>weak_ptr</td>
+<td>weak_ptr</td>
+<td>它不能决定所指对象的生命周期，引用所指对象时，需要lock()成shared_ptr才能使用。</td>
+</tr>
+</tbody>
+</table>
 <p>参考链接：</p>
 <ul>
 <li><a href="https://my.oschina.net/hevakelcj/blog/465978" target="_blank" rel="noopener">C++11中的智能指针</a></li>
