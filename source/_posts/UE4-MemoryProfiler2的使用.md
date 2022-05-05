@@ -93,6 +93,8 @@ public class TP_424Target : TargetRules
 
 # 其它内存调查工具
 
+- [Low-Level Memory Tracker - Going over how to use the Low-Level Memory Tracker in your Unreal Engine projects.](https://docs.unrealengine.com/4.26/en-US/ProductionPipelines/DevelopmentSetup/Tools/LowLevelMemoryTracker/)
+
 ## MemReport
 关于如何使用这个命令
 - [[UE4]Memreportを活用しよう！](https://historia.co.jp/archives/25131/)

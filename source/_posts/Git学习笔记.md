@@ -253,3 +253,6 @@ git lfs prune
 当项目发展到一定规模之后，使用GitLFS自己的仓库空间就会越来越大，电脑空间再大早晚就会被吃空，一个T两个T的SSD都被吃的干干净净，看着变红的硬盘，再看看空空的钱包，还是想想技术吧。
 
 - [【Git】Git LFSを使用したリポジトリが肥大化した場合に使いたい「git lfs prune」](https://zenn.dev/rossam/articles/73d4f14d368caf02fd9a)
+
+调查的时候发现一篇文章稍微有些在意，先记下：
+- [Gitリポジトリをメンテナンスして軽量化する](https://qiita.com/kaneshin/items/0d19fc1cd86f931dc855)

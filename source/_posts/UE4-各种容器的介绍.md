@@ -157,3 +157,8 @@ StrArr.Emplace(TEXT("World"));
 
 这一部分意外的有点多，等到遇到Array操作有些困扰的时候需要查阅：
 - [TArray: Arrays in Unreal Engine](https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TArrays/)
+
+
+### Add_GetRef
+要知道有这么一个函数
+- [TArray::Add_GetRef - Adds a new item to the end of the array, possibly reallocating the whole array to fit.](https://docs.unrealengine.com/4.26/en-US/API/Runtime/Core/Containers/TArray/Add_GetRef/1/)

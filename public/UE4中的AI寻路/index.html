@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="介绍一些关于AI制作的时候遇到的问题。主要是寻路算法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-03-28T09:26:31.265Z">
+<meta property="og:updated_time" content="2022-05-05T09:55:53.128Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的AI寻路">
 <meta name="twitter:description" content="介绍一些关于AI制作的时候遇到的问题。主要是寻路算法。">
@@ -212,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-03-28 18:00:14 / 修改时间：18:26:31" itemprop="dateCreated datePublished" datetime="2022-03-28T18:00:14+09:00">2022-03-28</time>
+              <time title="创建时间：2022-03-28 18:00:14" itemprop="dateCreated datePublished" datetime="2022-03-28T18:00:14+09:00">2022-03-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-05 18:55:53" itemprop="dateModified" datetime="2022-05-05T18:55:53+09:00">2022-05-05</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -249,7 +255,12 @@
 <h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>这种博文能否写好实在是没有自信，因为算法的确不是我的强项，已经玩不转算法的逻辑了。但是在制作角色AI的时候，寻路是必不可少的一环。</p>
 <p>在项目的开发中，我了解了许多关于AI的插件，UE4本身开源的免费插件，像是<strong>DoNPathFinding</strong>这样的还有不少，寻路足够用但是很多只有寻路。效率也没有什么保障，项目早就从几年前就停止更新了。</p>
 <p>之后的许多提供商用的AI插件，就不方便写在这里。</p>
-<p>当然也不是来介绍插件的，而是想简单的记录一下A星算法。</p>
+<p>当然也不是来介绍插件的，而是想简单的记录一下AI相关联的知识。</p>
+<p>有那么一天我可以吃透下面的文章：</p>
+<ul>
+<li><a href="https://www.gameaipro.com/" target="_blank" rel="noopener">GameAIPro</a></li>
+</ul>
+<p>上面的书都是免费的，下到Kindle里有时间看看可能也不错。</p>
 <h1 id="A-算法"><a href="#A-算法" class="headerlink" title="A*算法"></a>A*算法</h1><p>据我所知，绝大部分的AI寻路算法都是使用的A星寻路亦或者其衍生的算法。这些算法具体有什么不同我自己也不是很清楚。<br>目的是能简单的用C++来实现一个简单的A星寻路，2D与3D都是基于相同的思想。</p>
 <p>参考资料：</p>
 <ul>
@@ -258,6 +269,11 @@
 <p>一个超级可以帮助理解的视图化网站：</p>
 <ul>
 <li><a href="http://qiao.github.io/PathFinding.js/visual/" target="_blank" rel="noopener">PathFinding</a></li>
+</ul>
+<h1 id="3D空间的寻路"><a href="#3D空间的寻路" class="headerlink" title="3D空间的寻路"></a>3D空间的寻路</h1><p>一知半解，就不献丑了。</p>
+<p>英文的</p>
+<ul>
+<li><a href="http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter21_3D_Flight_Navigation_Using_Sparse_Voxel_Octrees.pdf" target="_blank" rel="noopener">3D Flight Navigation Using Sparse Voxel Octrees</a></li>
 </ul>
 
     </div>
@@ -343,7 +359,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#A-算法"><span class="nav-number">2.</span> <span class="nav-text">A*算法</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#A-算法"><span class="nav-number">2.</span> <span class="nav-text">A*算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3D空间的寻路"><span class="nav-number">3.</span> <span class="nav-text">3D空间的寻路</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -359,7 +375,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">108</span>
+          <span class="site-state-item-count">109</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

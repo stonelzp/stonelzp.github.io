@@ -443,6 +443,9 @@ Single/Multicast类型代理分别有着**General**与**Dynamic**的差别。
 | AddDynamic( UserObject, FuncName ) | Helper macro for calling AddDynamic() on dynamic multi-cast delegates. Automatically generates the function name string. |
 | RemoveDynamic( UserObject, FuncName ) | Helper macro for calling RemoveDynamic() on dynamic multi-cast delegates. Automatically generates the function name string. |
 
+
+AddUniqueDynamic?(有时间我直接看看源码实现)
+
 ### Dynamic类型代理的执行
 执行方式与各自Single/Multicast类型代理的执行方式相同。此处省略。
 

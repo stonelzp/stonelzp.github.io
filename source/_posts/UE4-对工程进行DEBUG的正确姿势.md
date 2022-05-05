@@ -475,6 +475,99 @@ UE4.26版本增加了Beta特性MemoryInsinsights的功能。
 - [UE4 Low Level Memory Tracker 使用](https://zhuanlan.zhihu.com/p/78005333)
 - [[UE4] LLM (Low Level Memory Tracker)を使用したメモリトラッキング](https://qiita.com/donbutsu17/items/dd410cd6ee53b0b348ca)
 
+# 添加Stat命令
+在添加新的功能的时候，顺手添加一个时间计量可能会方便以后的开发。
+于是就需要自己添加Stat命令了。当然UE已经存在的Stat命令也是很好用的。
+
+官方文档
+- [Stats System OverviewThe - Stats System enables developers to collect and display performance data so that they can optimize their games.](https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/StatCommands/StatsSystemOverview/)
+
+## Stat command
+先创建一个Stat组，由于一般都是只会在一个cpp文件中声明并且使用，先以这种情况说明。想要跨多个cpp文件的话会在最后介绍。
+
+1. 先创建一个Stat组：
+```
+DECLARE_STATS_GROUP(GroupDesc, GroupID, GroudCat)
+```
+使用的例子：
+```
+DECLARE_STATS_GROUP(TEXT(“StatTest”),STATGROUP_StatTest, STATCAT_Advanced);
+```
+- GroupDesc： 声明的Stat组名称
+- GroupID： Stat组的UniqueID，格式固定位`STATGROUP_XXX`，`XXX`即为Stat命令的参数，`Stat XXX`这样
+- GroupCat： 具体含义还不清楚，一般固定为`STATCAT_Advanced`。
+
+
+创建Stat组的方式有以下三种：
+
+| Method | Description |
+| ---- | ---- |
+| DECLARE_STATS_GROUP(GroupDesc, GroupId, GroupCat) | Declares a stats group that is enabled by default. |
+| DECLARE_STATS_GROUP_VERBOSE(GroupDesc, GroupId, GroupCat) | Declares a stats group that is disabled by default. |
+| DECLARE_STATS_GROUP_MAYBE_COMPILED_OUT(GroupDesc, GroupId, GroupCat) | Declares a stats group that is disabled by default and which may be stripped by the compiler. |
+
+参数各自的含义:
+- `GroupDesc` is a text description of the group
+- `GroupId` is a `UNIQUE` id of the group
+- `GroupCat` is reserved for future use
+- `CompileIn`, the compiler may strip it out if it is set to true
+
+至于第四个我是没找到啦，估计不读源码不行。
+
+举例：
+```
+DECLARE_STATS_GROUP(TEXT("Threading"), STATGROUP_Threading, STATCAT_Advanced);
+DECLARE_STATS_GROUP_VERBOSE(TEXT("Linker Load"), STATGROUP_LinkerLoad, STATCAT_Advanced);
+```
+
+2. 创建Stat的测量项目
+
+声明和定义Stat，作用域可以是:
+- Only one cpp file
+- The function scope
+- The module scope
+- The whole project
+
+对于单个cpp文件可以使用以下方法：
+
+| Declare Macro | Description |
+| ---- | ---- |
+| DECLARE_CYCLE_STAT(CounterName, StatId, GroupId) | Declares a cycle counter stat. |
+| DECLARE_SCOPE_CYCLE_COUNTER(CounterName, StatId, GroupId) | Declares a cycle counter stat and uses it at the same time. Additionally, it is limited to one function scope. |
+| UICK_SCOPE_CYCLE_COUNTER(StatId) | Declares a cycle counter stat that will belong to a stat group named 'Quick'. |
+| RETURN_QUICK_DECLARE_CYCLE_STAT(StatId, GroupId) | Returns a cycle counter, and is sometimes used by a few specialized classes. |
+| DECLARE_FLOAT_COUNTER_STAT(CounterName, StatId, GroupId) | Declares a float counter, and is based on the double type (8 bytes). |
+| DECLARE_DWORD_COUNTER_STAT(CounterName, StatId, GroupId) | Declares a dword counter, and is based on the qword type (8 bytes). |
+| DECLARE_FLOAT_ACCUMULATOR_STAT(CounterName, StatId, GroupId) | Declares a float accumulator. |
+| DECLARE_DWORD_ACCUMULATOR_STAT(CounterName, StatId, GroupId) | Declares a dword accumulator. |
+| DECLARE_MEMORY_STAT(CounterName, StatId, GroupId) | Declares a memory counter the same as a dword accumulator, but it will be displayed with memory specific units. |
+| DECLARE_MEMORY_STAT_POOL(CounterName, StatId, GroupId, Pool) | Declares a memory counter with a pool. |
+
+对于不局限于单个Cpp文件想要整个Project都可以使用的方式，则需要在声明的宏之后加上`_EXTERN`
+`DECLARE_CYCLE_STAT_EXTERN(CounterName, StatId, GroupId, API)`
+`DECLARE_FLOAT_COUNTER_STAT_EXTERN(CounterName, StatId, GroupId, API)`
+`DECLARE_DWORD_COUNTER_STAT_EXTERN(CounterName, StatId, GroupId, API)`
+`DECLARE_FLOAT_ACCUMULATOR_STAT_EXTERN(CounterName, StatId, GroupId, API)`
+`DECLARE_DWORD_ACCUMULATOR_STAT_EXTERN(CounterName, StatId, GroupId, API)`
+`DECLARE_MEMORY_STAT_EXTERN(CounterName, StatId, GroupId, API)`
+`DECLARE_MEMORY_STAT_POOL_EXTERN(CounterName, StatId, GroupId, Pool, API)`
+
+参数各自的含义：
+- `CounterName` is a text description of the stat
+- `StatId` is a `UNIQUE` id of the stat
+- `GroupId` is the id of the group that the stat will belong to, the `GroupId` from `DECLARE_STATS_GROUP*`
+- `Pool` is a platform-specific memory pool
+- `API` is the `*_API` of a module, and it can be empty if the stat will only be used in that module
+
+我好像不实际用一下还是不知道官网讲的是什么，等我实际用一下再来继续写。
+
+参考文章：
+- [[UE4]Statコマンドに情報を追加しよう](https://historia.co.jp/archives/14778/)
+
+## UE提供的常用stat命令
+官方文档：
+- [Stat Commands - Console commands specific to displaying game statistics.](https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/StatCommands/)
+
 
 # 一些优化的小技巧
 在对UE4的逐渐学习理解过程中，会遇见一些常见的优化小技巧。

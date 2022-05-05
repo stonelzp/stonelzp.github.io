@@ -20,7 +20,12 @@ tags:
 
 之后的许多提供商用的AI插件，就不方便写在这里。
 
-当然也不是来介绍插件的，而是想简单的记录一下A星算法。
+当然也不是来介绍插件的，而是想简单的记录一下AI相关联的知识。
+
+有那么一天我可以吃透下面的文章：
+- [GameAIPro](https://www.gameaipro.com/)
+
+上面的书都是免费的，下到Kindle里有时间看看可能也不错。
 
 # A*算法
 据我所知，绝大部分的AI寻路算法都是使用的A星寻路亦或者其衍生的算法。这些算法具体有什么不同我自己也不是很清楚。
@@ -31,3 +36,9 @@ tags:
 
 一个超级可以帮助理解的视图化网站：
 - [PathFinding](http://qiao.github.io/PathFinding.js/visual/)
+
+# 3D空间的寻路
+一知半解，就不献丑了。
+
+英文的
+- [3D Flight Navigation Using Sparse Voxel Octrees](http://www.gameaipro.com/GameAIPro3/GameAIPro3_Chapter21_3D_Flight_Navigation_Using_Sparse_Voxel_Octrees.pdf)
