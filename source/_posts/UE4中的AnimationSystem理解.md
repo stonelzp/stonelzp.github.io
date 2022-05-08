@@ -74,3 +74,5 @@ Advanced Locomotion System V4这个动画系统，由于是免费的，或许在
 这篇文章我放在这里有些奇怪，实在是因为我找不到任何关于BlendProfile的UE4相关的文档，看能否触类旁通一下。
 - [Animation Blend Profile in Unity](https://arrowinmyknee.com/2020/07/07/Animation-Blend-Profile-in-Unity/)
 - [UBlendProfile - A blend profile is a set of per-bone scales that can be used in transitions and blend lists to tweak the weights of specific bones.](https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/Animation/UBlendProfile/)
+
+- [UE4 ルートモーションについてのメモ](https://qiita.com/unknown_ds/items/d3d802415c16101d47f1)

@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="EQS(Environment Query System)的简称，主要应用场景就是制作游戏角色的AI了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-03-28T08:54:09.444Z">
+<meta property="og:updated_time" content="2022-05-08T15:15:05.653Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的EQS使用">
 <meta name="twitter:description" content="EQS(Environment Query System)的简称，主要应用场景就是制作游戏角色的AI了。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-03-28 17:54:09" itemprop="dateModified" datetime="2022-03-28T17:54:09+09:00">2022-03-28</time>
+                <time title="修改时间：2022-05-09 00:15:05" itemprop="dateModified" datetime="2022-05-09T00:15:05+09:00">2022-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,7 +268,10 @@
 <p>关于构造函数里的初始化操作</p>
 <h4 id="Cost"><a href="#Cost" class="headerlink" title="Cost"></a>Cost</h4><p>这个设定是用来设置Test的优先执行顺序的，有<code>Low</code>,<code>Medium</code>,<code>High</code>,优先级越低就会被优先执行，默认情况下时Low。这个某种程度上可以提升一点执行的效率，将执行效率低的处理设置为高优先级尽可能的减少处理次数。</p>
 <h4 id="ValidItemType"><a href="#ValidItemType" class="headerlink" title="ValidItemType"></a>ValidItemType</h4><p>这个暂时还不是很清楚。</p>
-<h3 id="自定义Generator"><a href="#自定义Generator" class="headerlink" title="自定义Generator"></a>自定义Generator</h3>
+<h3 id="自定义Generator"><a href="#自定义Generator" class="headerlink" title="自定义Generator"></a>自定义Generator</h3><h1 id="AI相关的Debug工具"><a href="#AI相关的Debug工具" class="headerlink" title="AI相关的Debug工具"></a>AI相关的Debug工具</h1><ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/ArtificialIntelligence/AIDebugging/" target="_blank" rel="noopener">AI Debugging - Describes the different ways in which you can debug your AI with the AI Debugging Tools.</a></li>
+</ul>
+
     </div>
 
     
@@ -351,7 +354,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在UE4中使用EQS"><span class="nav-number">1.</span> <span class="nav-text">在UE4中使用EQS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EQS是什么"><span class="nav-number">1.1.</span> <span class="nav-text">EQS是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义使用"><span class="nav-number">1.2.</span> <span class="nav-text">自定义使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义Test"><span class="nav-number">1.2.1.</span> <span class="nav-text">自定义Test</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cost"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Cost</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ValidItemType"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">ValidItemType</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义Generator"><span class="nav-number">1.2.2.</span> <span class="nav-text">自定义Generator</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在UE4中使用EQS"><span class="nav-number">1.</span> <span class="nav-text">在UE4中使用EQS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EQS是什么"><span class="nav-number">1.1.</span> <span class="nav-text">EQS是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义使用"><span class="nav-number">1.2.</span> <span class="nav-text">自定义使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义Test"><span class="nav-number">1.2.1.</span> <span class="nav-text">自定义Test</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Cost"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Cost</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ValidItemType"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">ValidItemType</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义Generator"><span class="nav-number">1.2.2.</span> <span class="nav-text">自定义Generator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AI相关的Debug工具"><span class="nav-number">2.</span> <span class="nav-text">AI相关的Debug工具</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -367,7 +370,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">109</span>
+          <span class="site-state-item-count">112</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -379,7 +382,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">49</span>
+        <span class="site-state-item-count">50</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

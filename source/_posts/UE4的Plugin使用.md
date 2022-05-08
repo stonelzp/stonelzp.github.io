@@ -36,7 +36,7 @@ tags:
 在类的声明中添加一个宏：`<大写字母的Module名字>_API`
 
 例如：
-```C++
+```
 UCLASS()
 class SAYHELLO_API USayHelloFunction : public UBlueprintFunctionLibrary{
     GENERATED_BODY()
@@ -57,6 +57,8 @@ Tips：
 # Plugins
 顺着文章名字找过来，结果发现内容跟我想象的不太一样。那么就分为两部分，上面是介绍UE4插件的使用方式。这一部分是介绍UE4中用到的插件。
 
+这篇文章是根据AI的部分过来的。本来Mercuna是一个用来寻路导航的AI插件，试了一下效果很是不错。关于如何制作二进制插件的文章，也就是不带源码的那种。
+- [Build Binary Plugins in UnrealEngine4](https://mercuna.com/building-binary-plugins-in-unreal-engine-4/)
 
 ## Impostor Bake
 - [Impostor Baker for UE4](https://80.lv/articles/impostor-baker-for-ue4/)
