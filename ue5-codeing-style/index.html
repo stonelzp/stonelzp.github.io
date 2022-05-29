@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="爱自己，对爱你的人来说，是最大的安慰">
-<meta property="og:type" content="website">
-<meta property="og:title" content="categories">
-<meta property="og:url" content="http://stonelzp.github.io/categories/index.html">
+  <meta name="description" content="这篇文章用来记录一下UnrealEngine中的代码规范。">
+<meta name="keywords" content="UE4,UE5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE5-代码规范">
+<meta property="og:url" content="http://stonelzp.github.io/ue5-codeing-style/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="爱自己，对爱你的人来说，是最大的安慰">
+<meta property="og:description" content="这篇文章用来记录一下UnrealEngine中的代码规范。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.526Z">
+<meta property="og:updated_time" content="2022-05-17T14:47:15.323Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="categories">
-<meta name="twitter:description" content="爱自己，对爱你的人来说，是最大的安慰">
+<meta name="twitter:title" content="UE5-代码规范">
+<meta name="twitter:description" content="这篇文章用来记录一下UnrealEngine中的代码规范。">
 
-<link rel="canonical" href="http://stonelzp.github.io/categories/">
+<link rel="canonical" href="http://stonelzp.github.io/ue5-codeing-style/">
 
 
 <script id="page-configurations">
@@ -40,13 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>categories | StoneのBLOG
-</title>
+  <title>UE5-代码规范 | StoneのBLOG</title>
   
 
 
@@ -182,51 +182,107 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-Hans">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue5-codeing-style/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE5-代码规范
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">categories
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
 
-<div class="post-meta">
+              <time title="创建时间：2022-05-17 23:44:26 / 修改时间：23:47:15" itemprop="dateCreated datePublished" datetime="2022-05-17T23:44:26+09:00">2022-05-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine5/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine5</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这篇文章用来记录一下UnrealEngine中的代码规范。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><ul>
+<li><a href="https://github.com/Allar/ue5-style-guide" target="_blank" rel="noopener">UE4 Style Guide - A mostly reasonable approach to Unreal Engine 4</a></li>
+</ul>
+<p>插件：</p>
+<ul>
+<li><a href="https://www.unrealengine.com/marketplace/en-US/product/linter-v2?lang=en-US" target="_blank" rel="noopener">Linter v2</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+              <a href="/tags/UE5/" rel="tag"># UE5</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/understand-navigation-system/" rel="prev" title="UE4中的NavigationSystem理解">
+      <i class="fa fa-chevron-left"></i> UE4中的NavigationSystem理解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <div class="category-all-page">
-            <div class="category-all-title">
-              目前共计 16 个分类
-            </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C#</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C++</a><span class="category-list-count">12</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/C/C/">C</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/C-编程思想/">C++编程思想</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Effective-C/">Effective C++</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/OpenGL/">OpenGL</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Rendering/">Rendering</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Unity/">Unity</a><span class="category-list-count">18</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Unity/CSharp/">CSharp</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/UnrealEngine4/">UnrealEngine4</a><span class="category-list-count">47</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/UnrealEngine5/">UnrealEngine5</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/VR/">VR</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Web/">Web</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/备忘/">备忘</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">5</span></li></ul>
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -277,6 +333,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
