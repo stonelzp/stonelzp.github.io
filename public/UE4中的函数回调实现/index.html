@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Yusei Magic:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-05-05T15:10:05.492Z">
+<meta property="og:updated_time" content="2022-05-29T07:49:10.374Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的函数回调实现">
 <meta name="twitter:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-05-06 00:10:05" itemprop="dateModified" datetime="2022-05-06T00:10:05+09:00">2022-05-06</time>
+                <time title="修改时间：2022-05-29 16:49:10" itemprop="dateModified" datetime="2022-05-29T16:49:10+09:00">2022-05-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -686,6 +686,13 @@
 <p>Accessors for events should follow an OnXXX pattern instead of the usual GetXXX pattern.</p>
 </blockquote>
 <p>我一直觉得把代理的变量直接放在Public或者Protected有一些抵触，刚好以后就参考这种写法了。</p>
+<p>下面是我在UE5的源码中找到的一个Event类型实现，很适合作为平常的使用参考。</p>
+<p>代理声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/** Called when the tab manager is changed */</span><br><span class="line">DECLARE_EVENT(FLevelEditorModule, FTabManagerChangedEvent);</span><br><span class="line">virtual FTabManagerChangedEvent&amp; OnTabManagerChanged() &#123; return TabManagerChangedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>代理变量声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/** Multicast delegate executed when the tab manager is changed */</span><br><span class="line">FTabManagerChangedEvent TabManagerChangedEvent;</span><br></pre></td></tr></table></figure></p>
+<p>代理使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private:</span><br><span class="line">	FDelegateHandle OnTabManagerChangedSubscription;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// We need to register a tab spawner now so that old tabs that were open when we closed the editor can be reopened</span><br><span class="line">// correctly displaying the &quot;Variant Manager&quot; title</span><br><span class="line">// Sadly this code runs after the LevelEditorModule is loaded, but before it has created its TabManager. We need to</span><br><span class="line">// subscribe to this event then, so that as soon as its created we&apos;ll register this spawner</span><br><span class="line">OnTabManagerChangedSubscription = LevelEditorModule.OnTabManagerChanged().AddLambda([ &amp;LevelEditorModule ]()</span><br><span class="line">&#123;</span><br><span class="line">  RegisterTabSpawner( LevelEditorModule.GetLevelEditorTabManager() );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FLevelEditorModule&amp; LevelEditorModule = FModuleManager::LoadModuleChecked&lt;FLevelEditorModule&gt;(TEXT(&quot;LevelEditor&quot;));</span><br><span class="line">LevelEditorModule.OnTabManagerChanged().Remove(OnTabManagerChangedSubscription);</span><br></pre></td></tr></table></figure>
+<p>从声明使用到废弃，应该很全面了。</p>
 <h4 id="抽象Events代理"><a href="#抽象Events代理" class="headerlink" title="抽象Events代理"></a>抽象Events代理</h4><p>关于这个<strong>Inherited Abstract Event</strong>也是官方文档的内容</p>
 <p><strong>Base Class Implementation:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/** Register/Unregister a callback for when assets are added to the registry */</span><br><span class="line">DECLARE_EVENT_OneParam( IAssetRegistry, FAssetAddedEvent, const FAssetData&amp;);</span><br><span class="line">virtual FAseetAddedEvent&amp; OnAssetAdded() = 0;</span><br></pre></td></tr></table></figure></p>
 <p><strong>Derived Class Implementation:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DECLARE_DERIVED_EVENT( FAssetRegistry, IAssetRegistry::FAssetAddedEvent, FAssetAddedEvent);</span><br><span class="line">virtual FAssetAddedEvent&amp; OnAssetAdded() override &#123; return AssetAddedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
@@ -798,7 +805,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">112</span>
+          <span class="site-state-item-count">113</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

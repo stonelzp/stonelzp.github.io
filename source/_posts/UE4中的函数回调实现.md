@@ -455,6 +455,10 @@ UE4/UE5：`Engine\Source\Runtime\Core\Public\Delegates\DelegateSignatureImpl.inl
 ## Delegate的Sample实现
 未必避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。
 
+
+
+
+
 ### Events代理的sample
 这一段是来自官网上的
 ```
@@ -474,6 +478,40 @@ FChangedEvent ChangedEvent;
 > Accessors for events should follow an OnXXX pattern instead of the usual GetXXX pattern.
 
 我一直觉得把代理的变量直接放在Public或者Protected有一些抵触，刚好以后就参考这种写法了。
+
+下面是我在UE5的源码中找到的一个Event类型实现，很适合作为平常的使用参考。
+
+代理声明：
+```
+/** Called when the tab manager is changed */
+DECLARE_EVENT(FLevelEditorModule, FTabManagerChangedEvent);
+virtual FTabManagerChangedEvent& OnTabManagerChanged() { return TabManagerChangedEvent; }
+```
+代理变量声明：
+```
+/** Multicast delegate executed when the tab manager is changed */
+FTabManagerChangedEvent TabManagerChangedEvent;
+```
+代理使用：
+```
+private:
+	FDelegateHandle OnTabManagerChangedSubscription;
+```
+```
+// We need to register a tab spawner now so that old tabs that were open when we closed the editor can be reopened
+// correctly displaying the "Variant Manager" title
+// Sadly this code runs after the LevelEditorModule is loaded, but before it has created its TabManager. We need to
+// subscribe to this event then, so that as soon as its created we'll register this spawner
+OnTabManagerChangedSubscription = LevelEditorModule.OnTabManagerChanged().AddLambda([ &LevelEditorModule ]()
+{
+  RegisterTabSpawner( LevelEditorModule.GetLevelEditorTabManager() );
+});
+```
+```
+FLevelEditorModule& LevelEditorModule = FModuleManager::LoadModuleChecked<FLevelEditorModule>(TEXT("LevelEditor"));
+LevelEditorModule.OnTabManagerChanged().Remove(OnTabManagerChangedSubscription);
+```
+从声明使用到废弃，应该很全面了。
 
 #### 抽象Events代理
 关于这个**Inherited Abstract Event**也是官方文档的内容

@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE5-代码规范</title>
+    <url>/ue5-codeing-style/</url>
+    <content><![CDATA[<p>这篇文章用来记录一下UnrealEngine中的代码规范。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><ul>
+<li><a href="https://github.com/Allar/ue5-style-guide" target="_blank" rel="noopener">UE4 Style Guide - A mostly reasonable approach to Unreal Engine 4</a></li>
+</ul>
+<p>插件：</p>
+<ul>
+<li><a href="https://www.unrealengine.com/marketplace/en-US/product/linter-v2?lang=en-US" target="_blank" rel="noopener">Linter v2</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine5</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>UE5</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE4中的NavigationSystem理解</title>
     <url>/understand-navigation-system/</url>
     <content><![CDATA[<p>本篇主要是用来记录NavigationSystem相关的内容。<br><a id="more"></a></p>
@@ -1631,8 +1651,43 @@
 <ul>
 <li><a href="https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/StatCommands/" target="_blank" rel="noopener">Stat Commands - Console commands specific to displaying game statistics.</a></li>
 </ul>
+<h1 id="关于CheatManager"><a href="#关于CheatManager" class="headerlink" title="关于CheatManager"></a>关于CheatManager</h1><p>没有什么特殊的要求的话，UE提供的CheatManager是提供项目的Debug功能的绝佳的放置地点。</p>
+<p>先来了解这个功能:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Object that manages &quot;cheat&quot; commands.</span><br><span class="line"> *</span><br><span class="line"> * By default:</span><br><span class="line"> *   - Debug and Development builds will force it to be instantiated (@see APlayerController::EnableCheats).</span><br><span class="line"> *   - Test and Shipping builds will only instantiate it if the authoritative game mode allows cheats (@see AGameModeBase::AllowCheats).</span><br><span class="line"> *</span><br><span class="line"> * This behavior can be changed either by overriding APlayerController::EnableCheats or AGameModeBase::AllowCheats.</span><br><span class="line"> */</span><br><span class="line">UPROPERTY(Transient, BlueprintReadOnly, Category=&quot;Cheat Manager&quot;)</span><br><span class="line">UCheatManager* CheatManager;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码来自于<code>APlayerController</code>中的内容。</p>
+<p>根据注释的内容我们看一下<code>EnableCheats</code>的内容：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public:</span><br><span class="line">	/** Enables cheats within the game */</span><br><span class="line">	UFUNCTION(exec)</span><br><span class="line">	virtual void EnableCheats();</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void APlayerController::EnableCheats()</span><br><span class="line">&#123;</span><br><span class="line">#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)</span><br><span class="line">	AddCheats(true);</span><br><span class="line">#else</span><br><span class="line">	AddCheats();</span><br><span class="line">#endif</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/...</span><br><span class="line"></span><br><span class="line">void APlayerController::AddCheats(bool bForce)</span><br><span class="line">&#123;</span><br><span class="line">	UWorld* World = GetWorld();</span><br><span class="line">	check(World);</span><br><span class="line"></span><br><span class="line">	// Abort if cheat manager exists or there is no cheat class</span><br><span class="line">	if (CheatManager || !CheatClass)</span><br><span class="line">	&#123;</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// Spawn if game mode says we are allowed, or if bForce</span><br><span class="line">	if ( (World-&gt;GetAuthGameMode() &amp;&amp; World-&gt;GetAuthGameMode()-&gt;AllowCheats(this)) || bForce)</span><br><span class="line">	&#123;</span><br><span class="line">		CheatManager = NewObject&lt;UCheatManager&gt;(this, CheatClass);</span><br><span class="line">		CheatManager-&gt;InitCheatManager();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Debug和Development下CheatManager是强制开启的，在Test和Shipping下只能在Server端开启(<code>GetNetMode() == NM_Standalone</code>)。</p>
+<p>参考资料</p>
+<ul>
+<li><a href="https://unrealengine.hatenablog.com/entry/2020/09/26/190000" target="_blank" rel="noopener">UE4 Cheat Managerを活用しよう</a></li>
+</ul>
+<h2 id="添加ConsoleCommand"><a href="#添加ConsoleCommand" class="headerlink" title="添加ConsoleCommand"></a>添加ConsoleCommand</h2><p>声明方式很简单，但是需要在特定的类（继承的类）中才可以。</p>
+<ul>
+<li>Possessed Pawns</li>
+<li>Player Controllers</li>
+<li>Player Input</li>
+<li>Cheat Managers</li>
+<li>Game Modes</li>
+<li>Game Instances</li>
+<li>继承上面类的子类</li>
+<li>Huds(?不确定)</li>
+</ul>
+<blockquote>
+<p>Only some classes support Exec functions out of the box. Possessed Pawns, Player Controllers, Player Input, Cheat Managers, Game Modes, Game Instances, overriden Game Engine classes, and Huds should all work by just adding the standard UFUNCTION markup. Exec functions tend to cascade down to these classes through the player controller (Pawn/Player Controllers/Cheat Manager/etc.) or the game viewport (game instance/game mode/etc).</p>
+</blockquote>
+<p>声明方式：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UFUNCTION(Exec)</span><br><span class="line">void Hoge();</span><br></pre></td></tr></table></figure></p>
+<p>带参数的声明<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UFUNCTION(Exec)</span><br><span class="line">void HogeHoge(int32 arg1, FString arg2);</span><br></pre></td></tr></table></figure></p>
+<p>使用的时候用空格隔开参数。</p>
+<p>除了上述列出来的类之外，在别的位置也可以实现这种便利的命令功能吗？<br>答案是可以的，实际上继承<code>UObject</code>的类都可以。要点就在于<code>ProcessConsoleExec()</code>这个函数上。<br>但是怎么说呢，确实按照参考文章的内容把命令的具体执行内容集中放到一个管理类中会有些冗余难懂，但基本上足够用了。</p>
+<p>未来的话，也许根据各种管理类拆分各种Cheat命令也是可行的，但是前提是确实是有那么多需要这么做的命令。<br>至于Override这个函数的要点，直接参考CheatManager的实现就能得到答案。<br>感兴趣的话可以展开看一下。</p>
+<details><summary><mark>CheatManager的override实现</mark></summary><br><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bool UCheatManager::ProcessConsoleExec(const TCHAR* Cmd, FOutputDevice&amp; Ar, UObject* Executor)</span><br><span class="line">&#123;</span><br><span class="line">#if UE_WITH_CHEAT_MANAGER</span><br><span class="line">	// If on the client and calling a cheat function marked as BlueprintAuthorityOnly, automatically route it through the ServerExec() RPC to the server</span><br><span class="line">	APlayerController* MyPC = GetOuterAPlayerController();</span><br><span class="line">	if (MyPC-&gt;GetLocalRole() != ROLE_Authority)</span><br><span class="line">	&#123;</span><br><span class="line">		const TCHAR* TestCmd = Cmd;</span><br><span class="line"></span><br><span class="line">		FString FunctionNameStr;</span><br><span class="line">		if (FParse::Token(TestCmd, FunctionNameStr, true))</span><br><span class="line">		&#123;</span><br><span class="line">			const FName FunctionName = FName(*FunctionNameStr, FNAME_Find);</span><br><span class="line"></span><br><span class="line">			if (FunctionName != NAME_None)</span><br><span class="line">			&#123;</span><br><span class="line">				// Check first in this class</span><br><span class="line">				UFunction* Function = FindFunction(FunctionName);</span><br><span class="line"></span><br><span class="line">				// Failing that, check in each of the child cheat managers for a function by this name</span><br><span class="line">				if (Function == nullptr)</span><br><span class="line">				&#123;</span><br><span class="line">					for (UObject* CheatObject : CheatManagerExtensions)</span><br><span class="line">					&#123;</span><br><span class="line">						Function = CheatObject ? CheatObject-&gt;FindFunction(FunctionName) : nullptr;</span><br><span class="line">						if (Function != nullptr)</span><br><span class="line">						&#123;</span><br><span class="line">							break;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">				if ((Function != nullptr) &amp;&amp; Function-&gt;HasAnyFunctionFlags(FUNC_BlueprintAuthorityOnly))</span><br><span class="line">				&#123;</span><br><span class="line">					MyPC-&gt;ServerExec(Cmd);</span><br><span class="line">					return true;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">	for (UObject* CheatObject : CheatManagerExtensions)</span><br><span class="line">	&#123;</span><br><span class="line">		if ((CheatObject != nullptr) &amp;&amp; CheatObject-&gt;ProcessConsoleExec(Cmd, Ar, Executor))</span><br><span class="line">		&#123;</span><br><span class="line">			return true;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return Super::ProcessConsoleExec(Cmd, Ar, Executor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><br></details>
+
+<p>参考资料：</p>
+<ul>
+<li><a href="https://web.archive.org/web/20191020173554/https://wiki.unrealengine.com/Exec_Functions" target="_blank" rel="noopener">Exec Functions</a></li>
+</ul>
 <h1 id="一些优化的小技巧"><a href="#一些优化的小技巧" class="headerlink" title="一些优化的小技巧"></a>一些优化的小技巧</h1><p>在对UE4的逐渐学习理解过程中，会遇见一些常见的优化小技巧。</p>
-<h2 id="Uin8变量的使用"><a href="#Uin8变量的使用" class="headerlink" title="Uin8变量的使用"></a>Uin8变量的使用</h2><p>在UE4的源码中经常会见到一些看起来比较违和的变量声明：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">uint8 bCanBeDamaged : <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Uint8变量的使用"><a href="#Uint8变量的使用" class="headerlink" title="Uint8变量的使用"></a>Uint8变量的使用</h2><p>在UE4的源码中经常会见到一些看起来比较违和的变量声明：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">uint8 bCanBeDamaged : <span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
 <p>之前我什么都不懂，以为只是一种布尔型变量的初始化，上面的就是初始化为true的意思，实际上就是我真的什么都不懂。</p>
 <p>按照别人的解答，这样的写法，首先是UE4默认的布尔类型变量的声明是以小写字母<code>b</code>开始的，而数字<code>1</code>的含义则是只使用1bit位。这是节省内存的表现，相比于布尔类型的数据。这是它们的唯一的不同。</p>
 <p>为了方便理解原文，贴上原答案：</p>
@@ -4540,6 +4595,22 @@ table th:nth-of-type(4) {
 <li><a href="https://qiita.com/yukitaka13-1110/items/935bfa233c6e024f82dc" target="_blank" rel="noopener">[Git] ファイル単位でstashする</a></li>
 </ul>
 <p>这里再稍微罗嗦一下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// Stash当前所有的修改</span><br><span class="line">git stash</span><br><span class="line"></span><br><span class="line">// 查看stash列表</span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line">// 应该是选择最上面的那样stash进行复原（我没有试过，需要验证的）</span><br><span class="line">git stash pop</span><br></pre></td></tr></table></figure></p>
+<h3 id="Git-clean"><a href="#Git-clean" class="headerlink" title="Git clean"></a>Git clean</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clean [-d] [-f] [-i] [-n] [-q] [-e &lt;pattern&gt;] [-x | -X] [--] &lt;path&gt;…​</span><br></pre></td></tr></table></figure>
+<p>各个参数的含义：</p>
+<ul>
+<li><code>-d</code> : 版本管理外的文件包含文件夹都会以递归的方式</li>
+<li><code>-f</code> : <code>--force</code>，没有这个参数的话，文件以及文件夹不会被删除。</li>
+<li><code>-x</code> : 版本管理外的文件包含文件夹都会被删除</li>
+<li><code>-n</code> : <code>--dry-run</code>,输出删除对象，但不会真正的删除文件</li>
+<li><code>-i</code> : <code>--interactive</code>,可以一个一个确认删除文件</li>
+<li><code>-q</code> : 安静的删除文件，不会输出删除日志，除非出错误日志</li>
+<li><code>-X</code> : 手动添加的文件可以不会被删？（没有用过）</li>
+</ul>
+<p>一般的情况下我都是使用<code>git clean -df</code>或者<code>git clean -xdf</code>。</p>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://www-creators.com/git-command/git-clean" target="_blank" rel="noopener">git clean</a></li>
+</ul>
 <h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
 <p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
 <p>文件路径奇葩带空格又不是我的错，我只是导入一个插件而已。至于解决方案，那就是使用命令行工具来提交啊。关键时候还得是Bash。</p>
@@ -5290,16 +5361,90 @@ table th:nth-of-type(4) {
     <content><![CDATA[<p>自从发现自己写的东西被人原封不动的复制粘贴扔到了CSDN之后，曾经一度想要废了这个博客，写博客对我来说就是一个记笔记的过程，记录自己工作中遇到的问题和解决过程，顺便写写自己的心得什么的，就是很随意。未想着给别人看，但是要是写的某一个地方帮上了某个地方的某个人也是好事情，哪怕不知道有没有，但也是一种安慰了。所以博客自建成起，就根本没设置什么自欺欺人的评论功能点赞功能。也没想着会有。</p>
 <p>但是整篇文章直接贴走，连个转载链接都不留是不是就有些过分了，生气不可避免了但是也只是只能无能狂怒了。去CSDN注册个账户举报？说到底对于我去CSDN注册账户这件事情都很抵触。算了，就算了吧。</p>
 <a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>[:contents]</p>
 <h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><ul>
 <li>2020/11/20 : 对新建文章的模板进行了修改</li>
 <li>2021/02/19 : 把博客的配置及源文件上传到了Github仓库分支方便多台PC整理博客</li>
 <li>2021/03/21 : 对新电脑上的博客重新配置遇到了好多问题</li>
+<li>2022/05/29 : 更改博客字体</li>
 </ul>
 <h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><p>果然UE4中的有些代码不会给你高亮，看起来就很不舒服，有时间填一下坑。</p>
 <h2 id="格式书写备忘"><a href="#格式书写备忘" class="headerlink" title="格式书写备忘"></a>格式书写备忘</h2><p>记不住全部的书写方式啊，主要还是记录的频率太低，经常会忘掉，把可能经常会用到的一些格式记录在这里。</p>
-<h3 id="文字添加颜色"><a href="#文字添加颜色" class="headerlink" title="文字添加颜色"></a>文字添加颜色</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;span style=&quot;color: red&quot;&gt;这里是想要变色的文字&lt;/span&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="添加Table"><a href="#添加Table" class="headerlink" title="添加Table"></a>添加Table</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">| Row1 | Row2 | Row3 |</span><br><span class="line">| ---- | ---- | ---- |</span><br><span class="line">| Str1 | Str2 | Str3 |</span><br><span class="line">| Str4 | Str5 | Str6 |</span><br></pre></td></tr></table></figure>
-<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
+<h3 id="文字添加颜色"><a href="#文字添加颜色" class="headerlink" title="文字添加颜色"></a>文字添加颜色</h3><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;span style=&quot;color: red&quot;&gt;这里是想要变色的文字&lt;/span&gt;</span><br></pre></td></tr></table></figure></p>
+<p>效果：<br><span style="color: red">这里是想要变色的文字</span></p>
+<h3 id="内容折叠"><a href="#内容折叠" class="headerlink" title="内容折叠"></a>内容折叠</h3><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;details&gt;&lt;summary&gt;缩略内容&lt;/summary&gt;</span><br><span class="line"></span><br><span class="line">(上面空一行)这里是想要展开的实际内容。</span><br><span class="line">&lt;/details&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 这里的mark默认的颜色是黄色，我查了一下修改这个颜色要修改css文件，我不会，所以放弃</span><br><span class="line">&lt;details&gt;&lt;summary&gt;&lt;mark&gt;缩略内容&lt;/mark&gt;&lt;/summary&gt;</span><br><span class="line"></span><br><span class="line">(上面空一行)这里是想要展开的实际内容。带mark</span><br><span class="line">&lt;/details&gt;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<details><summary>缩略内容</summary><br><br>这里是想要展开的实际内容。<br></details><br><details><summary><mark>缩略内容</mark></summary><br><br>这里是想要展开的实际内容。带mark<br></details>
+
+<h3 id="添加Table"><a href="#添加Table" class="headerlink" title="添加Table"></a>添加Table</h3><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">| Row1 | Row2 | Row3 |</span><br><span class="line">| ---- | ---- | ---- |</span><br><span class="line">| Str1 | Str2 | Str3 |</span><br><span class="line">| Str4 | Str5 | Str6 |</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">| Left align | Right align | Center align |</span><br><span class="line">|:-----------|------------:|:------------:|</span><br><span class="line">| This       | This        | This         |</span><br><span class="line">| column     | column      | column       |</span><br><span class="line">| will       | will        | will         |</span><br><span class="line">| be         | be          | be           |</span><br><span class="line">| left       | right       | center       |</span><br><span class="line">| aligned    | aligned     | aligned      |</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>Row1</th>
+<th>Row2</th>
+<th>Row3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Str1</td>
+<td>Str2</td>
+<td>Str3</td>
+</tr>
+<tr>
+<td>Str4</td>
+<td>Str5</td>
+<td>Str6</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Left align</th>
+<th style="text-align:right">Right align</th>
+<th style="text-align:center">Center align</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">This</td>
+<td style="text-align:right">This</td>
+<td style="text-align:center">This</td>
+</tr>
+<tr>
+<td style="text-align:left">column</td>
+<td style="text-align:right">column</td>
+<td style="text-align:center">column</td>
+</tr>
+<tr>
+<td style="text-align:left">will</td>
+<td style="text-align:right">will</td>
+<td style="text-align:center">will</td>
+</tr>
+<tr>
+<td style="text-align:left">be</td>
+<td style="text-align:right">be</td>
+<td style="text-align:center">be</td>
+</tr>
+<tr>
+<td style="text-align:left">left</td>
+<td style="text-align:right">right</td>
+<td style="text-align:center">center</td>
+</tr>
+<tr>
+<td style="text-align:left">aligned</td>
+<td style="text-align:right">aligned</td>
+<td style="text-align:center">aligned</td>
+</tr>
+</tbody>
+</table>
+<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">![替代文字](图片链接 &quot;图片标题&quot;)</span><br><span class="line"></span><br><span class="line">![替代文字](图片链接)</span><br></pre></td></tr></table></figure></p>
+<h2 id="网址链接"><a href="#网址链接" class="headerlink" title="网址链接"></a>网址链接</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 会打开新的Tab页面（比较推荐）</span><br><span class="line">&lt;a href=&quot;目标网址&quot; target=&quot;_blank&quot;&gt;表示文字&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">[表示文字](目标网址)</span><br></pre></td></tr></table></figure></p>
+<h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
 <p>因为用起来麻烦就忘了。</p>
 <p>执行</p>
 <p><code>hexo g &amp;&amp; gulp</code></p>
@@ -5319,7 +5464,7 @@ table th:nth-of-type(4) {
 <p>前提是自己的部署Deploy文件会默认将部署推送到远程的<strong>master</strong>的分支上。</p>
 <p>然后就是这个过程中遇到的大坑。首先是Window上需要运行Hexo的环境构建，Hexo的运行需要NodeJs，但是过高的版本Hexo并不支持。我自己选的版本是nodejs.v12.14版本。太新的版本没有办法将本地生成的网页部署到（推送）远程。安装完后基本上用到的命令就是<code>npm install</code>安装所有的node_module(注意要在博客的根目录，也就是这个文件夹所在的目录),<code>npm install hexo-cli -g</code>（Hexo不好用的时候重新安装Hexo）。</p>
 <p>其次是主题的版本，我用的next的主题但是又不能随便找一个网上的主题，只好沿用自己之前的主题，把之前的电脑的主题文件整个文件夹压缩转移到了新电脑，然后运行<code>hexo clean</code>重新配置生成网页，才解决了网页里出现了不知道是哪国语言的尴尬问题。</p>
-<hr>
+<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><hr>
 <ul>
 <li>2021/05/05 前来更新</li>
 </ul>
@@ -5347,6 +5492,18 @@ table th:nth-of-type(4) {
 </ol>
 <p>第一个直接搜命令使用npm安装就好。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure></p>
 <p>第二个去主题的配置文件找到<strong>local_search</strong>条目<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Local search</span><br><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure></p>
+<hr>
+<ul>
+<li>2022/05/29 更新</li>
+</ul>
+<p>平常看博文感觉自己的文字有些太大了，就想试着尝试修改一下字体的设置，顺便改了字体的格式。</p>
+<p>直接去Next的主题的<code>_config.yml</code>下开启:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">font:</span><br><span class="line">  enable: true</span><br><span class="line"></span><br><span class="line">  # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).</span><br><span class="line">  host:</span><br><span class="line"></span><br><span class="line">  # Font options:</span><br><span class="line">  # `external: true` will load this font family from `host` above.</span><br><span class="line">  # `family: Times New Roman`. Without any quotes.</span><br><span class="line">  # `size: x.x`. Use `em` as unit. Default: 1 (16px)</span><br><span class="line"></span><br><span class="line">  # Global font settings used for all elements inside &lt;body&gt;.</span><br><span class="line">  global:</span><br><span class="line">    external: true</span><br><span class="line">    family: Yusei Magic</span><br><span class="line">    size: 14px</span><br></pre></td></tr></table></figure></p>
+<p>修改结束后，使用<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</code>命令重新生成项目，顺便本地检查一下。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://leay.net/2020/02/14/hexo-next-font/" target="_blank" rel="noopener">Hexo Next 主题字体相关配置</a></li>
+<li><a href="https://github.com/theme-next/hexo-theme-next/issues/629" target="_blank" rel="noopener">Unable to change font-size-base and/or font.global.size</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>备忘</category>
@@ -9020,6 +9177,13 @@ table th:nth-of-type(4) {
 <p>Accessors for events should follow an OnXXX pattern instead of the usual GetXXX pattern.</p>
 </blockquote>
 <p>我一直觉得把代理的变量直接放在Public或者Protected有一些抵触，刚好以后就参考这种写法了。</p>
+<p>下面是我在UE5的源码中找到的一个Event类型实现，很适合作为平常的使用参考。</p>
+<p>代理声明：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/** Called when the tab manager is changed */</span><br><span class="line">DECLARE_EVENT(FLevelEditorModule, FTabManagerChangedEvent);</span><br><span class="line">virtual FTabManagerChangedEvent&amp; OnTabManagerChanged() &#123; return TabManagerChangedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>代理变量声明：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/** Multicast delegate executed when the tab manager is changed */</span><br><span class="line">FTabManagerChangedEvent TabManagerChangedEvent;</span><br></pre></td></tr></table></figure></p>
+<p>代理使用：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private:</span><br><span class="line">	FDelegateHandle OnTabManagerChangedSubscription;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// We need to register a tab spawner now so that old tabs that were open when we closed the editor can be reopened</span><br><span class="line">// correctly displaying the &quot;Variant Manager&quot; title</span><br><span class="line">// Sadly this code runs after the LevelEditorModule is loaded, but before it has created its TabManager. We need to</span><br><span class="line">// subscribe to this event then, so that as soon as its created we&apos;ll register this spawner</span><br><span class="line">OnTabManagerChangedSubscription = LevelEditorModule.OnTabManagerChanged().AddLambda([ &amp;LevelEditorModule ]()</span><br><span class="line">&#123;</span><br><span class="line">  RegisterTabSpawner( LevelEditorModule.GetLevelEditorTabManager() );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FLevelEditorModule&amp; LevelEditorModule = FModuleManager::LoadModuleChecked&lt;FLevelEditorModule&gt;(TEXT(&quot;LevelEditor&quot;));</span><br><span class="line">LevelEditorModule.OnTabManagerChanged().Remove(OnTabManagerChangedSubscription);</span><br></pre></td></tr></table></figure>
+<p>从声明使用到废弃，应该很全面了。</p>
 <h4 id="抽象Events代理"><a href="#抽象Events代理" class="headerlink" title="抽象Events代理"></a>抽象Events代理</h4><p>关于这个<strong>Inherited Abstract Event</strong>也是官方文档的内容</p>
 <p><strong>Base Class Implementation:</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/** Register/Unregister a callback for when assets are added to the registry */</span><br><span class="line">DECLARE_EVENT_OneParam( IAssetRegistry, FAssetAddedEvent, const FAssetData&amp;);</span><br><span class="line">virtual FAseetAddedEvent&amp; OnAssetAdded() = 0;</span><br></pre></td></tr></table></figure></p>
 <p><strong>Derived Class Implementation:</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DECLARE_DERIVED_EVENT( FAssetRegistry, IAssetRegistry::FAssetAddedEvent, FAssetAddedEvent);</span><br><span class="line">virtual FAssetAddedEvent&amp; OnAssetAdded() override &#123; return AssetAddedEvent; &#125;</span><br></pre></td></tr></table></figure></p>

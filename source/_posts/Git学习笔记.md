@@ -197,6 +197,23 @@ git stash list
 git stash pop
 ```
 
+### Git clean
+```
+git clean [-d] [-f] [-i] [-n] [-q] [-e <pattern>] [-x | -X] [--] <path>…​
+```
+各个参数的含义：
+- `-d` : 版本管理外的文件包含文件夹都会以递归的方式
+- `-f` : `--force`，没有这个参数的话，文件以及文件夹不会被删除。
+- `-x` : 版本管理外的文件包含文件夹都会被删除
+- `-n` : `--dry-run`,输出删除对象，但不会真正的删除文件
+- `-i` : `--interactive`,可以一个一个确认删除文件
+- `-q` : 安静的删除文件，不会输出删除日志，除非出错误日志
+- `-X` : 手动添加的文件可以不会被删？（没有用过）
+
+一般的情况下我都是使用`git clean -df`或者`git clean -xdf`。
+
+参考资料:
+- [git clean](https://www-creators.com/git-command/git-clean)
 
 ## SourceTree
 最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。

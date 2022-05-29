@@ -568,11 +568,169 @@ DECLARE_STATS_GROUP_VERBOSE(TEXT("Linker Load"), STATGROUP_LinkerLoad, STATCAT_A
 官方文档：
 - [Stat Commands - Console commands specific to displaying game statistics.](https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/StatCommands/)
 
+# 关于CheatManager
+没有什么特殊的要求的话，UE提供的CheatManager是提供项目的Debug功能的绝佳的放置地点。
+
+先来了解这个功能:
+```
+/**
+ * Object that manages "cheat" commands.
+ *
+ * By default:
+ *   - Debug and Development builds will force it to be instantiated (@see APlayerController::EnableCheats).
+ *   - Test and Shipping builds will only instantiate it if the authoritative game mode allows cheats (@see AGameModeBase::AllowCheats).
+ *
+ * This behavior can be changed either by overriding APlayerController::EnableCheats or AGameModeBase::AllowCheats.
+ */
+UPROPERTY(Transient, BlueprintReadOnly, Category="Cheat Manager")
+UCheatManager* CheatManager;
+```
+这段代码来自于`APlayerController`中的内容。
+
+根据注释的内容我们看一下`EnableCheats`的内容：
+```
+public:
+	/** Enables cheats within the game */
+	UFUNCTION(exec)
+	virtual void EnableCheats();
+```
+```
+void APlayerController::EnableCheats()
+{
+#if !(UE_BUILD_SHIPPING || UE_BUILD_TEST)
+	AddCheats(true);
+#else
+	AddCheats();
+#endif
+}
+
+/...
+
+void APlayerController::AddCheats(bool bForce)
+{
+	UWorld* World = GetWorld();
+	check(World);
+
+	// Abort if cheat manager exists or there is no cheat class
+	if (CheatManager || !CheatClass)
+	{
+		return;
+	}
+
+	// Spawn if game mode says we are allowed, or if bForce
+	if ( (World->GetAuthGameMode() && World->GetAuthGameMode()->AllowCheats(this)) || bForce)
+	{
+		CheatManager = NewObject<UCheatManager>(this, CheatClass);
+		CheatManager->InitCheatManager();
+	}
+}
+```
+
+
+在Debug和Development下CheatManager是强制开启的，在Test和Shipping下只能在Server端开启(`GetNetMode() == NM_Standalone`)。
+
+参考资料
+- [UE4 Cheat Managerを活用しよう](https://unrealengine.hatenablog.com/entry/2020/09/26/190000)
+
+## 添加ConsoleCommand
+声明方式很简单，但是需要在特定的类（继承的类）中才可以。
+- Possessed Pawns
+- Player Controllers
+- Player Input
+- Cheat Managers
+- Game Modes
+- Game Instances
+- 继承上面类的子类
+- Huds(?不确定)
+
+> Only some classes support Exec functions out of the box. Possessed Pawns, Player Controllers, Player Input, Cheat Managers, Game Modes, Game Instances, overriden Game Engine classes, and Huds should all work by just adding the standard UFUNCTION markup. Exec functions tend to cascade down to these classes through the player controller (Pawn/Player Controllers/Cheat Manager/etc.) or the game viewport (game instance/game mode/etc).
+
+声明方式：
+```
+UFUNCTION(Exec)
+void Hoge();
+```
+带参数的声明
+```
+UFUNCTION(Exec)
+void HogeHoge(int32 arg1, FString arg2);
+```
+使用的时候用空格隔开参数。
+
+除了上述列出来的类之外，在别的位置也可以实现这种便利的命令功能吗？
+答案是可以的，实际上继承`UObject`的类都可以。要点就在于`ProcessConsoleExec()`这个函数上。
+但是怎么说呢，确实按照参考文章的内容把命令的具体执行内容集中放到一个管理类中会有些冗余难懂，但基本上足够用了。
+
+未来的话，也许根据各种管理类拆分各种Cheat命令也是可行的，但是前提是确实是有那么多需要这么做的命令。
+至于Override这个函数的要点，直接参考CheatManager的实现就能得到答案。
+感兴趣的话可以展开看一下。
+
+<details><summary><mark>CheatManager的override实现</mark></summary>
+
+```
+bool UCheatManager::ProcessConsoleExec(const TCHAR* Cmd, FOutputDevice& Ar, UObject* Executor)
+{
+#if UE_WITH_CHEAT_MANAGER
+	// If on the client and calling a cheat function marked as BlueprintAuthorityOnly, automatically route it through the ServerExec() RPC to the server
+	APlayerController* MyPC = GetOuterAPlayerController();
+	if (MyPC->GetLocalRole() != ROLE_Authority)
+	{
+		const TCHAR* TestCmd = Cmd;
+
+		FString FunctionNameStr;
+		if (FParse::Token(TestCmd, FunctionNameStr, true))
+		{
+			const FName FunctionName = FName(*FunctionNameStr, FNAME_Find);
+
+			if (FunctionName != NAME_None)
+			{
+				// Check first in this class
+				UFunction* Function = FindFunction(FunctionName);
+
+				// Failing that, check in each of the child cheat managers for a function by this name
+				if (Function == nullptr)
+				{
+					for (UObject* CheatObject : CheatManagerExtensions)
+					{
+						Function = CheatObject ? CheatObject->FindFunction(FunctionName) : nullptr;
+						if (Function != nullptr)
+						{
+							break;
+						}
+					}
+				}
+
+				if ((Function != nullptr) && Function->HasAnyFunctionFlags(FUNC_BlueprintAuthorityOnly))
+				{
+					MyPC->ServerExec(Cmd);
+					return true;
+				}
+			}
+		}
+	}
+#endif
+
+	for (UObject* CheatObject : CheatManagerExtensions)
+	{
+		if ((CheatObject != nullptr) && CheatObject->ProcessConsoleExec(Cmd, Ar, Executor))
+		{
+			return true;
+		}
+	}
+
+	return Super::ProcessConsoleExec(Cmd, Ar, Executor);
+}
+```
+</details>
+
+参考资料：
+- [Exec Functions](https://web.archive.org/web/20191020173554/https://wiki.unrealengine.com/Exec_Functions)
+
 
 # 一些优化的小技巧
 在对UE4的逐渐学习理解过程中，会遇见一些常见的优化小技巧。
 
-## Uin8变量的使用
+## Uint8变量的使用
 在UE4的源码中经常会见到一些看起来比较违和的变量声明：
 ```c++
 uint8 bCanBeDamaged : 1;

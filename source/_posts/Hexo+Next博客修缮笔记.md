@@ -20,11 +20,14 @@ description: 今后准备认真的做好自己Blog的维护，于是记下一些
 但是整篇文章直接贴走，连个转载链接都不留是不是就有些过分了，生气不可避免了但是也只是只能无能狂怒了。去CSDN注册个账户举报？说到底对于我去CSDN注册账户这件事情都很抵触。算了，就算了吧。
 
 <!--more-->
+# Overview
+[:contents]
 
 # 关于博客内容书写
 - 2020/11/20 : 对新建文章的模板进行了修改
 - 2021/02/19 : 把博客的配置及源文件上传到了Github仓库分支方便多台PC整理博客
 - 2021/03/21 : 对新电脑上的博客重新配置遇到了好多问题
+- 2022/05/29 : 更改博客字体
 
 
 ## 代码部分
@@ -34,23 +37,92 @@ description: 今后准备认真的做好自己Blog的维护，于是记下一些
 记不住全部的书写方式啊，主要还是记录的频率太低，经常会忘掉，把可能经常会用到的一些格式记录在这里。
 
 ### 文字添加颜色
+写法：
 ```
 <span style="color: red">这里是想要变色的文字</span>
 ```
 
+效果：
+<span style="color: red">这里是想要变色的文字</span>
+
+### 内容折叠
+写法：
+```
+<details><summary>缩略内容</summary>
+
+(上面空一行)这里是想要展开的实际内容。
+</details>
+```
+```
+// 这里的mark默认的颜色是黄色，我查了一下修改这个颜色要修改css文件，我不会，所以放弃
+<details><summary><mark>缩略内容</mark></summary>
+
+(上面空一行)这里是想要展开的实际内容。带mark
+</details>
+```
+
+效果：
+<details><summary>缩略内容</summary>
+
+这里是想要展开的实际内容。
+</details>
+<details><summary><mark>缩略内容</mark></summary>
+
+这里是想要展开的实际内容。带mark
+</details>
+
 ### 添加Table
+写法：
 ```
 | Row1 | Row2 | Row3 |
 | ---- | ---- | ---- |
 | Str1 | Str2 | Str3 |
 | Str4 | Str5 | Str6 |
 ```
+```
+| Left align | Right align | Center align |
+|:-----------|------------:|:------------:|
+| This       | This        | This         |
+| column     | column      | column       |
+| will       | will        | will         |
+| be         | be          | be           |
+| left       | right       | center       |
+| aligned    | aligned     | aligned      |
+```
 
+效果：
+
+| Row1 | Row2 | Row3 |
+| ---- | ---- | ---- |
+| Str1 | Str2 | Str3 |
+| Str4 | Str5 | Str6 |
+
+| Left align | Right align | Center align |
+|:-----------|------------:|:------------:|
+| This       | This        | This         |
+| column     | column      | column       |
+| will       | will        | will         |
+| be         | be          | be           |
+| left       | right       | center       |
+| aligned    | aligned     | aligned      |
 
 ## 图片
+写法：
+```
+![替代文字](图片链接 "图片标题")
 
+![替代文字](图片链接)
+```
 
+## 网址链接
+写法：
+```
+// 会打开新的Tab页面（比较推荐）
+<a href="目标网址" target="_blank">表示文字</a>
 
+//
+[表示文字](目标网址)
+```
 
 # 关于博客构建
 
@@ -110,6 +182,8 @@ code {
 
 其次是主题的版本，我用的next的主题但是又不能随便找一个网上的主题，只好沿用自己之前的主题，把之前的电脑的主题文件整个文件夹压缩转移到了新电脑，然后运行`hexo clean`重新配置生成网页，才解决了网页里出现了不知道是哪国语言的尴尬问题。
 
+## 更新记录
+
 ---
 - 2021/05/05 前来更新
 
@@ -152,3 +226,35 @@ $ npm install hexo-generator-search --save
 local_search:
   enable: true
 ```
+
+---
+- 2022/05/29 更新
+
+平常看博文感觉自己的文字有些太大了，就想试着尝试修改一下字体的设置，顺便改了字体的格式。
+
+直接去Next的主题的`_config.yml`下开启:
+```
+font:
+  enable: true
+
+  # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).
+  host:
+
+  # Font options:
+  # `external: true` will load this font family from `host` above.
+  # `family: Times New Roman`. Without any quotes.
+  # `size: x.x`. Use `em` as unit. Default: 1 (16px)
+
+  # Global font settings used for all elements inside <body>.
+  global:
+    external: true
+    family: Yusei Magic
+    size: 14px
+```
+
+修改结束后，使用`hexo clean && hexo g && hexo s`命令重新生成项目，顺便本地检查一下。
+
+
+参考资料：
+- [Hexo Next 主题字体相关配置](https://leay.net/2020/02/14/hexo-next-font/)
+- [Unable to change font-size-base and/or font.global.size](https://github.com/theme-next/hexo-theme-next/issues/629)
