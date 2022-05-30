@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE5-Input输入绑定实现</title>
+    <url>/ue5-input-binding/</url>
+    <content><![CDATA[<p>记录一下关于UnrealEngine输入绑定的学习。<br><a id="more"></a></p>
+<p><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a></p>
+<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
+<!--more-->
+<p>参考链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
+<li><a href="https://answers.unrealengine.com/questions/166084/check-keyboard-events-in-code.html" target="_blank" rel="noopener">Check Keyboard Event in code</a></li>
+<li><a href="sirokuma.cc/?p=567">UE4-学习笔记之二</a><ul>
+<li>这篇文章感觉好厉害</li>
+</ul>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/23321666" target="_blank" rel="noopener">&lt;<insideue4>&gt;GamePlay架构(四)Pawn</insideue4></a><ul>
+<li>知乎文章，可以一看</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine5</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>UE5</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE5-代码规范</title>
     <url>/ue5-codeing-style/</url>
     <content><![CDATA[<p>这篇文章用来记录一下UnrealEngine中的代码规范。<br><a id="more"></a></p>
@@ -8092,33 +8121,6 @@ table th:nth-of-type(4) {
       <tags>
         <tag>UE4</tag>
         <tag>UE4Error</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>为Actor添加Input事件</title>
-    <url>/%E4%B8%BAActor%E6%B7%BB%E5%8A%A0Input%E4%BA%8B%E4%BB%B6/</url>
-    <content><![CDATA[<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
-<a id="more"></a>
-<p>参考链接：</p>
-<ul>
-<li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
-<li><a href="https://answers.unrealengine.com/questions/166084/check-keyboard-events-in-code.html" target="_blank" rel="noopener">Check Keyboard Event in code</a></li>
-<li><a href="sirokuma.cc/?p=567">UE4-学习笔记之二</a><ul>
-<li>这篇文章感觉好厉害</li>
-</ul>
-</li>
-<li><a href="https://zhuanlan.zhihu.com/p/23321666" target="_blank" rel="noopener">&lt;<insideue4>&gt;GamePlay架构(四)Pawn</insideue4></a><ul>
-<li>知乎文章，可以一看</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>UnrealEngine4</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
