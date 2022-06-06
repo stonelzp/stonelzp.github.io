@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE5-Input输入绑定实现</title>
+    <url>/ue5-input-binding/</url>
+    <content><![CDATA[<p>记录一下关于UnrealEngine输入绑定的学习。<br><a id="more"></a></p>
+<p><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a></p>
+<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
+<!--more-->
+<p>参考链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
+<li><a href="https://answers.unrealengine.com/questions/166084/check-keyboard-events-in-code.html" target="_blank" rel="noopener">Check Keyboard Event in code</a></li>
+<li><a href="sirokuma.cc/?p=567">UE4-学习笔记之二</a><ul>
+<li>这篇文章感觉好厉害</li>
+</ul>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/23321666" target="_blank" rel="noopener">&lt;<insideue4>&gt;GamePlay架构(四)Pawn</insideue4></a><ul>
+<li>知乎文章，可以一看</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine5</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+        <tag>UE5</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE5-代码规范</title>
     <url>/ue5-codeing-style/</url>
     <content><![CDATA[<p>这篇文章用来记录一下UnrealEngine中的代码规范。<br><a id="more"></a></p>
@@ -766,8 +795,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -3913,8 +3942,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -4001,8 +4030,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -5464,6 +5493,8 @@ table th:nth-of-type(4) {
 <p>前提是自己的部署Deploy文件会默认将部署推送到远程的<strong>master</strong>的分支上。</p>
 <p>然后就是这个过程中遇到的大坑。首先是Window上需要运行Hexo的环境构建，Hexo的运行需要NodeJs，但是过高的版本Hexo并不支持。我自己选的版本是nodejs.v12.14版本。太新的版本没有办法将本地生成的网页部署到（推送）远程。安装完后基本上用到的命令就是<code>npm install</code>安装所有的node_module(注意要在博客的根目录，也就是这个文件夹所在的目录),<code>npm install hexo-cli -g</code>（Hexo不好用的时候重新安装Hexo）。</p>
 <p>其次是主题的版本，我用的next的主题但是又不能随便找一个网上的主题，只好沿用自己之前的主题，把之前的电脑的主题文件整个文件夹压缩转移到了新电脑，然后运行<code>hexo clean</code>重新配置生成网页，才解决了网页里出现了不知道是哪国语言的尴尬问题。</p>
+<h2 id="删除文章"><a href="#删除文章" class="headerlink" title="删除文章"></a>删除文章</h2><p>需要删除文章的时候先执行：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure></p>
+<p>然后删掉Source下的源文件md,然后重新生成部署。</p>
 <h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><hr>
 <ul>
 <li>2021/05/05 前来更新</li>
@@ -7754,8 +7785,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -8095,33 +8126,6 @@ table th:nth-of-type(4) {
       </tags>
   </entry>
   <entry>
-    <title>为Actor添加Input事件</title>
-    <url>/%E4%B8%BAActor%E6%B7%BB%E5%8A%A0Input%E4%BA%8B%E4%BB%B6/</url>
-    <content><![CDATA[<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
-<a id="more"></a>
-<p>参考链接：</p>
-<ul>
-<li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
-<li><a href="https://answers.unrealengine.com/questions/166084/check-keyboard-events-in-code.html" target="_blank" rel="noopener">Check Keyboard Event in code</a></li>
-<li><a href="sirokuma.cc/?p=567">UE4-学习笔记之二</a><ul>
-<li>这篇文章感觉好厉害</li>
-</ul>
-</li>
-<li><a href="https://zhuanlan.zhihu.com/p/23321666" target="_blank" rel="noopener">&lt;<insideue4>&gt;GamePlay架构(四)Pawn</insideue4></a><ul>
-<li>知乎文章，可以一看</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>UnrealEngine4</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>UE4</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>UE4-ConstructorHelpers::FObjectFinder</title>
     <url>/UE4-ConstructorHelpers-FObjectFinder/</url>
     <content><![CDATA[<p>先来说一说这个问题的起源吧。最近想做一个类似于火焰的特效，是由大量的烟雾粒子组成的那种类似于烟雾的火焰。在制作大量烟雾粒子之前首先要制作出第一个粒子。</p>
@@ -8164,8 +8168,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>编程</tag>
         <tag>UE4</tag>
+        <tag>编程</tag>
       </tags>
   </entry>
   <entry>
@@ -8279,8 +8283,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -8396,8 +8400,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -8450,8 +8454,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -8609,8 +8613,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -8734,8 +8738,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -9201,8 +9205,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>UE4</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -9603,9 +9607,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
+        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>

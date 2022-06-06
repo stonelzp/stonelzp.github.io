@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Yusei Magic:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。">
-<meta name="keywords" content="C++,UE4">
+  <meta name="description" content="记录一下关于UnrealEngine输入绑定的学习。">
+<meta name="keywords" content="UE4,UE5">
 <meta property="og:type" content="article">
-<meta property="og:title" content="为Actor添加Input事件">
-<meta property="og:url" content="http://stonelzp.github.io/为Actor添加Input事件/index.html">
+<meta property="og:title" content="UE5-Input输入绑定实现">
+<meta property="og:url" content="http://stonelzp.github.io/ue5-input-binding/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。">
+<meta property="og:description" content="记录一下关于UnrealEngine输入绑定的学习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-02-18T16:09:45.524Z">
+<meta property="og:updated_time" content="2022-05-30T15:27:54.198Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="为Actor添加Input事件">
-<meta name="twitter:description" content="在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。">
+<meta name="twitter:title" content="UE5-Input输入绑定实现">
+<meta name="twitter:description" content="记录一下关于UnrealEngine输入绑定的学习。">
 
-<link rel="canonical" href="http://stonelzp.github.io/为Actor添加Input事件/">
+<link rel="canonical" href="http://stonelzp.github.io/ue5-input-binding/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>为Actor添加Input事件 | StoneのBLOG</title>
+  <title>UE5-Input输入绑定实现 | StoneのBLOG</title>
   
 
 
@@ -190,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/为Actor添加Input事件/">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue5-input-binding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -203,7 +203,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          为Actor添加Input事件
+          UE5-Input输入绑定实现
         </h1>
 
         <div class="post-meta">
@@ -212,23 +212,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2018-08-16 16:57:48" itemprop="dateCreated datePublished" datetime="2018-08-16T16:57:48+09:00">2018-08-16</time>
+              <time title="创建时间：2022-05-31 00:23:53 / 修改时间：00:27:54" itemprop="dateCreated datePublished" datetime="2022-05-31T00:23:53+09:00">2022-05-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-19 01:09:45" itemprop="dateModified" datetime="2021-02-19T01:09:45+09:00">2021-02-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                  <a href="/categories/UnrealEngine5/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine5</span></a>
                 </span>
             </span>
 
@@ -250,8 +244,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
-<a id="more"></a>
+        <p>记录一下关于UnrealEngine输入绑定的学习。<br><a id="more"></a></p>
+<p><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a></p>
+<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
+<!--more-->
 <p>参考链接：</p>
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
@@ -274,8 +270,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/C/" rel="tag"># C++</a>
               <a href="/tags/UE4/" rel="tag"># UE4</a>
+              <a href="/tags/UE5/" rel="tag"># UE5</a>
           </div>
 
         
@@ -284,13 +280,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/UE4-ConstructorHelpers-FObjectFinder/" rel="prev" title="UE4-ConstructorHelpers::FObjectFinder">
-      <i class="fa fa-chevron-left"></i> UE4-ConstructorHelpers::FObjectFinder
+    <a href="/ue5-codeing-style/" rel="prev" title="UE5-代码规范">
+      <i class="fa fa-chevron-left"></i> UE5-代码规范
     </a></div>
-      <div class="post-nav-item">
-    <a href="/UE4-Error-Message整理/" rel="next" title="UE4:Error_Message整理">
-      UE4:Error_Message整理 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
