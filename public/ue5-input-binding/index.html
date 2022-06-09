@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="记录一下关于UnrealEngine输入绑定的学习。">
+  <meta name="description" content="记录一下关于UnrealEngine输入绑定的学习。意外的接触了UE很久，对输入的部分还是一知半解。">
 <meta name="keywords" content="UE4,UE5">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UE5-Input输入绑定实现">
 <meta property="og:url" content="http://stonelzp.github.io/ue5-input-binding/index.html">
 <meta property="og:site_name" content="StoneのBLOG">
-<meta property="og:description" content="记录一下关于UnrealEngine输入绑定的学习。">
+<meta property="og:description" content="记录一下关于UnrealEngine输入绑定的学习。意外的接触了UE很久，对输入的部分还是一知半解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-05-30T15:27:54.198Z">
+<meta property="og:updated_time" content="2022-06-09T16:09:47.529Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE5-Input输入绑定实现">
-<meta name="twitter:description" content="记录一下关于UnrealEngine输入绑定的学习。">
+<meta name="twitter:description" content="记录一下关于UnrealEngine输入绑定的学习。意外的接触了UE很久，对输入的部分还是一知半解。">
 
 <link rel="canonical" href="http://stonelzp.github.io/ue5-input-binding/">
 
@@ -212,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2022-05-31 00:23:53 / 修改时间：00:27:54" itemprop="dateCreated datePublished" datetime="2022-05-31T00:23:53+09:00">2022-05-31</time>
+              <time title="创建时间：2022-05-31 00:23:53" itemprop="dateCreated datePublished" datetime="2022-05-31T00:23:53+09:00">2022-05-31</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-10 01:09:47" itemprop="dateModified" datetime="2022-06-10T01:09:47+09:00">2022-06-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -244,10 +250,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>记录一下关于UnrealEngine输入绑定的学习。<br><a id="more"></a></p>
-<p><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a></p>
-<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
-<!--more-->
+        <p>记录一下关于UnrealEngine输入绑定的学习。意外的接触了UE很久，对输入的部分还是一知半解。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>进入UE5之后，貌似EnhancedInput的插件变得相当的好用，使用的实际项目好像也逐渐多了起来。嘛，技术嘛肯定是要以新的优先，所以前半部分主要还是记录这个插件。</p>
+<h1 id="EnhancedInput的使用"><a href="#EnhancedInput的使用" class="headerlink" title="EnhancedInput的使用"></a>EnhancedInput的使用</h1><p>由于特殊原因暂时并不会使用这个插件，这个部分的更新暂时先搁置。</p>
+<p><a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Input/EnhancedInput/" target="_blank" rel="noopener">Enhanced Input - Using the Enhanced Input Plugin to read and interpret user input</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a><br><a href="https://qiita.com/sentyaanko/items/dd4990d4aa0e84478b59" target="_blank" rel="noopener">【UE5】Lyra に学ぶ Enhanced Input</a></p>
+<h1 id="UE4中的输入绑定实现"><a href="#UE4中的输入绑定实现" class="headerlink" title="UE4中的输入绑定实现"></a>UE4中的输入绑定实现</h1><p>这篇文章给出了一个UE4中实现输入绑定的一个比较好的方案，需要花时间总结一下。<br><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a></p>
+<h1 id="关于UE中的Input"><a href="#关于UE中的Input" class="headerlink" title="关于UE中的Input"></a>关于UE中的Input</h1><p>尚未整理完毕：<br><a href="https://shuntaendo.hatenablog.com/entry/2019/06/12/200000" target="_blank" rel="noopener">【UE4】入力イベントの順序、設定項目について</a><br><a href="https://katze.hatenablog.jp/entry/2016/07/21/185752" target="_blank" rel="noopener">UE4 アクターの入力取得をコントロールする</a><br><a href="https://baemincheon.github.io/2020/10/25/unreal-input-system-via-gamepad/" target="_blank" rel="noopener">Gamepad input process in UnrealEngine</a><br>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
 <p>参考链接：</p>
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
@@ -342,6 +350,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EnhancedInput的使用"><span class="nav-number">2.</span> <span class="nav-text">EnhancedInput的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的输入绑定实现"><span class="nav-number">3.</span> <span class="nav-text">UE4中的输入绑定实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于UE中的Input"><span class="nav-number">4.</span> <span class="nav-text">关于UE中的Input</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

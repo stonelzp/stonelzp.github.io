@@ -11,6 +11,15 @@ UE4中的**MetadataSpecifiers**是个很邪门的东西，一开始的时候根�
 
 <!--more-->
 
+# Overview
+发现了一个非常非常有用的，需要时常看看：
+- [All UPROPERTY Specifiers](https://benui.ca/unreal/uproperty/)
+- [All UFUNCTION Specifiers](https://benui.ca/unreal/ufunction/)
+- [All UPARAM Specifiers](https://benui.ca/unreal/uparam/)
+- [All UCLASS Specifiers](https://benui.ca/unreal/uclass/)
+- [All USTRUCT Specifiers](https://benui.ca/unreal/ustruct/)
+- [All UENUM and UMETA Specifiers](https://benui.ca/unreal/uenum-umeta/)
+
 # MetadataSpecifiers
 > When declaring classes, interfaces, structs, enums, enum values, functions, or properties, you can add Metadata Specifiers to control how they interact with various aspects of the engine and editor. Each type of data structure or member has its own list of Metadata Specifiers.
 
@@ -131,4 +140,21 @@ HideCategories=(Category1, Category2, ...)
 ```
 UPROPERTY(EditAnywhere, EditFixedSize)
 TArray<FName> FixedSizeArray;
+```
+
+### ClampMin, ClampMax, UIMin, UIMax
+
+| Property Mata Tag | Effect |
+| ---- | ---- |
+| ClampMin="N" | Used for float and integer properties. Specifies the minimum value N that may be entered for the property. |
+| ClampMax="N" | Used for float and integer properties. Specifies the maximum value N that may be entered for the property. |
+
+上面来自官网，本质就是Clamp处理。
+
+UIMin和UIMax我没有在官网找到解释，功能就是限制UI，在属性条目上用鼠标拖动调整数值的时候限制数值的处理。
+
+示例：
+```
+UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sample", meta=( ClampMin = 0, ClampMax = 1, UIMin = 0, UIMax = 1 ))
+float Sample;
 ```

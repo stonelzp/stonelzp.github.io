@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="UE4中的MetadataSpecifiers是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是PropertySpecifers这个概念。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2021-09-16T12:54:33.051Z">
+<meta property="og:updated_time" content="2022-06-09T15:52:53.840Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE4中的Meta修饰符">
 <meta name="twitter:description" content="UE4中的MetadataSpecifiers是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是PropertySpecifers这个概念。">
@@ -220,7 +220,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-16 21:54:33" itemprop="dateModified" datetime="2021-09-16T21:54:33+09:00">2021-09-16</time>
+                <time title="修改时间：2022-06-10 00:52:53" itemprop="dateModified" datetime="2022-06-10T00:52:53+09:00">2022-06-10</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -252,6 +252,15 @@
       
         <p>UE4中的<strong>MetadataSpecifiers</strong>是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是<strong>PropertySpecifers</strong>这个概念。</p>
 <a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>发现了一个非常非常有用的，需要时常看看：</p>
+<ul>
+<li><a href="https://benui.ca/unreal/uproperty/" target="_blank" rel="noopener">All UPROPERTY Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/ufunction/" target="_blank" rel="noopener">All UFUNCTION Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uparam/" target="_blank" rel="noopener">All UPARAM Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uclass/" target="_blank" rel="noopener">All UCLASS Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/ustruct/" target="_blank" rel="noopener">All USTRUCT Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uenum-umeta/" target="_blank" rel="noopener">All UENUM and UMETA Specifiers</a></li>
+</ul>
 <h1 id="MetadataSpecifiers"><a href="#MetadataSpecifiers" class="headerlink" title="MetadataSpecifiers"></a>MetadataSpecifiers</h1><blockquote>
 <p>When declaring classes, interfaces, structs, enums, enum values, functions, or properties, you can add Metadata Specifiers to control how they interact with various aspects of the engine and editor. Each type of data structure or member has its own list of Metadata Specifiers.</p>
 </blockquote>
@@ -374,6 +383,27 @@
 <p>说实话，在没有对UE4的多人模式进行学习的时候真是一头雾水。被标记了这个属性修饰符的变量，意味着变量存储的是一个暂时的值，我们并不想永久的保存它，比如说这个变量保存的是其它类中的内容，就好像是弱指针一样，只是暂时的保留这个变量的值。</p>
 <p>还有一个作用就是，标记了这个修饰符的变量，它不会被Serialize(见UE4的Net Serialize)。</p>
 <h3 id="EditFixedSize"><a href="#EditFixedSize" class="headerlink" title="EditFixedSize"></a>EditFixedSize</h3><p>禁止在LevelEditor对TArray进行元素添加操作。具体使用情况还不清楚，可能哪一天会派上用场。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, EditFixedSize)</span><br><span class="line">TArray&lt;FName&gt; FixedSizeArray;</span><br></pre></td></tr></table></figure></p>
+<h3 id="ClampMin-ClampMax-UIMin-UIMax"><a href="#ClampMin-ClampMax-UIMin-UIMax" class="headerlink" title="ClampMin, ClampMax, UIMin, UIMax"></a>ClampMin, ClampMax, UIMin, UIMax</h3><table>
+<thead>
+<tr>
+<th>Property Mata Tag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ClampMin=”N”</td>
+<td>Used for float and integer properties. Specifies the minimum value N that may be entered for the property.</td>
+</tr>
+<tr>
+<td>ClampMax=”N”</td>
+<td>Used for float and integer properties. Specifies the maximum value N that may be entered for the property.</td>
+</tr>
+</tbody>
+</table>
+<p>上面来自官网，本质就是Clamp处理。</p>
+<p>UIMin和UIMax我没有在官网找到解释，功能就是限制UI，在属性条目上用鼠标拖动调整数值的时候限制数值的处理。</p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=&quot;Sample&quot;, meta=( ClampMin = 0, ClampMax = 1, UIMin = 0, UIMax = 1 ))</span><br><span class="line">float Sample;</span><br></pre></td></tr></table></figure></p>
 
     </div>
 
@@ -457,7 +487,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MetadataSpecifiers"><span class="nav-number">1.</span> <span class="nav-text">MetadataSpecifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的一些使用"><span class="nav-number">1.1.</span> <span class="nav-text">遇到的一些使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-EditCondition-“变量名”"><span class="nav-number">1.1.1.</span> <span class="nav-text">Meta = (EditCondition = “变量名”)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-WorldContext-”WorldContextObject”-CallableWithoutWorldContext"><span class="nav-number">1.1.2.</span> <span class="nav-text">Meta = (WorldContext=”WorldContextObject”, CallableWithoutWorldContext)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-MakeEditWidget-true"><span class="nav-number">1.1.3.</span> <span class="nav-text">Meta = (MakeEditWidget=true)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class-Specifier"><span class="nav-number">2.</span> <span class="nav-text">Class Specifier</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些我用过的"><span class="nav-number">2.1.</span> <span class="nav-text">一些我用过的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MinimalAPI"><span class="nav-number">2.1.1.</span> <span class="nav-text">MinimalAPI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hidecategories-“category1-category2”"><span class="nav-number">2.1.2.</span> <span class="nav-text">hidecategories=(“category1|category2”)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Property-Specifiers"><span class="nav-number">3.</span> <span class="nav-text">Property Specifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些我用过的-1"><span class="nav-number">3.1.</span> <span class="nav-text">一些我用过的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的属性读写权限EditAnywhere等"><span class="nav-number">3.1.1.</span> <span class="nav-text">常用的属性读写权限EditAnywhere等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transient"><span class="nav-number">3.1.2.</span> <span class="nav-text">Transient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditFixedSize"><span class="nav-number">3.1.3.</span> <span class="nav-text">EditFixedSize</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MetadataSpecifiers"><span class="nav-number">2.</span> <span class="nav-text">MetadataSpecifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的一些使用"><span class="nav-number">2.1.</span> <span class="nav-text">遇到的一些使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-EditCondition-“变量名”"><span class="nav-number">2.1.1.</span> <span class="nav-text">Meta = (EditCondition = “变量名”)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-WorldContext-”WorldContextObject”-CallableWithoutWorldContext"><span class="nav-number">2.1.2.</span> <span class="nav-text">Meta = (WorldContext=”WorldContextObject”, CallableWithoutWorldContext)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-MakeEditWidget-true"><span class="nav-number">2.1.3.</span> <span class="nav-text">Meta = (MakeEditWidget=true)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class-Specifier"><span class="nav-number">3.</span> <span class="nav-text">Class Specifier</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些我用过的"><span class="nav-number">3.1.</span> <span class="nav-text">一些我用过的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MinimalAPI"><span class="nav-number">3.1.1.</span> <span class="nav-text">MinimalAPI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hidecategories-“category1-category2”"><span class="nav-number">3.1.2.</span> <span class="nav-text">hidecategories=(“category1|category2”)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Property-Specifiers"><span class="nav-number">4.</span> <span class="nav-text">Property Specifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些我用过的-1"><span class="nav-number">4.1.</span> <span class="nav-text">一些我用过的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的属性读写权限EditAnywhere等"><span class="nav-number">4.1.1.</span> <span class="nav-text">常用的属性读写权限EditAnywhere等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transient"><span class="nav-number">4.1.2.</span> <span class="nav-text">Transient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditFixedSize"><span class="nav-number">4.1.3.</span> <span class="nav-text">EditFixedSize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClampMin-ClampMax-UIMin-UIMax"><span class="nav-number">4.1.4.</span> <span class="nav-text">ClampMin, ClampMax, UIMin, UIMax</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

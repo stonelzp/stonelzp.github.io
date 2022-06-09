@@ -3,10 +3,12 @@
   <entry>
     <title>UE5-Input输入绑定实现</title>
     <url>/ue5-input-binding/</url>
-    <content><![CDATA[<p>记录一下关于UnrealEngine输入绑定的学习。<br><a id="more"></a></p>
-<p><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a></p>
-<p>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
-<!--more-->
+    <content><![CDATA[<p>记录一下关于UnrealEngine输入绑定的学习。意外的接触了UE很久，对输入的部分还是一知半解。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>进入UE5之后，貌似EnhancedInput的插件变得相当的好用，使用的实际项目好像也逐渐多了起来。嘛，技术嘛肯定是要以新的优先，所以前半部分主要还是记录这个插件。</p>
+<h1 id="EnhancedInput的使用"><a href="#EnhancedInput的使用" class="headerlink" title="EnhancedInput的使用"></a>EnhancedInput的使用</h1><p>由于特殊原因暂时并不会使用这个插件，这个部分的更新暂时先搁置。</p>
+<p><a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Input/EnhancedInput/" target="_blank" rel="noopener">Enhanced Input - Using the Enhanced Input Plugin to read and interpret user input</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a><br><a href="https://qiita.com/sentyaanko/items/dd4990d4aa0e84478b59" target="_blank" rel="noopener">【UE5】Lyra に学ぶ Enhanced Input</a></p>
+<h1 id="UE4中的输入绑定实现"><a href="#UE4中的输入绑定实现" class="headerlink" title="UE4中的输入绑定实现"></a>UE4中的输入绑定实现</h1><p>这篇文章给出了一个UE4中实现输入绑定的一个比较好的方案，需要花时间总结一下。<br><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a></p>
+<h1 id="关于UE中的Input"><a href="#关于UE中的Input" class="headerlink" title="关于UE中的Input"></a>关于UE中的Input</h1><p>尚未整理完毕：<br><a href="https://shuntaendo.hatenablog.com/entry/2019/06/12/200000" target="_blank" rel="noopener">【UE4】入力イベントの順序、設定項目について</a><br><a href="https://katze.hatenablog.jp/entry/2016/07/21/185752" target="_blank" rel="noopener">UE4 アクターの入力取得をコントロールする</a><br><a href="https://baemincheon.github.io/2020/10/25/unreal-input-system-via-gamepad/" target="_blank" rel="noopener">Gamepad input process in UnrealEngine</a><br>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
 <p>参考链接：</p>
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
@@ -617,6 +619,15 @@
     <url>/ue4-meta-data-specifiers/</url>
     <content><![CDATA[<p>UE4中的<strong>MetadataSpecifiers</strong>是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是<strong>PropertySpecifers</strong>这个概念。</p>
 <a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>发现了一个非常非常有用的，需要时常看看：</p>
+<ul>
+<li><a href="https://benui.ca/unreal/uproperty/" target="_blank" rel="noopener">All UPROPERTY Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/ufunction/" target="_blank" rel="noopener">All UFUNCTION Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uparam/" target="_blank" rel="noopener">All UPARAM Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uclass/" target="_blank" rel="noopener">All UCLASS Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/ustruct/" target="_blank" rel="noopener">All USTRUCT Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uenum-umeta/" target="_blank" rel="noopener">All UENUM and UMETA Specifiers</a></li>
+</ul>
 <h1 id="MetadataSpecifiers"><a href="#MetadataSpecifiers" class="headerlink" title="MetadataSpecifiers"></a>MetadataSpecifiers</h1><blockquote>
 <p>When declaring classes, interfaces, structs, enums, enum values, functions, or properties, you can add Metadata Specifiers to control how they interact with various aspects of the engine and editor. Each type of data structure or member has its own list of Metadata Specifiers.</p>
 </blockquote>
@@ -739,6 +750,27 @@
 <p>说实话，在没有对UE4的多人模式进行学习的时候真是一头雾水。被标记了这个属性修饰符的变量，意味着变量存储的是一个暂时的值，我们并不想永久的保存它，比如说这个变量保存的是其它类中的内容，就好像是弱指针一样，只是暂时的保留这个变量的值。</p>
 <p>还有一个作用就是，标记了这个修饰符的变量，它不会被Serialize(见UE4的Net Serialize)。</p>
 <h3 id="EditFixedSize"><a href="#EditFixedSize" class="headerlink" title="EditFixedSize"></a>EditFixedSize</h3><p>禁止在LevelEditor对TArray进行元素添加操作。具体使用情况还不清楚，可能哪一天会派上用场。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, EditFixedSize)</span><br><span class="line">TArray&lt;FName&gt; FixedSizeArray;</span><br></pre></td></tr></table></figure></p>
+<h3 id="ClampMin-ClampMax-UIMin-UIMax"><a href="#ClampMin-ClampMax-UIMin-UIMax" class="headerlink" title="ClampMin, ClampMax, UIMin, UIMax"></a>ClampMin, ClampMax, UIMin, UIMax</h3><table>
+<thead>
+<tr>
+<th>Property Mata Tag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ClampMin=”N”</td>
+<td>Used for float and integer properties. Specifies the minimum value N that may be entered for the property.</td>
+</tr>
+<tr>
+<td>ClampMax=”N”</td>
+<td>Used for float and integer properties. Specifies the maximum value N that may be entered for the property.</td>
+</tr>
+</tbody>
+</table>
+<p>上面来自官网，本质就是Clamp处理。</p>
+<p>UIMin和UIMax我没有在官网找到解释，功能就是限制UI，在属性条目上用鼠标拖动调整数值的时候限制数值的处理。</p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=&quot;Sample&quot;, meta=( ClampMin = 0, ClampMax = 1, UIMin = 0, UIMax = 1 ))</span><br><span class="line">float Sample;</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
@@ -5528,7 +5560,7 @@ table th:nth-of-type(4) {
 <li>2022/05/29 更新</li>
 </ul>
 <p>平常看博文感觉自己的文字有些太大了，就想试着尝试修改一下字体的设置，顺便改了字体的格式。</p>
-<p>直接去Next的主题的<code>_config.yml</code>下开启:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">font:</span><br><span class="line">  enable: true</span><br><span class="line"></span><br><span class="line">  # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).</span><br><span class="line">  host:</span><br><span class="line"></span><br><span class="line">  # Font options:</span><br><span class="line">  # `external: true` will load this font family from `host` above.</span><br><span class="line">  # `family: Times New Roman`. Without any quotes.</span><br><span class="line">  # `size: x.x`. Use `em` as unit. Default: 1 (16px)</span><br><span class="line"></span><br><span class="line">  # Global font settings used for all elements inside &lt;body&gt;.</span><br><span class="line">  global:</span><br><span class="line">    external: true</span><br><span class="line">    family: Yusei Magic</span><br><span class="line">    size: 14px</span><br></pre></td></tr></table></figure></p>
+<p>直接去Next的主题的<code>_config.yml</code>下开启:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Global font settings used for all elements inside &lt;body&gt;.</span><br><span class="line">global:</span><br><span class="line">  external: true</span><br><span class="line">  family: Noto Serif SC</span><br><span class="line">  size: 14px</span><br><span class="line"></span><br><span class="line"># Font settings for site title (.site-title).</span><br><span class="line">title:</span><br><span class="line">  external: true</span><br><span class="line">  family:</span><br><span class="line">  size:</span><br><span class="line"></span><br><span class="line"># Font settings for headlines (&lt;h1&gt; to &lt;h6&gt;).</span><br><span class="line">headings:</span><br><span class="line">  external: true</span><br><span class="line">  family:</span><br><span class="line">  size:</span><br><span class="line"></span><br><span class="line"># Font settings for posts (.post-body).</span><br><span class="line">posts:</span><br><span class="line">  external: true</span><br><span class="line">  family:</span><br><span class="line"></span><br><span class="line"># Font settings for &lt;code&gt; and code blocks.</span><br><span class="line">codes:</span><br><span class="line">  external: true</span><br><span class="line">  family: Roboto Mono</span><br></pre></td></tr></table></figure></p>
 <p>修改结束后，使用<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</code>命令重新生成项目，顺便本地检查一下。</p>
 <p>参考资料：</p>
 <ul>

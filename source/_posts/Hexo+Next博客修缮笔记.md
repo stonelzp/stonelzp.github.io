@@ -241,23 +241,34 @@ local_search:
 
 直接去Next的主题的`_config.yml`下开启:
 ```
-font:
-  enable: true
+# Global font settings used for all elements inside <body>.
+global:
+  external: true
+  family: Noto Serif SC
+  size: 14px
 
-  # Uri of fonts host, e.g. https://fonts.googleapis.com (Default).
-  host:
+# Font settings for site title (.site-title).
+title:
+  external: true
+  family:
+  size:
 
-  # Font options:
-  # `external: true` will load this font family from `host` above.
-  # `family: Times New Roman`. Without any quotes.
-  # `size: x.x`. Use `em` as unit. Default: 1 (16px)
+# Font settings for headlines (<h1> to <h6>).
+headings:
+  external: true
+  family:
+  size:
 
-  # Global font settings used for all elements inside <body>.
-  global:
-    external: true
-    family: Yusei Magic
-    size: 14px
-```
+# Font settings for posts (.post-body).
+posts:
+  external: true
+  family:
+
+# Font settings for <code> and code blocks.
+codes:
+  external: true
+  family: Roboto Mono
+  ```
 
 修改结束后，使用`hexo clean && hexo g && hexo s`命令重新生成项目，顺便本地检查一下。
 
