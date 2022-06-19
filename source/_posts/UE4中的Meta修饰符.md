@@ -158,3 +158,15 @@ UIMin和UIMax我没有在官网找到解释，功能就是限制UI，在属性�
 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sample", meta=( ClampMin = 0, ClampMax = 1, UIMin = 0, UIMax = 1 ))
 float Sample;
 ```
+
+### AllowPrivateAccess
+> Indicates that a private member marked as BlueprintReadOnly or BlueprintReadWirte should be accessible from blueprints.
+
+我遇到的是使用私有成员，单独标记位BlueprintReadOnly的时候会报错，这个时候就需要AllowPrivateAccess出马了。
+
+下面是来源于引擎的一段源码：
+```
+private:
+UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+class UCameraComponent* CameraComponent;
+```

@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4中的MemoryManagement</title>
+    <url>/ue4-memory-management/</url>
+    <content><![CDATA[<p>记录一些关于UnrealEngine中的内存管理的部分。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><ul>
+<li><p><a href="https://unrealcommunity.wiki/memory-management-6rlf3v4i" target="_blank" rel="noopener">Memory Management</a></p>
+</li>
+<li><p><a href="https://blog.csdn.net/u013412391/article/details/108089684" target="_blank" rel="noopener">UE4实验使用 FGCObject 引用UObject</a></p>
+</li>
+<li><a href="https://www.cnblogs.com/ghl_carmack/p/6112118.html" target="_blank" rel="noopener">虚幻4垃圾回收剖析</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>UE4中的Camera</title>
+    <url>/ue4-camera-system/</url>
+    <content><![CDATA[<p>这篇稍微深入了解一下UnrealEngine中的相机部分。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="PlayerCameraManager"><a href="#PlayerCameraManager" class="headerlink" title="PlayerCameraManager"></a>PlayerCameraManager</h1><ul>
+<li><a href="https://unrealcommunity.wiki/player-camera-manager-227ae5" target="_blank" rel="noopener">Player Camera Manager</a></li>
+</ul>
+<h1 id="添加相机功能"><a href="#添加相机功能" class="headerlink" title="添加相机功能"></a>添加相机功能</h1><p>CameraModifiers?</p>
+<ul>
+<li><a href="https://historia.co.jp/archives/634/" target="_blank" rel="noopener">[UE4] カメラの振動</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>UE4</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE5-Input输入绑定实现</title>
     <url>/ue5-input-binding/</url>
     <content><![CDATA[<p>记录一下关于UnrealEngine输入绑定的学习。意外的接触了UE很久，对输入的部分还是一知半解。<br><a id="more"></a></p>
@@ -8,7 +46,20 @@
 <h1 id="EnhancedInput的使用"><a href="#EnhancedInput的使用" class="headerlink" title="EnhancedInput的使用"></a>EnhancedInput的使用</h1><p>由于特殊原因暂时并不会使用这个插件，这个部分的更新暂时先搁置。</p>
 <p><a href="https://docs.unrealengine.com/4.27/en-US/InteractiveExperiences/Input/EnhancedInput/" target="_blank" rel="noopener">Enhanced Input - Using the Enhanced Input Plugin to read and interpret user input</a><br><a href="https://unrealengine.hatenablog.com/entry/2020/11/28/192500" target="_blank" rel="noopener">UE4.26 Enhanced Inputについて</a><br><a href="https://qiita.com/sentyaanko/items/dd4990d4aa0e84478b59" target="_blank" rel="noopener">【UE5】Lyra に学ぶ Enhanced Input</a></p>
 <h1 id="UE4中的输入绑定实现"><a href="#UE4中的输入绑定实现" class="headerlink" title="UE4中的输入绑定实现"></a>UE4中的输入绑定实现</h1><p>这篇文章给出了一个UE4中实现输入绑定的一个比较好的方案，需要花时间总结一下。<br><a href="https://snardle.dev/posts/ue4-key-axis-binding/" target="_blank" rel="noopener">Arbitrary Key &amp; Axis Binding in UE4 with C++</a></p>
-<h1 id="关于UE中的Input"><a href="#关于UE中的Input" class="headerlink" title="关于UE中的Input"></a>关于UE中的Input</h1><p>尚未整理完毕：<br><a href="https://shuntaendo.hatenablog.com/entry/2019/06/12/200000" target="_blank" rel="noopener">【UE4】入力イベントの順序、設定項目について</a><br><a href="https://katze.hatenablog.jp/entry/2016/07/21/185752" target="_blank" rel="noopener">UE4 アクターの入力取得をコントロールする</a><br><a href="https://baemincheon.github.io/2020/10/25/unreal-input-system-via-gamepad/" target="_blank" rel="noopener">Gamepad input process in UnrealEngine</a><br>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
+<h1 id="关于UE中的Input"><a href="#关于UE中的Input" class="headerlink" title="关于UE中的Input"></a>关于UE中的Input</h1><p>尚未整理完毕：<br><a href="https://shuntaendo.hatenablog.com/entry/2019/06/12/200000" target="_blank" rel="noopener">【UE4】入力イベントの順序、設定項目について</a><br><a href="https://katze.hatenablog.jp/entry/2016/07/21/185752" target="_blank" rel="noopener">UE4 アクターの入力取得をコントロールする</a></p>
+<p>这篇文章还有一个好处就是确认手柄的键位超级方便。<br><a href="https://baemincheon.github.io/2020/10/25/unreal-input-system-via-gamepad/" target="_blank" rel="noopener">Gamepad input process in UnrealEngine</a><br>在自己编写Actor的Component的时候想要加上input的事件，但是在UE4中加入这种事件不是那么简单的。这需要对Actor的层级关系有一些了解。</p>
+<h2 id="InputProcessor"><a href="#InputProcessor" class="headerlink" title="InputProcessor"></a>InputProcessor</h2><p>意外的可能会派上用场，比如说键盘手柄的Icon切换等等。</p>
+<ul>
+<li><a href="https://shama-coo.hatenablog.com/entry/2020/03/20/182505" target="_blank" rel="noopener">IInputProcessorによるキー入力処理について</a></li>
+</ul>
+<h1 id="Input-Latency"><a href="#Input-Latency" class="headerlink" title="Input Latency"></a>Input Latency</h1><p>偶然发现这个功能，等有时间了的话可以整理再深入了解一下。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.26/en-US/SharingAndReleasing/LowLatencyFrameSyncing/" target="_blank" rel="noopener">Low Latency Frame Syncing - Modifies the way thread syncing is performed to greatly reduce input latency.</a></li>
+</ul>
+<p>还有一篇解说原理的很有用的文章:</p>
+<ul>
+<li><a href="https://www.docswell.com/s/EpicGamesJapan/K8V87K-UE4_Thread_InputLatency_2019" target="_blank" rel="noopener">UE4のスレッドの流れとInput Latency改善の仕組み【2019】</a></li>
+</ul>
 <p>参考链接：</p>
 <ul>
 <li><a href="https://answers.unrealengine.com/questions/181782/c-is-there-a-way-to-get-input-from-actor-that-isn.html" target="_blank" rel="noopener">C++Is there a way to get input from actor that isn a pawn/character ?</a></li>
@@ -430,9 +481,26 @@
   </entry>
   <entry>
     <title>UE4中的C++之技巧篇</title>
-    <url>/UE4%E4%B8%AD%E7%9A%84C++%E4%B9%8B%E6%8A%80%E5%B7%A7%E7%AF%87/</url>
-    <content><![CDATA[<a id="more"></a>
+    <url>/ue4-c++-technology/</url>
+    <content><![CDATA[<p>记录一些我在UnrealEngine中遇到的一些C++的语法技巧，或者我不知道的C++用法。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="C-修饰符"><a href="#C-修饰符" class="headerlink" title="C++修饰符"></a>C++修饰符</h1><h2 id="constexpr-vs-const"><a href="#constexpr-vs-const" class="headerlink" title="constexpr vs const"></a>constexpr vs const</h2><ul>
+<li><a href="https://qiita.com/saltheads/items/dd65935878a0901fe9e7" target="_blank" rel="noopener">constexprとconstを正しく使い分ける</a></li>
+</ul>
+<h1 id="C-函数"><a href="#C-函数" class="headerlink" title="C++函数"></a>C++函数</h1><h2 id="MoveTemp"><a href="#MoveTemp" class="headerlink" title="MoveTemp"></a>MoveTemp</h2><p>待整理：</p>
+<ul>
+<li><p><a href="https://jonasreich.de/build/blog/001-ue4-move-semantics.html" target="_blank" rel="noopener">C++ Move Semantics in Unreal Engine 4</a></p>
+</li>
+<li><p><a href="https://jonasreich.github.io/OpenUnrealConventions/C++/" target="_blank" rel="noopener">C++ Coding Conventions</a></p>
+</li>
+</ul>
 ]]></content>
+      <categories>
+        <category>UnrealEngine4</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>UE4</tag>
+      </tags>
   </entry>
   <entry>
     <title>UE5-踩坑指南</title>
@@ -771,6 +839,11 @@
 <p>上面来自官网，本质就是Clamp处理。</p>
 <p>UIMin和UIMax我没有在官网找到解释，功能就是限制UI，在属性条目上用鼠标拖动调整数值的时候限制数值的处理。</p>
 <p>示例：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=&quot;Sample&quot;, meta=( ClampMin = 0, ClampMax = 1, UIMin = 0, UIMax = 1 ))</span><br><span class="line">float Sample;</span><br></pre></td></tr></table></figure></p>
+<h3 id="AllowPrivateAccess"><a href="#AllowPrivateAccess" class="headerlink" title="AllowPrivateAccess"></a>AllowPrivateAccess</h3><blockquote>
+<p>Indicates that a private member marked as BlueprintReadOnly or BlueprintReadWirte should be accessible from blueprints.</p>
+</blockquote>
+<p>我遇到的是使用私有成员，单独标记位BlueprintReadOnly的时候会报错，这个时候就需要AllowPrivateAccess出马了。</p>
+<p>下面是来源于引擎的一段源码：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private:</span><br><span class="line">UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = &quot;true&quot;))</span><br><span class="line">class UCameraComponent* CameraComponent;</span><br></pre></td></tr></table></figure></p>
 ]]></content>
       <categories>
         <category>UnrealEngine4</category>
@@ -827,8 +900,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -3974,8 +4047,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4062,8 +4135,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -7817,8 +7890,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8200,8 +8273,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8315,8 +8388,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8432,8 +8505,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8486,8 +8559,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8645,8 +8718,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8770,8 +8843,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -9237,8 +9310,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -9639,9 +9712,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
