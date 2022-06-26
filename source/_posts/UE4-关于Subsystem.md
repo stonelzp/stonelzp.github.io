@@ -14,6 +14,9 @@ tags:
 
 # SububSystem概要
 
+需要整理学习：
+- [Unreal-style Singletons with Subsystems](https://benui.ca/unreal/subsystem-singleton/)
+
 ## GameInstanceSubsystem
 多说无用，先介绍我目前最急迫使用的**GameInstance Subsubsystem**：
 

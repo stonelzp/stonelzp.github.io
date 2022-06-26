@@ -158,3 +158,8 @@ VS打开命令行输入`Tools.DiffFiles` 后面跟上两个文件的绝对路径
 Tools -> Customize -> Commands -> Toobar -> 下拉找到Standard -> 找到Solution Configuration -> 右边的Modify Selection -> 把Width改成165
 
 就OK了。
+
+# JetBrains Rider 2022
+
+## Live Templates
+- [Predefined Live Templates for C++](https://www.jetbrains.com/help/rider/Reference__Templates_Explorer__Live_Templates_CPP.html)
