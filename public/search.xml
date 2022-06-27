@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>UE4中的Audio系统</title>
+      <link href="ue4-audio-system/"/>
+      <url>ue4-audio-system/</url>
+      
+        <content type="html"><![CDATA[<p>这篇文章用来记录UnrealEngine中的Audio各种实用的功能。<br><a id="more"></a></p><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="Debug功能"><a href="#Debug功能" class="headerlink" title="Debug功能"></a>Debug功能</h1><h2 id="Audio-Command"><a href="#Audio-Command" class="headerlink" title="Audio Command"></a>Audio Command</h2><ul><li><a href="https://docs.unrealengine.com/4.26/en-US/WorkingWithAudio/AudioConsoleCommands/" target="_blank" rel="noopener">Audio Console Commands - A reference for console commands that can be used with the Unreal Audio Engine</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> UnrealEngine4 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> UE4 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>UE4-DebugDraw记录</title>
+      <link href="how-to-debug-draw/"/>
+      <url>how-to-debug-draw/</url>
+      
+        <content type="html"><![CDATA[<p>UE4本身提供了很多方便Debug的显示功能，在这里做一些使用记录。</p><a id="more"></a><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="UKismetSystemLibrary-DrawDebug系列"><a href="#UKismetSystemLibrary-DrawDebug系列" class="headerlink" title="UKismetSystemLibrary::DrawDebug系列"></a>UKismetSystemLibrary::DrawDebug系列</h1><p><code>UKismetSystemLibrary::DrawDebug</code>这个函数库里面提供了很多开箱即用的函数，很方便也是使用频度很高的功能。</p><h2 id="DrawDebugSphere"><a href="#DrawDebugSphere" class="headerlink" title="DrawDebugSphere"></a>DrawDebugSphere</h2><p>使用方法（复制粘贴过来的）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;Runtime/Engine/Classes/Kismet/GameplayStatics.h&quot;</span><br><span class="line">#include &quot;Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h&quot;</span><br><span class="line"></span><br><span class="line">// 適当なアクターに実装</span><br><span class="line">void AMyPawn::Tick( float DeltaTime )</span><br><span class="line">&#123;</span><br><span class="line">  Super::Tick( DeltaTime );</span><br><span class="line"></span><br><span class="line">  // 2.5 秒ごとに表示を on/off する細工</span><br><span class="line">  static float tt = 0;</span><br><span class="line">  tt = FMath::Fmod( tt + DeltaTime, 5.0f );</span><br><span class="line">  if ( tt &lt; 2.5f )</span><br><span class="line">  &#123;</span><br><span class="line">    // アクターの位置に赤い球を描画</span><br><span class="line">    UKismetSystemLibrary::DrawDebugSphere( GetWorld(), GetActorLocation(), 100.0f, 12, FLinearColor::Red, 0.0f, 3.0f );</span><br><span class="line">    // プレイヤーの位置を取得（本題と直接は関係しない）</span><br><span class="line">    auto l0 = UGameplayStatics::GetPlayerPawn( GetWorld(), 0 )-&gt;GetActorLocation();</span><br><span class="line">    // プレイヤーの位置からこのアクターの位置へ黄色の矢印を描画</span><br><span class="line">    UKismetSystemLibrary::DrawDebugArrow( GetWorld(), l0, GetActorLocation(), 100.0f, FLinearColor::Yellow, 0, 3.0f );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// プレイヤーのアクターに実装</span><br><span class="line">void TestCharacter::Tick( float DeltaTime )</span><br><span class="line">&#123;</span><br><span class="line">  Super::Tick( DeltaTime );</span><br><span class="line"></span><br><span class="line">  // プレイヤーの位置に &quot;PLAYER[0]&quot; を緑色で描画</span><br><span class="line">  UKismetSystemLibrary::DrawDebugString( GetWorld(), GetActorLocation(), TEXT( &quot;PLAYER[0]&quot; ), nullptr, FLinearColor::Green, 0 );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><ul><li><a href="https://usagi.hatenablog.jp/entry/2017/12/21/083000" target="_blank" rel="noopener">UE4: 点や線を簡易的に3D空間内へ描画する方法、あるいは UKismetSystemLibrary::DrawDebug 系の紹介</a></li><li><a href="https://michaeljcole.github.io/wiki.unrealengine.com/Draw_3D_Debug_Points,_Lines,_and_Spheres:_Visualize_Your_Algorithm_in_Action/#Draw_Point" target="_blank" rel="noopener">Draw 3D Debug Points, Lines, and Spheres: Visualize Your Algorithm in Action</a></li></ul><h1 id="Debug-HUD系列"><a href="#Debug-HUD系列" class="headerlink" title="Debug HUD系列"></a>Debug HUD系列</h1><p>之前有碰见过很有趣的HUD，就是DebugCamera用的HUD表示，感觉很适合常驻表示一些信息，有时间可以总结一下。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> UnrealEngine4 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> UE4 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>UE4-TickableObject使用</title>
       <link href="how-to-make-a-tickable-object/"/>
       <url>how-to-make-a-tickable-object/</url>
@@ -137,7 +187,7 @@
       <link href="understand-navigation-system/"/>
       <url>understand-navigation-system/</url>
       
-        <content type="html"><![CDATA[<p>本篇主要是用来记录NavigationSystem相关的内容。<br><a id="more"></a></p><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="NavigationSystem"><a href="#NavigationSystem" class="headerlink" title="NavigationSystem"></a>NavigationSystem</h1><p>-<a href="https://qiita.com/EGJ-Ken_Kuwano/items/53c1ecc3f19958183887" target="_blank" rel="noopener">【UE4】 ナビゲーション機能を提供するクラス-1</a></p><ul><li><p><a href="https://qiita.com/EGJ-Ken_Kuwano/items/90f04565b67f4a6ef207" target="_blank" rel="noopener">【UE4】 ナビゲーションのパフォーマンス</a></p></li><li><p><a href="https://unrealpossibilities.blogspot.com/2016/01/unreal-engine-diaries-11.html" target="_blank" rel="noopener">Unreal Engine Tips &amp; Tricks #2: Nav Mesh Configuration</a></p></li></ul>]]></content>
+        <content type="html"><![CDATA[<p>本篇主要是用来记录NavigationSystem相关的内容。<br><a id="more"></a></p><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="NavigationSystem"><a href="#NavigationSystem" class="headerlink" title="NavigationSystem"></a>NavigationSystem</h1><p>-<a href="https://qiita.com/EGJ-Ken_Kuwano/items/53c1ecc3f19958183887" target="_blank" rel="noopener">【UE4】 ナビゲーション機能を提供するクラス-1</a></p><ul><li><a href="https://qiita.com/EGJ-Ken_Kuwano/items/90f04565b67f4a6ef207" target="_blank" rel="noopener">【UE4】 ナビゲーションのパフォーマンス</a></li><li><a href="https://qiita.com/EGJ-Ken_Kuwano/items/63f1c728403ee0518d44" target="_blank" rel="noopener">【UE4】 ナビゲ―ション機能を調整する</a></li><li><p><a href="https://zhuanlan.zhihu.com/p/359376662" target="_blank" rel="noopener">Navigation Mesh (NavMesh) 原理讲解（一） NavMesh概览 &amp; 一个最简实现</a></p></li><li><p><a href="https://unrealpossibilities.blogspot.com/2016/01/unreal-engine-diaries-11.html" target="_blank" rel="noopener">Unreal Engine Tips &amp; Tricks #2: Nav Mesh Configuration</a></p></li><li><p><a href="https://yekdniwue.blogspot.com/2020/11/NavMeshExperience.html" target="_blank" rel="noopener">UE4 Navigation Mesh 心得</a></p></li><li><p><a href="https://zhuanlan.zhihu.com/p/352934629" target="_blank" rel="noopener">在UE4的streaming levels中使用静态NavMesh</a></p></li><li><p><a href="https://forums.unrealengine.com/t/nav-mesh-and-streaming-levels/451476" target="_blank" rel="noopener">Nav Mesh and Streaming Levels</a></p></li><li><a href="https://historia.co.jp/archives/14905/" target="_blank" rel="noopener">[UE4] NavModifierComponentの活用及び機能変更の方法</a></li></ul>]]></content>
       
       
       <categories>
@@ -384,9 +434,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -549,9 +599,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -1420,9 +1470,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -1447,9 +1497,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2299,9 +2349,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2561,9 +2611,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2665,9 +2715,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2692,9 +2742,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2719,9 +2769,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2746,9 +2796,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2773,9 +2823,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2884,9 +2934,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> C++ </tag>
+            
+            <tag> UE4 </tag>
             
             <tag> 编程 </tag>
             
