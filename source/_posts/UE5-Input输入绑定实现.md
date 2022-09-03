@@ -14,6 +14,7 @@ tags:
 
 # Overview
 进入UE5之后，貌似EnhancedInput的插件变得相当的好用，使用的实际项目好像也逐渐多了起来。嘛，技术嘛肯定是要以新的优先，所以前半部分主要还是记录这个插件。
+内容的话可能是UE4/UE5内容交叉着说，大致的实现部分我并没有感觉出来这两者的差别。
 
 # EnhancedInput的使用
 由于特殊原因暂时并不会使用这个插件，这个部分的更新暂时先搁置。
@@ -55,3 +56,10 @@ tags:
     - 这篇文章感觉好厉害
 - [<<InsideUE4>>GamePlay架构(四)Pawn](https://zhuanlan.zhihu.com/p/23321666)
     - 知乎文章，可以一看
+
+
+# Tips
+## UE4中开启Focus的Debug表示
+- ProjectSettings -> UserInterface -> Focus -> RenderFocusRule
+
+上面的路径可以找到Focus的Debug表示设定，可以方便的确认当前的Focus位置。
