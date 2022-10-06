@@ -143,7 +143,7 @@ auto ACallbackExample::VecArrayInputFuncion_Implementation(const TArray<FVector>
 
 不知道我当时写下这篇文章的时候为什么没有对上面的`_Implementation`后缀产生大大的问号，定义了一个函数之后，函数的实现部分的函数名字竟然需要添加后缀，让人大呼这是什么抛瓦。
 
-应为时间有限，就快速记录一下。
+因为时间有限，就快速记录一下。
 
 像上面那样函数的定义和实现都是在同一个文件的`.h`,`.cpp`中实现的，就是说：
 ```c++
@@ -453,11 +453,11 @@ AddUniqueDynamic?(有时间我直接看看源码实现)
 UE4/UE5：`Engine\Source\Runtime\Core\Public\Delegates\DelegateSignatureImpl.inl`
 
 ## Delegate的Sample实现
-未必避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。
+为了避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。
 
-
-
-
+我找到一个很好的博客，可以根据需要生成代理的源码：
+- [Advanced Delegates in C++](https://benui.ca/unreal/delegates-advanced/)
+![AdvancedDelegates](AdvancedDelegates.jpg)
 
 ### Events代理的sample
 这一段是来自官网上的

@@ -54,7 +54,7 @@ tags:
 - [Check Keyboard Event in code](https://answers.unrealengine.com/questions/166084/check-keyboard-events-in-code.html)
 - [UE4-学习笔记之二](sirokuma.cc/?p=567)
     - 这篇文章感觉好厉害
-- [<<InsideUE4>>GamePlay架构(四)Pawn](https://zhuanlan.zhihu.com/p/23321666)
+- [ InsideUE4 - GamePlay架构(四)Pawn](https://zhuanlan.zhihu.com/p/23321666)
     - 知乎文章，可以一看
 
 

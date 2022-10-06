@@ -16,6 +16,12 @@ tags:
 
 - [UE4 C++とUnreal C++の列挙型の扱い](http://papersloth.hatenablog.com/entry/2017/07/07/005225)
 
+# UENUM的一些基础的使用
+在调查**UPROPERTY**这个属性修饰符都可以修饰那些变量类型的时候，偶然发现了一些关于枚举的一些使用。
+- [Properties - Reference for creating and implementing properties for gameplay classes.](https://docs.unrealengine.com/4.27/ja/ProgrammingAndScripting/GameplayArchitecture/Properties/)
+
+-> 等待补全
+
 # UE为UENUM提供的一些宏的记录
 
 ## ENUM_RANGE_BY_COUNT()
