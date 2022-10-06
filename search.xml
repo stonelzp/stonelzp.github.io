@@ -123,7 +123,7 @@
 <li>这篇文章感觉好厉害</li>
 </ul>
 </li>
-<li><a href="https://zhuanlan.zhihu.com/p/23321666" target="_blank" rel="noopener">&lt;<insideue4>&gt;GamePlay架构(四)Pawn</insideue4></a><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/23321666" target="_blank" rel="noopener"> InsideUE4 - GamePlay架构(四)Pawn</a><ul>
 <li>知乎文章，可以一看</li>
 </ul>
 </li>
@@ -4108,6 +4108,11 @@ table th:nth-of-type(4) {
 <h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><ul>
 <li><a href="http://papersloth.hatenablog.com/entry/2017/07/07/005225" target="_blank" rel="noopener">UE4 C++とUnreal C++の列挙型の扱い</a></li>
 </ul>
+<h1 id="UENUM的一些基础的使用"><a href="#UENUM的一些基础的使用" class="headerlink" title="UENUM的一些基础的使用"></a>UENUM的一些基础的使用</h1><p>在调查<strong>UPROPERTY</strong>这个属性修饰符都可以修饰那些变量类型的时候，偶然发现了一些关于枚举的一些使用。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/ja/ProgrammingAndScripting/GameplayArchitecture/Properties/" target="_blank" rel="noopener">Properties - Reference for creating and implementing properties for gameplay classes.</a></li>
+</ul>
+<p>-&gt; 等待补全</p>
 <h1 id="UE为UENUM提供的一些宏的记录"><a href="#UE为UENUM提供的一些宏的记录" class="headerlink" title="UE为UENUM提供的一些宏的记录"></a>UE为UENUM提供的一些宏的记录</h1><h2 id="ENUM-RANGE-BY-COUNT"><a href="#ENUM-RANGE-BY-COUNT" class="headerlink" title="ENUM_RANGE_BY_COUNT()"></a>ENUM_RANGE_BY_COUNT()</h2><p>为定义的枚举类型添加一个For-Loop方便使用的宏。<br>声明：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &quot;Misc/EnumRange.h&quot;</span><br><span class="line"></span><br><span class="line">UENUM()</span><br><span class="line">enum class EElementType : uint8</span><br><span class="line">&#123;</span><br><span class="line">	Earth,</span><br><span class="line">	Fire,</span><br><span class="line">	Wind,</span><br><span class="line">	Water,</span><br><span class="line">	Count	UMETA(Hidden)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ENUM_RANGE_BY_COUNT(EElementType, EElementType::Count);</span><br></pre></td></tr></table></figure></p>
 <p>使用：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">for (EElementType ElementType : TEnumRange&lt;EElementType&gt;())</span><br><span class="line">&#123;</span><br><span class="line">	SettingArray.Add(LoadInitialSettings(ElementType));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>参考文章：</p>
@@ -8979,7 +8984,7 @@ table th:nth-of-type(4) {
 <hr>
 <p>2020/06/09 更新</p>
 <p>不知道我当时写下这篇文章的时候为什么没有对上面的<code>_Implementation</code>后缀产生大大的问号，定义了一个函数之后，函数的实现部分的函数名字竟然需要添加后缀，让人大呼这是什么抛瓦。</p>
-<p>应为时间有限，就快速记录一下。</p>
+<p>因为时间有限，就快速记录一下。</p>
 <p>像上面那样函数的定义和实现都是在同一个文件的<code>.h</code>,<code>.cpp</code>中实现的，就是说：<br><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleA::Execute_Implementation(<span class="keyword">int</span> value) <span class="keyword">const</span>&#123; &#125;</span><br><span class="line"><span class="comment">// auto SampleA::Execute_Implementation(int value) const&#123;// default Implementation &#125;   // 类型推断还能这么用的吗</span></span><br></pre></td></tr></table></figure></p>
 <p>这样的是好像也没有什么太大的问题，好像也很容易理解，但是当这个类似于事件的提供移到子类的时候，就有些让人摸不到头脑了。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="comment">// 这里应该没有实现，但是这个函数是有默认实现的，没错，蓝图那边有默认实现，如果我们没有这个C++的_Implementation实现，那么就是蓝图的默认实现被调用，但是我们对C++的_Implementation进行了实现，那么就是C++这部分实现会被调用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.h</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleB</span> :</span> <span class="keyword">public</span> SampleA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 没有这个子类的声明会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Execute_Implementation</span><span class="params">(ine value)</span> <span class="keyword">const</span> override</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleB::Execute_Implementation(ine value) <span class="keyword">const</span>&#123; <span class="comment">// 函数实现&#125;</span></span><br></pre></td></tr></table></figure>
@@ -9353,7 +9358,11 @@ table th:nth-of-type(4) {
 <p>AddUniqueDynamic?(有时间我直接看看源码实现)</p>
 <h3 id="Dynamic类型代理的执行"><a href="#Dynamic类型代理的执行" class="headerlink" title="Dynamic类型代理的执行"></a>Dynamic类型代理的执行</h3><p>执行方式与各自Single/Multicast类型代理的执行方式相同。此处省略。</p>
 <p>关于各项代理的源码实现可以直接参考引擎的源码：<br>UE4/UE5：<code>Engine\Source\Runtime\Core\Public\Delegates\DelegateSignatureImpl.inl</code></p>
-<h2 id="Delegate的Sample实现"><a href="#Delegate的Sample实现" class="headerlink" title="Delegate的Sample实现"></a>Delegate的Sample实现</h2><p>未必避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。</p>
+<h2 id="Delegate的Sample实现"><a href="#Delegate的Sample实现" class="headerlink" title="Delegate的Sample实现"></a>Delegate的Sample实现</h2><p>为了避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。</p>
+<p>我找到一个很好的博客，可以根据需要生成代理的源码：</p>
+<ul>
+<li><a href="https://benui.ca/unreal/delegates-advanced/" target="_blank" rel="noopener">Advanced Delegates in C++</a><br><img src="AdvancedDelegates.jpg" alt="AdvancedDelegates"></li>
+</ul>
 <h3 id="Events代理的sample"><a href="#Events代理的sample" class="headerlink" title="Events代理的sample"></a>Events代理的sample</h3><p>这一段是来自官网上的<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public:</span><br><span class="line">/** Broadcasts whenever the layer changes */</span><br><span class="line">DECLARE_EVENT( FLayerViewModel, FChangedEvent )</span><br><span class="line">FChangedEvent&amp; OnChanged() &#123; return ChangedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">private:</span><br><span class="line">/** Broadcasts whenever the layer changes */</span><br><span class="line">FChangedEvent ChangedEvent;</span><br></pre></td></tr></table></figure>
 <p>官网这里需要注意的是下面的一个TIP：</p>
