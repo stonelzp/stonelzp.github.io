@@ -1400,6 +1400,12 @@
 <p>所以最终我没有尝试验证上面的方法可行不可行的原因之一是，上面的方法都指向了自己序列化数据类型然后自己设置二进制文件进行保存，没有用到UE4提供的<code>SaveGame</code>类，更不用说<code>LoadGameFromSlot</code>函数和和它的异步版本(AsyncLoad/Save)了，这样的话我又要改造。</p>
 <p>原因之二也是最重要的原因是我用<strong>Struct</strong>来代替指针类型了，非常方便。</p>
 <h2 id="拓展-1"><a href="#拓展-1" class="headerlink" title="拓展"></a>拓展</h2><p>在学习这个<code>SaveGame</code>的过程中遇到了几个知识点。</p>
+<h3 id="关于SaveGame中的UserIndex参数"><a href="#关于SaveGame中的UserIndex参数" class="headerlink" title="关于SaveGame中的UserIndex参数"></a>关于SaveGame中的UserIndex参数</h3><p>参考文章：</p>
+<ul>
+<li><a href="https://shop-0761.hatenablog.com/entry/2016/09/26/120000" target="_blank" rel="noopener">【UE4】SaveとLoad時のUserIndexについて</a></li>
+</ul>
+<p>一直都很在意这个<code>UserIndex</code>参数是干什么用的，就调查了一下。参考了上面的文章，自己又动手实验了一下，调查的结果就是<strong>UserIndex这个参数基本上没有用，忽视就好了</strong>。</p>
+<p>并不是说换一个UserIndex就可以多一个SaveGame的备份数据，实际验证下来可以理解为就是多了一个UserIndex字段而已，没有什么特殊的功效。我能想到的使用就是保存存档的位置，但是这种事情在SlotName里面基本上顺带就实现了，取到SlotName基本上就足够了。</p>
 <h3 id="CreateLambda"><a href="#CreateLambda" class="headerlink" title="CreateLambda"></a>CreateLambda</h3><p>使用UE4的Delegate遇到的<code>CreateLambda</code>函数，没想到会在UE4里遇见你啊，有时间要整理。</p>
 <ul>
 <li><a href="https://qiita.com/sy_/items/541fd18e460f5a881c75" target="_blank" rel="noopener">Unreal Engine 4メモ：デリゲートをprivateで書く</a></li>
