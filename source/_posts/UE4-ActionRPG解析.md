@@ -537,6 +537,15 @@ Pointer类型的数据没有办法保存。`UObject*`或者`AActor*`类型，取
 ## 拓展
 在学习这个`SaveGame`的过程中遇到了几个知识点。
 
+### 关于SaveGame中的UserIndex参数
+参考文章：
+- [【UE4】SaveとLoad時のUserIndexについて](https://shop-0761.hatenablog.com/entry/2016/09/26/120000)
+
+一直都很在意这个`UserIndex`参数是干什么用的，就调查了一下。参考了上面的文章，自己又动手实验了一下，调查的结果就是**UserIndex这个参数基本上没有用，忽视就好了**。
+
+并不是说换一个UserIndex就可以多一个SaveGame的备份数据，实际验证下来可以理解为就是多了一个UserIndex字段而已，没有什么特殊的功效。我能想到的使用就是保存存档的位置，但是这种事情在SlotName里面基本上顺带就实现了，取到SlotName基本上就足够了。
+
+
 ### CreateLambda
 使用UE4的Delegate遇到的`CreateLambda`函数，没想到会在UE4里遇见你啊，有时间要整理。
 
