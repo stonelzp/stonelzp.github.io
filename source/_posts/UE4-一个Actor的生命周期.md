@@ -17,6 +17,8 @@ tags:
 
 首先是官方文档。
 
+![ActorLifeCycle1](ActorLifeCycle1.png)
+
 # 记录一些使用
 
 ## Actor的生成
@@ -126,3 +128,67 @@ auto something =
 - [UE4 C++でのExposeOnSpawnについて](https://papersloth.hatenablog.com/entry/2018/04/13/232533)
 
 按照上面的文章内容所说，在蓝图中设置的时候除了**Expose on Spawn**需要check之外，**instance editable**一项也需要被check，理由暂时不太清楚。
+
+# 注意事项
+
+## ActorComponent的InitializeComponent调用时机
+最近遇到了一个调用顺序的问题，转来转去才发现是自己没有好好看源码。
+添加的ActorComponent中，使用`InitializeComponent`来初始化数据，然在附着的Actor上的`PostInitializeComponents`函数来使用数据，本来应该是没有问题的，但是一运行就崩溃，调查了一下才发现，`InitializeComponent`函数被调用是有条件的：`bWantsInitializeComponent`这个变量需要被设置。
+
+至于解决方案有两种：
+1. 设置`bWantsInitializeComponent = true`在默认的构造函数里
+2. 使用`const FObjectInitialize&`构造函数
+
+参考链接：
+- [InitializeComponent not firing on spawn](https://forums.unrealengine.com/t/initializecomponent-not-firing-on-spawn/322782)
+> I ran into a similar issue. This was tricky to fix. Here are the things I did to get it to work. You may need to do one or more of these:
+>
+>   1. Needed to use const FObjectInitializer constructor not default constructor since UE4 did not call default constroctor.
+>   2. Needed to do stuff in InitializeComponent not constroctor. I think the constroctor is called once when you put an object in the map or something. Stuff that you want to happen each game probably should go in InitializeComponent.
+>   3. Needed to set bWantsInitializeComponent to true in constroctor so that InitializeComponent is called.
+>   4. Needed to clean out binaries directory for things to work right. Delete everything in Binaries since compiling C++ doesn’t always cause that to be refreshed properly.
+>
+> Good luck,
+> -X
+
+引擎源码注释：
+```
+/**
+ * Actor is the base class for an Object that can be placed or spawned in a level.
+ * Actors may contain a collection of ActorComponents, which can be used to control how actors move, how they are rendered, etc.
+ * The other main function of an Actor is the replication of properties and function calls across the network during play.
+ *
+ *
+ * Actor initialization has multiple steps, here's the order of important virtual functions that get called:
+ * - UObject::PostLoad: For actors statically placed in a level, the normal UObject PostLoad gets called both in the editor and during gameplay.
+ *                      This is not called for newly spawned actors.
+ * - UActorComponent::OnComponentCreated: When an actor is spawned in the editor or during gameplay, this gets called for any native components.
+ *                                        For blueprint-created components, this gets called during construction for that component.
+ *                                        This is not called for components loaded from a level.
+ * - AActor::PreRegisterAllComponents: For statically placed actors and spawned actors that have native root components, this gets called now.
+ *                                     For blueprint actors without a native root component, these registration functions get called later during construction.
+ * - UActorComponent::RegisterComponent: All components are registered in editor and at runtime, this creates their physical/visual representation.
+ *                                       These calls may be distributed over multiple frames, but are always after PreRegisterAllComponents.
+ *                                       This may also get called later on after an UnregisterComponent call removes it from the world.
+ * - AActor::PostRegisterAllComponents: Called for all actors both in the editor and in gameplay, this is the last function that is called in all cases.
+ * - AActor::PostActorCreated: When an actor is created in the editor or during gameplay, this gets called right before construction.
+ *                             This is not called for components loaded from a level.
+ * - AActor::UserConstructionScript: Called for blueprints that implement a construction script.
+ * - AActor::OnConstruction: Called at the end of ExecuteConstruction, which calls the blueprint construction script.
+ *                           This is called after all blueprint-created components are fully created and registered.
+ *                           This is only called during gameplay for spawned actors, and may get rerun in the editor when changing blueprints.
+ * - AActor::PreInitializeComponents: Called before InitializeComponent is called on the actor's components.
+ *                                    This is only called during gameplay and in certain editor preview windows.
+ * - UActorComponent::Activate: This will be called only if the component has bAutoActivate set.
+ *                              It will also got called later on if a component is manually activated.
+ * - UActorComponent::InitializeComponent: This will be called only if the component has bWantsInitializeComponentSet.
+ *                                         This only happens once per gameplay session.
+ * - AActor::PostInitializeComponents: Called after the actor's components have been initialized, only during gameplay and some editor previews.
+ * - AActor::BeginPlay: Called when the level starts ticking, only during actual gameplay.
+ *                      This normally happens right after PostInitializeComponents but can be delayed for networked or child actors.
+ *
+ * @see https://docs.unrealengine.com/latest/INT/Programming/UnrealArchitecture/Actors/
+ * @see https://docs.unrealengine.com/en-us/Programming/UnrealArchitecture/Actors/ActorLifecycle
+ * @see UActorComponent
+ */
+```
