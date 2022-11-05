@@ -475,14 +475,20 @@ UE4.26版本增加了Beta特性MemoryInsinsights的功能。
 - [UE4 Low Level Memory Tracker 使用](https://zhuanlan.zhihu.com/p/78005333)
 - [[UE4] LLM (Low Level Memory Tracker)を使用したメモリトラッキング](https://qiita.com/donbutsu17/items/dd410cd6ee53b0b348ca)
 
-# 添加Stat命令
+
+# 添加命令行命令的几种方式
+
+- Stat命令添加方式
+- Exec命令的添加方式
+
+## 添加Stat命令
 在添加新的功能的时候，顺手添加一个时间计量可能会方便以后的开发。
 于是就需要自己添加Stat命令了。当然UE已经存在的Stat命令也是很好用的。
 
 官方文档
 - [Stats System OverviewThe - Stats System enables developers to collect and display performance data so that they can optimize their games.](https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/StatCommands/StatsSystemOverview/)
 
-## Stat command
+### Stat command
 先创建一个Stat组，由于一般都是只会在一个cpp文件中声明并且使用，先以这种情况说明。想要跨多个cpp文件的话会在最后介绍。
 
 1. 先创建一个Stat组：
@@ -564,11 +570,11 @@ DECLARE_STATS_GROUP_VERBOSE(TEXT("Linker Load"), STATGROUP_LinkerLoad, STATCAT_A
 参考文章：
 - [[UE4]Statコマンドに情報を追加しよう](https://historia.co.jp/archives/14778/)
 
-## UE提供的常用stat命令
+### UE提供的常用stat命令
 官方文档：
 - [Stat Commands - Console commands specific to displaying game statistics.](https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/StatCommands/)
 
-# 关于CheatManager
+## Exec命令行命令添加方式 - CheatManager等
 没有什么特殊的要求的话，UE提供的CheatManager是提供项目的Debug功能的绝佳的放置地点。
 
 先来了解这个功能:
@@ -632,7 +638,10 @@ void APlayerController::AddCheats(bool bForce)
 参考资料
 - [UE4 Cheat Managerを活用しよう](https://unrealengine.hatenablog.com/entry/2020/09/26/190000)
 
-## 添加ConsoleCommand
+### 添加ConsoleCommand
+本质上跟CheatManager一样，但是CheatManager可以集中放置用来Debug的函数，但是全放置在那里会有很多。
+
+这个时候可以分散一下，在其它的地方也放置一下自身所需的测试函数。
 声明方式很简单，但是需要在特定的类（继承的类）中才可以。
 - Possessed Pawns
 - Player Controllers
@@ -726,6 +735,104 @@ bool UCheatManager::ProcessConsoleExec(const TCHAR* Cmd, FOutputDevice& Ar, UObj
 参考资料：
 - [Exec Functions](https://web.archive.org/web/20191020173554/https://wiki.unrealengine.com/Exec_Functions)
 
+## 可以在Editor的Cmd中执行的命令行命令
+在Gameplay中可以打开Console输入命令，实现的方式也有不少，这次来介绍一个可以在OutputLog窗口添加命令的方式。
+
+1. 简单建立静态函数方式：
+```
+// cpp file
+#if !UE_BUILD_SHIPPING
+static void TestFunc01(UWorld* InWorld)
+{
+	UE_LOG(LogTemp, Log, TEXT("TestFunction01!!"));
+}
+static FAutoConsoleCommandWithWorld TestFunction01(
+	TEXT("Test.TestFunc01"),
+	TEXT("Add a static func01 test."),
+	FConsoleCommandWithWorldDelegate::CreateStatic(TestFunc01)
+);
+#endif
+```
+
+2. 使用Lambda方式
+```
+#if !UE_BUILD_SHIPPING
+static FAutoConsoleCommandWithWorldAndArgs TestFunction02(
+	TEXT("Test.TestFunc02"),
+	TEXT("Add a static func02 test."),
+	FConsoleCommandWithWorldAndArgsDelegate::CreateLambda([](const TArray<FString>& Args, UWorld* InWorld){
+		if(IsValid(InWorld))
+		{
+			for(const auto& item : Args)
+			{
+				UE_LOG(LogTemp, Log, TEXT("%s"), *item);
+			}
+		}
+	})
+);
+#endif
+```
+
+3. 使用 FAutoConsoleVariable && FAutoConsoleVariableRef
+还有一种可以简单声明变量的方式，可以很方便的存储Debug所需要的设定数据。
+在使用之前可以简单过一下UE的`IConsoleManager.h`源码中的提示：
+```
+ /**
+ * Console variable usage guide:
+ *
+ * The variable should be creates early in the initialization but not before (not in global variable construction).
+ * Choose the right variable type, consider using a console command if more functionality is needed (see Exec()).
+ * Available types: bool, int, float, bool&, int&, float&, string
+ * Always provide a good help text, other should be able to understand the function of the console variable by reading this help.
+ * The help length should be limited to a reasonable width in order to work well for low res screen resolutions.
+ *
+ * Usage in the game console:
+ *   <COMMAND> ?				print the HELP
+ *   <COMMAND>	 				print the current state of the console variable
+ *   <COMMAND> x 				set and print the new state of the console variable
+ *
+ * All variables support auto completion. The single line help that can show up there is currently not connected to the help as the help text
+ * is expected to be multi line.
+ * The former Exec() system can be used to access the console variables.
+ * Use console variables only in main thread.
+ * The state of console variables is not network synchronized or serialized (load/save). The plan is to allow to set the state in external files (game/platform/engine/local).
+ */
+```
+
+  之后就是简单的使用了。
+```
+#if !UE_BUILD_SHIPPING
+namespace TestDebugCmd
+{
+	static FAutoConsoleVariable TestVariable01(TEXT("CFDebug.TestVarialble01"), 100.f, TEXT("Test varialbe01."));
+
+	static int DebugTestVar02 = 300;
+	static FAutoConsoleVariableRef TestVariable02(
+		TEXT("TestDebug.TestVarialble02"), DebugTestVar02,
+		TEXT("TestVarialbe02 Help info"),
+		ECVF_Default
+	);
+}
+#endif
+```
+
+  使用Console变量中的值：
+  ```
+  # !UE_BUILD_SHIPPING
+  UE_LOG(LogTemp, Log, TEXT("Debug variable02 value: %d"), TestDebugCmd::TestVariable02->GetInt()); // 参考源码实现
+  #endif
+  ```
+
+4. Data Driven CVars - UE5
+在`Project Settings -> Engine -> Data Driven CVars`可以找到设置的位置，貌似是UE5中的新功能，使用方式跟方式3一样。
+![DataDrivenCVar](DataDrivenCVar.jpg)
+
+更多的使用方式可以就直接参考引擎的源码部分。
+
+参考文章：
+- [エディタ上で実行できるコンソールコマンドを追加する](https://qiita.com/Naotsun/items/05d4d5243ca9762abdf8)
+- [UE4 C++（19）：控制台命令](https://blog.csdn.net/weixin_44200074/article/details/110640451)
+- [UE5 Data Driven CVars（コンソール変数）について](https://unrealengine.hatenablog.com/entry/2021/06/11/205348)
 
 # 一些优化的小技巧
 在对UE4的逐渐学习理解过程中，会遇见一些常见的优化小技巧。
