@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>UE5中的加载功能理解</title>
+      <link href="ue5-loading/"/>
+      <url>ue5-loading/</url>
+      
+        <content type="html"><![CDATA[<p>资源的加载是非常重要的部分之一，小心的避免Hitching的发生，减少Loading的时间，这都是为了给用户更好的游玩体验。理解如何管理资源就显得额外重要。<br><a id="more"></a></p><h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h1><p>以下几篇文章帮助我理解：</p><ul><li><a href="https://blog.csdn.net/qq_43034470/article/details/120888095" target="_blank" rel="noopener">UE4资源加载（转载）</a></li><li><a href="https://qiita.com/donbutsu17/items/ca8fbf19c1c43b3c465d" target="_blank" rel="noopener">【UE4】ロード周りの設定と検証</a></li><li><a href="https://zhuanlan.zhihu.com/p/95968374" target="_blank" rel="noopener">UE4 AsyncLoading</a></li><li><a href="https://zhuanlan.zhihu.com/p/483311510" target="_blank" rel="noopener">UE4加载模块分析笔记(一)</a></li><li><a href="https://zhuanlan.zhihu.com/p/490286818" target="_blank" rel="noopener">UE4加载模块分析笔记（二）</a></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> UnrealEngine5 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> UE5 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>UE4中的Audio系统</title>
       <link href="ue4-audio-system/"/>
       <url>ue4-audio-system/</url>
@@ -2540,9 +2565,9 @@
       
         <tags>
             
-            <tag> UE4 </tag>
-            
             <tag> 编程 </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
@@ -2936,9 +2961,9 @@
             
             <tag> C++ </tag>
             
-            <tag> UE4 </tag>
-            
             <tag> 编程 </tag>
+            
+            <tag> UE4 </tag>
             
         </tags>
       
