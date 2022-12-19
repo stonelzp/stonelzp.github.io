@@ -27,7 +27,7 @@ UE4中的编译选项包含两个关键字，第一个关键字代表了**Build 
   - DebugGame -State，可以Debug game code
   - Editor -Target，可以在UE4的Editor中打开我们的项目
 
-UE4默认的是Development Editor的编译方式，怎么说呢，Editor用起来变快了一点？但是开发的话经常Debug就不是那么友好了。单纯的把自己的Code内容编译好再反映到Editor上的话，这个应该是最适合的了，如果说UE4源码本身的编译时间不是那么的长的话，倒可以频繁的切换到这个模式试试呢。
+UE4默认的是Development Editor的编译方式，怎么说呢，Editor用起来变快了一点？但是开发的话经常Debug就不是那么友好了。单纯的把自己的Code内容编译好再反映到Editor上的话，这个应该是最适合的了。如果说UE4源码本身的编译时间不是那么的长的话（使用了分布式编译的话），还是推荐使用DebugEditor模式，当然速度变慢是肉眼可见的。
 
 
 # 保留项目中的设定

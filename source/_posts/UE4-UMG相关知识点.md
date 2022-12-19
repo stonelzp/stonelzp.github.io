@@ -130,3 +130,9 @@ UE4为我们提供了式样案例`RichTextBlockImageDecorator`这个类，之后
 首先是对UE4提供的`RichTextBlockImageDecorator`的示例源码进行解析。
 - `URichTextBlockDecorator`
 - `FRichTextDecorator`
+
+#### RichTextBlock各项活用
+有时间的话可以验证验证下面的实现，多学习一些效果。
+- [[UE4] RichTextBlock でタイプライター演出](https://qiita.com/koorinonaka/items/5eb82738479667fa3d9c)
+- [[UE4] RichTextBlock でルビを振る](https://qiita.com/koorinonaka/items/34a47303e9d9c5393105)
+- [[UE4] RichTextBlock で独自タグを定義する](https://qiita.com/koorinonaka/items/39b01d1652d698e3d73b)
