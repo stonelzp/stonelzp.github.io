@@ -1505,12 +1505,30 @@
 <li><a href="https://github.com/segross/UnrealImGui" target="_blank" rel="noopener">Unreal ImGui</a></li>
 <li><a href="https://pafuhana1213.hatenablog.com/entry/UnrealImGui-HowTo-Basic" target="_blank" rel="noopener">【UE4】GUIフレームワーク「Dear ImGui」を使ってデバッグ・ツール用UIを作ってみよう！ &lt; 導入・基本編 &gt;</a></li>
 </ul>
-<h1 id="Unreal-ImGui的使用"><a href="#Unreal-ImGui的使用" class="headerlink" title="Unreal ImGui的使用"></a>Unreal ImGui的使用</h1><p>据说是可以远程实机操控imgui的插件，配合UnrealImGui一起使用的插件。也是需要调查使用方法的。</p>
+<h1 id="Unreal-ImGui的使用"><a href="#Unreal-ImGui的使用" class="headerlink" title="Unreal ImGui的使用"></a>Unreal ImGui的使用</h1><p>一些基础的想要深入使用的话最好要看的：</p>
+<ul>
+<li><a href="https://github.com/ocornut/imgui/blob/master/docs/FAQ.md" target="_blank" rel="noopener">FAQ (Frequently Asked Questions)</a></li>
+<li><a href="https://github.com/ocornut/imgui/blob/master/docs/FONTS.md" target="_blank" rel="noopener">Dear ImGui: Using Fonts</a></li>
+</ul>
+<p>据说是可以远程实机操控imgui的插件，配合UnrealImGui一起使用的插件。也是需要调查使用方法的。</p>
 <ul>
 <li><a href="https://github.com/sammyfreg/netImgui" target="_blank" rel="noopener">netimgui</a></li>
 </ul>
-<h2 id="ImGui各种控件的实现"><a href="#ImGui各种控件的实现" class="headerlink" title="ImGui各种控件的实现"></a>ImGui各种控件的实现</h2><ul>
-<li><a href="https://qiita.com/ousttrue/items/ae7c8d5715adffc5b1fa" target="_blank" rel="noopener">ImGuiのWidgets</a></li>
+<h2 id="ImGui的扩展资源"><a href="#ImGui的扩展资源" class="headerlink" title="ImGui的扩展资源"></a>ImGui的扩展资源</h2><p>应该是别人使用ImGui的扩展，一定要看：</p>
+<ul>
+<li><a href="https://github.com/HankiDesign/awesome-dear-imgui" target="_blank" rel="noopener">Awesome Dear ImGui</a></li>
+<li><a href="https://github.com/ocornut/imgui/wiki/Useful-Extensions" target="_blank" rel="noopener">Useful Extensions</a></li>
+</ul>
+<h2 id="ImGui各种控件的实现"><a href="#ImGui各种控件的实现" class="headerlink" title="ImGui各种控件的实现"></a>ImGui各种控件的实现</h2><h3 id="Widget控件"><a href="#Widget控件" class="headerlink" title="Widget控件"></a>Widget控件</h3><p>记录各种常用的控件（Demo里面的可能也会记录）。</p>
+<ol>
+<li>ToggleButton<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void ToggleButton(const char* str_id, bool* v)</span><br><span class="line">&#123;</span><br><span class="line">    ImVec2 p = ImGui::GetCursorScreenPos();</span><br><span class="line">    ImDrawList* draw_list = ImGui::GetWindowDrawList();</span><br><span class="line"></span><br><span class="line">    float height = ImGui::GetFrameHeight();</span><br><span class="line">    float width = height * 1.55f;</span><br><span class="line">    float radius = height * 0.50f;</span><br><span class="line"></span><br><span class="line">    if (ImGui::InvisibleButton(str_id, ImVec2(width, height)))</span><br><span class="line">        *v = !*v;</span><br><span class="line">    ImU32 col_bg;</span><br><span class="line">    if (ImGui::IsItemHovered())</span><br><span class="line">        col_bg = *v ? IM_COL32(145+20, 211, 68+20, 255) : IM_COL32(218-20, 218-20, 218-20, 255);</span><br><span class="line">    else</span><br><span class="line">        col_bg = *v ? IM_COL32(145, 211, 68, 255) : IM_COL32(218, 218, 218, 255);</span><br><span class="line"></span><br><span class="line">    draw_list-&gt;AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg, height * 0.5f);</span><br><span class="line">    draw_list-&gt;AddCircleFilled(ImVec2(*v ? (p.x + width - radius) : (p.x + radius), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ul>
+<li><p><a href="https://github.com/ocornut/imgui/issues/1537" target="_blank" rel="noopener">Toggle Button?</a><br>不知道为什么没加到ImGui的库里面去。</p>
+</li>
+<li><p><a href="https://qiita.com/ousttrue/items/ae7c8d5715adffc5b1fa" target="_blank" rel="noopener">ImGuiのWidgets</a></p>
+</li>
 </ul>
 <p>我在调查的过程中有一个很在意的东西，下面的这个文章里的一个叫cereal的东西：</p>
 <blockquote>
