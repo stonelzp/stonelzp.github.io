@@ -133,6 +133,32 @@ UE4为我们提供了式样案例`RichTextBlockImageDecorator`这个类，之后
 
 #### RichTextBlock各项活用
 有时间的话可以验证验证下面的实现，多学习一些效果。
-- [[UE4] RichTextBlock でタイプライター演出](https://qiita.com/koorinonaka/items/5eb82738479667fa3d9c)
-- [[UE4] RichTextBlock でルビを振る](https://qiita.com/koorinonaka/items/34a47303e9d9c5393105)
-- [[UE4] RichTextBlock で独自タグを定義する](https://qiita.com/koorinonaka/items/39b01d1652d698e3d73b)
+- [UE4 RichTextBlock でタイプライター演出](https://qiita.com/koorinonaka/items/5eb82738479667fa3d9c)
+- [UE4 RichTextBlock でルビを振る](https://qiita.com/koorinonaka/items/34a47303e9d9c5393105)
+- [UE4 RichTextBlock で独自タグを定義する](https://qiita.com/koorinonaka/items/39b01d1652d698e3d73b)
+- [正規表現を可視化してまとめたチートシート](https://qiita.com/grrrr/items/0b35b5c1c98eebfa5128)
+- [正規表現に見切りをつけるとき](https://leoclock.blogspot.com/2009/01/blog-post_27.html)
+
+一个关于UI的博客部分写得非常棒的人写的一个库，说不定未来能给我一些参考：
+- [BYG Rich Text Library](https://benui.ca/unreal/byg-rich-text/)
+
+总觉得上面的内容很乱，有时间的话整理一下。
+
+# Font - 字体
+关于UE中的字体规则记录，又或者说是关于Font相关的基础知识。
+
+![FontMetrics](FontMetrics.png)
+
+# UI的各种尝试
+在各种搜索中偶然发现了一个大佬的博客，是关于使用UMG制作UI的各种记录，非常厉害。
+- [みつまめ杏仁 - 首页](https://limesode.hatenablog.com/archive/category/UE4)
+
+先贴几个很感兴趣的：
+- [UMGでマテリアルアニメーション制御 2020](https://limesode.hatenablog.com/entry/2020/07/14/002543)
+- [UMGでマテリアルアニメーション制御](https://limesode.hatenablog.com/entry/2016/05/19/003251)
+- [９スライスを試してみたメモ](https://limesode.hatenablog.com/entry/2021/04/04/203656)
+- [文字がシャッフルしながら出てきてランダムに消えていくやつについてのメモ](https://limesode.hatenablog.com/entry/2020/10/31/193903)
+- [UMGのスライダーをシークバー風に変える](https://limesode.hatenablog.com/entry/2021/02/21/161333)
+- [ポップするリスト表示を試してみたのでメモ](https://limesode.hatenablog.com/entry/2021/01/06/234154)
+- [ゆらゆらするマテリアル](https://limesode.hatenablog.com/entry/2019/04/05/015513)
+- [HorizontalBoxの中の表示間隔を調整する](https://limesode.hatenablog.com/entry/2018/09/22/223541)
