@@ -22,13 +22,51 @@ UnrealImGui的master分支已经更新最新的UE5的支持。
 - [【UE4】GUIフレームワーク「Dear ImGui」を使ってデバッグ・ツール用UIを作ってみよう！ < 導入・基本編 >](https://pafuhana1213.hatenablog.com/entry/UnrealImGui-HowTo-Basic)
 
 # Unreal ImGui的使用
+一些基础的想要深入使用的话最好要看的：
+- [FAQ (Frequently Asked Questions)](https://github.com/ocornut/imgui/blob/master/docs/FAQ.md)
+- [Dear ImGui: Using Fonts](https://github.com/ocornut/imgui/blob/master/docs/FONTS.md)
 
 据说是可以远程实机操控imgui的插件，配合UnrealImGui一起使用的插件。也是需要调查使用方法的。
 - [netimgui](https://github.com/sammyfreg/netImgui)
 
+## ImGui的扩展资源
+应该是别人使用ImGui的扩展，一定要看：
+- [Awesome Dear ImGui](https://github.com/HankiDesign/awesome-dear-imgui)
+- [Useful Extensions](https://github.com/ocornut/imgui/wiki/Useful-Extensions)
 
 ## ImGui各种控件的实现
+
+### Widget控件
+记录各种常用的控件（Demo里面的可能也会记录）。
+1. ToggleButton
+```
+void ToggleButton(const char* str_id, bool* v)
+{
+    ImVec2 p = ImGui::GetCursorScreenPos();
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    float height = ImGui::GetFrameHeight();
+    float width = height * 1.55f;
+    float radius = height * 0.50f;
+
+    if (ImGui::InvisibleButton(str_id, ImVec2(width, height)))
+        *v = !*v;
+    ImU32 col_bg;
+    if (ImGui::IsItemHovered())
+        col_bg = *v ? IM_COL32(145+20, 211, 68+20, 255) : IM_COL32(218-20, 218-20, 218-20, 255);
+    else
+        col_bg = *v ? IM_COL32(145, 211, 68, 255) : IM_COL32(218, 218, 218, 255);
+
+    draw_list->AddRectFilled(p, ImVec2(p.x + width, p.y + height), col_bg, height * 0.5f);
+    draw_list->AddCircleFilled(ImVec2(*v ? (p.x + width - radius) : (p.x + radius), p.y + radius), radius - 1.5f, IM_COL32(255, 255, 255, 255));
+}
+```
+- [Toggle Button?](https://github.com/ocornut/imgui/issues/1537)
+不知道为什么没加到ImGui的库里面去。
+
 - [ImGuiのWidgets](https://qiita.com/ousttrue/items/ae7c8d5715adffc5b1fa)
+
+
 
 
 我在调查的过程中有一个很在意的东西，下面的这个文章里的一个叫cereal的东西：
