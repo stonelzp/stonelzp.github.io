@@ -60,6 +60,14 @@ UE_LOG(LogMyAwesomeGame, Log, TEXT("Test Log Message"));
 LogMyAwesomeGame=VeryVerbose
 ```
 
+> 2023/08/28 追加
+
+使用命令行的方式提升某个LOG输出等级：
+```
+Console
+: Log LogMyAwesomeGame Verbose //将定义的LOG提升至Verbose输出等级
+```
+
 ### 第三个参数：All
 第三个参数则是决定了编译阶段会被编译进去的LOG层级，这意味着在Runtime对Log的输出层级进行修改变为不可能，当然是指修改为未被编译进去的LOG层级。
 

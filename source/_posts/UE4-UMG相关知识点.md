@@ -144,10 +144,27 @@ UE4为我们提供了式样案例`RichTextBlockImageDecorator`这个类，之后
 
 总觉得上面的内容很乱，有时间的话整理一下。
 
+#### 其它Tips
+
+##### 关于换行
+在RichText里面换行意外是一件很麻烦的事情，主要是有几种方式，不统一。
+既然是RichText，下面都是针对FText变量对象展开。
+
+1. 使用`{/n}`,在Buleprint中字符串里直接插入该字符。
+2. 在开启MultiLine的情况下使用`Shift`+`Enter`进行换行
+3. C++代码中插入`'\n'`
+
+参考：
+- [How to line break within Rich Text Block?](https://forums.unrealengine.com/t/how-to-line-break-within-rich-text-block/131598)
+
 # Font - 字体
 关于UE中的字体规则记录，又或者说是关于Font相关的基础知识。
 
 ![FontMetrics](FontMetrics.png)
+
+## FontSize计算
+在UE里Slate的字体计算实际上操作一下真的是有些难受，先做一下记录吧。
+- [How is font size calculated?](https://stackoverflow.com/questions/3495872/how-is-font-size-calculated)
 
 # UI的各种尝试
 在各种搜索中偶然发现了一个大佬的博客，是关于使用UMG制作UI的各种记录，非常厉害。
