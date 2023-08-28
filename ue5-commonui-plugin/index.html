@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="StoneのBLOG">
 <meta property="og:description" content="CommonUI是UE推出的新的UI插件，本质上还是UMG那一套，相比于原来的基础系统，为我们做了一点使用上的简化。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2023-08-27T16:51:07.503Z">
+<meta property="og:updated_time" content="2023-08-28T16:29:29.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UE5-CommonUI插件">
 <meta name="twitter:description" content="CommonUI是UE推出的新的UI插件，本质上还是UMG那一套，相比于原来的基础系统，为我们做了一点使用上的简化。">
@@ -212,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2023-08-28 01:33:12 / 修改时间：01:51:07" itemprop="dateCreated datePublished" datetime="2023-08-28T01:33:12+09:00">2023-08-28</time>
+              <time title="创建时间：2023-08-28 01:33:12" itemprop="dateCreated datePublished" datetime="2023-08-28T01:33:12+09:00">2023-08-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-29 01:29:29" itemprop="dateModified" datetime="2023-08-29T01:29:29+09:00">2023-08-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -258,7 +264,11 @@
 <p>If the widget you are creating only needs to interact with CommonUI’s Input Routing system to handle input by itself, consider creating a CommonUserWidget or a regular User Widget. CommonUserWidgets form the basis of many of CommonUI’s classes, including UCommonButtonBase and UCommonTabListWidgetBase. Tooltips are a good example of a case where Activatable Widgets can be counterproductive since tooltips tend to quickly appear and disappear, don’t need to forward input to child widgets, and don’t need to seize input from the rest of your UI.</p>
 <p>If the widget you are creating has multiple interactable children or needs to block input handling from the rest of your UI, then using an Activatable Widget is preferable. Pop-up windows and modal menus are good examples of this kind of behavior.</p>
 </blockquote>
-<h1 id="Debug-Tips"><a href="#Debug-Tips" class="headerlink" title="Debug Tips"></a>Debug Tips</h1><h2 id="观察Log"><a href="#观察Log" class="headerlink" title="观察Log"></a>观察Log</h2><p>可以使用<code>Log LogCommonUI Verbose</code>提高Log输入等级，观察CommonUI的日志。尤其重要的是Focus的移动。</p>
+<h1 id="Debug-Tips"><a href="#Debug-Tips" class="headerlink" title="Debug Tips"></a>Debug Tips</h1><h2 id="Slate-Debugger"><a href="#Slate-Debugger" class="headerlink" title="Slate Debugger"></a>Slate Debugger</h2><ul>
+<li><a href="https://docs.unrealengine.com/5.2/en-US/console-slate-debugger-in-unreal-engine/" target="_blank" rel="noopener">Console Slate Debugger - A reference manual for the Console Slate Debugger tool, which helps users debug applications using the Slate UI framework.</a></li>
+</ul>
+<p>我怎么忘了，还有一个超级好用的工具，之前有用过的。</p>
+<h2 id="观察Log"><a href="#观察Log" class="headerlink" title="观察Log"></a>观察Log</h2><p>可以使用<code>Log LogCommonUI Verbose</code>提高Log输入等级，观察CommonUI的日志。尤其重要的是Focus的移动。</p>
 
     </div>
 
@@ -340,7 +350,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CommonUI-GuideLine"><span class="nav-number">2.</span> <span class="nav-text">CommonUI-GuideLine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Debug-Tips"><span class="nav-number">3.</span> <span class="nav-text">Debug Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#观察Log"><span class="nav-number">3.1.</span> <span class="nav-text">观察Log</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CommonUI-GuideLine"><span class="nav-number">2.</span> <span class="nav-text">CommonUI-GuideLine</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Debug-Tips"><span class="nav-number">3.</span> <span class="nav-text">Debug Tips</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Slate-Debugger"><span class="nav-number">3.1.</span> <span class="nav-text">Slate Debugger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察Log"><span class="nav-number">3.2.</span> <span class="nav-text">观察Log</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
