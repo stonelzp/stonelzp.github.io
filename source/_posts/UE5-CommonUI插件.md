@@ -30,5 +30,10 @@ CommonUI是UE推出的新的UI插件，本质上还是UMG那一套，相比于�
 
 # Debug Tips
 
+## Slate Debugger
+- [Console Slate Debugger - A reference manual for the Console Slate Debugger tool, which helps users debug applications using the Slate UI framework.](https://docs.unrealengine.com/5.2/en-US/console-slate-debugger-in-unreal-engine/)
+
+我怎么忘了，还有一个超级好用的工具，之前有用过的。
+
 ## 观察Log
 可以使用`Log LogCommonUI Verbose`提高Log输入等级，观察CommonUI的日志。尤其重要的是Focus的移动。
