@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>UE4-UMG中的NavigationSystem</title>
+    <url>/ue4-umg-navigationsystem/</url>
+    <content><![CDATA[<p>有时间说一下UMG中的Navigation。<br><a id="more"></a></p>
+]]></content>
+      <categories>
+        <category>UE5</category>
+        <category>UE4</category>
+      </categories>
+      <tags>
+        <tag>UE5</tag>
+        <tag>UMG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>UE5-CommonUI插件</title>
     <url>/ue5-commonui-plugin/</url>
     <content><![CDATA[<p>CommonUI是UE推出的新的UI插件，本质上还是UMG那一套，相比于原来的基础系统，为我们做了一点使用上的简化。<br><a id="more"></a></p>
@@ -75,9 +89,9 @@
         <category>编程</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
         <tag>UE5</tag>
       </tags>
   </entry>
@@ -667,8 +681,8 @@
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -1069,8 +1083,8 @@
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4349,8 +4363,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -4437,8 +4451,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -5800,8 +5814,14 @@ table th:nth-of-type(4) {
     <content><![CDATA[<p>自从发现自己写的东西被人原封不动的复制粘贴扔到了CSDN之后，曾经一度想要废了这个博客，写博客对我来说就是一个记笔记的过程，记录自己工作中遇到的问题和解决过程，顺便写写自己的心得什么的，就是很随意。未想着给别人看，但是要是写的某一个地方帮上了某个地方的某个人也是好事情，哪怕不知道有没有，但也是一种安慰了。所以博客自建成起，就根本没设置什么自欺欺人的评论功能点赞功能。也没想着会有。</p>
 <p>但是整篇文章直接贴走，连个转载链接都不留是不是就有些过分了，生气不可避免了但是也只是只能无能狂怒了。去CSDN注册个账户举报？说到底对于我去CSDN注册账户这件事情都很抵触。算了，就算了吧。</p>
 <a id="more"></a>
-<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>[:contents]</p>
-<h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><ul>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><ul>
+<li>目录索引<ul>
+<li><a href="#toc_0">1. 关于博客内容书写</a></li>
+<li><a href="#toc_1">2. 关于博客构建</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a><h1 id="toc_0">关于博客内容书写</h1></h1><ul>
 <li>2020/11/20 : 对新建文章的模板进行了修改</li>
 <li>2021/02/19 : 把博客的配置及源文件上传到了Github仓库分支方便多台PC整理博客</li>
 <li>2021/03/21 : 对新电脑上的博客重新配置遇到了好多问题</li>
@@ -5883,7 +5903,10 @@ table th:nth-of-type(4) {
 </table>
 <h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">![替代文字](图片链接 &quot;图片标题&quot;)</span><br><span class="line"></span><br><span class="line">![替代文字](图片链接)</span><br></pre></td></tr></table></figure></p>
 <h2 id="网址链接"><a href="#网址链接" class="headerlink" title="网址链接"></a>网址链接</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 会打开新的Tab页面（比较推荐）</span><br><span class="line">&lt;a href=&quot;目标网址&quot; target=&quot;_blank&quot;&gt;表示文字&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">[表示文字](目标网址)</span><br></pre></td></tr></table></figure></p>
-<h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
+<h2 id="目录索引"><a href="#目录索引" class="headerlink" title="目录索引"></a>目录索引</h2><p>简单搜了一下但是没有什么比较满意的方案，还得是使用HTML的方式，但是我对html的语法真的只是一知半解。</p>
+<p>使用前提是定义好要索引的标题:<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;h1 id=&quot;loc_段落标题ID&quot;&gt;段落标题&lt;/h1&gt;</span><br></pre></td></tr></table></figure></p>
+<p>将段落标题加入到目录索引<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[段落标题](@loc_段落标题ID) // 这里要@上面定义的ID</span><br></pre></td></tr></table></figure></p>
+<h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a><h1 id="toc_1">关于博客构建</h1></h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
 <p>因为用起来麻烦就忘了。</p>
 <p>执行</p>
 <p><code>hexo g &amp;&amp; gulp</code></p>
@@ -8195,8 +8218,8 @@ table th:nth-of-type(4) {
         <category>C++</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8230,9 +8253,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -8269,9 +8292,9 @@ table th:nth-of-type(4) {
         <category>Effective C++</category>
       </categories>
       <tags>
+        <tag>笔记</tag>
         <tag>C++</tag>
         <tag>编程</tag>
-        <tag>笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -8440,8 +8463,8 @@ table th:nth-of-type(4) {
         <category>编程</category>
       </categories>
       <tags>
-        <tag>C++</tag>
         <tag>笔记</tag>
+        <tag>C++</tag>
       </tags>
   </entry>
   <entry>
@@ -8578,8 +8601,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8693,8 +8716,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8810,8 +8833,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -8864,8 +8887,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -9023,8 +9046,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -9148,8 +9171,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -9619,8 +9642,8 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
@@ -10021,9 +10044,9 @@ table th:nth-of-type(4) {
         <category>UnrealEngine4</category>
       </categories>
       <tags>
-        <tag>UE4</tag>
         <tag>C++</tag>
         <tag>编程</tag>
+        <tag>UE4</tag>
       </tags>
   </entry>
   <entry>
