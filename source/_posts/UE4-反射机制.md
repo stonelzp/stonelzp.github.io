@@ -78,6 +78,11 @@ UField
                             AnyPropertiesEdited = true;
                     }
             }
+            else if(auto StrProperty = CastField<FStrProperty>(Property))
+            {
+                FString sampleStr = StrProperty->GetPropertyValue_InContainer(DebugSettings);
+                // TODO:
+            }
     }
     if(AnyPropertiesEdited)
     {
