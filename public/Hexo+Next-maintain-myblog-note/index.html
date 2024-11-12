@@ -247,7 +247,12 @@
         <p>自从发现自己写的东西被人原封不动的复制粘贴扔到了CSDN之后，曾经一度想要废了这个博客，写博客对我来说就是一个记笔记的过程，记录自己工作中遇到的问题和解决过程，顺便写写自己的心得什么的，就是很随意。未想着给别人看，但是要是写的某一个地方帮上了某个地方的某个人也是好事情，哪怕不知道有没有，但也是一种安慰了。所以博客自建成起，就根本没设置什么自欺欺人的评论功能点赞功能。也没想着会有。</p>
 <p>但是整篇文章直接贴走，连个转载链接都不留是不是就有些过分了，生气不可避免了但是也只是只能无能狂怒了。去CSDN注册个账户举报？说到底对于我去CSDN注册账户这件事情都很抵触。算了，就算了吧。</p>
 <a id="more"></a>
-<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>[:contents]</p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><!--
+- 目录索引
+  - [1. 关于博客内容书写](#toc_0)
+  - [2. 关于博客构建](#toc_1)
+-->
+<!--# <h1 id="toc_0">关于博客内容书写</h1> -->
 <h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><ul>
 <li>2020/11/20 : 对新建文章的模板进行了修改</li>
 <li>2021/02/19 : 把博客的配置及源文件上传到了Github仓库分支方便多台PC整理博客</li>
@@ -330,6 +335,11 @@
 </table>
 <h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">![替代文字](图片链接 &quot;图片标题&quot;)</span><br><span class="line"></span><br><span class="line">![替代文字](图片链接)</span><br></pre></td></tr></table></figure></p>
 <h2 id="网址链接"><a href="#网址链接" class="headerlink" title="网址链接"></a>网址链接</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 会打开新的Tab页面（比较推荐）</span><br><span class="line">&lt;a href=&quot;目标网址&quot; target=&quot;_blank&quot;&gt;表示文字&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">[表示文字](目标网址)</span><br></pre></td></tr></table></figure></p>
+<h2 id="注释掉内容"><a href="#注释掉内容" class="headerlink" title="注释掉内容"></a>注释掉内容</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 要注释掉的内容 --&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="目录索引"><a href="#目录索引" class="headerlink" title="目录索引"></a>目录索引</h2><p>简单搜了一下但是没有什么比较满意的方案，还得是使用HTML的方式，但是我对html的语法真的只是一知半解。<br>我用了这种方式，MarkdownPreview没有问题，但是在分发到网站上之后，Post的右边文章目录那里段落标题会出现两遍… 懒得调查了…</p>
+<p>使用前提是定义好要索引的标题:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1 id=&quot;loc_段落标题ID&quot;&gt;段落标题&lt;/h1&gt;</span><br></pre></td></tr></table></figure></p>
+<p>将段落标题加入到目录索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[段落标题](@loc_段落标题ID) // 这里要@上面定义的ID</span><br></pre></td></tr></table></figure></p>
+<!-- # <h1 id="toc_1">关于博客构建</h1> -->
 <h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
 <p>因为用起来麻烦就忘了。</p>
 <p>执行</p>
@@ -476,7 +486,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">2.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">2.1.</span> <span class="nav-text">代码部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式书写备忘"><span class="nav-number">2.2.</span> <span class="nav-text">格式书写备忘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文字添加颜色"><span class="nav-number">2.2.1.</span> <span class="nav-text">文字添加颜色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内容折叠"><span class="nav-number">2.2.2.</span> <span class="nav-text">内容折叠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加Table"><span class="nav-number">2.2.3.</span> <span class="nav-text">添加Table</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">2.3.</span> <span class="nav-text">图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网址链接"><span class="nav-number">2.4.</span> <span class="nav-text">网址链接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">3.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#博文压缩"><span class="nav-number">3.1.</span> <span class="nav-text">博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义新建文章的模板"><span class="nav-number">3.2.</span> <span class="nav-text">定义新建文章的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改code代码块自定义样式"><span class="nav-number">3.3.</span> <span class="nav-text">修改code代码块自定义样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转移电脑的博客遇见的大坑"><span class="nav-number">3.4.</span> <span class="nav-text">转移电脑的博客遇见的大坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除文章"><span class="nav-number">3.5.</span> <span class="nav-text">删除文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新记录"><span class="nav-number">3.6.</span> <span class="nav-text">更新记录</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">2.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">2.1.</span> <span class="nav-text">代码部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式书写备忘"><span class="nav-number">2.2.</span> <span class="nav-text">格式书写备忘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文字添加颜色"><span class="nav-number">2.2.1.</span> <span class="nav-text">文字添加颜色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内容折叠"><span class="nav-number">2.2.2.</span> <span class="nav-text">内容折叠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加Table"><span class="nav-number">2.2.3.</span> <span class="nav-text">添加Table</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">2.3.</span> <span class="nav-text">图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网址链接"><span class="nav-number">2.4.</span> <span class="nav-text">网址链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释掉内容"><span class="nav-number">2.5.</span> <span class="nav-text">注释掉内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录索引"><span class="nav-number">2.6.</span> <span class="nav-text">目录索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">3.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#博文压缩"><span class="nav-number">3.1.</span> <span class="nav-text">博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义新建文章的模板"><span class="nav-number">3.2.</span> <span class="nav-text">定义新建文章的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改code代码块自定义样式"><span class="nav-number">3.3.</span> <span class="nav-text">修改code代码块自定义样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转移电脑的博客遇见的大坑"><span class="nav-number">3.4.</span> <span class="nav-text">转移电脑的博客遇见的大坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除文章"><span class="nav-number">3.5.</span> <span class="nav-text">删除文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新记录"><span class="nav-number">3.6.</span> <span class="nav-text">更新记录</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -492,19 +502,19 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">120</span>
+          <span class="site-state-item-count">126</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">50</span>
+        <span class="site-state-item-count">58</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -536,7 +546,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
