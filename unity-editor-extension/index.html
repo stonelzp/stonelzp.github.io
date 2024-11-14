@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
+<meta name="keywords" content="C#,Unity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity-Editor扩展">
+<meta property="og:url" content="http://stonelzp.github.io/unity-editor-extension/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/unity-editor-extension/MinMaxSlider.png">
+<meta property="og:image" content="http://stonelzp.github.io/unity-editor-extension/FoldoutAndPopupView.png">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity-Editor扩展">
+<meta name="twitter:description" content="编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)">
+<meta name="twitter:image" content="http://stonelzp.github.io/unity-editor-extension/MinMaxSlider.png">
+
+<link rel="canonical" href="http://stonelzp.github.io/unity-editor-extension/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Unity-Editor扩展 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/unity-editor-extension/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unity-Editor扩展
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-13 19:58:46" itemprop="dateCreated datePublished" datetime="2019-08-13T19:58:46+09:00">2019-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>编辑器扩展是很重要的一个部分，多使用可以提高开发效率。当然也是需要学习的。(未整理)</p>
+<a id="more"></a>
+<p>由于是Editor的扩展功能在实际的项目中要注意不要把Editor的功能打包在项目的功能里面。</p>
+<h2 id="Unity-Editor扩展"><a href="#Unity-Editor扩展" class="headerlink" title="Unity Editor扩展"></a>Unity Editor扩展</h2><p>Unity编辑器扩展好多内容啊，只能记下我遇见的了。有时间要找找一些感觉用的上的。</p>
+<p>参考公司大佬的写法，我做了一个当我准备关掉Editor的时候会弹出来一个MessageBox的功能。没啥实际的功能，就是为了提醒。</p>
+<h3 id="实现需求"><a href="#实现需求" class="headerlink" title="实现需求"></a>实现需求</h3><p><a href="https://docs.unity3d.com/ScriptReference/EditorApplication-wantsToQuit.html" target="_blank" rel="noopener">EditorApplication.wantsToQuit</a>就是实现这个功能的主角。</p>
+<p>实现这个功能的代码:<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">InitializeOnLoad</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">EditorReminder</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">InitializeOnLoadMethod</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ValidateReminder</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        EditorApplication.wantsToQuit += EditorWantToQuitReminder;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">EditorWantToQuitReminder</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">bool</span>.TryParse(EditorUserSettings.GetConfigValue(<span class="string">"EnableReminder"</span>), <span class="keyword">out</span> <span class="keyword">var</span> enable);</span><br><span class="line">        <span class="keyword">if</span>(!enable)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> EditorUtility.DisplayDialog(<span class="string">"Reminder"</span>, <span class="string">"Have you released all your locks on GitHub?"</span>, <span class="string">"Yes, quit!"</span>, <span class="string">"No, wait a second."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>几行就能实现这个功能，真的好简单啊（站着说话不腰疼）。</p>
+<h3 id="InitializeOnLoad"><a href="#InitializeOnLoad" class="headerlink" title="InitializeOnLoad"></a>InitializeOnLoad</h3><blockquote>
+<p><strong><a href="https://docs.unity3d.com/Manual/RunningEditorCodeOnLaunch.html" target="_blank" rel="noopener">Running Editor Script Code on Launch</a></strong></p>
+<p>Sometimes, it is useful to be able to run some editor script code in a project as soon as Unity launches without requiring action from the user. You can do this by applying the InitializeOnLoad attribute to a class which has a static constructor. A static constructor is a function with the same name as the class, declared static and without a return type or parameters (see <a href="http://docs.go-mono.com/index.aspx?link=ecmaspec%3a17.11" target="_blank" rel="noopener">here</a> for more information):-</p>
+</blockquote>
+<p>官方文档上说对于有一个静态构造函数的类前可以加上<strong>InitializeOnLoad</strong>这个attribute，但是上面的那个例子我并没有显式的去声明一个静态的构造函数。而且执行下来也没什么问题，难道说有一个静态构造函数会好一些吗。</p>
+<blockquote>
+<p>A static constructor is always guaranteed to be called before any static function or instance of the class is used, but the InitializeOnLoad attribute ensures that it is called as the editor launches.</p>
+</blockquote>
+<p>就是这样使用的。</p>
+<h3 id="InitializeOnLoadMethod"><a href="#InitializeOnLoadMethod" class="headerlink" title="InitializeOnLoadMethod"></a>InitializeOnLoadMethod</h3><p><a href="https://docs.unity3d.com/ScriptReference/InitializeOnLoadMethodAttribute.html" target="_blank" rel="noopener">InitializeOnLoadMethodAttribute</a></p>
+<blockquote>
+<p>Allow an editor class method to be initialized when Unity loads without action from the user.</p>
+</blockquote>
+<p>项目被加载到Unity中的时候带有这个属性的静态函数就会被自动调用。</p>
+<h3 id="RuntimeInitializeOnLoadMethod"><a href="#RuntimeInitializeOnLoadMethod" class="headerlink" title="RuntimeInitializeOnLoadMethod"></a>RuntimeInitializeOnLoadMethod</h3><ul>
+<li><a href="https://docs.unity3d.com/ScriptReference/RuntimeInitializeOnLoadMethodAttribute.html" target="_blank" rel="noopener">RuntimeInitializeOnLoadMethodAttribute</a></li>
+</ul>
+<p>添加了这个属性的函数会在游戏开始运行的时候被自动调用而不需要人为调用。</p>
+<blockquote>
+<p>Allow a runtime class method to be initialized when a game is loaded at runtime without action from the user.</p>
+</blockquote>
+<p><code>[RuntimeInitializeOnLoadMethod]</code>的默认行为会在<code>Awake</code>之后被调用，还有一种说法是在<code>OnEnable</code>之后调用。</p>
+<blockquote>
+<p>The execution order of methods marked [RuntimeInitializeOnLoadMethod] is not guaranteed.<br>这句话应该是说都有<code>[RuntimeInitializeOnLoadMethod]</code>的函数调用顺序无法被保证。</p>
+</blockquote>
+<h4 id="RuntimeInitializeLoadType"><a href="#RuntimeInitializeLoadType" class="headerlink" title="RuntimeInitializeLoadType"></a>RuntimeInitializeLoadType</h4><ul>
+<li><a href="https://docs.unity3d.com/ScriptReference/RuntimeInitializeLoadType.html" target="_blank" rel="noopener">RuntimeInitializeLoadType</a></li>
+</ul>
+<p>指定参数的话就可以指定不同时间段调用。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">InitTest</span>  : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OnBeforeSceneLoadRuntimeMethod</span> (<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"Before scene loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Awake</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"Awake"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnEnable</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"OnEnable"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OnAfterSceneLoadRuntimeMethod</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"After scene loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">RuntimeInitializeOnLoadMethod</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">OnRuntimeMethodLoad</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"RuntimeMethodLoad: After scene loaded"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Start</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"Start"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行顺序为:<code>BeforeSceneLoad</code>-&gt;<code>Awake</code>-&gt;<code>OnEnable</code>-&gt;<code>AfterSceneLoad</code>-&gt;<code>no paramater</code>-&gt;<code>Start</code></p>
+<h3 id="EditorApplication"><a href="#EditorApplication" class="headerlink" title="EditorApplication"></a>EditorApplication</h3><p><a href="https://docs.unity3d.com/ScriptReference/EditorApplication.html" target="_blank" rel="noopener">EditorApplication</a></p>
+<h4 id="wantsToQuit"><a href="#wantsToQuit" class="headerlink" title="wantsToQuit"></a>wantsToQuit</h4><p>就是我用的那个啦，连用法都是抄的官方文档的。</p>
+<blockquote>
+<p>Unity raises this event when the editor application wants to quit.</p>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Ensure class initializer is called whenever scripts recompile</span></span><br><span class="line">[<span class="meta">InitializeOnLoad</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">EditorWantsToQuitExample</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">bool</span> <span class="title">WantsToQuit</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Debug.Log(<span class="string">"Editor prevented from quitting."</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="title">EditorWantsToQuitExample</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        EditorApplication.wantsToQuit += WantsToQuit;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>想要在Editor退出前做点什么？那么用这个吧。</p>
+<h4 id="quitting"><a href="#quitting" class="headerlink" title="quitting"></a>quitting</h4><p>想要在Editor退出的时候做点什么那么用这个。</p>
+<h3 id="EditorUtility"><a href="#EditorUtility" class="headerlink" title="EditorUtility"></a>EditorUtility</h3><p><strong><a href="https://docs.unity3d.com/ScriptReference/EditorUtility.html" target="_blank" rel="noopener">EditorUtility</a></strong></p>
+<p>一些通用的函数库，看名字就知道应该会很多</p>
+<h4 id="EditorUtility-DisplayDialog"><a href="#EditorUtility-DisplayDialog" class="headerlink" title="EditorUtility.DisplayDialog"></a>EditorUtility.DisplayDialog</h4><p><strong><a href="https://docs.unity3d.com/ScriptReference/EditorUtility.DisplayDialog.html" target="_blank" rel="noopener">EditorUtility.DisplayDialog</a></strong></p>
+<p>弹出一个窗口？</p>
+<h4 id="EditorUtility-DisplayDialogComplex"><a href="#EditorUtility-DisplayDialogComplex" class="headerlink" title="EditorUtility.DisplayDialogComplex"></a>EditorUtility.DisplayDialogComplex</h4><p>弹出一个更复杂的窗口？（貌似是支持三个按钮）</p>
+<h3 id="MenuItem"><a href="#MenuItem" class="headerlink" title="MenuItem"></a>MenuItem</h3><p><strong><a href="https://docs.unity3d.com/ScriptReference/MenuItem.html" target="_blank" rel="noopener">MenuItem</a></strong></p>
+<p>这个属性可以让在Editor上的菜单栏添加项目，可以用来做什么呢？那可太多了，比如说需要方便切换的项目设定，亦或者想要方便调用一个函数（啊这个好像可以直接在想要调用的GameObject上右键调用，使用另外一个Attribute）。总而言之，就是方便。</p>
+<p>需要注意的是<strong>只有静态函数才能使用这个MenuItem属性</strong>。</p>
+<p>这个光看官方文档不靠谱，讲的太少了，看我总结的？我总结的也没什么好看的，看这个</p>
+<ul>
+<li><a href="http://kan-kikuchi.hatenablog.com/entry/MenuItem" target="_blank" rel="noopener">メニューを追加するための属性「MenuItem」は意外と多機能【Unity】【エディタ拡張】【属性】</a></li>
+</ul>
+<p>还能设定快捷键，厉害了。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">MenuItem(menuRoot + <span class="meta-string">"EnableReminder"</span>)</span>]</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">EnableReminder</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> path = menuRoot + <span class="string">"EnableReminder"</span>;</span><br><span class="line">    <span class="keyword">var</span> enable = Menu.GetChecked(path);</span><br><span class="line"></span><br><span class="line">    Menu.SetChecked(path, !enable);</span><br><span class="line">    EditorUserSettings.SetConfigValue(<span class="string">"EnableReminder"</span>, (!enable).ToString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用的话就是这么用的。我靠<strong>EditorUserSettings</strong>又是什么？</p>
+<hr>
+<ul>
+<li>2020/01/16更新</li>
+</ul>
+<h4 id="MenuItem参数说明"><a href="#MenuItem参数说明" class="headerlink" title="MenuItem参数说明"></a>MenuItem参数说明</h4><p>在菜单栏里添加自定义项的话当然需要对其参数有所了解，直接进入源码查看即可，这里我顺便贴一下注释:<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Summary:</span></span><br><span class="line"><span class="comment">//     Creates a menu item and invokes the static function following it, when the menu</span></span><br><span class="line"><span class="comment">//     item is selected.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Parameters:</span></span><br><span class="line"><span class="comment">//   itemName:</span></span><br><span class="line"><span class="comment">//     The itemName is the menu item represented like a pathname. For example the menu</span></span><br><span class="line"><span class="comment">//     item could be "GameObject/Do Something".</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//   isValidateFunction:</span></span><br><span class="line"><span class="comment">//     If isValidateFunction is true, this is a validation function and will be called</span></span><br><span class="line"><span class="comment">//     before invoking the menu function with the same itemName.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//   priority:</span></span><br><span class="line"><span class="comment">//     The order by which the menu items are displayed.</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MenuItem</span>(<span class="params"><span class="keyword">string</span> itemName, <span class="keyword">bool</span> isValidateFunction, <span class="keyword">int</span> priority</span>)</span>;</span><br></pre></td></tr></table></figure></p>
+<p>这里关于<code>isValidateFunxtion</code>的说明就是增加一个验证函数，比如说我只想在游戏运行的时候执行某个操作，在Editor未运行的时候调用这个函数没有意义那就加上一个验证函数。</p>
+<hr>
+<ul>
+<li>2020/02/10 更新内容</li>
+</ul>
+<p>过了好久终于有机会亲自尝试一下这个功能，同时对一些疑问进行了验证。</p>
+<p>1.首先是这个MenuItem的<code>isValidateFunction</code>为True的情况下的执行情况：</p>
+<p>按照源码中的注释所说，标注了这个属性的函数(以下称为<em>验证函数</em>)会在具有相同<code>itemName</code>的函数之前执行，在我实际添加了执行log的结果来看，这个函数确实会在前面执行，但是执行的时机却很迷惑。</p>
+<p>单纯的情况下，在执行无<code>isValidateFunction</code>同名<code>itemName</code>函数之前，这个验证函数被执行了两次。哪怕是点开MenuItem执行其他的功能函数，甚至什么都不执行点击其他位置关掉点开MenuItem弹出来的菜单，这个验证函数都会被执行一次。</p>
+<p>看来这个验证函数还跟Unity的Editor的运行有关，比如说关掉MenuItem的窗口会刷新一下状态，执行一遍所有的验证函数（我猜的）什么的。</p>
+<p>2.验证函数的返回值的影响</p>
+<p>细心的我发现，与被调用的函数不同，验证函数会有一个布尔类型的返回值，对于这个返回值我测试得到的结果是：</p>
+<p>当返回值是true的时候，就是平常一样正常的调用。</p>
+<p>返回值是false的时候，被调用的函数(具有相同的<code>itemName</code>)的MenuItem就变灰色了，不能点击调用。</p>
+<hr>
+<p>关于<code>priority</code>的含义就是可以自定义菜单选项的顺序，这里要注意的是想要在弹出来的菜单中看到分割线的话，优先级的数值是10起跳的。摘一段官网的文字:</p>
+<blockquote>
+<p>Note: The understanding of ten or greater is considered to create a divider in the menu. However, as per the example above, the difference between script function need to have the priority separated by 11 or more. This is why the example before has a value of 100 and one of 111. Changing 111 to 110 does not have a divider.</p>
+</blockquote>
+<h3 id="ScriptTemplates"><a href="#ScriptTemplates" class="headerlink" title="ScriptTemplates"></a>ScriptTemplates</h3><p>简单创建一个想要的脚本模板。Unity提供了两种方式。</p>
+<p>一种是直接在Unity原有的ScriptTemplates的地方添加类似的新的模板。</p>
+<p>另一种是在工程里添加新的模板。</p>
+<p>当然是推荐第二种啦。但是第一种也应该知道，毕竟要看人家是怎么做的啊。贴一下Unity引擎内置的脚本模板的位置:</p>
+<p>Windows:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\Unity\Editor\Data\Resources\ScriptTemplates\</span><br></pre></td></tr></table></figure></p>
+<p>Mac:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Unity/Unity.app/Contents/Resources/ScriptTemplates/</span><br></pre></td></tr></table></figure></p>
+<p>主要是第二种使用方法，需要做的是以下的事情：</p>
+<ul>
+<li>创建Assets/ScriptTemplates/文件路径，模板文件放置在里面</li>
+<li>模板文件命名规则：{priority}-{メニュー名}-{ファイル名}.{拡張子}.txt</li>
+<li>重启Editor </li>
+</ul>
+<p>不需要MenuItem，只要起对了名字，放对了位置，那么重启一下就能用。厉害了。</p>
+<p>知道了之后也不是很难嘛，然后我看到了一篇关于<strong>ScriptableObject</strong>式的脚本模板文章：</p>
+<ul>
+<li><a href="https://qiita.com/keidroid/items/40db91531c32a13c257f" target="_blank" rel="noopener">ScriptTemplatesでScriptableObjectのための環境構築</a></li>
+</ul>
+<p>虽然我暂时并没有找到任何非要使用ScriptableObject的理由，是我还不了解这个概念，什么情况下该使用这个东西不知道。</p>
+<h3 id="EditorUserSettings"><a href="#EditorUserSettings" class="headerlink" title="EditorUserSettings"></a>EditorUserSettings</h3><ul>
+<li><a href="http://kan-kikuchi.hatenablog.com/entry/EditorUserSettings" target="_blank" rel="noopener">プロジェクト内でデータを保存【Unity】【エディタ拡張】</a></li>
+</ul>
+<p>挺神奇的一个功能，用来保存本地设定相当理想的功能，但是貌似只有Get和Set两个方法写入的内容没法删除，别瞎写好么，我第一印象。</p>
+<p>##先记下，后整理</p>
+<ul>
+<li><a href="http://baba-s.hatenablog.com/entry/2017/12/04/090000#Unity-%E3%82%A8%E3%83%87%E3%82%A3%E3%82%BF%E3%82%92%E7%B5%82%E4%BA%86%E3%81%97%E3%81%9F%E6%99%82" target="_blank" rel="noopener">【Unity】エディタ拡張で使用できるコールバックを40個まとめて紹介</a></li>
+</ul>
+<h2 id="Editor扩展实例"><a href="#Editor扩展实例" class="headerlink" title="Editor扩展实例"></a>Editor扩展实例</h2><h3 id="Sample-Template-Editor扩展的模板写法"><a href="#Sample-Template-Editor扩展的模板写法" class="headerlink" title="Sample-Template (Editor扩展的模板写法)"></a>Sample-Template (Editor扩展的模板写法)</h3><p>模板写法包含了一些关键部分，就是个参照。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">EditorExtension</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">CustomEditor(typeof(ExtensionClass), true)</span>]</span><br><span class="line">    public class ExtensionClassInspector ： Editor</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">protected</span> ExtensionClass extensionClass = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">protected</span> SerializedProperty attributeA;</span><br><span class="line">        <span class="keyword">protected</span> SerializedProoerty attributeB;</span><br><span class="line">        ......</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnEnable</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            extensionClass = target <span class="keyword">as</span> ExtensionClass;</span><br><span class="line"></span><br><span class="line">            attributeA = serializedObject.FindObject(<span class="string">"ExtensionClass_AttributeAName"</span>);</span><br><span class="line">            attributeB = serializedObject.FindObject(<span class="string">"ExtensionClass_AttributeBName"</span>);</span><br><span class="line">            ......</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnInspectorGUI</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            serializedObject.Update();</span><br><span class="line"></span><br><span class="line">            EditorGUILayout.PropertyField(attributeA);</span><br><span class="line">            EditorGUILayout.PropertyField(attributeB);</span><br><span class="line">            ......</span><br><span class="line"></span><br><span class="line">            serializedObject.ApplyModifiedProperties();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最普通的格式就是上面那样，这是对Inspector格式的扩展，内容都是最基础的。需要注意的是在对<code>OnInspectorGUI</code>函数进行重写的时候，最开始要<strong>Update()</strong>，最后要<strong>ApplyModifiedProperties()</strong>。</p>
+<h4 id="indentLevel-缩进"><a href="#indentLevel-缩进" class="headerlink" title="indentLevel (缩进)"></a>indentLevel (缩进)</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在上面的例子中的话</span></span><br><span class="line">EditorGUILayout.PropertyField(attributeA);</span><br><span class="line"></span><br><span class="line">EditorGUI.indentLevel++;</span><br><span class="line">EditorGUILayout.PropertyField(attributeB);</span><br><span class="line">EditorGUI.indentLevel--;</span><br></pre></td></tr></table></figure>
+<h4 id="Content-Name-Inspector变量名设定"><a href="#Content-Name-Inspector变量名设定" class="headerlink" title="Content-Name (Inspector变量名设定)"></a>Content-Name (Inspector变量名设定)</h4><p>在Inspector不指定变量名字的话就会使用默认的变量名字，但是也可以自己设置。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EditorGUILayout.PropertyField(attributeA, <span class="keyword">new</span> GUIContent(<span class="string">"NameA"</span>));</span><br></pre></td></tr></table></figure>
+<p>这里的话就不自觉的产生了<strong>EditorGUILayout</strong>是什么的想法，还有其它的作用吧</p>
+<ol>
+<li>EditorGUILayout</li>
+<li>GUIContent</li>
+</ol>
+<h4 id="Type-judgement-类型判断"><a href="#Type-judgement-类型判断" class="headerlink" title="Type-judgement (类型判断)"></a>Type-judgement (类型判断)</h4><p>在<code>OnInspectorGUI</code>函数中也想要使用条件判断，这个时候不知道变量的类型不好办，上面的代码中表示的，变量类型都是<strong>SerializedProperty</strong>，条件语句对这个变量类型并不知晓。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(attributeA.boolValue) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span>(attributeB.intValue) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>等等类型，基本数据类型应该都会有覆盖到，不太清楚。</p>
+<h4 id="Disable-Area-Inspector在运行时添加不可交互内容"><a href="#Disable-Area-Inspector在运行时添加不可交互内容" class="headerlink" title="Disable-Area (Inspector在运行时添加不可交互内容)"></a>Disable-Area (Inspector在运行时添加不可交互内容)</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(EditorAppliation.isPlaying)</span><br><span class="line">&#123;</span><br><span class="line">    EditorGUILayout.BeginVertical(GUI.skin.box);</span><br><span class="line">    EditorGUILayout.LabelField(<span class="string">"Running status"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    EditorGUI.BeginDisabledGroup(<span class="literal">true</span>);</span><br><span class="line">    EditorGUILayout.PropertyField(flag1);</span><br><span class="line">    EditorGUILayout.PropertyField(flag2);</span><br><span class="line">    EditorGUI.EndDisabledGroup();</span><br><span class="line"></span><br><span class="line">    EditorGUILayout.BeginHorizontal();</span><br><span class="line">    GUILayout.FlexibleSpace();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (GUILayout.Button(<span class="string">"buttonA"</span>, GUILayout.Width(<span class="number">100</span>)))</span><br><span class="line">    &#123;</span><br><span class="line">        (target <span class="keyword">as</span> ExtensionClass)?.SampleFunctionA();</span><br><span class="line">    &#125;</span><br><span class="line">    EditorGUILayout.EndHorizontal();</span><br><span class="line"></span><br><span class="line">    EditorGUILayout.EndVertical();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我只是拿来用而已…..出现了好多我不会用的控件。还需要学习啊。</p>
+<h3 id="Inspector中显示List元素"><a href="#Inspector中显示List元素" class="headerlink" title="Inspector中显示List元素"></a>Inspector中显示List元素</h3><ul>
+<li><a href="http://light11.hatenadiary.com/entry/2019/04/13/232549" target="_blank" rel="noopener">【Unity】【エディタ拡張】配列やリストのInspector表示を改良する</a></li>
+</ul>
+<p>因为比我想象的要麻烦，我就直接用了人家的代码……原本颜色什么的都无所谓的。</p>
+<p>真的超级麻烦，如果希望上面的List中的元素是List又该怎么办呢？</p>
+<p>答案是没人这么写啊…只好自己写个类，类里面的属性加上List好了。</p>
+<ol>
+<li>error解决</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Unsupport type ..</span><br><span class="line">ApplyModifiedProperties()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://answers.unity.com/questions/533541/unsupported-type-error-in-custom-editor-script.html" target="_blank" rel="noopener">‘Unsupported type’ error in custom editor script</a></li>
+</ul>
+<p>删掉重新再add component之后就修复了。</p>
+<h3 id="Inspector中显示多元List"><a href="#Inspector中显示多元List" class="headerlink" title="Inspector中显示多元List"></a>Inspector中显示多元List</h3><ul>
+<li><a href="http://kan-kikuchi.hatenablog.com/entry/ValueListList" target="_blank" rel="noopener">多次元のListをInspectorに表示する【Unity】</a></li>
+</ul>
+<p>方法很简单，但是这里遇见了一个问题，因为使用了Inspector扩展，Inspector上不显示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// EditorGUILayout.PropertyField(pathAnchors);</span><br><span class="line">EditorGUILayout.PropertyField(pathAnchors, true);</span><br></pre></td></tr></table></figure></p>
+<p>加上一个true的参数就好了，原因我也不知道，之后在调查吧。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Serializable</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AreaPathAnchor</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;GameObject&gt; List = <span class="keyword">new</span> List&lt;GameObject&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AreaPathAnchor</span>(<span class="params">List&lt;GameObject&gt; list</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        List = list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">SerializeField</span>]</span><br><span class="line"><span class="keyword">private</span> List&lt;AreaPathAnchor&gt; pathAnchors = <span class="keyword">new</span> List&lt;AreaPathAnchor&gt;();</span><br></pre></td></tr></table></figure>
+<p>Inspector扩展中对应的代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public override void OnInspectorGUI()</span><br><span class="line">&#123;</span><br><span class="line">    EditorGUILayout.PropertyField(pathAnchors, true);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Inspector中加入HDRColor选择-未整理"><a href="#Inspector中加入HDRColor选择-未整理" class="headerlink" title="Inspector中加入HDRColor选择(未整理)"></a>Inspector中加入HDRColor选择(未整理)</h3><p>其实这个属性也不需要刻意的去扩展，只要在属性前加上限定Unity就会自动处理了。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">ColorUsage(false,true)</span>] <span class="keyword">private</span> Color color1;</span><br></pre></td></tr></table></figure></p>
+<p>像这样子。</p>
+<p>关于这个属性的更详细的说明之后再整理。</p>
+<ul>
+<li><a href="https://docs.unity3d.com/ScriptReference/ColorUsageAttribute-ctor.html" target="_blank" rel="noopener">ColorUsageAttribute Constructor</a></li>
+<li><a href="https://nopitech.com/2019/01/29/post-962/" target="_blank" rel="noopener">マテリアルのEmissionを操作</a></li>
+</ul>
+<h3 id="MinMaxSlider实现-（可以拖拽的SliderBar"><a href="#MinMaxSlider实现-（可以拖拽的SliderBar" class="headerlink" title="MinMaxSlider实现 （可以拖拽的SliderBar)"></a>MinMaxSlider实现 （可以拖拽的SliderBar)</h3><p>目的是实现一个有最大值和最小值的可拖拽的SlideBar，而且最大值和最小值可以指定，但是不能超过固定的范围。</p>
+<p>用的是自己做的项目中的一些实现，所以直接粘贴了。</p>
+<p>首先是要扩展的变量声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">using System;</span><br><span class="line">using UnityEngine;</span><br><span class="line"></span><br><span class="line">namespace CubeFantasy.EditorExtension</span><br><span class="line">&#123;</span><br><span class="line">    /// &lt;summary&gt;</span><br><span class="line">    /// Sample Editor Extension basic class.</span><br><span class="line">    /// &lt;/summary&gt;</span><br><span class="line">    ///</span><br><span class="line">    [Serializable, AddComponentMenu(&quot;CubeFantasy/SampleEditorExtension&quot;)]</span><br><span class="line">    public class SampleEditorExtension : MonoBehaviour</span><br><span class="line">    &#123;</span><br><span class="line">        // sample for MinMaxSlider</span><br><span class="line">        [SerializeField, Range(0, 30), HideInInspector]</span><br><span class="line">        public int timeMin = 0;</span><br><span class="line">        [SerializeField, Range(0, 30), HideInInspector]</span><br><span class="line">        public int timeMax = 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后是真正的扩展实现：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> CubeFantasy.EditorExtension;</span><br><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">CubeFantasy</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">CustomEditor(typeof(SampleEditorExtension),true)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SampleEditorExtensionInspector</span> : <span class="title">Editor</span></span><br><span class="line">    &#123;</span><br><span class="line">        SerializedProperty TimeMin;</span><br><span class="line">        SerializedProperty TimeMax;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnEnable</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            TimeMin = serializedObject.FindProperty(<span class="string">"timeMin"</span>);</span><br><span class="line">            TimeMax = serializedObject.FindProperty(<span class="string">"timeMax"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnInspectorGUI</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            serializedObject.Update();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// base.OnInspectorGUI();</span></span><br><span class="line"></span><br><span class="line">            EditorGUILayout.BeginHorizontal();</span><br><span class="line"></span><br><span class="line">            EditorGUILayout.PrefixLabel(<span class="string">"MinMaxSlider"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> min = (<span class="keyword">float</span>)TimeMin.intValue;</span><br><span class="line">            <span class="keyword">var</span> max = (<span class="keyword">float</span>)TimeMax.intValue;</span><br><span class="line"></span><br><span class="line">            min = Mathf.Clamp((<span class="keyword">int</span>)EditorGUILayout.FloatField(min), <span class="number">0</span>, max);</span><br><span class="line">            EditorGUILayout.MinMaxSlider(<span class="keyword">ref</span> min, <span class="keyword">ref</span> max, <span class="number">0</span>, <span class="number">30</span>);</span><br><span class="line">            max = Mathf.Clamp((<span class="keyword">int</span>)EditorGUILayout.FloatField(max), min, <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">            TimeMin.intValue = (<span class="keyword">int</span>)min;</span><br><span class="line">            TimeMax.intValue = (<span class="keyword">int</span>)max;</span><br><span class="line"></span><br><span class="line">            EditorGUILayout.EndHorizontal();</span><br><span class="line"></span><br><span class="line">            serializedObject.ApplyModifiedProperties();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最后实现的效果：</p>
+<p><img src="MinMaxSlider.png" alt="MinMaxSlider实现效果"></p>
+<h3 id="Foldout-and-window-Popup-实现"><a href="#Foldout-and-window-Popup-实现" class="headerlink" title="Foldout and window Popup 实现"></a>Foldout and window Popup 实现</h3><p>这是一个小的功能，和一个大的功能，我以为很简单但实际上是非常的浮复杂，涉及的知识也不少。我将其分为几部实现。</p>
+<p>主要是参考了公司大佬的Wwise的Event的扩展，方便在Editor中添加删除WwiseEvent和选择WwiseEvent。我想这个功能会很常见就想着自己保存下来实践一下，发现要实现的内容不是那么简单。</p>
+<h4 id="Foldout-实现"><a href="#Foldout-实现" class="headerlink" title="Foldout 实现"></a>Foldout 实现</h4><p>折叠效果的实现很简单，借助Unity的<code>EditorGUILayout.Foldout(bool folding, &quot;ContentName&quot;)</code>直接使用就可以了。重要的是需要折叠的内容，这次我要举的列子是ArrayList。</p>
+<p>这是我们要进行扩展的对象：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略using部分</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">CubeFantasy.EditorExtension</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Sample Editor Extension basic class.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span></span></span><br><span class="line">    [<span class="meta">Serializable, AddComponentMenu(<span class="meta-string">"CubeFantasy/SampleEditorExtension"</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SampleEditorExtension</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// sample for foldout and pop up list</span></span><br><span class="line">        [<span class="meta">SerializeField</span>]</span><br><span class="line">        <span class="keyword">public</span> List&lt;<span class="keyword">string</span>&gt; WwiseEventNameList = <span class="keyword">new</span> List&lt;<span class="keyword">string</span>&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>是的，实际上我们想要扩展的只是这个文字列的数组而已，但是我希望这个文字列的数组，在Inspector上的表现是</p>
+<ul>
+<li>可以折叠</li>
+<li>可以动态添加元素</li>
+<li>添加的元素是我们指定添加的(Popup Window)</li>
+<li>甚至可以在PopWindow中进行查找</li>
+</ul>
+<p>下面是Inspector的扩展实现，首先是Flodout实现：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 省略using部分的内容</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">CubeFantasy</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">CustomEditor(typeof(SampleEditorExtension), true)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SampleEditorExtensionInspector</span> : <span class="title">Editor</span></span><br><span class="line">    &#123;</span><br><span class="line">        SampleEditorExtension SampleObjectScript;</span><br><span class="line"></span><br><span class="line">        SerializedProperty WwiseEventName;</span><br><span class="line">        SerializedProperty WwiseEventNameList;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">bool</span> floding = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">OnEnable</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            SampleObjectScript = target <span class="keyword">as</span> SampleEditorExtension;</span><br><span class="line"></span><br><span class="line">            WwiseEventNameList = serializedObject.FindProperty(<span class="string">"WwiseEventNameList"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnInspectorGUI</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            serializedObject.Update();</span><br><span class="line">            <span class="comment">// base.OnInspectorGUI();</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// Sample for Flodout</span></span><br><span class="line">            <span class="keyword">if</span> (floding = EditorGUILayout.Foldout(floding, <span class="string">"SampleFoldout"</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                EditorGUI.indentLevel++;</span><br><span class="line">                <span class="keyword">var</span> length = WwiseEventNameList.arraySize;</span><br><span class="line">                <span class="keyword">var</span> newLength = EditorGUILayout.IntField(<span class="string">"Size"</span>, length);</span><br><span class="line">                <span class="keyword">if</span> (newLength &gt; length)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">var</span> currentSize = WwiseEventNameList.arraySize;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; newLength - currentSize; i++)</span><br><span class="line">                    &#123;</span><br><span class="line">                        WwiseEventNameList.InsertArrayElementAtIndex(WwiseEventNameList.arraySize);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (newLength &lt; length)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">var</span> currentSize = WwiseEventNameList.arraySize;</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; currentSize - newLength; i++)</span><br><span class="line">                    &#123;</span><br><span class="line">                        WwiseEventNameList.DeleteArrayElementAtIndex(WwiseEventNameList.arraySize - <span class="number">1</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; WwiseEventNameList.arraySize; i++)</span><br><span class="line">                &#123;</span><br><span class="line">                    WwiseEventNameField(WwiseEventNameList.GetArrayElementAtIndex(i));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                EditorGUI.indentLevel--;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            serializedObject.ApplyModifiedProperties();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">WwiseEventNameField</span>(<span class="params">SerializedProperty p</span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> w = WwiseEvents.None;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="keyword">string</span>.IsNullOrEmpty(p.stringValue))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">try</span></span><br><span class="line">                &#123;</span><br><span class="line">                    w = (WwiseEvents)Enum.Parse(<span class="keyword">typeof</span>(WwiseEvents), p.stringValue, <span class="literal">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> (ArgumentException)</span><br><span class="line">                &#123;</span><br><span class="line">                    UnityEngine.Debug.LogError(<span class="string">$"<span class="subst">&#123;SampleObjectScript.name&#125;</span> の <span class="subst">&#123;p.stringValue&#125;</span> は存在しません。"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> eventNamePopupRect = GUILayoutUtility.GetRect(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">            eventNamePopupRect.y += EditorGUIUtility.singleLineHeight + <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">            EditorGUILayout.BeginHorizontal();</span><br><span class="line">            EditorGUILayout.PrefixLabel(<span class="string">"WwiseEventName"</span>);</span><br><span class="line"></span><br><span class="line">            eventNamePopupRect.x += EditorGUIUtility.labelWidth;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (EditorGUILayout.DropdownButton(<span class="keyword">new</span> GUIContent(w.GetDescription()), FocusType.Passive))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">new</span> WwiseEventSearchWindow().Popup(eventNamePopupRect, Enum.GetNames(<span class="keyword">typeof</span>(WwiseEvents)), w.GetDescription(),</span><br><span class="line">                    x =&gt;</span><br><span class="line">                    &#123;</span><br><span class="line">                        p.stringValue = ((WwiseEvents)x).GetDescription();</span><br><span class="line"></span><br><span class="line">                        serializedObject.ApplyModifiedProperties();</span><br><span class="line">                    &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            EditorGUILayout.EndHorizontal();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的就是实现的一部分代码，为了能让其运行还缺三个部分：</p>
+<ul>
+<li><code>WwiseEvent</code>的<code>enum</code>类型</li>
+<li><code>Enum</code>类型的扩展，好方便Wwise的类型获得其Attribute的Description内容</li>
+<li>Popup窗口的扩展</li>
+</ul>
+<h4 id="WwiseEvent的enum创建"><a href="#WwiseEvent的enum创建" class="headerlink" title="WwiseEvent的enum创建"></a>WwiseEvent的enum创建</h4><p>主要为了用<code>enum</code>类型来管理Wwise的事件，什么场合下适合这么用呢，比如说想要把事件的名称传递给第三方库（这里就会Wwise），而这种事件又可能会产生很多，这种情况下，使用enum类型便能方便的管理。</p>
+<p>这里的内容只要放到相应位置，比如说放置一些固定数据的文件内容中，然后把命名空间公开，方便扩展那一部分好使用就可以了。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">CubeFantasy</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">CubeFantasyConst</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">enum</span> WwiseEvents : <span class="keyword">int</span></span><br><span class="line">        &#123;</span><br><span class="line">            [<span class="meta">System.ComponentModel.Description(<span class="meta-string">"None"</span>)</span>]</span><br><span class="line">            None,</span><br><span class="line">            [<span class="meta">System.ComponentModel.Description(<span class="meta-string">"Wwise_Event_Name_Sample_1"</span>)</span>]</span><br><span class="line">            Wwise_Event_Name_Sample_1,</span><br><span class="line">            [<span class="meta">System.ComponentModel.Description(<span class="meta-string">"Wwise_Event_Name_Sample_2"</span>)</span>]</span><br><span class="line">            Wwise_Event_Name_Sample_2,</span><br><span class="line">            [<span class="meta">System.ComponentModel.Description(<span class="meta-string">"Wwise_Event_Name_Sample_2"</span>)</span>]</span><br><span class="line">            Wwise_Event_Name_Sample_3,</span><br><span class="line">            [<span class="meta">System.ComponentModel.Description(<span class="meta-string">"Wwise_Event_Name_Sample_2"</span>)</span>]</span><br><span class="line">            Wwise_Event_Name_Sample_4,</span><br><span class="line">            [<span class="meta">System.ComponentModel.Description(<span class="meta-string">"Wwise_Event_Name_Sample_2"</span>)</span>]</span><br><span class="line">            Wwise_Event_Name_Sample_5</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="对Enum进行扩展"><a href="#对Enum进行扩展" class="headerlink" title="对Enum进行扩展"></a>对Enum进行扩展</h4><p>可以看到上面我们为WwiseEvent添加了Description，我也不知道中文怎么翻译，反正就是那个意思，为这个枚举的元素添加了属性描述，要取得这个描述就需要我们为Enum进行扩展。</p>
+<p>那么Enum是什么呢？我也不清楚…</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.ComponentModel;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">CubeFantasy.Extensions</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">EnumExtensions</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="title">GetDescription</span>(<span class="params"><span class="keyword">this</span> Enum <span class="keyword">value</span></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> field = <span class="keyword">value</span>.GetType().GetField(<span class="keyword">value</span>.ToString());</span><br><span class="line">            <span class="keyword">var</span> attribute = Attribute.GetCustomAttribute(field, <span class="keyword">typeof</span>(DescriptionAttribute)) <span class="keyword">as</span> DescriptionAttribute;</span><br><span class="line">            <span class="keyword">if</span>(attribute != <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> attribute.Description;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">value</span>.ToString();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种写法我在学习UniRx的时候经常看到，貌似是C#的写法，可以为一个类添加在类外的静态函数？参数要使用本身<code>this</code>，当进行调用的时候this是缺省的。在有多个参数的时候，第一个一定是this，然后调用的时候是缺省的。</p>
+<p>感觉C#方面的技术要提升了。</p>
+<h4 id="对PopUpWindow进行扩展实现"><a href="#对PopUpWindow进行扩展实现" class="headerlink" title="对PopUpWindow进行扩展实现"></a>对PopUpWindow进行扩展实现</h4><p>即上面的代码中出现的<code>WwiseEventSearchWindow</code>这个类的实现，内容我没有搞懂，直接Copy过来就使用了。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WwiseEventSearchWindow</span> : <span class="title">PopupWindowContent</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">class</span> <span class="title">FilterItem</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">string</span> Name;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> Index;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> WindowWidth = <span class="number">400</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">float</span> WindowHeight</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> height = <span class="number">0.0</span>f;</span><br><span class="line">            <span class="keyword">var</span> singleLineHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;</span><br><span class="line"></span><br><span class="line">            height += (Math.Min(filterdItems.Length, <span class="number">10</span>) + <span class="number">1</span>) * singleLineHeight;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> height;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Vector2 scroll;</span><br><span class="line">    <span class="keyword">int</span> selectedIndex = <span class="number">0</span>;</span><br><span class="line">    FilterItem[] list;</span><br><span class="line">    FilterItem[] filterdItems;</span><br><span class="line">    Action&lt;<span class="keyword">int</span>&gt; onCloseAction;</span><br><span class="line">    <span class="keyword">bool</span> init;</span><br><span class="line">    <span class="keyword">string</span> filter;</span><br><span class="line"></span><br><span class="line">    GUIStyle toolbarSearchField;</span><br><span class="line">    GUIStyle toolbarSearchFieldCancelButton;</span><br><span class="line">    GUIStyle toolbarSearchFieldCancelButtonEmpty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> サイズを取得する</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> Vector2 <span class="title">GetWindowSize</span>(<span class="params"></span>) </span>=&gt; <span class="keyword">new</span> Vector2(WindowWidth, WindowHeight);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Popup</span>(<span class="params">Rect rect, <span class="keyword">string</span>[] list_, <span class="keyword">string</span> selectedVal, Action&lt;<span class="keyword">int</span>&gt; onClose</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; list_.Length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (list_[i] == selectedVal)</span><br><span class="line">            &#123;</span><br><span class="line">                selectedIndex = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        init = <span class="literal">true</span>;</span><br><span class="line">        list = list_.Select((item, i) =&gt; <span class="keyword">new</span> FilterItem() &#123; Index = i, Name = item &#125;).ToArray();</span><br><span class="line">        filterdItems = list;</span><br><span class="line">        onCloseAction = onClose;</span><br><span class="line"></span><br><span class="line">        UnityEditor.PopupWindow.Show(rect, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> GUI描画</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnGUI</span>(<span class="params">Rect rect</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> newFilter = SearchFilterField(filter);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (init || newFilter != filter)</span><br><span class="line">        &#123;</span><br><span class="line">            init = <span class="literal">false</span>;</span><br><span class="line">            filter = newFilter;</span><br><span class="line">            filterdItems = list</span><br><span class="line">                .Where(x =&gt; x.Index == selectedIndex</span><br><span class="line">                    || <span class="keyword">string</span>.IsNullOrEmpty(filter)</span><br><span class="line">                    || x.Name.ToLower().Contains(filter.ToLower()))</span><br><span class="line">                .ToArray();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        scroll = EditorGUILayout.BeginScrollView(scroll);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> style = GUI.skin.GetStyle(<span class="string">"ExposablePopupItem"</span>);</span><br><span class="line">        style.richText = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; filterdItems.Length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> item = filterdItems[i];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> flag = GUILayout.Toggle(selectedIndex == item.Index, FormatString(item.Name, filter), style);</span><br><span class="line">            <span class="keyword">if</span> (flag != (selectedIndex == item.Index))</span><br><span class="line">            &#123;</span><br><span class="line">                selectedIndex = item.Index;</span><br><span class="line">                onCloseAction(selectedIndex);</span><br><span class="line">                editorWindow.Close();</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        EditorGUILayout.EndScrollView();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> searchFieldHash = <span class="string">"SearchBoxTestWindow_SearchField"</span>.GetHashCode();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">string</span> <span class="title">SearchFilterField</span>(<span class="params"><span class="keyword">string</span> filter</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> style = GUI.skin.GetStyle(<span class="string">"ExposablePopupItem"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> maxWidth = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; filterdItems.Length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> w = style.CalcSize(<span class="keyword">new</span> GUIContent(filterdItems[i].Name));</span><br><span class="line">            maxWidth = Math.Max(maxWidth, (<span class="keyword">int</span>)w.x);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        WindowWidth = maxWidth + <span class="number">24</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> rect = GUILayoutUtility.GetRect(<span class="number">16</span>f, <span class="number">24</span>f,</span><br><span class="line">            EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing,</span><br><span class="line">            EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing,</span><br><span class="line">            <span class="keyword">new</span> GUILayoutOption[] &#123; GUILayout.Width(maxWidth) &#125;);</span><br><span class="line">        rect.x += <span class="number">4</span>f;</span><br><span class="line">        rect.y += <span class="number">4</span>f;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> controlID = GUIUtility.GetControlID(searchFieldHash, FocusType.Passive, rect);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ToolbarSearchField(controlID, rect, filter, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">string</span> <span class="title">ToolbarSearchField</span>(<span class="params"><span class="keyword">int</span> id, Rect position, <span class="keyword">string</span> text, <span class="keyword">bool</span> showWithPopupArrow</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> position2 = position;</span><br><span class="line">        position2.width -= <span class="number">14</span>f;</span><br><span class="line">        <span class="keyword">var</span> position3 = position;</span><br><span class="line">        position3.x += position.width;</span><br><span class="line">        position3.width = <span class="number">14</span>f;</span><br><span class="line"></span><br><span class="line">        GUI.SetNextControlName(<span class="string">"filterField"</span>);</span><br><span class="line">        text = EditorGUI.TextField(position, text, toolbarSearchField);</span><br><span class="line">        GUI.FocusControl(<span class="string">"filterField"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (text == <span class="string">""</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            GUI.Button(position3, GUIContent.none, toolbarSearchFieldCancelButtonEmpty);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (GUI.Button(position3, GUIContent.none, toolbarSearchFieldCancelButton))</span><br><span class="line">            &#123;</span><br><span class="line">                text = <span class="string">""</span>;</span><br><span class="line">                GUIUtility.keyboardControl = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> text;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">private</span> GUIStyle <span class="title">GetStyle</span>(<span class="params"><span class="keyword">string</span> styleName</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> style = GUI.skin.FindStyle(styleName);</span><br><span class="line">        <span class="keyword">if</span> (style == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            style = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).FindStyle(styleName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (style == <span class="literal">null</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            style = <span class="keyword">new</span> GUIStyle();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> style;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">string</span> <span class="title">FormatString</span>(<span class="params"><span class="keyword">string</span> text, <span class="keyword">string</span> filter</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">string</span>.IsNullOrEmpty(filter))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> text;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> b = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> index = text.IndexOf(filter, StringComparison.CurrentCultureIgnoreCase);</span><br><span class="line">            <span class="keyword">if</span> (index == <span class="number">-1</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (text.Length &gt; <span class="number">0</span>)</span><br><span class="line">                &#123;</span><br><span class="line">                    b.Append(text);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            b.Append(text.Substring(<span class="number">0</span>, index));</span><br><span class="line">            b.Append(<span class="string">"&lt;b&gt;&lt;color=cyan&gt;"</span>);</span><br><span class="line">            b.Append(text.Substring(index, filter.Length));</span><br><span class="line">            b.Append(<span class="string">"&lt;/color&gt;&lt;/b&gt;"</span>);</span><br><span class="line">            text = text.Substring(index + filter.Length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> b.ToString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 開いたときの処理</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnOpen</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        toolbarSearchField = GetStyle(<span class="string">"ToolbarSeachTextField"</span>);</span><br><span class="line">        toolbarSearchFieldCancelButton = GetStyle(<span class="string">"ToolbarSeachCancelButton"</span>);</span><br><span class="line">        toolbarSearchFieldCancelButtonEmpty = GetStyle(<span class="string">"ToolbarSeachCancelButtonEmpty"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 閉じたときの処理</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnClose</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然我不搞懂也行，当到了一定时间我就可以直接复制使用，但是万一出现了一些更新，里面的内容可能就会变得一团糟。</p>
+<p><strong>所以我还是很有必要把这一部分的内容完全搞懂的。</strong></p>
+<h4 id="实现的效果"><a href="#实现的效果" class="headerlink" title="实现的效果"></a>实现的效果</h4><p>写了那么多，实现的内容一张图片就足够总结了，这一部分说来简单也很复杂，算是各种知识的拓展了。</p>
+<p><img src="FoldoutAndPopupView.png" alt="实现效果"></p>
+<h4 id="Foldout效果的官网实现"><a href="#Foldout效果的官网实现" class="headerlink" title="Foldout效果的官网实现"></a>Foldout效果的官网实现</h4><ul>
+<li><a href="https://docs.unity3d.com/ja/current/ScriptReference/EditorGUILayout.Foldout.html" target="_blank" rel="noopener">EditorGUILayout.Foldout</a></li>
+</ul>
+<p>嘛，重要的不是他的实现，而是里面的东西，一些没见过的东西。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create a foldable menu that hides/shows the selected transform position.</span></span><br><span class="line"><span class="comment">// If no Transform is selected, the Foldout item will be folded until</span></span><br><span class="line"><span class="comment">// a transform is selected.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnityEditor;</span><br><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FoldoutUsage</span> : <span class="title">EditorWindow</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">bool</span> showPosition = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">string</span> status = <span class="string">"Select a GameObject"</span>;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">MenuItem(<span class="meta-string">"Examples/Foldout Usage"</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Init</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        FoldoutUsage window = (FoldoutUsage)GetWindow(<span class="keyword">typeof</span>(FoldoutUsage));</span><br><span class="line">        window.Show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnGUI</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        showPosition = EditorGUILayout.Foldout(showPosition, status);</span><br><span class="line">        <span class="keyword">if</span> (showPosition)</span><br><span class="line">            <span class="keyword">if</span> (Selection.activeTransform)</span><br><span class="line">            &#123;</span><br><span class="line">                Selection.activeTransform.position =</span><br><span class="line">                    EditorGUILayout.Vector3Field(<span class="string">"Position"</span>, Selection.activeTransform.position);</span><br><span class="line">                status = Selection.activeTransform.name;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!Selection.activeTransform)</span><br><span class="line">        &#123;</span><br><span class="line">            status = <span class="string">"Select a GameObject"</span>;</span><br><span class="line">            showPosition = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnInspectorUpdate</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.Repaint();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一次见到的弹出新窗口的使用<code>(FoldoutUsage)GetWindow(typeof(FoldoutUsage))</code>，和<code>Selection.activeTransform</code>的使用。</p>
+<p>至于这段代码的效果就是，调用这个方法后弹出一个窗口，里面包含着你选定物体的Transform，然后可以折叠，但是只能选一个，多选没有用。</p>
+<p>都是比较重要的知识。</p>
+<h3 id="UnityEditor-Inspector-script-field"><a href="#UnityEditor-Inspector-script-field" class="headerlink" title="UnityEditor Inspector script field"></a>UnityEditor Inspector script field</h3><p>当我选择注释掉<code>base.OnInspectorGUI()</code>这一行的时候，那个显示脚本名称的ScriptField就消失了，虽然看起来更清楚了但是有的时候还是会有混淆，这里讲如何恢复这个<em>ScriptField</em>。</p>
+<p>首先是参考了下面两篇文章：</p>
+<ul>
+<li><a href="https://answers.unity.com/questions/550829/how-to-add-a-script-field-in-custom-inspector.html" target="_blank" rel="noopener">How to add a “Script” field in custom inspector?</a></li>
+<li><a href="http://sokuhatiku.hateblo.jp/entry/2016/12/13/174513" target="_blank" rel="noopener">UnityのEditor拡張で「Script」フィールドを設置する方法</a></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[CustomEditor(typeof(SampleClass))]</span><br><span class="line">public class SampleClassInspector : Editor</span><br><span class="line">&#123;</span><br><span class="line">    MonoScript script = null;</span><br><span class="line"></span><br><span class="line">    private void OnEnable()</span><br><span class="line">    &#123;</span><br><span class="line">        script = MonoScript.FromMonoBehaviour((SampleClass)target);</span><br><span class="line">    &#125;</span><br><span class="line">    public override void OnInspectorGUI()</span><br><span class="line">    &#123;</span><br><span class="line">        serializedObject.Update();</span><br><span class="line">        // base.OnInspectorGUI();</span><br><span class="line">        EditorGUI.BeginDisabledGroup(true);</span><br><span class="line">        EditorGUILayout.ObjectField(&quot;Script&quot;, script, typeof(MonoScript), false);</span><br><span class="line">        EditorGUI.EndDisabledGroup();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码实现就是那样，至于参数，等遇到之后再追加说明吧。</p>
+<h2 id="SerializedObject"><a href="#SerializedObject" class="headerlink" title="SerializedObject"></a>SerializedObject</h2><ul>
+<li><a href="http://light11.hatenadiary.com/entry/2018/03/15/225709" target="_blank" rel="noopener">【Unity】【エディタ拡張】SerializedObjectの勘所をまとめてみる</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/Unity/" rel="tag"># Unity</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/unityraymaching/" rel="prev" title="Unity-トレマーチング入門">
+      <i class="fa fa-chevron-left"></i> Unity-トレマーチング入門
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/ue4-editor-extension/" rel="next" title="UE4-Editor扩展">
+      UE4-Editor扩展 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-Editor扩展"><span class="nav-number">1.</span> <span class="nav-text">Unity Editor扩展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实现需求"><span class="nav-number">1.1.</span> <span class="nav-text">实现需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InitializeOnLoad"><span class="nav-number">1.2.</span> <span class="nav-text">InitializeOnLoad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InitializeOnLoadMethod"><span class="nav-number">1.3.</span> <span class="nav-text">InitializeOnLoadMethod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RuntimeInitializeOnLoadMethod"><span class="nav-number">1.4.</span> <span class="nav-text">RuntimeInitializeOnLoadMethod</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RuntimeInitializeLoadType"><span class="nav-number">1.4.1.</span> <span class="nav-text">RuntimeInitializeLoadType</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditorApplication"><span class="nav-number">1.5.</span> <span class="nav-text">EditorApplication</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wantsToQuit"><span class="nav-number">1.5.1.</span> <span class="nav-text">wantsToQuit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#quitting"><span class="nav-number">1.5.2.</span> <span class="nav-text">quitting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditorUtility"><span class="nav-number">1.6.</span> <span class="nav-text">EditorUtility</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EditorUtility-DisplayDialog"><span class="nav-number">1.6.1.</span> <span class="nav-text">EditorUtility.DisplayDialog</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EditorUtility-DisplayDialogComplex"><span class="nav-number">1.6.2.</span> <span class="nav-text">EditorUtility.DisplayDialogComplex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MenuItem"><span class="nav-number">1.7.</span> <span class="nav-text">MenuItem</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#MenuItem参数说明"><span class="nav-number">1.7.1.</span> <span class="nav-text">MenuItem参数说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ScriptTemplates"><span class="nav-number">1.8.</span> <span class="nav-text">ScriptTemplates</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditorUserSettings"><span class="nav-number">1.9.</span> <span class="nav-text">EditorUserSettings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Editor扩展实例"><span class="nav-number">2.</span> <span class="nav-text">Editor扩展实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sample-Template-Editor扩展的模板写法"><span class="nav-number">2.1.</span> <span class="nav-text">Sample-Template (Editor扩展的模板写法)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#indentLevel-缩进"><span class="nav-number">2.1.1.</span> <span class="nav-text">indentLevel (缩进)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Content-Name-Inspector变量名设定"><span class="nav-number">2.1.2.</span> <span class="nav-text">Content-Name (Inspector变量名设定)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-judgement-类型判断"><span class="nav-number">2.1.3.</span> <span class="nav-text">Type-judgement (类型判断)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Disable-Area-Inspector在运行时添加不可交互内容"><span class="nav-number">2.1.4.</span> <span class="nav-text">Disable-Area (Inspector在运行时添加不可交互内容)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中显示List元素"><span class="nav-number">2.2.</span> <span class="nav-text">Inspector中显示List元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中显示多元List"><span class="nav-number">2.3.</span> <span class="nav-text">Inspector中显示多元List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inspector中加入HDRColor选择-未整理"><span class="nav-number">2.4.</span> <span class="nav-text">Inspector中加入HDRColor选择(未整理)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MinMaxSlider实现-（可以拖拽的SliderBar"><span class="nav-number">2.5.</span> <span class="nav-text">MinMaxSlider实现 （可以拖拽的SliderBar)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Foldout-and-window-Popup-实现"><span class="nav-number">2.6.</span> <span class="nav-text">Foldout and window Popup 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Foldout-实现"><span class="nav-number">2.6.1.</span> <span class="nav-text">Foldout 实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WwiseEvent的enum创建"><span class="nav-number">2.6.2.</span> <span class="nav-text">WwiseEvent的enum创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对Enum进行扩展"><span class="nav-number">2.6.3.</span> <span class="nav-text">对Enum进行扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对PopUpWindow进行扩展实现"><span class="nav-number">2.6.4.</span> <span class="nav-text">对PopUpWindow进行扩展实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现的效果"><span class="nav-number">2.6.5.</span> <span class="nav-text">实现的效果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Foldout效果的官网实现"><span class="nav-number">2.6.6.</span> <span class="nav-text">Foldout效果的官网实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UnityEditor-Inspector-script-field"><span class="nav-number">2.7.</span> <span class="nav-text">UnityEditor Inspector script field</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SerializedObject"><span class="nav-number">3.</span> <span class="nav-text">SerializedObject</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

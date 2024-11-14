@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
+<meta name="keywords" content="C#,UniRx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UniRx从入门到放弃">
+<meta property="og:url" content="http://stonelzp.github.io/unirx-learning-note/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Observer-Pattern.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/TransformToUniRx.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/MySubjectObserver.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/IObservable.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/IObserver.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/ISubject-Interface.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/SubjectClass.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/IObservable-Action.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Unirx-Operator.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Unirx-Observable.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/LINQtoAsynchronous.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Async-Await.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Synchronous-Asynchronous.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Async-Await-Rx-Conclusion.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task3.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/Csharp-Task4.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnderstandAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncAwait-Callback.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OptimizationForAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterClass.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterClassUse.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/MultilpleAwaitOptimization1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/MultilpleAwaitOptimization2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTask.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnityIsSingleThread.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UnityWithSynchronizationContext.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OverheadOfTask.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OverheadOfUniTask.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/GameloopBasedAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskVsCoroutine1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskVsCoroutine2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskTracker.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskConclusion.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskConclusion1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Pending.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Succeeded.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Faulted.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AwaiterStatus-Cancled.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException3.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/UniTaskException4.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/PainpointOfAsyncAwait.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/OperationCanceledException.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/CanceledTokenSource.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/SuppressCancellationThrow.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncEventHandling1.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncEventHandling2.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/AsyncEventHandling3.png">
+<meta property="og:image" content="http://stonelzp.github.io/unirx-learning-note/ReusablePromise.png">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UniRx从入门到放弃">
+<meta name="twitter:description" content="时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。">
+<meta name="twitter:image" content="http://stonelzp.github.io/unirx-learning-note/Observer-Pattern.png">
+
+<link rel="canonical" href="http://stonelzp.github.io/unirx-learning-note/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UniRx从入门到放弃 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/unirx-learning-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UniRx从入门到放弃
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-28 11:35:04" itemprop="dateCreated datePublished" datetime="2019-05-28T11:35:04+09:00">2019-05-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C#</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>时隔一年再次接触Unity，发生了好多变化，也许是之前见识也少的原因，遇到了UniRx这个库，刚遇到的时候感觉真是无从下手，就俩接口，叫我看不出来个所以然。</p>
+<a id="more"></a>
+<h1 id="理解UniRx"><a href="#理解UniRx" class="headerlink" title="理解UniRx"></a>理解UniRx</h1><p>我来了，我表示我并没有理解UniRx，只知道是个什么东西远远不够。当出现Operator的使用的时候，我发现我根本不理解。</p>
+<ul>
+<li><p><a href="http://kan-kikuchi.hatenablog.com/entry/What_is_UniRx" target="_blank" rel="noopener">UniRx(ユニアールエックス)の基本的な使い方と具体的な利用例【Unity】【UniRx】</a></p>
+</li>
+<li><p><a href="https://kuailey.github.io/DungeonsGame/2016/11/06/UniRx-%E5%AD%A6%E4%B9%A0/" target="_blank" rel="noopener">UniRx 学习</a></p>
+</li>
+</ul>
+<h2 id="Reactive-Extension"><a href="#Reactive-Extension" class="headerlink" title="Reactive Extension"></a>Reactive Extension</h2><h2 id="UniRx"><a href="#UniRx" class="headerlink" title="UniRx"></a>UniRx</h2><hr>
+<ul>
+<li>2020/02/17更新</li>
+</ul>
+<p>又是我们的老朋友，<strong>UniRX</strong>，这次我来彻彻底底的更新UniRX的内容了，因为发现要是还不好好的整理，深入理解UniRX的使用和原理，连热度都蹭不上了。</p>
+<p>在逐渐接触到UniRx的过程中，更为准确的是接触现在项目的过程中，我对<strong>UniRX</strong>，<strong>Observable</strong>，<strong>UniTask</strong>这三者之间的界限越来越模糊，什么时间什么场合该使用哪个完全不清楚。</p>
+<h3 id="从Observer模式理解UniRx"><a href="#从Observer模式理解UniRx" class="headerlink" title="从Observer模式理解UniRx"></a>从Observer模式理解UniRx</h3><p>主要参考文章：</p>
+<ul>
+<li><a href="https://learning.unity3d.jp/1324/" target="_blank" rel="noopener">ObserverパターンからはじめるUniRx</a></li>
+</ul>
+<h4 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h4><p><strong>观察者模式</strong>(Observer Pattern)，即经常提到的设计模式的一种。实现<strong>事件的发行和订阅的一种设计模式</strong>。</p>
+<p><img src="Observer-Pattern.png" alt="Observerパターン" title="ObserverParttern"></p>
+<p>UniRx中登场的就是<code>Observer</code>和<code>Subject</code>这两个重要的概念。</p>
+<ul>
+<li>Observer<ul>
+<li>观察者，监听者(Listener)，Message Receiver</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>Subject<ul>
+<li>观察对象，Event发行方</li>
+<li>记录着所有Observer的订阅</li>
+</ul>
+</li>
+</ul>
+<p>两者的关系就是<strong>Subject管理着所有订阅的Observer，Subject向Observer发送消息</strong>。</p>
+<h4 id="简单的观察者模式实现"><a href="#简单的观察者模式实现" class="headerlink" title="简单的观察者模式实现"></a>简单的观察者模式实现</h4><ol>
+<li><p><code>IMyObserver&lt;T&gt;</code>接口</p>
+<ul>
+<li>接收消息的接口  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">My</span></span><br><span class="line">&#123;</span><br><span class="line">    interface IMyObserver&lt;T&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span>收到消息的时候执行</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">OnReceived</span>(<span class="params">T <span class="keyword">value</span></span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Observer的具体实现</p>
+<ul>
+<li>收到消息则打印消息  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">My</span></span><br><span class="line">&#123;</span><br><span class="line">    class PrintObserver&lt;T&gt; : IMyObserver&lt;T&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> voi <span class="title">OnReceived</span>(<span class="params">T <span class="keyword">value</span></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            UnityEngine.Debug.Log(<span class="keyword">value</span>.ToString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><code>MySubject&lt;T&gt;</code>类的实现</p>
+<ul>
+<li>实现登记功能的类  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class MySubject&lt;T&gt; : IDisposable</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;IMyObserver&lt;T&gt;&gt; _observers = <span class="keyword">new</span> List&lt;IMyObserver&lt;T&gt;&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Observer登记（订阅）</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RegisterObserver</span>(<span class="params">IMyObserver&lt;T&gt; observer</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _observers.Add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Observer解除登记（取消订阅）</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">UnRegisterObserver</span>(<span class="params">IMyObserver&lt;T&gt; observer</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _observers.Remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 消息发行</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span><span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function">pblic <span class="keyword">void</span> <span class="title">SendMessage</span>(<span class="params">T <span class="keyword">value</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> myObserver <span class="keyword">in</span> _observers)</span><br><span class="line">        &#123;</span><br><span class="line">            myObserver.OnReceived(<span class="keyword">value</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Dispose</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        _observers.Clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>使用测试</p>
+<ul>
+<li><p>这里可以生成多个Observer来举例，这里只列出一个</p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成Subject</span></span><br><span class="line"><span class="keyword">var</span> mySubject = <span class="keyword">new</span> MySubject&lt;<span class="keyword">string</span>&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Observer生成</span></span><br><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> PrintObserver&lt;<span class="keyword">string</span>&gt;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 登记Observer到Sbject上</span></span><br><span class="line">mySubject.RegisterObserver(observer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 送信</span></span><br><span class="line">mySubject.SendMessage(<span class="string">"Hello!"</span>);</span><br><span class="line">mySubject.SendMessage(<span class="string">"World!"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解除所有登记</span></span><br><span class="line">mySubject.Dispose();</span><br></pre></td></tr></table></figure>
+<p>  结果是依次输出两个字符串。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="向UniRx进行转变"><a href="#向UniRx进行转变" class="headerlink" title="向UniRx进行转变"></a>向UniRx进行转变</h4><ol>
+<li><p><strong>UniRx.IObserver&lt;T></strong></p>
+<ul>
+<li><p>IMyObserve&lt;T> -&gt; <span style="color:orange">UniRx.IObserver&lt;T></span></p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">UniRx</span></span><br><span class="line">&#123;</span><br><span class="line">    public interface IObserver&lt;T&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">OnCompleted</span>(<span class="params"></span>)</span>;</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">OnError</span>(<span class="params">Exception error</span>)</span>;</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">OnNext</span>(<span class="params">T <span class="keyword">value</span></span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  图片更为直观,需要注意的是:</p>
+<ul>
+<li>注意.NET4.6的时候变成了System.IObservable&lt;T></li>
+<li>OnReceived(T value) -&gt; <span style="color:orange">OnNext(T value)</span></li>
+</ul>
+<p><img src="TransformToUniRx.png" alt="TransformToUniRx"></p>
+</li>
+<li><p>PrintObserver -&gt; <span style="color:orange">IObserver&lt;T></span></p>
+  <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class PrintObserver&lt;T&gt; : IObserver&lt;T&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnCompleted</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        UnityEngine.Debug.Log(<span class="string">"OnCompleted"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnError</span>(<span class="params">Exception error</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        UnityEngine.Debug.LogError(error);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnNext</span>(<span class="params">T <span class="keyword">value</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        UnityEngine.Debug.Log(<span class="keyword">value</span>.ToString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>UniRx.Subject&lt;T></strong><br>这里我们需要把<code>MySubject&lt;T&gt;</code>的接口分解一下，来对应<code>UniRx.Subject&lt;T&gt;</code>中的变化。</p>
+<ul>
+<li><p>将处理Observer部分的内容按照接口的形式分离:<br><img src="MySubjectObserver.png" alt="MySubjectObserver"></p>
+</li>
+<li><p>UniRx.<span style="color:orange">IObservable&lt;T></span>是声明负责订阅的接口<br><img src="IObservable.png" alt="IObsrvable"></p>
+</li>
+<li><p>Subject的发送消息处理，使用<code>IObserver&lt;T&gt;</code>接口来代替<br><img src="IObserver.png" alt="IObserver"></p>
+</li>
+<li><p>ISubject&lt;T>接口，只是用来为了证明这:是个Subject哦 的接口，当然只是文章里说的<br><img src="ISubject-Interface.png" alt="ISubject-Interface"></p>
+</li>
+<li><p>UniRx.Subject&lt;T>是对上面所有继承的接口的实装类<br><img src="SubjectClass.png" alt="SubjectClass"></p>
+</li>
+<li><p>使用的例子</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> subject = <span class="keyword">new</span> UniRx.Subject&lt;<span class="keyword">string</span>&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> observer = <span class="keyword">new</span> PrintObserver&lt;<span class="keyword">string</span>&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Observer订阅</span></span><br><span class="line"><span class="keyword">var</span> disposable = subject.Subscribe(observer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 消息发行</span></span><br><span class="line">subject.OnNext(<span class="string">"Hello!"</span>);</span><br><span class="line">subject.OnNext(<span class="string">"World!"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Observer订阅取消</span></span><br><span class="line">disposable.Dispose();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结束通知</span></span><br><span class="line">subject.OnCompleted();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我感觉是解除所有的订阅，难不成还有些其他比较重要的操作？</span></span><br><span class="line">subject.Dispose();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Subscribe()中经常见到的Lambda式<br>在UniRx的使用中，Lambda是非常常见的，以至于我几乎没有见到老老实实在<code>Subscribe()</code>的里面见到一个简单的变量。其原因就在于它的扩展方法。</p>
+<p> 当向<code>Subscribe()</code>中传递一个Lambda表达式的时候，在内部会生成一个Observer实例。在Unity中Lambda和代理(delegate)貌似都可以用<code>Action&lt;T&gt;</code>的类型来代替(未验证)。</p>
+<p> <img src="IObservable-Action.png" alt="IObservable-Action"></p>
+<p> 使用方法就是经常见到的那样:</p>
+ <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> subject = <span class="keyword">new</span> UniRx.Subject&lt;<span class="keyword">string</span>&gt;();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> disposable = subject.Subscribe(x =&gt; </span><br><span class="line">&#123;</span><br><span class="line">    Debug.Log(x);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">subject.OnNext(<span class="string">"Hello!"</span>);</span><br><span class="line">subject.OnNext(<span class="string">"World!"</span>):</span><br><span class="line"></span><br><span class="line">disposable.Dispose();</span><br><span class="line"></span><br><span class="line">subject.OnCompleted();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>图片一多起来感觉就正式起来了，但是由于画面太长，承载的信息量较少，直观是很直观但是不够集中流畅，感觉图片的方式还是要限制的好一些。</p>
+<ul>
+<li>关于UniRx接口的总结<ul>
+<li>interface: <code>IObserver&lt;T&gt;</code> : <strong>接收消息</strong>定义的接口。</li>
+<li>interface: <code>IObservable&lt;T&gt;</code> : <strong>消息订阅</strong>，<strong>消息处理</strong>定义的接口。<ul>
+<li>这里的消息处理不是指收到消息进行处理，而是指对消息对象的本身进行处理，后面会有图更直观一些。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="UniRx构成的三大要素"><a href="#UniRx构成的三大要素" class="headerlink" title="UniRx构成的三大要素"></a>UniRx构成的三大要素</h3><p>也还是根据这篇演讲的内容，与其说是整理，倒不如说是汉化。</p>
+<ul>
+<li><span style="color:orange">Observable</span></li>
+<li><span style="color:orange">Operator</span></li>
+<li><span style="color:orange">Scheduler</span></li>
+</ul>
+<h4 id="Operator"><a href="#Operator" class="headerlink" title="Operator"></a>Operator</h4><p>UniRx中有很多的操作符，关于操作符</p>
+<ul>
+<li><strong>操作符继承了IObserverT>和IObservable&lt;T>两个接口并实现功能</strong></li>
+<li><strong>在Subject -&gt; Observer 之间进行消息的处理</strong></li>
+<li>顺便一提这个叫做装饰模式(Decrator Pattern)</li>
+</ul>
+<p>…这个是突然说是装饰模式我也不是特别理解，我所知道的装饰模式是动态的为类添加功能的模式，听起来挺符合的。</p>
+<p><img src="Unirx-Operator.png" alt="Operator"></p>
+<h4 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h4><p>这个我也不知道该怎么翻译，调度器？</p>
+<ul>
+<li><strong>管理消息的执行时机，执行线程的</strong><ul>
+<li>UniRx基本上使用的是Unity的WaitForSeconds来计量时间(MainThreadScheduler)</li>
+<li>不想使用WaitForSeconds也可以指定其它的Scheduler来切换</li>
+</ul>
+</li>
+</ul>
+<p>使用的例子暂时还没有遇见，暂时先空着。</p>
+<h4 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h4><p>这里是理解UniRx的关键，各种设计模式，操作符，Lambda，什么的</p>
+<ul>
+<li>发行的消息，经过Operator的处理，到达最后的Observer</li>
+<li><strong>这个消息被运送的路径，构成，组织结构，被叫做Observable</strong><ul>
+<li>也会被叫做流(Stream)</li>
+</ul>
+</li>
+</ul>
+<p><img src="Unirx-Observable.png" alt="Observable"></p>
+<p>这张图片是我这篇文章里最想放的图片，非常直观的了解UniRx的动作方式。</p>
+<h3 id="深入理解UniTask中的async-await"><a href="#深入理解UniTask中的async-await" class="headerlink" title="深入理解UniTask中的async/await"></a>深入理解UniTask中的async/await</h3><p>关于Unity中的UniTask，对我来说一直都是一个盲点，看到大佬的代码的时候会出现，关键是在C#中也是有这个关键字的，和UniRx使用的时候就开始乱套了，该怎么用。这里我可能会整理两篇文章，先理解，再入门。</p>
+<ul>
+<li><a href="https://learning.unity3d.jp/1493/" target="_blank" rel="noopener">Deep Dive async/await in Unity with UniTask(UniRx.Async)</a></li>
+</ul>
+<p>这篇是UniRx的制作人neueccさん在UnityBlog的稿子。除了UniRx之外还有他的<strong>MessagePack-CSharp</strong>的知识点啊文章啊值得我去理解和整理。别总是说什么自己不做web端的东西啊什么的，时代变了。</p>
+<p>下面就开始对这个稿子的总结记录(汉化？)</p>
+<h4 id="Rx-vs-async-await"><a href="#Rx-vs-async-await" class="headerlink" title="Rx vs async/await"></a>Rx vs async/await</h4><p>首先是Observable可以做什么？<br><img src="LINQtoAsynchronous.png" alt="Rx-Observable"></p>
+<blockquote>
+<p>注: コレクション操作</p>
+<p>この操作は、指定した配列に対して、連結、相違、フラット、交差、結合、一意、順序、フィルタ、日付フィルタなどのコレクション操作を実行するときに使用します。</p>
+</blockquote>
+<p>图片中的内容我也不敢贸然翻译，反正就我个人的理解，UniRx中的Observable从LINQ到异步处理，都能胜任。能做到很多的事情是强项同时也是缺点。</p>
+<p><strong>async/await</strong>的语法则是能让异步处理的写法跟同步处理的写法很相似。<br><img src="Async-Await.png" alt="Async-Await"></p>
+<p><img src="Synchronous-Asynchronous.png" alt="Synchronous-Asynchronous"></p>
+<p>正如上面也提到过的，<code>IObservable&lt;T&gt;</code>的功能很强大，从Event到异步处理都可以胜任，但是实现也只是一个操作符，让人无法准确的区分实现的功能，可读性变差也是非常不好的。按照作者的说法就是，对于<code>IObservable&lt;T&gt;</code>的实现来说，无论是Event(无限多个)还是异步处理(长度1)，使用相同的Operator来实现功能都是可能的，即实现的代码相同但是功能不同，功能非常强大。但是在应用层面上的使用就会出现问题。</p>
+<p>比如说Event(的Observable流)使用Where等的关键字(这里只听懂了Where关键词)是可以的，但是异步处理使用Where等关键字就不可以。因为异步处理的返回结果是0，就会什么都不会返回（这里没能理解准确的意思）。异步处理的长度不能增加不能减少，这种情况下就希望能够区分处理。必要的时候可以互相转换就足够。</p>
+<p>Rx可以用简单的写法实现复杂的功能，就使得源码的解读像是解密一样，stream的流向不是单方向，复杂度也会提升。这里我深有体会，操作符中用了<code>Repeat</code>，数据的流向就不知道跑去了哪里，简直就是灾难。所以如何写的简明易懂也是非常必要的。</p>
+<p>总结起来就是：<strong>异步处理使用async/await，事件(Event)使用Rx。</strong><br><img src="Async-Await-Rx-Conclusion.png" alt="Conclusion"></p>
+<h5 id="理解并正确使用async-await"><a href="#理解并正确使用async-await" class="headerlink" title="理解并正确使用async/await"></a>理解并正确使用async/await</h5><p>首先是<strong>async/await不是多线程！！</strong></p>
+<p>原本一个我很早之前知道的但是忘记了的就是，游戏是没有多线程的使用的，但是我现在不是很确定这一个概念是否准确，只是隐隐约约这么感觉。</p>
+<p><img src="Csharp-Task1.png" alt="Task"><br><img src="Csharp-Task2.png" alt="Task"><br><img src="Csharp-Task3.png" alt="Task"><br><img src="Csharp-Task4.png" alt="Task"></p>
+<p>贴了好多图片，但是我感觉图片的内容总结的很好…所以就还是贴图片了。</p>
+<p>最后引出了我们主角<strong>UniTask</strong>,这是为Unity量身打造的Task系统，结合async/await来使用，效率非常的高。</p>
+<p>async/await是如何工作的<br><img src="UnderstandAsyncAwait.png" alt="理解Async/await"></p>
+<p>按照作者所说，那个<strong>CPS</strong>的名字看起似乎很了不起，实际上也没什么，<strong>就是Callback的连锁</strong>。当await的内容执行完就执行回调。被作者叫做<em>自动回调制造机</em>。<br><img src="AsyncAwait-Callback.png" alt="自动回调制造机"></p>
+<p>同时对于async/await的处理进行了优化，虽然是异步的写法但是在实际的运行中也有可能是同步执行。<br><img src="OptimizationForAsyncAwait.png" alt="对异步处理的优化"></p>
+<p>具体的话Awaiter是怎么是实现的呢？我在别的文章看到过貌似，就是这个Awaiter实现异步处理的类是可以自己实现的，它提供了一些接口和类来实现。<code>IsCompleted</code>的标志位则是用来控制同步还是异步处理，避免了重复执行的时候产生的额外的Delegate调用。<br><img src="AwaiterClass.png" alt="Awaiter的实现"><br><img src="AwaiterClassUse.png" alt="Awaiter实现的伪代码"></p>
+<p>除此之外，对于有复数的await调用的情况下也有一些优化:<br><img src="MultilpleAwaitOptimization1.png" alt="复数Await的优化1"></p>
+<p>这里有复数个await，看起来会有三个Action continuation(Delegate)组成的，但实际上一个continuation都不会生成。根据作者的描述是说在async类型的方法中会有一个状态机(AsyncStateMachine)，所有的continuation都会由<code>this.MoveNext()</code>方法表示，通过推进状态机的状态，来完成所有的continuation。节省了为每一个continuation生成Delegate的开销。<br><img src="MultilpleAwaitOptimization2.png" alt="复数Await的优化2"></p>
+<p>那么UniTask又是什么？UniTask是作者设计用来代替Task的，当然是为Unity而特化的类。C#原本的Task系统有许多Unity开发用不到或者很重的操作。<br><img src="UniTask.png" alt="UniTask"></p>
+<p><strong>Unity是单线程运作的（基本上）。</strong>Unity是由C++的引擎层和C#的脚本层构成，C#的部分基本上都是使用的单线程处理。在使用C#的Task的时候很容易就使用了多线程的操作。所以出于各种Unity自身的特殊性，作者从特殊性和性能的方面强推使用UniTask的功能。<br><img src="UnityIsSingleThread.png" alt="Unity的特殊性"></p>
+<p>async/await(Task)有能把多线程的功能统合到单线程的功能(SynchronizationContext),但是在Unity的情况下，多线程是基本上不会用到甚至是不推荐用的情况下，就会算是额外的开销。<br><img src="UnityWithSynchronizationContext.png" alt="Unity With SynchronizationContext"></p>
+<p>关于Task中的一些调用知识，算是轻微的拓展。通过观察两者的调用情况可以发现，UniTask中舍弃了ExecutionContext和SynchronziationContext两种Capture。<br><img src="OverheadOfTask.png" alt="Overhead of Task"><br><img src="OverheadOfUniTask.png" alt="Overhead of UniTask"></p>
+<p>async/await是基于Gameloop的。需要使用Unity中的Coroutine的时候，UniTask中也提供了一些替换Task中的操作的功能，由于没有多余的Allocation，效率会好一些。<br><img src="GameloopBasedAsyncAwait.png" alt="基于Gameloop"></p>
+<p>对比使用Unity中的Coroutine，UniTask减少了很多Allocation。<br><img src="UniTaskVsCoroutine1.png" alt="Vs Coroutine"><br><img src="UniTaskVsCoroutine2.png" alt="Vs Coroutine"></p>
+<p>UniTask Tracker可以用来观察UniTask的状态。使用不当会发生Leak（类似于内存泄漏？），根据情况多多使用是好的。<br><img src="UniTaskTracker.png" alt="UniTask Tracker"></p>
+<p>最后是作者的总结：</p>
+<ul>
+<li><strong>出于性能的选择 UniTask + async/await</strong><ul>
+<li>UniTask是为了Unity而特化的工具，相比于Task性能好好很多是肯定的</li>
+<li>No ExecutionContext, No SynchronizationContext</li>
+<li>UniTask相比于Coroutne有更少的Allocation</li>
+<li>在异步处理的方面的性能要强于UniRx(Observable)</li>
+</ul>
+</li>
+<li><strong>出于自由的选择 UniTask + async/await</strong><ul>
+<li>单线程是使用的前提，不用担心掉进多线程的坑</li>
+<li>提供丰富的功能，在绝大多数情况下可以替换Coroutine</li>
+<li>有UniTask Tracker可以简单回避Leak(泄漏)</li>
+<li>和Task,Rx混合使用没有问题</li>
+</ul>
+</li>
+</ul>
+<p><img src="UniTaskConclusion.png" alt="UniTask-Conclusion"><br><img src="UniTaskConclusion1.png" alt="UniTask-Conclusion"></p>
+<p><strong>State of UniTask</strong>。UniTask内部有四个状态。由UniTaskCompletionSource生成的情况下，可以使用TrySetResult/TrySetException/TrySetCancled来切换状态。<br><img src="AwaiterStatus.png" alt="AwaiterStatus"></p>
+<p>各个状态的时间段：<br><img src="AwaiterStatus-Pending.png" alt="Pending"><br><img src="AwaiterStatus-Succeeded.png" alt="Succeeded"><br><img src="AwaiterStatus-Faulted.png" alt="Faulted"><br><img src="AwaiterStatus-Cancled.png" alt="Cancled"></p>
+<p>异常处理,当捕获到异常之后都会一层一层的向调用的上级上抛，在哪里停止呢？作者提供了<code>Forget()</code>的方法用来终结UniTask的异常处理。<br><img src="UniTaskException1.png" alt="UniTask的异常处理"><br><img src="UniTaskException2.png" alt="UniTask的异常处理"><br><img src="UniTaskException3.png" alt="UniTask的异常处理"><br><img src="UniTaskException4.png" alt="UniTask的异常处理"></p>
+<p>这里有一个问题就是<code>Observable.Empty/Never</code>可以用来做什么？</p>
+<p><strong>async中的Cancellation</strong>，async/await的痛点，就作者的话来说就是麻烦。取消很麻烦。</p>
+<ul>
+<li>相比于Rx的IDisposable返回值，async/awai没有了IDisposable的Allocation，但是有了CancellationToken这个参数</li>
+</ul>
+<p>具体的说来(参照下面的图片)，就是需要在异步函数的最后一个参数那里添加<code>CancellationToken cancellationToken = default</code>这个参数，按照作者所说，算是一个半强制的操作，如果说取消的这个操作保证绝对没有的话，不写这个参数也是可以的，但是基本上是推荐带上这个参数的。<br><img src="PainpointOfAsyncAwait.png" alt="async/await的痛点"></p>
+<p>那么由谁来发送这个OperationCanceledExcrption呢？取消就代表着<code>OperationCanceledException</code>，可以通过<code>cancellationToken.IsCancelationRequested</code>来检查是否被取消，但是，<strong>在在代码中去使用这个东西来检查是不需要的</strong>。因为在(Unity)用户代码中都是一些同步处理，而实际上抛出这个<code>OperationCanceledException</code>异常的是异步处理，也就是说来源都是<code>= asyncOperation.ConfigureAwait(token), UniTask.Delay(token), etc...</code>，而我们所要做的就是把这个Token传递给这些异步处理的当中就OK了。<br><img src="OperationCanceledException.png" alt="取消 = OperationCanceledException"></p>
+<p>在Unity中的MonoBehaviour/OnDestory便利的使用：<br><img src="CanceledTokenSource.png" alt="CanceledTokenSource in MonoBehaviour"></p>
+<p>异常处理是会拖累性能的，针对特殊情况，比如说同时大量的Cancle异常发生，针对同一个事件大量的对象对此发出异常事件的情况，我们可以使用提供的<code>UniTask.SuppressCancellationThrow</code>来抑制这一层例外的大量发射的情况，但是这个方法只能抑制这一层的情况。只会在特殊情况下使用这个，记着吧。<br><img src="SuppressCancellationThrow.png" alt="异常的高代价"></p>
+<p><strong>Async Eventhandling</strong>。而实际上async/await不单单可以实现异步处理，也是可以用来做Event(事件)的实现的。但是原则上还是推荐EventHandling由Rx为主实现。async/await的EventHandling实现还是作为一个可以实现的一个方式，但是不做推荐。<br><img src="AsyncEventHandling1.png" alt="AsyncTrigger/AsyncUGUI"><br><img src="AsyncEventHandling2.png" alt="AsyncTrigger/AsyncUGUI"><br><img src="AsyncEventHandling3.png" alt="什么时候使用"></p>
+<p>作者出于性能的考虑，一些本地的变量可以被重复使用。如下面的代码，我没有实际上试过，但是那个变量<code>i</code>貌似应该有些问题。<br><img src="ReusablePromise.png" alt="UniTask的一部分再利用"></p>
+<p>还有一些别的使用可以参考UniTask(async/await?)的ReadMe文档。(当然我是还没找啦)</p>
+<p>最后总结一下，用作者的意思就是恐れず、どんどん使いましょう、と。</p>
+<hr>
+<p>大体上的印象我是从这篇文章终于算是稍微理解了一些：</p>
+<ul>
+<li><a href="https://qiita.com/toRisouP/items/2f1643e344c741dd94f8" target="_blank" rel="noopener">UniRx入門 その1</a></li>
+</ul>
+<p>这个作者还有一些其他的入门文章有时间也可以观摩一下:<a href="https://qiita.com/toRisouP/items/00b8a5bb8e7b68e0686c" target="_blank" rel="noopener">UniRx入門シリーズ 目次はこちら</a></p>
+<ul>
+<li><a href="https://qiita.com/Marimoiro/items/2ad8a1b422a3fe98f938" target="_blank" rel="noopener">UniRxを導入するメリット ～こういう時にUniRxは使えるよ～</a></li>
+</ul>
+<p>超级有用的一篇知乎文章：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/35189325" target="_blank" rel="noopener">又见Rx——Rx via UniRx</a></li>
+</ul>
+<p>里面的那个讲Rx的视频真的很厉害。</p>
+<h2 id="UniRx中遇见的"><a href="#UniRx中遇见的" class="headerlink" title="UniRx中遇见的"></a>UniRx中遇见的</h2><h3 id="PlayerLoop"><a href="#PlayerLoop" class="headerlink" title="PlayerLoop"></a>PlayerLoop</h3><p>所以说<strong>PlayerLoop</strong>是个什么东西我还没搞懂，只不过在读源码的时候发现了这么几行：<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UniRx用</span></span><br><span class="line"><span class="keyword">var</span> playerLoop = ScriptBehaviourUpdateOrder.CurrentPlayerLoop;</span><br><span class="line">PlayerLoopHelper.Initialize(<span class="keyword">ref</span> playerLoop);</span><br></pre></td></tr></table></figure></p>
+<p>有时候大佬的两行代码我的用一天来理解。首先我不知道UniRx怎么用，其次为什么要在这里这么用。几番调查锁定了这两行代码的用意。</p>
+<ul>
+<li><a href="https://notargs.hateblo.jp/entry/ecs_unirx" target="_blank" rel="noopener">【Unity2018】Entity Component System(ECS)とUniRx.Asyncを和解させる</a></li>
+</ul>
+<p>在使用Unity的ECS和UniRx的时候，两者的<code>PlayerLoop</code>会冲突，读源码就会大概理解(接受？)这个情况。</p>
+<blockquote>
+<p>ECSを使っているプロジェクトにUniRxをぶちこむと、ECSとUniRxのPlayerLoopが喧嘩してUniRxが勝ちます（ECSが動かなくなります）</p>
+</blockquote>
+<p><strong>ECS:</strong><br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GameBootstrap.cs</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">Unity.Entities</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !UNITY_DISABLE_AUTOMATIC_SYSTEM_BOOTSTRAP</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">AutomaticWorldBootstrap</span></span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)</span>]</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Initialize</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">            DefaultWorldInitialization.Initialize(<span class="string">"Default World"</span>, <span class="literal">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ScriptBehaviourUpdateOrder.cs</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetPlayerLoop</span>(<span class="params">PlayerLoopSystem playerLoop</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    PlayerLoop.SetPlayerLoop(playerLoop);</span><br><span class="line">    currentPlayerLoop = playerLoop;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">UpdatePlayerLoop</span>(<span class="params"><span class="keyword">params</span> World[] worlds</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> defaultLoop = PlayerLoop.GetDefaultPlayerLoop();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (worlds?.Length &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> ecsLoop = InsertWorldManagersInPlayerLoop(defaultLoop, worlds.Where(x =&gt; x != <span class="literal">null</span>).ToArray());</span><br><span class="line">        SetPlayerLoop(ecsLoop);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        SetPlayerLoop(defaultLoop);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>UniRx:</strong><br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// PlayerLoopHelper.cs</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Initialize</span>(<span class="params"><span class="keyword">ref</span> PlayerLoopSystem playerLoop</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    yielders = <span class="keyword">new</span> ContinuationQueue[<span class="number">7</span>];</span><br><span class="line">    runners = <span class="keyword">new</span> PlayerLoopRunner[<span class="number">7</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> copyList = playerLoop.subSystemList.ToArray();</span><br><span class="line"></span><br><span class="line">    copyList[<span class="number">0</span>].subSystemList = InsertRunner(copyList[<span class="number">0</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldInitialization), yielders[<span class="number">0</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerInitialization), runners[<span class="number">0</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line">    copyList[<span class="number">1</span>].subSystemList = InsertRunner(copyList[<span class="number">1</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldEarlyUpdate), yielders[<span class="number">1</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerEarlyUpdate), runners[<span class="number">1</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line">    copyList[<span class="number">2</span>].subSystemList = InsertRunner(copyList[<span class="number">2</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldFixedUpdate), yielders[<span class="number">2</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerFixedUpdate), runners[<span class="number">2</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line">    copyList[<span class="number">3</span>].subSystemList = InsertRunner(copyList[<span class="number">3</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldPreUpdate), yielders[<span class="number">3</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerPreUpdate), runners[<span class="number">3</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line">    copyList[<span class="number">4</span>].subSystemList = InsertRunner(copyList[<span class="number">4</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldUpdate), yielders[<span class="number">4</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerUpdate), runners[<span class="number">4</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line">    copyList[<span class="number">5</span>].subSystemList = InsertRunner(copyList[<span class="number">5</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldPreLateUpdate), yielders[<span class="number">5</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerPreLateUpdate), runners[<span class="number">5</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line">    copyList[<span class="number">6</span>].subSystemList = InsertRunner(copyList[<span class="number">6</span>], <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerYieldPostLateUpdate), yielders[<span class="number">6</span>] = <span class="keyword">new</span> ContinuationQueue(), <span class="keyword">typeof</span>(UniTaskLoopRunners.UniTaskLoopRunnerPostLateUpdate), runners[<span class="number">6</span>] = <span class="keyword">new</span> PlayerLoopRunner());</span><br><span class="line"></span><br><span class="line">    playerLoop.subSystemList = copyList;</span><br><span class="line">    PlayerLoop.SetPlayerLoop(playerLoop);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)</span>]</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Init</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// capture default(unity) sync-context.</span></span><br><span class="line">    unitySynchronizationContetext = SynchronizationContext.Current;</span><br><span class="line">    mainThreadId = Thread.CurrentThread.ManagedThreadId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (runners != <span class="literal">null</span>) <span class="keyword">return</span>; <span class="comment">// already initialized</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> playerLoop = PlayerLoop.GetDefaultPlayerLoop();</span><br><span class="line">    Initialize(<span class="keyword">ref</span> playerLoop);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里我把代码一起粘贴出来是因为这里面有好多我知识点的盲区，有代码能加快一些理解。</p>
+<p>最终结论就是加上最上面的两行使得ECS和UniRx的PlayerLoop不冲突，不会造成一方失效的问题。<br>也就是这一步并不是UniRx要做的设定而是为了让两者共存而做的设定。</p>
+<p>那么通过这个问题我发现的一些知识盲区：</p>
+<ul>
+<li>ECS是什么？</li>
+<li>PlayerLoop是什么，为什么游戏开始之前要指定PlayerLoop的设定？</li>
+</ul>
+<p>调查了一下发现这个问题是真的很复杂，需要展开另一篇关于Unity的ECS的内容来加深理解了。</p>
+<h2 id="UniRx-各种用法"><a href="#UniRx-各种用法" class="headerlink" title="UniRx-各种用法"></a>UniRx-各种用法</h2><h3 id="SubscribeOnMainThread-amp-ObserveOnMainThread"><a href="#SubscribeOnMainThread-amp-ObserveOnMainThread" class="headerlink" title="SubscribeOnMainThread &amp; ObserveOnMainThread"></a>SubscribeOnMainThread &amp; ObserveOnMainThread</h3><p>这个是做什么的</p>
+<ul>
+<li><a href="https://github.com/neuecc/UniRx/issues/282" target="_blank" rel="noopener">How to use SubscribeOnMainThread? It seems never working #282</a></li>
+</ul>
+<blockquote>
+<p>SubscribeOnMainThread means that you are subscribing (therefore starting the task [for cold observables]) in main thread whereas ObserveOnMainThread means that you are observing (listening) onNext messages in main thread.</p>
+</blockquote>
+<blockquote>
+<p>When you are using Observable.Start method, the task will be run on the ThreadPool by default. So use it with the ObserveOnMainThread to access Unity API in the Subscribe method.</p>
+</blockquote>
+<p>从名字上也能大致了解，就是为了让Subscribe中的内容在MainThread中执行。因为涉及到Unity的GameObject的操作都要在主线程中进行。</p>
+<p>按理说我应该试着使用这两个方法，再去了解这个方法应不应该这样用，也就是试错。</p>
+<p>但是我听前辈说这两个方法不太靠得住（意思应该就是使用的时候可能会报错，因为在子线程中动Unity的GameObject，或者Unity的一些东西，编译就会报错，会好好的报出错误信息的），最靠谱的方式是用<code>await UniTask.Yield()</code>。至于具体怎么用，在后面的地方专门展开。</p>
+<h3 id="ObserveEveryValueChanged"><a href="#ObserveEveryValueChanged" class="headerlink" title="ObserveEveryValueChanged"></a>ObserveEveryValueChanged</h3><h3 id="Observable-1"><a href="#Observable-1" class="headerlink" title="Observable"></a>Observable</h3><ul>
+<li><a href="http://reactivex.io/documentation/observable.html" target="_blank" rel="noopener">Observable</a></li>
+</ul>
+<h3 id="Disposables"><a href="#Disposables" class="headerlink" title="Disposables"></a>Disposables</h3><p>这个也是一个很重要的概念。</p>
+<ul>
+<li><a href="http://rxwiki.wikidot.com/disposables" target="_blank" rel="noopener">Disposables</a></li>
+</ul>
+<h3 id="Operators"><a href="#Operators" class="headerlink" title="Operators"></a>Operators</h3><ul>
+<li><a href="https://qiita.com/toRisouP/items/3cf1c9be3c37e7609a2f" target="_blank" rel="noopener">UniRx オペレータ逆引き</a></li>
+</ul>
+<h4 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h4><ul>
+<li><a href="http://neue.cc/2011/09/17_343.html" target="_blank" rel="noopener">Rxにおける並行非同期実行とリソース処理の問題</a></li>
+</ul>
+<h4 id="Do"><a href="#Do" class="headerlink" title="Do"></a>Do</h4><ul>
+<li><a href="http://light11.hatenadiary.com/entry/2018/11/03/195828" target="_blank" rel="noopener">【Unity】【UniRx】Observable.DoXxx()系のメソッドの挙動まとめ</a></li>
+</ul>
+<h1 id="Reactive-Programming-重要"><a href="#Reactive-Programming-重要" class="headerlink" title="Reactive Programming(重要)"></a>Reactive Programming(重要)</h1><ul>
+<li><a href="https://egghead.io/courses/introduction-to-reactive-programming" target="_blank" rel="noopener">Introduction to Reactive Programming</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/UniRx/" rel="tag"># UniRx</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/the-lambda-what-i-understand/" rel="prev" title="我所理解的Lambda表达式">
+      <i class="fa fa-chevron-left"></i> 我所理解的Lambda表达式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/the-inverse-kinematics-wat-i-understand/" rel="next" title="我所理解的Unity-IK">
+      我所理解的Unity-IK <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解UniRx"><span class="nav-number">1.</span> <span class="nav-text">理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactive-Extension"><span class="nav-number">1.1.</span> <span class="nav-text">Reactive Extension</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx"><span class="nav-number">1.2.</span> <span class="nav-text">UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#从Observer模式理解UniRx"><span class="nav-number">1.2.1.</span> <span class="nav-text">从Observer模式理解UniRx</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#观察者模式"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">观察者模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单的观察者模式实现"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">简单的观察者模式实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向UniRx进行转变"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">向UniRx进行转变</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UniRx构成的三大要素"><span class="nav-number">1.2.2.</span> <span class="nav-text">UniRx构成的三大要素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Operator"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Operator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Scheduler"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Scheduler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Observable"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">Observable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#深入理解UniTask中的async-await"><span class="nav-number">1.2.3.</span> <span class="nav-text">深入理解UniTask中的async/await</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Rx-vs-async-await"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">Rx vs async/await</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#理解并正确使用async-await"><span class="nav-number">1.2.3.1.1.</span> <span class="nav-text">理解并正确使用async/await</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx中遇见的"><span class="nav-number">1.3.</span> <span class="nav-text">UniRx中遇见的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PlayerLoop"><span class="nav-number">1.3.1.</span> <span class="nav-text">PlayerLoop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UniRx-各种用法"><span class="nav-number">1.4.</span> <span class="nav-text">UniRx-各种用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SubscribeOnMainThread-amp-ObserveOnMainThread"><span class="nav-number">1.4.1.</span> <span class="nav-text">SubscribeOnMainThread &amp; ObserveOnMainThread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObserveEveryValueChanged"><span class="nav-number">1.4.2.</span> <span class="nav-text">ObserveEveryValueChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observable-1"><span class="nav-number">1.4.3.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Disposables"><span class="nav-number">1.4.4.</span> <span class="nav-text">Disposables</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operators"><span class="nav-number">1.4.5.</span> <span class="nav-text">Operators</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Do"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">Do</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactive-Programming-重要"><span class="nav-number">2.</span> <span class="nav-text">Reactive Programming(重要)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

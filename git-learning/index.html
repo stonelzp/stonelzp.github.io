@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git学习笔记">
+<meta property="og:url" content="http://stonelzp.github.io/git-learning/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:46.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git学习笔记">
+<meta name="twitter:description" content="Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。">
+
+<link rel="canonical" href="http://stonelzp.github.io/git-learning/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Git学习笔记 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/git-learning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-22 14:14:17" itemprop="dateCreated datePublished" datetime="2019-06-22T14:14:17+09:00">2019-06-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:46" itemprop="dateModified" datetime="2024-11-12T20:51:46+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工具/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Git的使用尤为重要，只要是做项目开发没有版本管理的话，那就没个玩。但是Git的使用虽然是很简单但是精通的话还是要时间。</p>
+<a id="more"></a>
+<p>这里就是要记下我在使用Git的过程中遇到的问题和解决方案。像记事本一样。</p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><ul>
+<li><a href="https://github.com/geeeeeeeeek/git-recipes/wiki" target="_blank" rel="noopener">git-recipes</a></li>
+</ul>
+<p>这是Git的中文Wiki，我还没看过，真是罪过，一定要看！！</p>
+<ul>
+<li><a href="https://github.com/k88hudson/git-flight-rules/blob/master/README.md" target="_blank" rel="noopener">Flight rules for Git</a></li>
+</ul>
+<p>有中文翻译。顺便一提这个是日语翻译<a href="https://blog.labot.jp/entry/2019/07/01/183204" target="_blank" rel="noopener">【永久保存版】Gitのあらゆるトラブルが解決する神ノウハウ集を翻訳した</a></p>
+<h2 id="Git使用中遇到的"><a href="#Git使用中遇到的" class="headerlink" title="Git使用中遇到的"></a>Git使用中遇到的</h2><h3 id="关于换行符"><a href="#关于换行符" class="headerlink" title="关于换行符"></a>关于换行符</h3><ul>
+<li><a href="https://qiita.com/uggds/items/00a1974ec4f115616580" target="_blank" rel="noopener">気をつけて！Git for Windowsにおける改行コード</a></li>
+</ul>
+<h3 id="关于差分（diff）"><a href="#关于差分（diff）" class="headerlink" title="关于差分（diff）"></a>关于差分（diff）</h3><p>在提交(add)代码之前，使用差分工具看看自己修改过的内容是一个极好的习惯，确保自己代码修改的地方，防止提交一些自己失误添加的内容。</p>
+<p>最近就发生了我提交了迷之代码的尴尬事情，查看历史的提交记录，追溯到我，场面一度非常尴尬。</p>
+<ul>
+<li><a href="https://qiita.com/shibukk/items/8c9362a5bd399b9c56be" target="_blank" rel="noopener">忘れやすい人のための git diff チートシート</a></li>
+</ul>
+<h3 id="关于忽略文件的变动"><a href="#关于忽略文件的变动" class="headerlink" title="关于忽略文件的变动"></a>关于忽略文件的变动</h3><p>有的时候会遇见一些Run-Time类型的文件，可以上传一个版本但是每次运行的时候总会变，每次都要commit就很不现实，于是便有了这个问题：</p>
+<p>如何停止对一个文件（或者文件夹中的文件）进行版本管理？</p>
+<p>找到的方法是：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/936249/how-to-stop-tracking-and-ignore-changes-to-a-file-in-git" target="_blank" rel="noopener">How to stop tracking and ignore changes to a file in Git?</a></li>
+</ul>
+<blockquote>
+<p>There are 3 options, you probably want #3</p>
+<ol>
+<li><p>This will keep the local file for you, but will delete it for anyone else when they pull.</p>
+<p><code>git rm --cached &lt;file-name&gt;</code> or <code>git rm -r --cached &lt;folder-name&gt;</code></p>
+</li>
+<li><p>This is for optimization, like a folder with a large number of files, e.g. SDKs that probably won’t ever change. It tells git to stop checking that huge folder every time for changes, locally, since it won’t have any. The assume-unchanged index will be reset and file(s) overwritten if there are upstream changes to the file/folder (when you pull).</p>
+<p> <code>git update-index --assume-unchanged &lt;path-name&gt;</code></p>
+</li>
+<li><p>This is to tell git you want your own independent version of the file or folder. For instance, you don’t want to overwrite (or delete) production/staging config files.</p>
+<p> <code>git update-index --skip-worktree &lt;path-name&gt;</code></p>
+</li>
+</ol>
+<p>It’s important to know that git update-index will not propagate with git, and each user will have to run it independently.</p>
+</blockquote>
+<p>我实际上使用的是第一种方法，但由于我是一个人开发的所以没有验证过是不是别人Pull的时候会删掉我取消Track的文件。</p>
+<p>但我感觉我实际上应该使用的是第二种方法，的确是使用了某个SDK，即Plugins，基本上不会再有改动，除非其他人对插件的内容进行了修改。</p>
+<h3 id="删除远程分支"><a href="#删除远程分支" class="headerlink" title="删除远程分支"></a>删除远程分支</h3><p>多人一起工作的时候就会经常遇到需要删除自己提交的远程分支的情况，在这里做一下记录。</p>
+<p>首先先看一下自己本地的分支和远程的分支：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -a</span><br></pre></td></tr></table></figure></p>
+<p>在确认了想要删除的分支的名字之后首先执行本地的分支删除操作吧：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git brance -d Branch-Name</span><br></pre></td></tr></table></figure></p>
+<p>如果没有什么问题本地的分支就会被删除。下一步是删除远程的分支<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push -d origin Branch-Name</span><br></pre></td></tr></table></figure></p>
+<p>这样就完成了，上面的<code>-d</code>跟<code>--delete</code>是等效的。</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://qiita.com/iorionda/items/c7e0aca399371068a9b8" target="_blank" rel="noopener">Git で不要になったローカルブランチ・リモートブランチを削除する方法</a></li>
+</ul>
+<h3 id="添加远程分支"><a href="#添加远程分支" class="headerlink" title="添加远程分支"></a>添加远程分支</h3><p>为初始的仓库添加远程分支。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git-url</span><br></pre></td></tr></table></figure></p>
+<p>删除远程分支<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rm git-url</span><br></pre></td></tr></table></figure></p>
+<p>修改远程分支<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote set-url origin git-url</span><br></pre></td></tr></table></figure></p>
+<p>也是修改远程分支的指令。</p>
+<p>修改仓库名称<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rename name-before name-after</span><br></pre></td></tr></table></figure></p>
+<p>顺便一提查看远程分支的指令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure></p>
+<p>还有查看远程ping得通得指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git ls-remote</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><a href="https://superuser.com/questions/227509/git-ping-check-if-remote-repository-exists" target="_blank" rel="noopener">git “ping”: check if remote repository exists</a></li>
+</ul>
+<p>要说为什么想起来写这个部分的内容，公司的一个Gitlab的仓库我是死活连接不上，原因则是用的ssh的路径而不是http的路径。<br>话说回来，我也是不太清楚ssh和http路径在gitlab中使用的区别，至少我目前遇到的都是ssh路径不行的情况下http就可以，而SourceTree中使用的基本上都是http路径。</p>
+<h3 id="Add操作"><a href="#Add操作" class="headerlink" title="Add操作"></a>Add操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+<p>这个算是最常用的命令之一了，这个命令的含义是将当前文件夹下的所有的变动（<strong>增删改</strong>）都执行add操作。</p>
+<p>无关当前文件夹，当前Repo里所有的变动都执行add操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -A</span><br><span class="line">// or</span><br><span class="line">git add --all</span><br></pre></td></tr></table></figure></p>
+<p>无关当前文件夹，所有变动（只有<strong>删改</strong>）执行add操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add -u</span><br><span class="line">// or</span><br><span class="line">git add --update</span><br></pre></td></tr></table></figure></p>
+<p>参考文章<br>-<a href="https://note.nkmk.me/git-add-u-a-period/" target="_blank" rel="noopener">git add -u と git add -A と git add . の違い</a></p>
+<h3 id="取消已经add的操作"><a href="#取消已经add的操作" class="headerlink" title="取消已经add的操作"></a>取消已经add的操作</h3><p>有的时候习惯性就会在commit之前add，真正准备commit的时候才发现有不想提交的内容。<br>结论就是使用这个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git rm --cached .</span><br><span class="line">// or</span><br><span class="line">git rm --cached &lt;added_file_to_undo&gt;</span><br></pre></td></tr></table></figure></p>
+<p>或者需要递归操作的话用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rm -r --cached .</span><br></pre></td></tr></table></figure></p>
+<p>这会清除所有add的内容。</p>
+<p>在执行add的时候推荐用这个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add -n .</span><br></pre></td></tr></table></figure></p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/348170/how-do-i-undo-git-add-before-commit" target="_blank" rel="noopener">How do I undo ‘git add’ before commit?</a><br>回答里的最高赞内容，只能说是跟我的情况一模一样了。</li>
+</ul>
+<h3 id="Git-Stash"><a href="#Git-Stash" class="headerlink" title="Git Stash"></a>Git Stash</h3><p>可以一时间保存本地的修改，在切换分支的时候也可以保留自己的修改。</p>
+<p>指定文件进行stash操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 指定文件进行stash操作</span><br><span class="line">$ git stash push -- &lt;filepath&gt;</span><br><span class="line"></span><br><span class="line">// 指定stash的id进行复原</span><br><span class="line">$ git stash pop stash@&#123;0&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考：</p>
+<ul>
+<li><a href="https://qiita.com/yukitaka13-1110/items/935bfa233c6e024f82dc" target="_blank" rel="noopener">[Git] ファイル単位でstashする</a></li>
+</ul>
+<p>这里再稍微罗嗦一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// Stash当前所有的修改</span><br><span class="line">git stash</span><br><span class="line"></span><br><span class="line">// 查看stash列表</span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line">// 应该是选择最上面的那样stash进行复原（我没有试过，需要验证的）</span><br><span class="line">git stash pop</span><br></pre></td></tr></table></figure></p>
+<h3 id="Git-clean"><a href="#Git-clean" class="headerlink" title="Git clean"></a>Git clean</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clean [-d] [-f] [-i] [-n] [-q] [-e &lt;pattern&gt;] [-x | -X] [--] &lt;path&gt;…​</span><br></pre></td></tr></table></figure>
+<p>各个参数的含义：</p>
+<ul>
+<li><code>-d</code> : 版本管理外的文件包含文件夹都会以递归的方式</li>
+<li><code>-f</code> : <code>--force</code>，没有这个参数的话，文件以及文件夹不会被删除。</li>
+<li><code>-x</code> : 版本管理外的文件包含文件夹都会被删除</li>
+<li><code>-n</code> : <code>--dry-run</code>,输出删除对象，但不会真正的删除文件</li>
+<li><code>-i</code> : <code>--interactive</code>,可以一个一个确认删除文件</li>
+<li><code>-q</code> : 安静的删除文件，不会输出删除日志，除非出错误日志</li>
+<li><code>-X</code> : 手动添加的文件可以不会被删？（没有用过）</li>
+</ul>
+<p>一般的情况下我都是使用<code>git clean -df</code>或者<code>git clean -xdf</code>。</p>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://www-creators.com/git-command/git-clean" target="_blank" rel="noopener">git clean</a></li>
+</ul>
+<h2 id="SourceTree"><a href="#SourceTree" class="headerlink" title="SourceTree"></a>SourceTree</h2><p>最近一直在用这个工具，很方便了，代替Git吧，但是遇到了问题。</p>
+<p>在SourceTree中使用Git LFS的时候，文件超过一定大小当你准备提交的时候就会提醒你把这个文件交给Git LFS来处理，于是我照办了。由于这个文件的路径有些奇葩，有<code>space</code>的存在，于是我明明在<code>.gitattribute</code>文件中添加了路径，SourceTree还是会提醒我这个文件要用Git LFS来处理。</p>
+<p>文件路径奇葩带空格又不是我的错，我只是导入一个插件而已。至于解决方案，那就是使用命令行工具来提交啊。关键时候还得是Bash。</p>
+<p>参考了下面的文章：</p>
+<ul>
+<li>[<a href="https://github.com/git-lfs/git-lfs/issues/2668" target="_blank" rel="noopener">[:space:]] seam to prevent Git lfs to work with SourceTree</a></li>
+</ul>
+<h2 id="Git-LFS-2"><a href="#Git-LFS-2" class="headerlink" title="Git LFS 2"></a>Git LFS 2</h2><p>在UE4中可以使用这个插件来完成项目的多人协作，割舍不下的功能就是在UE4中对Asset进行编辑时可以远程加锁，UE4的Asset版本管理很麻烦的，又不能像C++代码那样简单的Merge。</p>
+<ul>
+<li>Github项目<a href="https://github.com/SRombauts/UE4GitPlugin" target="_blank" rel="noopener">Unreal Engine 4 Git Source Control Plugin</a></li>
+</ul>
+<h3 id="Git-LFS"><a href="#Git-LFS" class="headerlink" title="Git LFS"></a>Git LFS</h3><h4 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h4><p>这东西用于管理大数据文件很有用，使用的时候也会遇到很多问题，当然是我的问题，上面SourceTree的内容就有提到。</p>
+<p>关于一些命令的使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git lfs locks             #获取现在加锁文件的一览</span><br><span class="line">$ git lfs unlock --id=555   #为555号id文件解锁，当然是自己加锁的文件</span><br></pre></td></tr></table></figure></p>
+<p>还有就是一些批量操作默认的GitLFS命令并不支持，这也是我要在这里记录这个的原因。</p>
+<p>在<code>ProjectName/.git/config</code>文件里面添加下面的内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[alias]</span><br><span class="line">        lock = &quot;!f()&#123; git pull ; for file in \&quot;$@\&quot;; do git lfs lock $file; done &#125;;f&quot;</span><br><span class="line">        unlock = &quot;!f()&#123; for file in \&quot;$@\&quot;; do git lfs unlock $file; done &#125;;f&quot;</span><br><span class="line">        unlockall = &quot;!f() &#123; git lfs locks | grep [my-git-user-name] | cut -f 1 | while read -r file; do git lfs unlock $file; done; &#125;;f&quot;</span><br><span class="line">        locks = &quot;!f() &#123; git lfs locks; &#125;;f&quot;</span><br></pre></td></tr></table></figure></p>
+<p>这里的<code>[my-git-user-name]</code>根据自己的账户名字进行替换，使用<code>git lfs locks</code>就可以看到自己加锁的账户名字，<code>[]</code>是必须的，不要省略。</p>
+<p>这样在使用下面的命令的时候，就会把自己加锁的文件全部解锁。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git unlockall</span><br></pre></td></tr></table></figure></p>
+<p><code>git unlock a.txt b.txt</code>和<code>git lock a.txt b.txt</code>这样可以对文件进行批量的加锁解锁操作，但还是需要指定路径，也许可以加以改造，指定id就可以简单的批量解锁文件，但是我也只是参照别人的文章复制过来的，对<code>.git/config</code>文件的内容语法也不是很了解。</p>
+<p>参考文章:</p>
+<ul>
+<li><a href="https://qiita.com/gecko655/items/89085bad77fb83c98267" target="_blank" rel="noopener">Git LFS lockを使うためのエイリアス メモ</a></li>
+</ul>
+<h4 id="进阶使用"><a href="#进阶使用" class="headerlink" title="进阶使用"></a>进阶使用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git lfs prune</span><br></pre></td></tr></table></figure>
+<p>当项目发展到一定规模之后，使用GitLFS自己的仓库空间就会越来越大，电脑空间再大早晚就会被吃空，一个T两个T的SSD都被吃的干干净净，看着变红的硬盘，再看看空空的钱包，还是想想技术吧。</p>
+<ul>
+<li><a href="https://zenn.dev/rossam/articles/73d4f14d368caf02fd9a" target="_blank" rel="noopener">【Git】Git LFSを使用したリポジトリが肥大化した場合に使いたい「git lfs prune」</a></li>
+</ul>
+<p>调查的时候发现一篇文章稍微有些在意，先记下：</p>
+<ul>
+<li><a href="https://qiita.com/kaneshin/items/0d19fc1cd86f931dc855" target="_blank" rel="noopener">Gitリポジトリをメンテナンスして軽量化する</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/ue4-trace-fnctions/" rel="prev" title="UE4中的TraceFunctions">
+      <i class="fa fa-chevron-left"></i> UE4中的TraceFunctions
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/unity-shader-learning/" rel="next" title="Unity-Shader学习">
+      Unity-Shader学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">1.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用中遇到的"><span class="nav-number">2.</span> <span class="nav-text">Git使用中遇到的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于换行符"><span class="nav-number">2.1.</span> <span class="nav-text">关于换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于差分（diff）"><span class="nav-number">2.2.</span> <span class="nav-text">关于差分（diff）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于忽略文件的变动"><span class="nav-number">2.3.</span> <span class="nav-text">关于忽略文件的变动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除远程分支"><span class="nav-number">2.4.</span> <span class="nav-text">删除远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加远程分支"><span class="nav-number">2.5.</span> <span class="nav-text">添加远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Add操作"><span class="nav-number">2.6.</span> <span class="nav-text">Add操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取消已经add的操作"><span class="nav-number">2.7.</span> <span class="nav-text">取消已经add的操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-Stash"><span class="nav-number">2.8.</span> <span class="nav-text">Git Stash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-clean"><span class="nav-number">2.9.</span> <span class="nav-text">Git clean</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SourceTree"><span class="nav-number">3.</span> <span class="nav-text">SourceTree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-LFS-2"><span class="nav-number">4.</span> <span class="nav-text">Git LFS 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-LFS"><span class="nav-number">4.1.</span> <span class="nav-text">Git LFS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本使用"><span class="nav-number">4.1.1.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进阶使用"><span class="nav-number">4.1.2.</span> <span class="nav-text">进阶使用</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

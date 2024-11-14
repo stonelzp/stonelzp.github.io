@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
+<meta name="keywords" content="C++,UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4中的函数回调实现">
+<meta property="og:url" content="http://stonelzp.github.io/UE4中的函数回调实现/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/UE4中的函数回调实现/AdvancedDelegates.jpg">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.060Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4中的函数回调实现">
+<meta name="twitter:description" content="回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。 说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。">
+<meta name="twitter:image" content="http://stonelzp.github.io/UE4中的函数回调实现/AdvancedDelegates.jpg">
+
+<link rel="canonical" href="http://stonelzp.github.io/UE4中的函数回调实现/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4中的函数回调实现 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4中的函数回调实现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4中的函数回调实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-31 15:26:25" itemprop="dateCreated datePublished" datetime="2018-07-31T15:26:25+09:00">2018-07-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>回调函数的含义，实际上我也不太清楚，搜回调函数得到的关键字有很多：闭包，代理，委托，Wrapper，等等。但有一点我很清楚，这些我都不太懂。</p>
+<p>说是在不同的语言中有不同的叫法。其本质上就是一个函数指针，而在汇编层面，就是子程序代码的首地址。每一段编译器先放一个占位符，最后放入实际的值。</p>
+<a id="more"></a>
+<p>上面的话是<a href="http://sourcecodereadingofunreal.readthedocs.io/en/latest/content/programmingSkill.html" target="_blank" rel="noopener">Unreal用到一些编程技巧</a>里的内容。</p>
+<h1 id="先理解什么是”函数回调”"><a href="#先理解什么是”函数回调”" class="headerlink" title="先理解什么是”函数回调”"></a>先理解什么是”函数回调”</h1><blockquote>
+<p>A “callback” is any function that is called by another function whitch takes the first function as a parameter. A lot of the time, a “callback” is a function that is called when something happens. That something can be called an “event” in programmer-speak.</p>
+</blockquote>
+<p>摘自Stack Overflow：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/9596276/how-to-explain-callbacks-in-plain-english-how-are-they-different-from-calling-o" target="_blank" rel="noopener">How to explain callbacks in plain english? How are they different from calling one function from another function?</a></li>
+</ul>
+<p>实际的应用场景就类似：<strong>类A需要类B做一件事情，类B做完之后需要告知类A已经做完了这件事情，至于告知的具体方法(函数的具体实现)类A并没有事先告诉类B(编译期间)，等类B做完看一下类A留下的便条(绑定的事件)，根据信条里面的内容(函数的具体实现)来通知类A。</strong></p>
+<p>用简单的代码来表示CallBack就是：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"B work has done."</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void B( void (A_prt) (void))&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>学了C++的虚函数之后，理解起来就是快 =。=</p>
+<h1 id="UE4中的函数回调-CallBack"><a href="#UE4中的函数回调-CallBack" class="headerlink" title="UE4中的函数回调(CallBack)"></a>UE4中的函数回调(CallBack)</h1><p>C++中应该有许多种方式的回调，UE C++(UnrealEngine中的C++)则是使用的<strong>DELEGATE</strong>和<strong>EVENT</strong>来实现。</p>
+<p>关于UE C++的代理，存在着以下的几种方式：</p>
+<ul>
+<li>静态的Single-cast Delegates</li>
+<li>Dynamic Single-cast Delegates</li>
+<li>静态的Multi-cast Delegates</li>
+<li>Dynamic Multi-cast Delegates</li>
+</ul>
+<p>这几种代理的实现有什么不同需要后续整理，可以参考：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/533323/what-difference-between-delegates.html" target="_blank" rel="noopener">What difference betweens delegates?</a></li>
+</ul>
+<p>有的时候需要很好的利用一下UE4的<a href="https://answers.unrealengine.com/index.html" target="_blank" rel="noopener">官方论坛</a>，像是Stack Overflow一样。</p>
+<h2 id="Dynamic-Multi-cast-Delegates"><a href="#Dynamic-Multi-cast-Delegates" class="headerlink" title="Dynamic Multi-cast Delegates"></a>Dynamic Multi-cast Delegates</h2><p>Dynamic Multi-cast Delegates是唯一的一种可以和UE4的Blueprint联动的代理实现方式。</p>
+<p><strong>Dynamic Multi-cast Delegates的UE C++中的声明</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//File: CallbackExample.h</span></span><br><span class="line"><span class="comment">//Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line">DECLARE_DYNAMIC_MULTICAST_DELEGATE(FZeroInputDelegate);    <span class="comment">//没有参数的声明方法</span></span><br><span class="line">UPROPERTY(BlueprintAssignable, Category=<span class="string">"UE C++ Book"</span>)    <span class="comment">//BlueprintAssignable属性使得这个代理在Blueprint中也取得到。 -&gt;此处在真正的工程中不应该写注释，会出编译问题</span></span><br><span class="line">FZeroInputDelegate TheZeroInputDelegate;</span><br><span class="line"></span><br><span class="line">DECLEAR_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FTwoInputsDelegate, <span class="keyword">float</span>, FloatVal, int32, IntVal);    <span class="comment">//两个参数的声明方法</span></span><br><span class="line">UPROPERTY(BlueprintAssignable, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">FTwoInputsDelegate TheTwoInputsDelegate;</span><br></pre></td></tr></table></figure></p>
+<p>Tips:</p>
+<ul>
+<li>参数最大允许有8个。参数的声明类似上述两个参数的声明，先是类型后是参数名。</li>
+<li>参数不同的代理声明只需要将上述的数字换成相应参数的英文就可以，比如说八个参数的情况声明代理的语句就会变成：<code>DELEAR_DYNAMIC_MULTICAST_DELEGATE_EightParams</code></li>
+</ul>
+<p>这样制作的代理，可以在UE的Blueprint中获得到这个代理（似乎是作为Event）并进行实现了。别忘了指定Event与Target。即把这个代理委托给一个类的实例(Instance)。在Blueprint中似乎是以<code>Event</code>而存在的，Blueprint中实现的操作是把这个调用的Event登录到这个代理上去。这样在UE C++中调用这个代理，也会调用Blueprint中的事件，执行这个事件的实现部分。</p>
+<p><strong>调用Blueprint中的代理实现</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File: CallbackExample.cpp</span></span><br><span class="line"><span class="comment">// Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::ExecuteDelegate(<span class="keyword">const</span> <span class="keyword">float</span> FloatVal, <span class="keyword">const</span> int32 IntVal) -&gt; <span class="keyword">void</span> &#123;</span><br><span class="line">    TheZeroInputDelegate.Broadcast();</span><br><span class="line">    TheTwoInputsDelegate.Broadcast(FloatVal, IntVal);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>官方参考链接：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-us/Programming/UnrealArchitecture/Delegates/Dynamic" target="_blank" rel="noopener">Dynamic Delegates</a></li>
+<li><a href="https://docs.unrealengine.com/en-us/Programming/UnrealArchitecture/Delegates/Events" target="_blank" rel="noopener">Events</a><h2 id="Blueprint-Event与Blueprint-Function"><a href="#Blueprint-Event与Blueprint-Function" class="headerlink" title="Blueprint Event与Blueprint Function"></a>Blueprint Event与Blueprint Function</h2>关于事件与函数的区别，没有返回值的被叫做事件，有返回值的叫做函数。是否真实需要验证。在UE C++中可以登录Blueprint的事件，通过给UPROPERTY宏添加属性来完成。话说回来这个是函数，应该使用UFUNCTION宏才对，不知道为什么书上这么说。</li>
+</ul>
+<p>用于事件声明的属性有两种，区别的方式是是否在UE C++中有默认的实现。</p>
+<ul>
+<li><code>BlueprintImplementableEvent</code>:没有默认实现</li>
+<li><code>BlueprintNativeEvent</code>:拥有默认实现</li>
+</ul>
+<p><strong>Blueprint Event,Blueprint Function在UE C++中的声明</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File: CallbackExample.h</span></span><br><span class="line"><span class="comment">// Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// BP Event</span></span><br><span class="line">UFUNCTION(BlueprintImplementableEvent, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FloatInputEvent</span><span class="params">(<span class="keyword">const</span> <span class="keyword">float</span> FloatVal)</span></span>;</span><br><span class="line"></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">VectorInputEvent</span><span class="params">(<span class="keyword">const</span> FVector&amp; VecValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// BP Function</span></span><br><span class="line">UFUNCTION(BlueprintImplementableEvent, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line"><span class="function"><span class="keyword">float</span> <span class="title">IntInputFunction</span><span class="params">(<span class="keyword">const</span> int32 IntInput)</span></span>;</span><br><span class="line"></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">TArray&lt;<span class="keyword">float</span>&gt; VecArrayInputFuncion(<span class="keyword">const</span> TArray&lt;FVector&gt;&amp; VecValues);</span><br></pre></td></tr></table></figure></p>
+<p><strong>Event的默认实现</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File: CallbackExample.cpp</span></span><br><span class="line"><span class="comment">// Class: ACallbackExample</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//static FVector TheVector事先声明的属性</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VectorInputEvent_Implementation(<span class="keyword">const</span> FVector&amp; VecValue)-&gt;<span class="keyword">void</span>&#123;</span><br><span class="line">    TheVector = VecValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> ACallbackExample::VecArrayInputFuncion_Implementation(<span class="keyword">const</span> TArray&lt;FVector&gt;&amp; VecValues)-&gt; TArray&lt;<span class="keyword">float</span>&gt;&#123;</span><br><span class="line">    TArray&lt;<span class="keyword">float</span>&gt; Result;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; Val : VecValue)</span><br><span class="line">        Result.Emplace(FVector::Dist(TheVector, Val));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上的代码实装完成之后，继承了上面的<code>CallbackExample</code>类的Blueprint就可以在Blueprint Editor中对上述UE C++中的事件与函数进行重写了。</p>
+<p>以上，是对UE中的代理与事件，在可用范围内的总结与实现。但是对于在什么情况下使用这一点上仍然有许多疑问。</p>
+<hr>
+<p>2020/06/09 更新</p>
+<p>不知道我当时写下这篇文章的时候为什么没有对上面的<code>_Implementation</code>后缀产生大大的问号，定义了一个函数之后，函数的实现部分的函数名字竟然需要添加后缀，让人大呼这是什么抛瓦。</p>
+<p>因为时间有限，就快速记录一下。</p>
+<p>像上面那样函数的定义和实现都是在同一个文件的<code>.h</code>,<code>.cpp</code>中实现的，就是说：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleA::Execute_Implementation(<span class="keyword">int</span> value) <span class="keyword">const</span>&#123; &#125;</span><br><span class="line"><span class="comment">// auto SampleA::Execute_Implementation(int value) const&#123;// default Implementation &#125;   // 类型推断还能这么用的吗</span></span><br></pre></td></tr></table></figure></p>
+<p>这样的是好像也没有什么太大的问题，好像也很容易理解，但是当这个类似于事件的提供移到子类的时候，就有些让人摸不到头脑了。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SampleA.h</span></span><br><span class="line">UFUNCTION(BlueprintNativeEvent, Category=<span class="string">"Execute"</span>)</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Execute</span><span class="params">(<span class="keyword">int</span> value)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleA.cpp</span></span><br><span class="line"><span class="comment">// 这里应该没有实现，但是这个函数是有默认实现的，没错，蓝图那边有默认实现，如果我们没有这个C++的_Implementation实现，那么就是蓝图的默认实现被调用，但是我们对C++的_Implementation进行了实现，那么就是C++这部分实现会被调用。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.h</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleB</span> :</span> <span class="keyword">public</span> SampleA</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 没有这个子类的声明会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Execute_Implementation</span><span class="params">(ine value)</span> <span class="keyword">const</span> override</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleB.cpp</span></span><br><span class="line"><span class="keyword">void</span> SampleB::Execute_Implementation(ine value) <span class="keyword">const</span>&#123; <span class="comment">// 函数实现&#125;</span></span><br></pre></td></tr></table></figure>
+<p>如果是继承来的<code>Execute</code>就需要这样的样子，总之就是，带有</p>
+<ul>
+<li>UFUNCTION(BlueprintImplementableEvent, Category = “Foo”)</li>
+<li>UFUNCTION(BlueprintNativeEvent, Category = “Foo”)</li>
+</ul>
+<p>的可能都要这么实现。</p>
+<ul>
+<li><a href="https://www.epicgames.com/unrealtournament/forums/unreal-tournament-development/ut-development-programming/11600-what-s-the-deal-with-appending-_implementation-to-functions" target="_blank" rel="noopener">What’s the deal with appending ‘_Implementation’ to functions?</a></li>
+</ul>
+<blockquote>
+<p>FUNCTION_Implementation is for the UnrealEngine framework. Calling FUNCTION will also call the _Implementation part. FUNCTION is only a wrapper generated by the UHT. CPP includes the generated classes/headers.</p>
+</blockquote>
+<hr>
+<h2 id="UE-C-的函数回调实现"><a href="#UE-C-的函数回调实现" class="headerlink" title="UE C++的函数回调实现"></a>UE C++的函数回调实现</h2><p>说实话，函数回调跟代理的概念我还是没太理清。在许多的实际应用上，有些操作你叫它代理也行，叫它函数回调也行。用自己的感受就好比是参考系不同一样。就像上面举的函数回调的例子来说：</p>
+<p>函数回调就是类A想要在类B在运行中达成某种条件的时候调用类A提供的函数。这个时候类A是主参考系。</p>
+<p>代理就是类B在运行中达成某种条件的时候想要通知类A，但是不知道方法，而且觉得这个方法还是由类A决定为好，于是就提供给类A一个纸条(代理)，类A要实现代理内容。这个时候类B就是主参考系了。</p>
+<p>我是这样理解的，不知道是否正确。但是在UE4之中delegate的出现比较多，之后就用代理来称呼了。</p>
+<p>在Blueprint和AnimationBlueprint中可以很容易的实现代理，利用Blueprint自带的<strong>Event Dispatchers</strong>就可以快速的实现。函数绑定的时候需要注意的是要Cast正确的对象。</p>
+<p>在UE C++实现代理就稍微有些复杂。但还是很简单的。</p>
+<h2 id="一些代理之间的区别"><a href="#一些代理之间的区别" class="headerlink" title="一些代理之间的区别"></a>一些代理之间的区别</h2><p>在对UE4的代理越来越多的使用之后，对代理这个概念有了深入的了解，或者说是开始一点点接受并认同<strong>代理(delegate)</strong>这个概念的存在了。</p>
+<p>关于UE4中的各种类型的代理准备在上面逐一记录使用方法(TODO)，这里主要是用来记录我调查了某种代理之间的使用区别。</p>
+<h3 id="AddDynamic-amp-AddUniqueDynamic"><a href="#AddDynamic-amp-AddUniqueDynamic" class="headerlink" title="AddDynamic &amp; AddUniqueDynamic"></a>AddDynamic &amp; AddUniqueDynamic</h3><p>据网上的资料所说，<code>AddUniqueDynamic</code>类型的代理绑定了函数之后，相同对象的相同函数被重复绑定也只会被调用一次，而<code>AddDynamic</code>则是会被调用绑定次数。</p>
+<blockquote>
+<p>Consider the following fabricated situations :</p>
+<p>Situation 1 :<br>Tank-&gt;OnTankDeath.AddDynamic(this, &amp;ATankPlayerController::OnTankDeath);<br>Tank-&gt;OnTankDeath.AddDynamic(this, &amp;ATankPlayerController::OnTankDeath);</p>
+<p>Situation 2 :<br>Tank-&gt;OnTankDeath.AddUniqueDynamic(this, &amp;ATankPlayerController::OnTankDeath);<br>Tank-&gt;OnTankDeath.AddUniqueDynamic(this, &amp;ATankPlayerController::OnTankDeath);</p>
+<p>If you were to then call : OnTankDeath.Broadcast();</p>
+<p>For situation 1 , ATankPlayerController::OnTankDeath would be invoked or called twice.<br>For situation 2 , ATankPlayerController::OnTankDeath would be invoked or called only once.</p>
+<p>Essentially AddUniqueDynamic adds the dynamic delegate only if it isnt already present in the &gt; list of invocable dynamic delegates associated with OnTankDeath.</p>
+</blockquote>
+<ul>
+<li><a href="https://community.gamedev.tv/t/difference-between-adddynamic-adduniquedynamic/37003" target="_blank" rel="noopener">Difference between AddDynamic &amp; AddUniqueDynamic?</a></li>
+</ul>
+<h1 id="为什么要使用Delegate和Event？"><a href="#为什么要使用Delegate和Event？" class="headerlink" title="为什么要使用Delegate和Event？"></a>为什么要使用Delegate和Event？</h1><p>关于代理的实现，就算明白了也需要知道需要在什么情况下使用代理，否则没有意义。</p>
+<h2 id="关于Event"><a href="#关于Event" class="headerlink" title="关于Event"></a>关于Event</h2><p>在UE4中的Blueprint中应没有委托这一说，全部是以Event的名字来称呼的。</p>
+<h2 id="Delegate的使用情况"><a href="#Delegate的使用情况" class="headerlink" title="Delegate的使用情况"></a>Delegate的使用情况</h2><h3 id="推测1"><a href="#推测1" class="headerlink" title="推测1"></a>推测1</h3><p>面向对象的说法只是一种理想的情况，总会有想要实现别人功能的情况。比如说ClassA想要实现一个功能，但是明显这个功能是由ClassB负责的部分，要是自己来实现的话不好，所以自己的话，声明一个Delegate，想用的时候就把这个广播出去(Broadcast)，实现了这接口的内容会被调用。</p>
+<p>只言片语：</p>
+<blockquote>
+<p>现在我要对一系列数据进行排序，而排序算法可能比较复杂，我不会自己写，我想调用Array.Sort方法，微软为我们提供了快速排序算法。<br>但是这里有一个问题——我要实现自定义排序规则，比如对于字符串，默认的是按字母顺序，但现在我想这样排序：</p>
+<p>按字符串长度排序，只有当长度不同时，再按字母排序。</p>
+<p>显然，微软不可能提供这样“个性”的排序方法，那是不是说，就必须让我们自己去写快速排序算法呢？<br>不需要！<br>我们只需要使用委托，就能实现这个要求：<br>string[]strs=”I like C# very much”.Split();<br>Array.Sort(strs,Rule);<br>int void Rule(string first,string second)<br>{<br>return first.Length==second.Length?first.CompareTo(second):first.Length.CompareTo(second.Length);<br>}</p>
+<p>显然，我并不需要知道快速排序算法的逻辑，我只需要告之排序规则，就实现了我的个性排序。</p>
+<p>试问：如果没有委托，你如何解决这个问题？</p>
+</blockquote>
+<h1 id="UEC-中的Delegate实现"><a href="#UEC-中的Delegate实现" class="headerlink" title="UEC++中的Delegate实现"></a>UEC++中的Delegate实现</h1><p>上面的内容对于UE4/UE5中的代理（Delegate）这个概念有些大概的了解了。但是再UnrealEngine中，提供了一些类型的代理，什么时间用什么样的代理如果不深入理解的话，虽然可以一招鲜吃遍天但是未必太单调了。<br>而且为什么需要根据场景选择不同的代理的理由会在后面进行说明和佐证。</p>
+<p>首先是官方文档：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/" target="_blank" rel="noopener">Delegates - Data types that reference and execute member functions on C++ Objects</a></li>
+</ul>
+<p>文档的干货说明：</p>
+<ul>
+<li><strong>Delegates can call member functions on C++ objects in a generic, type-safe way.</strong> ：代理的调用时线程安全的。</li>
+<li><strong>Delegates are safe to copy. whenever possible, pass delegates by reference.</strong> ：代理可以复制，代价是需要再Heap中申请内存，所以尽可能的使用引用。</li>
+</ul>
+<p>UE引擎中提供了大致三种类型的代理：</p>
+<ul>
+<li>Single</li>
+<li>Multicast<ul>
+<li>Events</li>
+</ul>
+</li>
+<li>Dynamic(UObject,serializable)</li>
+</ul>
+<p><strong>UE的代理都是对Object的弱引用。</strong>Dynamic的代理不敢确定。</p>
+<p>代理的作用域(Scope)可以存在于:</p>
+<ul>
+<li>Global Scope</li>
+<li>namespace</li>
+<li>class</li>
+</ul>
+<p>下面就对这三种代理类型进行说明。</p>
+<h2 id="Delegates-Single"><a href="#Delegates-Single" class="headerlink" title="Delegates - Single"></a>Delegates - Single</h2><p>Single，也是通常的代理类型。通常的代理类型可以拥有以下几种特征：</p>
+<ul>
+<li><strong>Functions returning a value</strong>：Delegate可以拥有返回值</li>
+<li><strong>Functions declared as <code>const</code></strong>：Delegate的对象可以是<code>const</code>函数</li>
+<li><strong>Up to four “payload” variables</strong>：至多4个”payload”变量</li>
+<li><strong>Up to eight function parameters</strong>：支持最多8个函数参数</li>
+</ul>
+<h3 id="Single代理的声明"><a href="#Single代理的声明" class="headerlink" title="Single代理的声明"></a>Single代理的声明</h3><p>一般的写法(参考官方文档)：</p>
+<table>
+<thead>
+<tr>
+<th>Function signature</th>
+<th>Declaration macro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void Function()</td>
+<td>DECLARE_DELEGATE(DelegateName)</td>
+</tr>
+<tr>
+<td>void Function(Param1)</td>
+<td>DECLARE_DELEGATE_OneParam(DelegateName, Param1Type)</td>
+</tr>
+<tr>
+<td>void Function(Param1, Param2)</td>
+<td>DECLARE_DELEGATE_TwoParams(DelegateName, Param1Type, Param2Type)</td>
+</tr>
+<tr>
+<td>void Function(Param1, Param2, …)</td>
+<td>DECLARE_DELEGATE_<num>Params(DelegateName, Param1Type, Param2Type, …)</num></td>
+</tr>
+<tr>
+<td><retvaltype> Function()</retvaltype></td>
+<td>DECLARE_DELEGATE_RetVal(RetValType, DelegateName)</td>
+</tr>
+<tr>
+<td><retvaltype> Function(Param1)</retvaltype></td>
+<td>DECLARE_DELEGATE_RetVal_OneParam(RetValType, DelegateName, Param1Type)</td>
+</tr>
+<tr>
+<td><retvaltype> Function(Param1, Param2)</retvaltype></td>
+<td>DECLARE_DELEGATE_RetVal_TwoParams(RetValType, DelegateName, Param1Type, Param2Type)</td>
+</tr>
+<tr>
+<td><retvaltype> Function(Param1, Param2, …)</retvaltype></td>
+<td>DECLARE_DELEGATE_RetVal_<num>Params(RetValType, DelegateName, Param1Type, Param2Type, …)</num></td>
+</tr>
+</tbody>
+</table>
+<p>关于Delegate的一个就是属性修饰符，我真的是没见过，只在官方文档里见到了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UDELEGATE(BlueprintAuthorityOnly)</span><br><span class="line">DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FInstigatedAnyDamageSignature, float, Damage, const UDamageType*, DamageType, AActor*, DamagedActor, AActor*, DamageCauser);</span><br></pre></td></tr></table></figure></p>
+<p>这个<code>UDELEGATE</code>有时间我得调查一下。</p>
+<h3 id="Single代理的绑定"><a href="#Single代理的绑定" class="headerlink" title="Single代理的绑定"></a>Single代理的绑定</h3><table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bind</td>
+<td>Binds to an existing delegate object.</td>
+</tr>
+<tr>
+<td>BindStatic</td>
+<td>Binds a raw C++ pointer global function delegate.</td>
+</tr>
+<tr>
+<td>BindRaw</td>
+<td>Binds a raw C++ pointer delegate. Since raw pointers do not use any sort of reference, calling <code>Execute</code> or <code>ExecuteIfBound</code> after deleting the target object is unsafe.</td>
+</tr>
+<tr>
+<td>BindLambda</td>
+<td>Binds a functor. This is generally used for lambda functions.</td>
+</tr>
+<tr>
+<td>BindSP</td>
+<td>Binds a shared pointer-based member function delegate. Shared pointer delegates keep a weak reference to your object. You can use <code>ExecuteIfBound</code> to call them.</td>
+</tr>
+<tr>
+<td>BindUObject</td>
+<td>Binds a <code>UObject</code> member function delegate. <code>UObject</code> delegates keep a weak reference to the <code>UObject</code> you target. You can use <code>ExecuteIfBound</code> to call them.</td>
+</tr>
+<tr>
+<td>UnBind</td>
+<td>Unbinds this delegate.</td>
+</tr>
+</tbody>
+</table>
+<p>使用Delegate的例子<span style="color: red">（随时补全）</span>：</p>
+<p>关于Delegate的<strong>PayLoad Data</strong>，这又是一个我未曾见过的写法，也就是说在Bind的阶段可以传递Payload数据</p>
+<blockquote>
+<p>When binding to a delegate, you can pass payload data along. These are arbitrary variables that will be passed directly to any bound function when it is invoked. This is really useful as it allows you to store parameters within the delegate itself at bind-time. All delegate types (except for “dynamic”) supports payload variables automatically.</p>
+<p>This example passes two custom variables, a bool and an int32 to a delegate. Then when the delegate is invoked, these parameters will be passed to your bound function. The extra variable arguments must always be accepted after the delegate type parameter arguments.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; MyDelegate.BindRaw( &amp;MyFunction, true, 20 );</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>我暂时没有找到具体的使用案例<span style="color: red">（随时补全）</span>。</p>
+<h3 id="Single代理执行"><a href="#Single代理执行" class="headerlink" title="Single代理执行"></a>Single代理执行</h3><p>由于对未绑定的代理执行<code>Execute()</code>可能会造成未定义的程序行为（比如说未被初始化的成员变量被访问到），需要在使用之前<code>IsBound()</code>进行判断。<br>对于没有返回值的代理可以使用<code>ExecuteIfBound()</code>执行。<br><strong>代理的使用的时候需要注意避免对未初始化的变量进行访问。</strong></p>
+<table>
+<thead>
+<tr>
+<th>Execution Functions</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Execute</td>
+<td>Executes a delegate without checking its bindings</td>
+</tr>
+<tr>
+<td>ExecuteIfBound</td>
+<td>Checks that a delegate is bound, and if so, calls Execute</td>
+</tr>
+<tr>
+<td>IsBound</td>
+<td>Checks whether or not a delegate is bound, often before code that includes an <code>Execute</code> call</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Delegate-Multicast"><a href="#Delegate-Multicast" class="headerlink" title="Delegate - Multicast"></a>Delegate - Multicast</h2><p>官方文档</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Multicast/" target="_blank" rel="noopener">Multi-cast Delegates - Delegates that can be bound to multiple functions and execute them all at once.</a></li>
+</ul>
+<p><strong>Multicast类型的代理不可使用返回值</strong>，特性大致上都与Single类型相同。使用上通常是为了方便传递一个代理的集合。</p>
+<h3 id="Multicast代理声明"><a href="#Multicast代理声明" class="headerlink" title="Multicast代理声明"></a>Multicast代理声明</h3><p>Multicast类型分为两种，基于Dynamic类型的特殊性，分为第三类型的代理，将在下一个章节部分进行说明。</p>
+<table>
+<thead>
+<tr>
+<th>Declaration Macro</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DECLARE_MULTICAST_DELEGATE( DelegateName )</td>
+<td>Creates a multi-cast delegate.</td>
+</tr>
+<tr>
+<td>DECLARE_MULTICAST_DELEGATE_<num>Params( DelegateName, Param1Type, Param2Type, … )</num></td>
+<td>Creates a multi-cast delegate with N parameters.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Multicast类型代理的绑定"><a href="#Multicast类型代理的绑定" class="headerlink" title="Multicast类型代理的绑定"></a>Multicast类型代理的绑定</h3><p>Multicast的绑定语义上类似与数组。</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Add()</td>
+<td>Adds a function delegate to this multi-cast delegate’s invocation list.</td>
+</tr>
+<tr>
+<td>AddStatic()</td>
+<td>Adds a raw C++ pointer global function delegate.</td>
+</tr>
+<tr>
+<td>AddRaw()</td>
+<td>Adds a raw C++ pointer delegate. Raw pointer does not use any sort of reference, so may be unsafe to call if the object was deleted out from underneath your delegate. Be careful when calling Execute()!</td>
+</tr>
+<tr>
+<td>AddSP()</td>
+<td>Adds a shared pointer-based (fast, not thread-safe) member function delegate. Shared pointer delegates keep a weak reference to your object.</td>
+</tr>
+<tr>
+<td>AddUObject()</td>
+<td>Adds a UObject-based member function delegate. UObject delegates keep a weak reference to your object.</td>
+</tr>
+<tr>
+<td>Remove()</td>
+<td>Removes a function from this multi-cast delegate’s invocation list (performance is O(N)). Note that the order of the delegates may not be preserved!</td>
+</tr>
+<tr>
+<td>RemoveAll()</td>
+<td>Removes all functions from this multi-cast delegate’s invocation list that are bound to the specified UserObject. Note that the order of the delegates may not be preserved!</td>
+</tr>
+</tbody>
+</table>
+<p>关于<code>RemoveAll()</code>这个函数在使用<strong>Raw delegate</strong>有一点需要注意：</p>
+<blockquote>
+<p><code>RemoveAll()</code> will remove all registered delegates bound to the provided pointer. Keep in mind that Raw delegates that are not bound to an object pointer will not be removed by this function!</p>
+</blockquote>
+<h3 id="Multicast类型代理执行"><a href="#Multicast类型代理执行" class="headerlink" title="Multicast类型代理执行"></a>Multicast类型代理执行</h3><p>我们可以安全的使用<code>Broadcast()</code>执行这个类型的代理，即使它没有任何的绑定。Multicast代理的执行顺序是没有保障的，不要想当然的认为是绑定的顺序。</p>
+<table>
+<thead>
+<tr>
+<th>Declaration Macro</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Broadcast()</td>
+<td>Broadcasts this delegate to all bound objects, except to those that may have expired.</td>
+</tr>
+</tbody>
+</table>
+<p>关于官方文档的：</p>
+<blockquote>
+<p>The only time you need to be careful is if you are using a delegate to initialize output variables, which is generally very bad to do.</p>
+</blockquote>
+<p>这句话我很在意，但是我又搞不明白他说的具体是什么样的情况。</p>
+<h2 id="Delegate-Events"><a href="#Delegate-Events" class="headerlink" title="Delegate - Events"></a>Delegate - Events</h2><p>官方文档</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Events/" target="_blank" rel="noopener">Events - Delegates that can be bound to multiple functions and execute them all at once.</a></li>
+</ul>
+<p>Events类型的代理是一种类型特化的Multicast代理类型。也就是说只有该代理声明的类的类型才能使用该代理。这减少了该对象暴露在外面世界的时候内部的一些比较敏感的代理实现不会被指定类之外的对象调用。</p>
+<h3 id="Events类型代理声明"><a href="#Events类型代理声明" class="headerlink" title="Events类型代理声明"></a>Events类型代理声明</h3><p><code>OwningType</code>的声明就是指定该代理从属的类，只有指定的类才能调用<code>Broadcast()</code>。</p>
+<table>
+<thead>
+<tr>
+<th>Declaration Macro</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DECLARE_EVENT( OwningType, EventName )</td>
+<td>Creates an event.</td>
+</tr>
+<tr>
+<td>DECLARE_EVENT_OneParam( OwningType, EventName, Param1Type )</td>
+<td>Creates an event with one parameter.</td>
+</tr>
+<tr>
+<td>DECLARE_EVENT_TwoParams( OwningType, EventName, Param1Type, Param2Type )</td>
+<td>Creates an event with two parameters.</td>
+</tr>
+<tr>
+<td>DECLARE_EVENT_<num>Params( OwningType, EventName, Param1Type, Param2Type, … )</num></td>
+<td>Creates an event with N parameters.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Events类型代理绑定"><a href="#Events类型代理绑定" class="headerlink" title="Events类型代理绑定"></a>Events类型代理绑定</h3><p>与Multicast类型的代理绑定一样。此处省略。</p>
+<h3 id="Events类型代理执行"><a href="#Events类型代理执行" class="headerlink" title="Events类型代理执行"></a>Events类型代理执行</h3><p>与Multicast类型的代理执行一样。此处省略。</p>
+<h2 id="Delegate-Dynamic"><a href="#Delegate-Dynamic" class="headerlink" title="Delegate - Dynamic"></a>Delegate - Dynamic</h2><p>官方文档</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/Delegates/Dynamic/" target="_blank" rel="noopener">Dynamic Delegates - Delegates that can be serialized and support reflection.</a></li>
+</ul>
+<p>Dynamic类型的代理数据会被序列化(serialized)，可以通过函数名找到。也就是说它们的执行效率要比普通的代理慢许多。</p>
+<p>本质上Dynamic代理类型不是独立于Single/Multicast代理类型的第三个类型，而是基于其特殊性放在第三个位来说。<br>Single/Multicast类型代理分别有着<strong>General</strong>与<strong>Dynamic</strong>的差别。</p>
+<h3 id="Dynamic类型代理的声明"><a href="#Dynamic类型代理的声明" class="headerlink" title="Dynamic类型代理的声明"></a>Dynamic类型代理的声明</h3><p>官方文档的写法貌似是Dynamic类型代理不支持返回值的写法，但是我也不完全确定。</p>
+<table>
+<thead>
+<tr>
+<th>Declaration Macro</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DECLARE_DYNAMIC_DELEGATE( DelegateName )</td>
+<td>Creates a dynamic delegate.</td>
+</tr>
+<tr>
+<td>DECLARE_DELEGATE_<num>Params( DelegateName , Param1Type, Param2Type, …)</num></td>
+<td>Creates a dynamic delegate with N parameters.</td>
+</tr>
+<tr>
+<td>DECLARE_DYNAMIC_MULTICAST_DELEGATE( DelegateName )</td>
+<td>Creates a dynamic multi-cast delegate.</td>
+</tr>
+<tr>
+<td>DECLARE_DYNAMIC_MULTICAST_DELEGATE_<num>Params( DelegateName, Param1Type, Param2Type, … )</num></td>
+<td>Create a dynamic multi-cast delegate with N parameters</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Dynamic类型代理的绑定"><a href="#Dynamic类型代理的绑定" class="headerlink" title="Dynamic类型代理的绑定"></a>Dynamic类型代理的绑定</h3><table>
+<thead>
+<tr>
+<th>Helper Macro</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BindDynamic( UserObject, FuncName )</td>
+<td>Helper macro for calling BindDynamic() on dynamic delegates. Automatically generates the function name string.</td>
+</tr>
+<tr>
+<td>AddDynamic( UserObject, FuncName )</td>
+<td>Helper macro for calling AddDynamic() on dynamic multi-cast delegates. Automatically generates the function name string.</td>
+</tr>
+<tr>
+<td>RemoveDynamic( UserObject, FuncName )</td>
+<td>Helper macro for calling RemoveDynamic() on dynamic multi-cast delegates. Automatically generates the function name string.</td>
+</tr>
+</tbody>
+</table>
+<p>AddUniqueDynamic?(有时间我直接看看源码实现)</p>
+<h3 id="Dynamic类型代理的执行"><a href="#Dynamic类型代理的执行" class="headerlink" title="Dynamic类型代理的执行"></a>Dynamic类型代理的执行</h3><p>执行方式与各自Single/Multicast类型代理的执行方式相同。此处省略。</p>
+<p>关于各项代理的源码实现可以直接参考引擎的源码：<br>UE4/UE5：<code>Engine\Source\Runtime\Core\Public\Delegates\DelegateSignatureImpl.inl</code></p>
+<h2 id="Delegate的Sample实现"><a href="#Delegate的Sample实现" class="headerlink" title="Delegate的Sample实现"></a>Delegate的Sample实现</h2><p>为了避免理解变得困难，于是决定没有把各自代理的例子放在上面章节，而是独立设置了一个章节。</p>
+<p>我找到一个很好的博客，可以根据需要生成代理的源码：</p>
+<ul>
+<li><a href="https://benui.ca/unreal/delegates-advanced/" target="_blank" rel="noopener">Advanced Delegates in C++</a><br><img src="AdvancedDelegates.jpg" alt="AdvancedDelegates"></li>
+</ul>
+<h3 id="Events代理的sample"><a href="#Events代理的sample" class="headerlink" title="Events代理的sample"></a>Events代理的sample</h3><p>这一段是来自官网上的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public:</span><br><span class="line">/** Broadcasts whenever the layer changes */</span><br><span class="line">DECLARE_EVENT( FLayerViewModel, FChangedEvent )</span><br><span class="line">FChangedEvent&amp; OnChanged() &#123; return ChangedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private:</span><br><span class="line">/** Broadcasts whenever the layer changes */</span><br><span class="line">FChangedEvent ChangedEvent;</span><br></pre></td></tr></table></figure>
+<p>官网这里需要注意的是下面的一个TIP：</p>
+<blockquote>
+<p>Accessors for events should follow an OnXXX pattern instead of the usual GetXXX pattern.</p>
+</blockquote>
+<p>我一直觉得把代理的变量直接放在Public或者Protected有一些抵触，刚好以后就参考这种写法了。</p>
+<p>下面是我在UE5的源码中找到的一个Event类型实现，很适合作为平常的使用参考。</p>
+<p>代理声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/** Called when the tab manager is changed */</span><br><span class="line">DECLARE_EVENT(FLevelEditorModule, FTabManagerChangedEvent);</span><br><span class="line">virtual FTabManagerChangedEvent&amp; OnTabManagerChanged() &#123; return TabManagerChangedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>代理变量声明：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/** Multicast delegate executed when the tab manager is changed */</span><br><span class="line">FTabManagerChangedEvent TabManagerChangedEvent;</span><br></pre></td></tr></table></figure></p>
+<p>代理使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private:</span><br><span class="line">	FDelegateHandle OnTabManagerChangedSubscription;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// We need to register a tab spawner now so that old tabs that were open when we closed the editor can be reopened</span><br><span class="line">// correctly displaying the &quot;Variant Manager&quot; title</span><br><span class="line">// Sadly this code runs after the LevelEditorModule is loaded, but before it has created its TabManager. We need to</span><br><span class="line">// subscribe to this event then, so that as soon as its created we&apos;ll register this spawner</span><br><span class="line">OnTabManagerChangedSubscription = LevelEditorModule.OnTabManagerChanged().AddLambda([ &amp;LevelEditorModule ]()</span><br><span class="line">&#123;</span><br><span class="line">  RegisterTabSpawner( LevelEditorModule.GetLevelEditorTabManager() );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FLevelEditorModule&amp; LevelEditorModule = FModuleManager::LoadModuleChecked&lt;FLevelEditorModule&gt;(TEXT(&quot;LevelEditor&quot;));</span><br><span class="line">LevelEditorModule.OnTabManagerChanged().Remove(OnTabManagerChangedSubscription);</span><br></pre></td></tr></table></figure>
+<p>从声明使用到废弃，应该很全面了。</p>
+<h4 id="抽象Events代理"><a href="#抽象Events代理" class="headerlink" title="抽象Events代理"></a>抽象Events代理</h4><p>关于这个<strong>Inherited Abstract Event</strong>也是官方文档的内容</p>
+<p><strong>Base Class Implementation:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/** Register/Unregister a callback for when assets are added to the registry */</span><br><span class="line">DECLARE_EVENT_OneParam( IAssetRegistry, FAssetAddedEvent, const FAssetData&amp;);</span><br><span class="line">virtual FAseetAddedEvent&amp; OnAssetAdded() = 0;</span><br></pre></td></tr></table></figure></p>
+<p><strong>Derived Class Implementation:</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DECLARE_DERIVED_EVENT( FAssetRegistry, IAssetRegistry::FAssetAddedEvent, FAssetAddedEvent);</span><br><span class="line">virtual FAssetAddedEvent&amp; OnAssetAdded() override &#123; return AssetAddedEvent; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在派生类中声明派生的Events代理的时候，貌似函数的语言不需要重复定义了(我理解的函数参数的数量和类型)，使用<code>DECLARE_DERIVED_EVENT</code>宏就足够了，该宏的第三个参数是定义该Events代理的新名字，一般跟父类的名字相同就可以了。</p>
+<p>这种写法的话我能想到的就是开放子类也可使用这个Events代理，只不过需要自己实现罢了。<br>（只不过需要自己实现罢了，可以约束子类一定要实现这个代理？）</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://www.cppblog.com/huangwei1024/archive/2010/11/17/133870.html" target="_blank" rel="noopener">C++中实现委托（Delegate）</a></li>
+<li><a href="http://aigo.iteye.com/blog/2301010" target="_blank" rel="noopener">C++实现Delegate Event实例(例子、example、sample)</a></li>
+<li><a href="https://blog.csdn.net/lijun538/article/details/51277199" target="_blank" rel="noopener">C++委托实现(函数指针，function+bind，委托模式)</a></li>
+<li><a href="https://blog.csdn.net/cyxisgreat/article/details/7506672" target="_blank" rel="noopener">高效C++委托的原理</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/OpenGl学习内容整理/" rel="prev" title="OpenGl学习内容整理">
+      <i class="fa fa-chevron-left"></i> OpenGl学习内容整理
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/UE4中的智能指针/" rel="next" title="UE4中的智能指针">
+      UE4中的智能指针 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#先理解什么是”函数回调”"><span class="nav-number">1.</span> <span class="nav-text">先理解什么是”函数回调”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的函数回调-CallBack"><span class="nav-number">2.</span> <span class="nav-text">UE4中的函数回调(CallBack)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamic-Multi-cast-Delegates"><span class="nav-number">2.1.</span> <span class="nav-text">Dynamic Multi-cast Delegates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blueprint-Event与Blueprint-Function"><span class="nav-number">2.2.</span> <span class="nav-text">Blueprint Event与Blueprint Function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE-C-的函数回调实现"><span class="nav-number">2.3.</span> <span class="nav-text">UE C++的函数回调实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些代理之间的区别"><span class="nav-number">2.4.</span> <span class="nav-text">一些代理之间的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AddDynamic-amp-AddUniqueDynamic"><span class="nav-number">2.4.1.</span> <span class="nav-text">AddDynamic &amp; AddUniqueDynamic</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为什么要使用Delegate和Event？"><span class="nav-number">3.</span> <span class="nav-text">为什么要使用Delegate和Event？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于Event"><span class="nav-number">3.1.</span> <span class="nav-text">关于Event</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate的使用情况"><span class="nav-number">3.2.</span> <span class="nav-text">Delegate的使用情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#推测1"><span class="nav-number">3.2.1.</span> <span class="nav-text">推测1</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UEC-中的Delegate实现"><span class="nav-number">4.</span> <span class="nav-text">UEC++中的Delegate实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegates-Single"><span class="nav-number">4.1.</span> <span class="nav-text">Delegates - Single</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Single代理的声明"><span class="nav-number">4.1.1.</span> <span class="nav-text">Single代理的声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Single代理的绑定"><span class="nav-number">4.1.2.</span> <span class="nav-text">Single代理的绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Single代理执行"><span class="nav-number">4.1.3.</span> <span class="nav-text">Single代理执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate-Multicast"><span class="nav-number">4.2.</span> <span class="nav-text">Delegate - Multicast</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Multicast代理声明"><span class="nav-number">4.2.1.</span> <span class="nav-text">Multicast代理声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multicast类型代理的绑定"><span class="nav-number">4.2.2.</span> <span class="nav-text">Multicast类型代理的绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multicast类型代理执行"><span class="nav-number">4.2.3.</span> <span class="nav-text">Multicast类型代理执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate-Events"><span class="nav-number">4.3.</span> <span class="nav-text">Delegate - Events</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Events类型代理声明"><span class="nav-number">4.3.1.</span> <span class="nav-text">Events类型代理声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Events类型代理绑定"><span class="nav-number">4.3.2.</span> <span class="nav-text">Events类型代理绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Events类型代理执行"><span class="nav-number">4.3.3.</span> <span class="nav-text">Events类型代理执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate-Dynamic"><span class="nav-number">4.4.</span> <span class="nav-text">Delegate - Dynamic</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic类型代理的声明"><span class="nav-number">4.4.1.</span> <span class="nav-text">Dynamic类型代理的声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic类型代理的绑定"><span class="nav-number">4.4.2.</span> <span class="nav-text">Dynamic类型代理的绑定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic类型代理的执行"><span class="nav-number">4.4.3.</span> <span class="nav-text">Dynamic类型代理的执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Delegate的Sample实现"><span class="nav-number">4.5.</span> <span class="nav-text">Delegate的Sample实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Events代理的sample"><span class="nav-number">4.5.1.</span> <span class="nav-text">Events代理的sample</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#抽象Events代理"><span class="nav-number">4.5.1.1.</span> <span class="nav-text">抽象Events代理</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

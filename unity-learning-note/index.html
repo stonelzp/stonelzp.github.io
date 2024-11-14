@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
+<meta name="keywords" content="C#,笔记,plugins,Unity2019.1.3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity知识点记录">
+<meta property="og:url" content="http://stonelzp.github.io/unity-learning-note/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.218Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity知识点记录">
+<meta name="twitter:description" content="记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。">
+
+<link rel="canonical" href="http://stonelzp.github.io/unity-learning-note/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Unity知识点记录 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/unity-learning-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unity知识点记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-23 17:13:44" itemprop="dateCreated datePublished" datetime="2019-05-23T17:13:44+09:00">2019-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">记录学习Unity过程中的比较碎的知识点，只记录一些零碎的知识。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="更新内容"><a href="#更新内容" class="headerlink" title="更新内容"></a>更新内容</h1><ul>
+<li>(2019/05/29) 更新MenuItem的详细使用</li>
+<li>(2020/03/21) 更新CustomEditor的内容<h1 id="Unity的使用"><a href="#Unity的使用" class="headerlink" title="Unity的使用"></a>Unity的使用</h1>这次终于不是自己单枪匹马的干，而是真的项目中使用Unity引擎来做开发了。</li>
+</ul>
+<p>先附上官方文档：</p>
+<ul>
+<li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank" rel="noopener">Unity User Manual (2019.1)</a></li>
+</ul>
+<h2 id="1-Unity-C-中的一些比较重要的使用"><a href="#1-Unity-C-中的一些比较重要的使用" class="headerlink" title="1.Unity C# 中的一些比较重要的使用"></a>1.Unity C# 中的一些比较重要的使用</h2><h3 id="1-MenuItem"><a href="#1-MenuItem" class="headerlink" title="1.MenuItem"></a>1.MenuItem</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#if UNITY_EDITOR</span><br><span class="line">        [UnityEditor.MenuItem(&quot;Project/Operation&quot;)</span><br><span class="line">        public static void OperationRun()&#123;&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<p>或者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">using UnityEditor;</span><br><span class="line">using UnityEngine;</span><br><span class="line"></span><br><span class="line">    [MenuItem(&quot;Project/Operation&quot;)]</span><br><span class="line">    public static void OperationRun()&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的用法，貌似也可以被叫做<strong>Debug Menu</strong> ,感觉用处相当大。</p>
+<p>便利的调用一些比较麻烦的函数，触发条件和时机需要自己掌控等等，总而言之，这个很重要。</p>
+<ul>
+<li><a href="https://anchan828.github.io/editor-manual/web/part1-menuitem.html" target="_blank" rel="noopener">第8章　MenuItem</a></li>
+</ul>
+<p>但是要注意添加的方法都是static的方法，调用非静态函数的方法，我知道的有两个:</p>
+<ul>
+<li>1.向静态函数中传递对象引用。</li>
+<li>2.在静态函数遍历所有对象找到那个想要的对象并调用对象函数，这限于Unity中debug场景，毕竟可以遍历场景中的所有对象。使用<code>FindObjectofType</code>之类的函数。</li>
+</ul>
+<p>其他要注意的是，这个功能算是对UnityEditor的扩展功能，使用的时候不要忘记：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#if UNITY_EDITOR</span><br><span class="line">using UnityEditor</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">加上编译选项才安全。</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-Unity-C-中的序列化-Serialization"><a href="#2-Unity-C-中的序列化-Serialization" class="headerlink" title="2.Unity C# 中的序列化(Serialization)"></a>2.Unity C# 中的序列化(Serialization)</h3><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/27990334" target="_blank" rel="noopener">Unity与C#的序列化与反序列化</a></li>
+<li><a href="https://dev.twsiyuan.com/2018/06/how-to-save-and-load-gamesaves-in-unity.html" target="_blank" rel="noopener">Unity 遊戲存檔機制淺談，從序列化 (Serialization) 到儲存裝置 (Storage)</a></li>
+</ul>
+<h4 id="SerializeField"><a href="#SerializeField" class="headerlink" title="SerializeField"></a>SerializeField</h4><ul>
+<li><a href="https://qiita.com/makopo/items/8ef280b00f1cc18aec91" target="_blank" rel="noopener">Unityの[SerializeField]について色々な疑問に答えてみる</a></li>
+</ul>
+<h4 id="HideInInspector"><a href="#HideInInspector" class="headerlink" title="HideInInspector"></a>HideInInspector</h4><p><a href="https://ekulabo.com/hide-in-inspector" target="_blank" rel="noopener">【Unity】HideInInspectorとSerializeFieldの興味深い関係</a></p>
+<h4 id="Serializable"><a href="#Serializable" class="headerlink" title="Serializable"></a>Serializable</h4><ul>
+<li><a href="http://ftvoid.com/blog/post/732" target="_blank" rel="noopener">[Unity] 自前のクラスをインスペクタから編集できるようにする</a></li>
+</ul>
+<h3 id="3-MessagePack"><a href="#3-MessagePack" class="headerlink" title="3.MessagePack"></a>3.MessagePack</h3><ul>
+<li><a href="http://engineering.grani.jp/entry/2017/05/24/160006" target="_blank" rel="noopener">黒騎士と白の魔王におけるMessagePack-CSharpのUnionの活用事例</a></li>
+</ul>
+<h3 id="4-FindObjectOfType"><a href="#4-FindObjectOfType" class="headerlink" title="4.FindObjectOfType"></a>4.FindObjectOfType</h3><blockquote>
+<p>（シーン上にある該当する物の中からUnityが適当に選んだ１つが返ります。１つも存在していなかったらnullが返ります）</p>
+</blockquote>
+<blockquote>
+<p>ゲームオブジェクトを参照して、スクリプトにアクセスするのがGetCompornetで、</p>
+<p>スクリプトを参照して、スクリプトにアクセスするのがFindObjectOfTypeです。</p>
+</blockquote>
+<p>就像上面说的那样，下面附上使用：</p>
+<ul>
+<li><a href="https://docs.unity3d.com/ja/current/ScriptReference/Object.FindObjectOfType.html" target="_blank" rel="noopener">Object.FindObjectOfType</a></li>
+<li><a href="https://docs.unity3d.com/ja/current/ScriptReference/Object.FindObjectsOfType.html" target="_blank" rel="noopener">Object.FindObjectsOfType</a></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static Object FindObjectOfType (Type type);</span><br><span class="line"></span><br><span class="line">public static Object[] FindObjectsOfType (Type type);</span><br></pre></td></tr></table></figure>
+<p>这个方法非常低效，不适合在每一帧都调用，可以利用SingletonPattern。</p>
+<p><a href="http://baba-s.hatenablog.com/entry/2014/07/09/093240" target="_blank" rel="noopener">【Unity】GameObject.Find 系関数の処理速度の検証結果</a></p>
+<h3 id="5-Attribute"><a href="#5-Attribute" class="headerlink" title="5. Attribute"></a>5. Attribute</h3><h4 id="1-AddComponentMenu"><a href="#1-AddComponentMenu" class="headerlink" title="1. AddComponentMenu"></a>1. AddComponentMenu</h4><h4 id="2-RequireComponent"><a href="#2-RequireComponent" class="headerlink" title="2. RequireComponent"></a>2. RequireComponent</h4><h3 id="6-CustomEditor"><a href="#6-CustomEditor" class="headerlink" title="6. CustomEditor"></a>6. CustomEditor</h3><blockquote>
+<p>Defines which object type the custom editor class can edit.</p>
+</blockquote>
+<p>个人理解就是为自定义的类进行编辑器扩展。<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 无参数</span></span><br><span class="line">[<span class="meta">CustomEditor(typeof(CustomClass))</span>]</span><br><span class="line"><span class="comment">// 有参数</span></span><br><span class="line">[<span class="meta">CustomEditor(typeof(CustomeClass), true)</span>]</span><br></pre></td></tr></table></figure></p>
+<p>关于参数的解释，我贴一下源码：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">UnityEditor</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">// Summary:</span></span><br><span class="line">    <span class="comment">//     Tells an Editor class which run-time type it's an editor for.</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomEditor</span> : <span class="title">Attribute</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Summary:</span></span><br><span class="line">        <span class="comment">//     Defines which object type the custom editor class can edit.</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Parameters:</span></span><br><span class="line">        <span class="comment">//   inspectedType:</span></span><br><span class="line">        <span class="comment">//     Type that this editor can edit.</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">//   editorForChildClasses:</span></span><br><span class="line">        <span class="comment">//     If true, child classes of inspectedType will also show this editor. Defaults</span></span><br><span class="line">        <span class="comment">//     to false.</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">CustomEditor</span>(<span class="params">Type inspectedType</span>)</span>;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Summary:</span></span><br><span class="line">        <span class="comment">//     Defines which object type the custom editor class can edit.</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Parameters:</span></span><br><span class="line">        <span class="comment">//   inspectedType:</span></span><br><span class="line">        <span class="comment">//     Type that this editor can edit.</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">//   editorForChildClasses:</span></span><br><span class="line">        <span class="comment">//     If true, child classes of inspectedType will also show this editor. Defaults</span></span><br><span class="line">        <span class="comment">//     to false.</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">CustomEditor</span>(<span class="params">Type inspectedType, <span class="keyword">bool</span> editorForChildClasses</span>)</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Summary:</span></span><br><span class="line">        <span class="comment">//     If true, match this editor only if all non-fallback editors do not match. Defaults</span></span><br><span class="line">        <span class="comment">//     to false.</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">bool</span> isFallback &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有参数版本的，设置为true的理由就是，inspedtedType子类也会显示这个部分的Editor内容。（说实话不太理解）</p>
+<p>除此之外，<code>isFallback</code>变量的作用我也不是很理解。</p>
+<h3 id="7-ContextMenu"><a href="#7-ContextMenu" class="headerlink" title="7. ContextMenu"></a>7. ContextMenu</h3><p>可以在Inspector视图里直接调用函数？</p>
+<h2 id="2-C-语法"><a href="#2-C-语法" class="headerlink" title="2.C# 语法"></a>2.C# 语法</h2><h3 id="？类型声明"><a href="#？类型声明" class="headerlink" title="？类型声明"></a>？类型声明</h3><ul>
+<li><a href="https://stackoverflow.com/questions/2326158/why-is-there-a-questionmark-on-the-private-variable-definition" target="_blank" rel="noopener">Why is there a questionmark on the private variable definition?</a></li>
+</ul>
+<h3 id="operator"><a href="#operator" class="headerlink" title="?? operator"></a>?? operator</h3><ul>
+<li><a href="https://stackoverflow.com/questions/446835/what-do-two-question-marks-together-mean-in-c" target="_blank" rel="noopener">What do two question marks together mean in C#?</a></li>
+</ul>
+<h3 id="operator-1"><a href="#operator-1" class="headerlink" title="$ operator"></a>$ operator</h3><ul>
+<li><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/tokens/interpolated" target="_blank" rel="noopener">$ - 字符串内插（C# 参照）</a></li>
+</ul>
+<h3 id="gt-operator"><a href="#gt-operator" class="headerlink" title="=&gt; operator"></a>=&gt; operator</h3><p>看见的第一眼以为是lambda表达式，但是后面接着出现的是是变量而不是表达式。</p>
+<ul>
+<li><a href="http://var.blog.jp/archives/67192510.html" target="_blank" rel="noopener">C# の =&gt; プロパティ</a></li>
+</ul>
+<p>相当于<code>{get;}</code>但是又不是简单的get。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">◆ private A a =&gt; new A();</span><br><span class="line">◆ ＝ private A a &#123; get &#123; return new A(); &#125; &#125; </span><br><span class="line">◆ ≠ private A a &#123; get; &#125; = new A();</span><br></pre></td></tr></table></figure>
+<h3 id="where关键字"><a href="#where关键字" class="headerlink" title="where关键字"></a>where关键字</h3><ul>
+<li><a href="https://docs.microsoft.com/ja-jp/dotnet/csharp/language-reference/keywords/where-generic-type-constraint" target="_blank" rel="noopener">where (generic type constraint) (C# Reference)</a></li>
+</ul>
+<p>一般类型约束？</p>
+<blockquote>
+<p>For example, you can declare a generic class, <code>MyGenericClass</code>, such that the type parameter T implements the <code>IComparable&lt;T&gt;</code> interface:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AGenericClass&lt;T&gt; where T : IComparable&lt;T&gt; &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>使用了模板但是约束了类型，是这样的么。</p>
+<p>我发誓这个关键字在我以前用C#的时候肯定知道，但是我忘了。。</p>
+<h3 id><a href="#" class="headerlink" title="@"></a>@</h3><ul>
+<li><a href="https://stackoverflow.com/questions/429529/what-does-the-symbol-before-a-variable-name-mean-in-c" target="_blank" rel="noopener">What does the @ symbol before a variable name mean in C#? [duplicate]</a></li>
+</ul>
+<h3 id="await-async"><a href="#await-async" class="headerlink" title="await/async"></a>await/async</h3><ul>
+<li><a href="https://qiita.com/rawr/items/5d49960a4e4d3823722f" target="_blank" rel="noopener">C# 今更ですが、await / async</a></li>
+<li><a href="https://qiita.com/acple@github/items/8f63aacb13de9954c5da" target="_blank" rel="noopener">Taskを極めろ！async/await完全攻略</a></li>
+</ul>
+<h3 id="IEnumerator"><a href="#IEnumerator" class="headerlink" title="IEnumerator"></a>IEnumerator</h3><ul>
+<li><a href="https://qiita.com/vc_kusuha/items/2048391d821cb94fa489" target="_blank" rel="noopener">[C#]IEnumeratorとIEnumerableを調べた</a></li>
+</ul>
+<h2 id="3-Unity语法"><a href="#3-Unity语法" class="headerlink" title="3.Unity语法"></a>3.Unity语法</h2><h3 id="1-Instantiate"><a href="#1-Instantiate" class="headerlink" title="1.Instantiate"></a>1.Instantiate</h3><p>根据Prefab生成实例。</p>
+<h2 id="3-LINQ-Linq"><a href="#3-LINQ-Linq" class="headerlink" title="3.LINQ (Linq)"></a>3.LINQ (Linq)</h2><ul>
+<li><a href="https://qiita.com/nskydiving/items/c9c47c1e48ea365f8995" target="_blank" rel="noopener">はじめての LINQ - Qiita</a></li>
+</ul>
+<p>当我想深入了解LINQ的时候，我发现我需要先理解Lambda表达式。</p>
+<h2 id="4-Reactive-Extensions-Rx"><a href="#4-Reactive-Extensions-Rx" class="headerlink" title="4.Reactive Extensions (Rx)"></a>4.Reactive Extensions (Rx)</h2><ul>
+<li><a href="https://qiita.com/acple@github/items/6cfee916f09632037a6e" target="_blank" rel="noopener">こわくないReactive Extensions超入門 - Qiita</a></li>
+</ul>
+<h2 id="5-UniRx"><a href="#5-UniRx" class="headerlink" title="5.UniRx"></a>5.UniRx</h2><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/35189325" target="_blank" rel="noopener">又见Rx——Rx via UniRx</a></li>
+</ul>
+<p>这是我在知乎上找到的一篇文章，感觉能学到很多东西。</p>
+<p><a href="https://github.com/neuecc/UniRx" target="_blank" rel="noopener">Reactive Extensions for Unity</a></p>
+<ul>
+<li><a href="https://qiita.com/Marimoiro/items/2ad8a1b422a3fe98f938" target="_blank" rel="noopener">UniRxを導入するメリット ～こういう時にUniRxは使えるよ～ - Qiita</a></li>
+</ul>
+<h2 id="6-Lambda"><a href="#6-Lambda" class="headerlink" title="6.Lambda"></a>6.Lambda</h2><p>直接搜<code>C# lambda</code>最先出来的三个链接。</p>
+<ul>
+<li><a href="https://docs.microsoft.com/ja-jp/dotnet/csharp/programming-guide/statements-expressions-operators/lambda-expressions" target="_blank" rel="noopener">Lambda expressions (C# Programming Guide)</a></li>
+<li><a href="https://docs.microsoft.com/ja-jp/dotnet/csharp/language-reference/operators/lambda-operator" target="_blank" rel="noopener">=&gt; operator (C# Reference)</a></li>
+</ul>
+<h1 id="Unity中的插件"><a href="#Unity中的插件" class="headerlink" title="Unity中的插件"></a>Unity中的插件</h1><h2 id="SteamVR-Unity"><a href="#SteamVR-Unity" class="headerlink" title="SteamVR Unity"></a>SteamVR Unity</h2><p>要记录的是<br>SteamVR Unity Plugin v2这个Unity的VR开发插件。开始调查这个插件的契机是不知道<code>SteamVR_Behaviour_Pose</code>这个类的作用，而明白这个是插件的内容。</p>
+<ul>
+<li><p><a href="https://framesynthesis.jp/tech/unity/htcvive/" target="_blank" rel="noopener">Unity＋HTC Vive開発メモ</a></p>
+</li>
+<li><p><a href="https://framesynthesis.jp/tech/unity/xr/" target="_blank" rel="noopener">Unity標準のVR機能（UnityEngine.XR）メモ</a></p>
+</li>
+</ul>
+<p>上面的这个人的文章我看很厉害就直接先粘链接了。</p>
+<h3 id="SteamVR-Behaviour-Pose"><a href="#SteamVR-Behaviour-Pose" class="headerlink" title="SteamVR_Behaviour_Pose"></a>SteamVR_Behaviour_Pose</h3><h2 id="Amplify-Shader-Editor"><a href="#Amplify-Shader-Editor" class="headerlink" title="Amplify Shader Editor"></a>Amplify Shader Editor</h2><ul>
+<li><a href="http://www.asset-sale.net/entry/Amplify_Shader_Editor" target="_blank" rel="noopener">【Amplify Shader Editor】ノードベースでシェーダ作りのAmplifyを触ってみました。エディタの操作性、学習コスト、サンプルデモを大量に紹介！</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C#</a>
+              <a href="/tags/笔记/" rel="tag"># 笔记</a>
+              <a href="/tags/plugins/" rel="tag"># plugins</a>
+              <a href="/tags/Unity2019-1-3/" rel="tag"># Unity2019.1.3</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/learn-opengl/" rel="prev" title="学习OpenGL">
+      <i class="fa fa-chevron-left"></i> 学习OpenGL
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/how-to-visual-studio/" rel="next" title="如何使用VisualStudio">
+      如何使用VisualStudio <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#更新内容"><span class="nav-number">1.</span> <span class="nav-text">更新内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unity的使用"><span class="nav-number">2.</span> <span class="nav-text">Unity的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Unity-C-中的一些比较重要的使用"><span class="nav-number">2.1.</span> <span class="nav-text">1.Unity C# 中的一些比较重要的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-MenuItem"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.MenuItem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Unity-C-中的序列化-Serialization"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.Unity C# 中的序列化(Serialization)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SerializeField"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">SerializeField</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HideInInspector"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">HideInInspector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Serializable"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">Serializable</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MessagePack"><span class="nav-number">2.1.3.</span> <span class="nav-text">3.MessagePack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-FindObjectOfType"><span class="nav-number">2.1.4.</span> <span class="nav-text">4.FindObjectOfType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Attribute"><span class="nav-number">2.1.5.</span> <span class="nav-text">5. Attribute</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-AddComponentMenu"><span class="nav-number">2.1.5.1.</span> <span class="nav-text">1. AddComponentMenu</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-RequireComponent"><span class="nav-number">2.1.5.2.</span> <span class="nav-text">2. RequireComponent</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-CustomEditor"><span class="nav-number">2.1.6.</span> <span class="nav-text">6. CustomEditor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-ContextMenu"><span class="nav-number">2.1.7.</span> <span class="nav-text">7. ContextMenu</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-C-语法"><span class="nav-number">2.2.</span> <span class="nav-text">2.C# 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#？类型声明"><span class="nav-number">2.2.1.</span> <span class="nav-text">？类型声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator"><span class="nav-number">2.2.2.</span> <span class="nav-text">?? operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#operator-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">$ operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gt-operator"><span class="nav-number">2.2.4.</span> <span class="nav-text">=&gt; operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#where关键字"><span class="nav-number">2.2.5.</span> <span class="nav-text">where关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#null"><span class="nav-number">2.2.6.</span> <span class="nav-text">@</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#await-async"><span class="nav-number">2.2.7.</span> <span class="nav-text">await/async</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IEnumerator"><span class="nav-number">2.2.8.</span> <span class="nav-text">IEnumerator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Unity语法"><span class="nav-number">2.3.</span> <span class="nav-text">3.Unity语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Instantiate"><span class="nav-number">2.3.1.</span> <span class="nav-text">1.Instantiate</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-LINQ-Linq"><span class="nav-number">2.4.</span> <span class="nav-text">3.LINQ (Linq)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reactive-Extensions-Rx"><span class="nav-number">2.5.</span> <span class="nav-text">4.Reactive Extensions (Rx)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-UniRx"><span class="nav-number">2.6.</span> <span class="nav-text">5.UniRx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Lambda"><span class="nav-number">2.7.</span> <span class="nav-text">6.Lambda</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Unity中的插件"><span class="nav-number">3.</span> <span class="nav-text">Unity中的插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SteamVR-Unity"><span class="nav-number">3.1.</span> <span class="nav-text">SteamVR Unity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SteamVR-Behaviour-Pose"><span class="nav-number">3.1.1.</span> <span class="nav-text">SteamVR_Behaviour_Pose</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Amplify-Shader-Editor"><span class="nav-number">3.2.</span> <span class="nav-text">Amplify Shader Editor</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

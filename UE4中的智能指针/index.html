@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
+<meta name="keywords" content="C++,UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4中的智能指针">
+<meta property="og:url" content="http://stonelzp.github.io/UE4中的智能指针/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.061Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4中的智能指针">
+<meta name="twitter:description" content="对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。">
+
+<link rel="canonical" href="http://stonelzp.github.io/UE4中的智能指针/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4中的智能指针 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4中的智能指针/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4中的智能指针
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-31 19:59:19" itemprop="dateCreated datePublished" datetime="2018-07-31T19:59:19+09:00">2018-07-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>对于内存使用的了解，就不得不了解指针。UE4拥有跟C++类似的智能指针，在这里对虚幻4的智能指针库的内容进行一些总结跟提炼，同时也需要对C++的智能指针进行深入的了解。</p>
+<a id="more"></a>
+<h1 id="UE4的智能指针"><a href="#UE4的智能指针" class="headerlink" title="UE4的智能指针"></a>UE4的智能指针</h1><p>智能指针并不能使用<code>UPROPERTY()</code>，<code>TSharedRef</code>,<code>TSharedPtr</code>,<code>TWeakPtr</code>等等。</p>
+<p>上一次更新这篇文章是两年前，都两年了我还没深入了解UE4的智能指针，我也不知道我都干了些什么。</p>
+<p>我应该对UE4的智能指针进行分类探讨，根据自己遇到过的情况。</p>
+<h2 id="Unreal-Smart-Pointer-Library"><a href="#Unreal-Smart-Pointer-Library" class="headerlink" title="Unreal Smart Pointer Library"></a>Unreal Smart Pointer Library</h2><ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/SmartPointerLibrary/" target="_blank" rel="noopener">Unreal Smart Pointer Library</a></li>
+</ul>
+<p>参考了UE的官方文档内容。<br>UE4的智能指针库(smart pointer library)是C++11智能指针的自定义实现。实现包含了标准的<strong>SharedPointers</strong>,<strong>WeakPointers</strong>,<strong>UniquePointers</strong>。 <strong>SharedReferences</strong>则表现为非空的SharedPointers。</p>
+<p>这些指针都不能作用于UE的<code>UObject</code>系统对象中，因为UE的UObject使用的是单独的内存追踪系统。(更适合游戏代码的系统，官网上如是说)</p>
+<h3 id="SharedPointers"><a href="#SharedPointers" class="headerlink" title="SharedPointers"></a>SharedPointers</h3><p>共享指针(<code>TSharedPtr</code>)拥有其指向的对象，如果指向该对象的所有共享指针和共享引用都不存在了的情况下负责该对象的销毁，否则该对象将一直被视为无法销毁的对象。<br>一个非空的共享指针可以为其对象生成共享引用。</p>
+<p>具体内容可以参照官方文档：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/SmartPointerLibrary/SharedPointer/" target="_blank" rel="noopener">Shared Pointers</a></li>
+</ul>
+<h3 id="SharedReferences"><a href="#SharedReferences" class="headerlink" title="SharedReferences"></a>SharedReferences</h3><p>共享引用指针(<code>TSharedRef</code>)使用跟共享指针类似，但是指向对象不能为空。<br>共享引用可以转换为共享指针，而且该共享指针指向的对象一定不会为空。</p>
+<p>具体内容可以参照官方文档：<br>-<a href></a></p>
+<h3 id="WeakPointers"><a href="#WeakPointers" class="headerlink" title="WeakPointers"></a>WeakPointers</h3><p>弱指针(<code>TWeakPtr</code>)不拥有其指向的对象，也就是说其指向的对象随时都有可能变为空。</p>
+<p>具体内容可以参照官方文档：<br>-<a href></a></p>
+<h3 id="UniquePointers"><a href="#UniquePointers" class="headerlink" title="UniquePointers"></a>UniquePointers</h3><p>唯一指针(<code>TUniquePtr</code>)</p>
+<blockquote>
+<p>A Unique Pointer solely and explicitly owns the object it references. Since there can only be one Unique Pointer to a given resource, Unique Pointers can transfer ownership, but cannot share it. Any attempts to copy a Unique Pointer will result in a compile error. When a Unique Pointer is goes out of scope, it will automatically delete the object it references.</p>
+</blockquote>
+<h3 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h3><h4 id="侵入式的访问器-Intrusive-Accessors"><a href="#侵入式的访问器-Intrusive-Accessors" class="headerlink" title="侵入式的访问器(Intrusive Accessors)"></a>侵入式的访问器(Intrusive Accessors)</h4><p>共享指针是非侵入式的，什么意思呢，就是对象本身并不知道自己是否被某个共享指针所拥有。<br>但是在程序设计的时候，将对象作为共享指针或共享引用来进行访问的时候会很方便，于是便有了这种侵入式的访问器的实现。</p>
+<p><code>TSharedFromThis</code>类提供了两个函数,这里需要注意的是，这是一个类，不是结构体（我有一次就想在结构体继承这个类=-=）。</p>
+<ul>
+<li><code>AsShared()</code></li>
+<li><code>SharedThis()</code></li>
+</ul>
+<p>使用上面的两种方式将对象转换为指针引用，然后根据需要转换为共享指针。</p>
+<p>官网上的示例代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class FRegistryObject;</span><br><span class="line">class FMyBaseClass: public TSharedFromThis&lt;FMyBaseClass&gt;</span><br><span class="line">&#123;</span><br><span class="line">    virtual void RegisterAsBaseClass(FRegistryObject* RegistryObject)</span><br><span class="line">    &#123;</span><br><span class="line">        // 访问对&quot;this&quot;的共享引用。</span><br><span class="line">        // 直接继承自&lt; TSharedFromThis &gt;，因此AsShared()和SharedThis(this)会返回相同的类型。</span><br><span class="line">        TSharedRef&lt;FMyBaseClass&gt; ThisAsSharedRef = AsShared();</span><br><span class="line">        // RegistryObject需要 TSharedRef&lt;FMyBaseClass&gt;，或TSharedPtr&lt;FMyBaseClass&gt;。TSharedRef可被隐式转换为TSharedPtr.</span><br><span class="line">        RegistryObject-&gt;Register(ThisAsSharedRef);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">class FMyDerivedClass : public FMyBaseClass</span><br><span class="line">&#123;</span><br><span class="line">    virtual void Register(FRegistryObject* RegistryObject) override</span><br><span class="line">    &#123;</span><br><span class="line">        // 并非直接继承自TSharedFromThis&lt;&gt;，因此AsShared()和SharedThis(this)不会返回相同类型。</span><br><span class="line">        // 在本例中，AsShared()会返回在TSharedFromThis&lt;&gt; - TSharedRef&lt;FMyBaseClass&gt;中初始指定的类型。</span><br><span class="line">        // 在本例中，SharedThis(this)会返回具备&quot;this&quot;类型的TSharedRef - TSharedRef&lt;FMyDerivedClass&gt;。</span><br><span class="line">        // SharedThis()函数仅在与 &apos;this&apos;指针相同的范围内可用。</span><br><span class="line">        TSharedRef&lt;FMyDerivedClass&gt; AsSharedRef = SharedThis(this);</span><br><span class="line">        // FMyDerivedClass是FMyBaseClass的一种类型，因此RegistryObject将接受TSharedRef&lt;FMyDerivedClass&gt;。</span><br><span class="line">        RegistryObject-&gt;Register(ThisAsSharedRef);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">class FRegistryObject</span><br><span class="line">&#123;</span><br><span class="line">    // 此函数将接受到FMyBaseClass或其子类的TSharedRef或TSharedPtr。</span><br><span class="line">    void Register(TSharedRef&lt;FMyBaseClass&gt;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Casting"><a href="#Casting" class="headerlink" title="Casting"></a>Casting</h4><blockquote>
+<p>You can cast Shared Pointers (and Shared References) through several support functions included in the Unreal Smart Pointer Library. Up-casting is implicit, as with C++ pointers. You can const cast with the ConstCastSharedPtr function, and static cast (often to downcast to derived class pointers) with StaticCastSharedPtr. Dynamic casting is not supported, as there is no run-type type information (RTTI); static casting should be used instead, as in the following code:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// This assumes we validated that the FDragDropOperation is actually an FAssetDragDropOp through other means.</span><br><span class="line">TSharedPtr&lt;FDragDropOperation&gt; Operation = DragDropEvent.GetOperation();</span><br><span class="line">// We can now cast with StaticCastSharedPtr.</span><br><span class="line">TSharedPtr&lt;FAssetDragDropOp&gt; DragDropOp = StaticCastSharedPtr&lt;FAssetDragDropOp&gt;(Operation);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4><ul>
+<li><p>Avoid passing data to functions as TSharedRef or TSharedPtr parameters where possible, as these will incur overhead by dereferencing and reference-counting. Instead, pass the referenced object, preferably as a <code>const &amp;</code>.</p>
+</li>
+<li><p>You can forward-declare Shared Pointers to incomplete types.</p>
+</li>
+<li><p>Shared Pointers are not compatible with Unreal objects (UObject and its derived classes). The Engine has a separate memory management system (see Object Handling documentation) for UObject management, and the two systems have no overlap with each other.</p>
+</li>
+</ul>
+<p>第一条限制对于刚开始准备利用共享指针的我无疑是一个很好的警示。</p>
+<h3 id="源码文档"><a href="#源码文档" class="headerlink" title="源码文档"></a>源码文档</h3><p>去<code>Source\Runtime\Core\Public\Templates\SharedPointer.h</code>文件里有关于UE智能指针的一些文档，我参考的是UE5的源码。</p>
+<p>源码中的文档内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> *	SharedPointer - Unreal smart pointer library</span><br><span class="line"> *</span><br><span class="line"> *	This is a smart pointer library consisting of shared references (TSharedRef), shared pointers (TSharedPtr),</span><br><span class="line"> *	weak pointers (TWeakPtr) as well as related helper functions and classes.  This implementation is modeled</span><br><span class="line"> *	after the C++0x standard library&apos;s shared_ptr as well as Boost smart pointers.</span><br><span class="line"> *</span><br><span class="line"> *	Benefits of using shared references and pointers:</span><br><span class="line"> *</span><br><span class="line"> *		Clean syntax.  You can copy, dereference and compare shared pointers just like regular C++ pointers.</span><br><span class="line"> *		Prevents memory leaks.  Resources are destroyed automatically when there are no more shared references.</span><br><span class="line"> *		Weak referencing.  Weak pointers allow you to safely check when an object has been destroyed.</span><br><span class="line"> *		Thread safety.  Includes &quot;thread safe&quot; version that can be safely accessed from multiple threads.</span><br><span class="line"> *		Ubiquitous.  You can create shared pointers to virtually *any* type of object.</span><br><span class="line"> *		Runtime safety.  Shared references are never null and can always be dereferenced.</span><br><span class="line"> *		No reference cycles.  Use weak pointers to break reference cycles.</span><br><span class="line"> *		Confers intent.  You can easily tell an object *owner* from an *observer*.</span><br><span class="line"> *		Performance.  Shared pointers have minimal overhead.  All operations are constant-time.</span><br><span class="line"> *		Robust features.  Supports &apos;const&apos;, forward declarations to incomplete types, type-casting, etc.</span><br><span class="line"> *		Memory.  Only twice the size of a C++ pointer in 64-bit (plus a shared 16-byte reference controller.)</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line"> *	This library contains the following smart pointers:</span><br><span class="line"> *</span><br><span class="line"> *		TSharedRef - Non-nullable, reference counted non-intrusive authoritative smart pointer</span><br><span class="line"> *		TSharedPtr - Reference counted non-intrusive authoritative smart pointer</span><br><span class="line"> *		TWeakPtr - Reference counted non-intrusive weak pointer reference</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line"> *	Additionally, the following helper classes and functions are defined:</span><br><span class="line"> *</span><br><span class="line"> *		MakeShareable() - Used to initialize shared pointers from C++ pointers (enables implicit conversion)</span><br><span class="line"> *		TSharedFromThis - You can derive your own class from this to acquire a TSharedRef from &quot;this&quot;</span><br><span class="line"> *		StaticCastSharedRef() - Static cast utility function, typically used to downcast to a derived type.</span><br><span class="line"> *		ConstCastSharedRef() - Converts a &apos;const&apos; reference to &apos;mutable&apos; smart reference</span><br><span class="line"> *		StaticCastSharedPtr() - Dynamic cast utility function, typically used to downcast to a derived type.</span><br><span class="line"> *		ConstCastSharedPtr() - Converts a &apos;const&apos; smart pointer to &apos;mutable&apos; smart pointer</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line"> *	Examples:</span><br><span class="line"> *		- Please see &apos;SharedPointerTesting.inl&apos; for various examples of shared pointers and references!</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line"> *	Tips:</span><br><span class="line"> *		- Use TSharedRef instead of TSharedPtr whenever possible -- it can never be nullptr!</span><br><span class="line"> *		- You can call TSharedPtr::Reset() to release a reference to your object (and potentially deallocate)</span><br><span class="line"> *		- Use the MakeShareable() helper function to implicitly convert to TSharedRefs or TSharedPtrs</span><br><span class="line"> *		- You can never reset a TSharedRef or assign it to nullptr, but you can assign it a new object</span><br><span class="line"> *		- Shared pointers assume ownership of objects -- no need to call delete yourself!</span><br><span class="line"> *		- Usually you should &quot;operator new&quot; when passing a C++ pointer to a new shared pointer</span><br><span class="line"> *		- Use TSharedRef or TSharedPtr when passing smart pointers as function parameters, not TWeakPtr</span><br><span class="line"> *		- The &quot;thread-safe&quot; versions of smart pointers are a bit slower -- only use them when needed</span><br><span class="line"> *		- You can forward declare shared pointers to incomplete types, just how you&apos;d expect to!</span><br><span class="line"> *		- Shared pointers of compatible types will be converted implicitly (e.g. upcasting)</span><br><span class="line"> *		- You can create a typedef to TSharedRef&lt; MyClass &gt; to make it easier to type</span><br><span class="line"> *		- For best performance, minimize calls to TWeakPtr::Pin (or conversions to TSharedRef/TSharedPtr)</span><br><span class="line"> *		- Your class can return itself as a shared reference if you derive from TSharedFromThis</span><br><span class="line"> *		- To downcast a pointer to a derived object class, to the StaticCastSharedPtr function</span><br><span class="line"> *		- &apos;const&apos; objects are fully supported with shared pointers!</span><br><span class="line"> *		- You can make a &apos;const&apos; shared pointer mutable using the ConstCastSharedPtr function</span><br><span class="line"> *		</span><br><span class="line"> *</span><br><span class="line"> *	Limitations:</span><br><span class="line"> *</span><br><span class="line"> *		- Shared pointers are not compatible with Unreal objects (UObject classes)!</span><br><span class="line"> *		- Currently only types with that have regular destructors (no custom deleters)</span><br><span class="line"> *		- Dynamically-allocated arrays are not supported yet (e.g. MakeSharable( new int32[20] ))</span><br><span class="line"> *		- Implicit conversion of TSharedPtr/TSharedRef to bool is not supported yet</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line"> *	Differences from other implementations (e.g. boost:shared_ptr, std::shared_ptr):</span><br><span class="line"> *</span><br><span class="line"> *		- Type names and method names are more consistent with Unreal&apos;s codebase</span><br><span class="line"> *		- You must use Pin() to convert weak pointers to shared pointers (no explicit constructor)</span><br><span class="line"> *		- Thread-safety features are optional instead of forced</span><br><span class="line"> *		- TSharedFromThis returns a shared *reference*, not a shared *pointer*</span><br><span class="line"> *		- Some features were omitted (e.g. use_count(), unique(), etc.)</span><br><span class="line"> *		- No exceptions are allowed (all related features have been omitted)</span><br><span class="line"> *		- Custom allocators and custom delete functions are not supported yet</span><br><span class="line"> *		- Our implementation supports non-nullable smart pointers (TSharedRef)</span><br><span class="line"> *		- Several other new features added, such as MakeShareable and nullptr assignment</span><br><span class="line"> *</span><br><span class="line"> *</span><br><span class="line"> *	Why did we write our own Unreal shared pointer instead of using available alternatives?</span><br><span class="line"> *</span><br><span class="line"> *		- std::shared_ptr (and even tr1::shared_ptr) is not yet available on all platforms</span><br><span class="line"> *		- Allows for a more consistent implementation on all compilers and platforms</span><br><span class="line"> *		- Can work seamlessly with other Unreal containers and types</span><br><span class="line"> *		- Better control over platform specifics, including threading and optimizations</span><br><span class="line"> *		- We want thread-safety features to be optional (for performance)</span><br><span class="line"> *		- We&apos;ve added our own improvements (MakeShareable, assign to nullptr, etc.)</span><br><span class="line"> *		- Exceptions were not needed nor desired in our implementation</span><br><span class="line"> *		- We wanted more control over performance (inlining, memory, use of virtuals, etc.)</span><br><span class="line"> *		- Potentially easier to debug (liberal code comments, etc.)</span><br><span class="line"> *		- Prefer not to introduce new third party dependencies when not needed</span><br><span class="line"> *</span><br><span class="line"> */</span><br></pre></td></tr></table></figure></p>
+<p>文档中的内总结的相当好了，我就不继续画蛇添足了。</p>
+<p>这里提到了<code>SharedPointerTesting.inl</code>文件，里面有很多实现的样例代码，实现的时候好好参照这个文件。</p>
+<h2 id="TWeakPtr"><a href="#TWeakPtr" class="headerlink" title="TWeakPtr"></a>TWeakPtr</h2><h2 id="TWeakObjectPtr"><a href="#TWeakObjectPtr" class="headerlink" title="TWeakObjectPtr"></a>TWeakObjectPtr</h2><p>关于<code>TWeakPtr</code>和<code>TweakObjectPtr</code>之间的区别：</p>
+<p><strong>TWeakObjectPtr</strong>是针对<code>UObjects</code>的弱指针引用，<strong>TWeakPtr</strong>则是针对除了<code>UObjects</code>的弱指针引用。</p>
+<blockquote>
+<p>TWeakObjectPtr is for weak pointers to UObjects, TWeakPtr for pointers to everything else.</p>
+<p>Since UObjects are garbage collected and shared pointers are reference counted, we cannot have the same weak pointer type for all, unfortunately.</p>
+</blockquote>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/298868/difference-between-tweakptr-and-tweakobjectptr.html" target="_blank" rel="noopener">Difference between TWeakPtr and TWeakObjectPtr?</a></li>
+</ul>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://api.unrealengine.com/INT/Programming/UnrealArchitecture/SmartPointerLibrary/index.html" target="_blank" rel="noopener">Unreal Smart Pointer Library</a></li>
+</ul>
+<h1 id="C-的智能指针"><a href="#C-的智能指针" class="headerlink" title="C++的智能指针"></a>C++的智能指针</h1><p>指针的使用伴随着内存泄漏(memory leak)的问题，可能会发生内存泄漏的情况有：</p>
+<ul>
+<li>new或者malloc出来的内存因为程序员的疏忽忘记释放</li>
+<li>程序运行发生错误(throw)，未能执行内存释放程序</li>
+</ul>
+<p>所以不是说只要程序员足够谨慎就能够避免指针造成的内存泄漏的问题。</p>
+<h2 id="C-11中的智能指针"><a href="#C-11中的智能指针" class="headerlink" title="C++11中的智能指针"></a>C++11中的智能指针</h2><p>主要在用的智能指针有：unique_ptr, shared_ptr, weak_ptr。</p>
+<p>这3种指针组件就是采用了boost里的智能指针方案。很多有用过boost智能指针的朋友，很容易地就能发现它们之间的关系：</p>
+<table>
+<thead>
+<tr>
+<th>std</th>
+<th>boost</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>unique_ptr</td>
+<td>scoped_ptr</td>
+<td>独占指针对象，并保证指针所指对象生命周期与其一致</td>
+</tr>
+<tr>
+<td>shared_ptr</td>
+<td>shared_ptr</td>
+<td>可共享指针对象，可以赋值给shared_ptr或weak_ptr。<br>指针所指对象在所有的相关联的shared_ptr生命周期结束时结束，是强引用。</td>
+</tr>
+<tr>
+<td>weak_ptr</td>
+<td>weak_ptr</td>
+<td>它不能决定所指对象的生命周期，引用所指对象时，需要lock()成shared_ptr才能使用。</td>
+</tr>
+</tbody>
+</table>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://my.oschina.net/hevakelcj/blog/465978" target="_blank" rel="noopener">C++11中的智能指针</a></li>
+</ul>
+<h2 id="三种智能指针的特性用法"><a href="#三种智能指针的特性用法" class="headerlink" title="三种智能指针的特性用法"></a>三种智能指针的特性用法</h2><p>参考链接：</p>
+<ul>
+<li><a href="https://blog.csdn.net/haolexiao/article/details/56773039" target="_blank" rel="noopener">C++11及C++14标准的智能指针</a></li>
+</ul>
+<h3 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h3><p><code>std::weak_ptr</code>是一个很好的解决<strong>悬空指针</strong>问题的方式。使用原生指针（raw pointers）的话不知道现在所引用的资源是否已经被释放。而使<br>用<code>std::shared_ptr</code>来管理的话，<code>std::weak_ptr</code>只管使用，而不关心资源的使用情况，反正也不管理指向的资源。</p>
+<p>因为本身<code>std::weak_ptr</code>并不能直接引用到对象，不会影响对象的自动释放，不会影响对象的引用计数，需要使用<code>lock()</code>来升级到<code>std::shared_ptr</code>来进行操作。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://my.oschina.net/u/2368952/blog/416606" target="_blank" rel="noopener">C++ weak pointer</a></li>
+<li><a href="https://stackoverflow.com/questions/12030650/when-is-stdweak-ptr-useful" target="_blank" rel="noopener">When is std::weak_ptr useful?</a></li>
+</ul>
+<h2 id="比起直接使用new优先使用std-make-unique和std-make-shared"><a href="#比起直接使用new优先使用std-make-unique和std-make-shared" class="headerlink" title="比起直接使用new优先使用std::make_unique和std::make_shared"></a>比起直接使用new优先使用std::make_unique和std::make_shared</h2><p>参考链接：</p>
+<ul>
+<li><a href="https://www.cnblogs.com/boydfd/p/5146432.html" target="_blank" rel="noopener">Item 21: 比起直接使用new优先使用std::make_unique和std::make_shared</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/UE4中的函数回调实现/" rel="prev" title="UE4中的函数回调实现">
+      <i class="fa fa-chevron-left"></i> UE4中的函数回调实现
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/UE4-C++/" rel="next" title="UE4中的C++">
+      UE4中的C++ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的智能指针"><span class="nav-number">1.</span> <span class="nav-text">UE4的智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unreal-Smart-Pointer-Library"><span class="nav-number">1.1.</span> <span class="nav-text">Unreal Smart Pointer Library</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SharedPointers"><span class="nav-number">1.1.1.</span> <span class="nav-text">SharedPointers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SharedReferences"><span class="nav-number">1.1.2.</span> <span class="nav-text">SharedReferences</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WeakPointers"><span class="nav-number">1.1.3.</span> <span class="nav-text">WeakPointers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UniquePointers"><span class="nav-number">1.1.4.</span> <span class="nav-text">UniquePointers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现细节"><span class="nav-number">1.1.5.</span> <span class="nav-text">实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#侵入式的访问器-Intrusive-Accessors"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">侵入式的访问器(Intrusive Accessors)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Casting"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">Casting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#限制"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">限制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码文档"><span class="nav-number">1.1.6.</span> <span class="nav-text">源码文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TWeakPtr"><span class="nav-number">1.2.</span> <span class="nav-text">TWeakPtr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TWeakObjectPtr"><span class="nav-number">1.3.</span> <span class="nav-text">TWeakObjectPtr</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C-的智能指针"><span class="nav-number">2.</span> <span class="nav-text">C++的智能指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11中的智能指针"><span class="nav-number">2.1.</span> <span class="nav-text">C++11中的智能指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三种智能指针的特性用法"><span class="nav-number">2.2.</span> <span class="nav-text">三种智能指针的特性用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#weak-ptr"><span class="nav-number">2.2.1.</span> <span class="nav-text">weak_ptr</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比起直接使用new优先使用std-make-unique和std-make-shared"><span class="nav-number">2.3.</span> <span class="nav-text">比起直接使用new优先使用std::make_unique和std::make_shared</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

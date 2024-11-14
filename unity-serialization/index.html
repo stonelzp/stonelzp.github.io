@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。">
+<meta name="keywords" content="serialization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity-Serialization理解">
+<meta property="og:url" content="http://stonelzp.github.io/unity-serialization/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.216Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity-Serialization理解">
+<meta name="twitter:description" content="这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。">
+
+<link rel="canonical" href="http://stonelzp.github.io/unity-serialization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Unity-Serialization理解 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/unity-serialization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unity-Serialization理解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-20 18:44:14" itemprop="dateCreated datePublished" datetime="2019-09-20T18:44:14+09:00">2019-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这个概念对于Unity来说非常重要。了解这个概念应该会对开发的效率有很大的提升。</p>
+<a id="more"></a>
+<p>在最开始应该理解一下什么是序列化。</p>
+<h2 id="Serialization-序列化"><a href="#Serialization-序列化" class="headerlink" title="Serialization 序列化"></a>Serialization 序列化</h2><blockquote>
+<p>序列化又称串行化，是.NET运行时环境用来支持用户定义类型的流化的机制。其目的是以某种存储形式使自定义对象持久化，或者将这种对象从一个地方传输到另一个地方。</p>
+</blockquote>
+<p>Unity中非常多非常多的场景中使用了序列化，参考一下这篇文章<a href="https://blogs.unity3d.com/2014/06/24/serialization-in-unity/" target="_blank" rel="noopener">Serialization in Unity</a>，深入理解一下Unity中的序列化。</p>
+<p>下面我就对这篇文章的内容进行整理，主要是做笔记。</p>
+<h3 id="Serialization-in-Unity"><a href="#Serialization-in-Unity" class="headerlink" title="Serialization in Unity"></a>Serialization in Unity</h3><p>先是比较重要的内容摘抄一下。</p>
+<ul>
+<li><strong>Storing data stroed in your scripts.</strong><ul>
+<li>保存你脚本中保存的数据。是大多数人最熟知的功能。</li>
+</ul>
+</li>
+<li><strong>Inspector window.</strong><ul>
+<li>Inspector窗口不是经过C#的API来了解内部的数据结构或者属性，它要求对象序列化数据然后显示序列化之后的数据内容。</li>
+</ul>
+</li>
+<li><strong>Prefab.</strong><ul>
+<li>prefab是一个或多个对象和组件的被序列化的数据流(serialized data stream)。一个prefab实例(instance)实际上是一组应该被应用到这个被序列化数据实例的修改内容(A prefab instance is a list of modifications that should be made on the serialized data for this instance.)。Prefab这个概念实际上只存在于Editor阶段，当Unity开始Build工程的时候就会把这些修改应用到这些被序列化的数据流上，并且当这些修改被实例化，被实例化的数据对象并不会知道它们曾经是Editor编辑器中的Prefab。</li>
+</ul>
+</li>
+<li><p><strong>Instantiation.</strong></p>
+<ul>
+<li><p>当你调用<code>Instantiate()</code>函数，对prefab，scene中的gameobject，或者是其它的能被序列化的数据(everything that derives from UnityEngine.Object can be serialized)的操作结果，我们将会序列化对象，然后创建一个新的对象，然后反序列化对象数据到新的对象数据中。</p>
+<blockquote>
+<p>(We then run the same serialization code again in a different variant, where we use it to report which other UnityEngine.Object’s are being referenced. We then check for all referenced UnityEngine.Object’s if they are part of the data being Instantiated(). If the reference is pointing to something “external” (like a texture) we keep that reference as it is, if it is pointing to something “internal” (like a child gameobject), we patch the reference to the corresponding copy).</p>
+</blockquote>
+<p>  这里我直接贴了英文原文，感觉翻译不出人家的意思。要注意的是：</p>
+<ul>
+<li>Variant: 在unity编辑器中偶尔会看见这个名字，在我prefab中嵌套另一个prefab的时候印象最深。按照上面的说法，这个是用来通知被引用的UnityEngine.Object’s，然后同样对这些对象执行上述的序列化代码。</li>
+<li>如果引用的内容是外部数据(“external”)将会保留原有的引用。</li>
+<li>如果引用的内容是内部数据(“internal”)将会将引用替换为原有数据的副本。</li>
+<li>在这里，在这篇文章的评论部分有提及，作者举了一个例子来说明这个过程：<blockquote>
+<p>The scenario you mean is when you call Instantiate() on something. Let’s take this example. There are three objects.</p>
+<p>O1: GameObject components=O2, O3<br>O2: RigidBody<br>O3: BoxCollider</p>
+<p>when you invoke Instatiate(gameObject1), we duplicate all three objects.</p>
+<p>O4: GameObject components=O2, O3<br>O5: RigidBody<br>O6: BoxCollider</p>
+<p>Notice how the cloned object O4, actually points to O2 and O3 in its component list. this is obviously not what you intended. In the second phase of Instantiate, we fix this up, by running the serializer in a special mode on O1,O2&amp;O3. we ask it “please report your object references”, and then we check if any of the objects referenced were included in the list of objects that were cloned. For each reference that referenced an object that was cloned (both entries in the componentlist in our case), we update that reference to the cloned version instead of the original. after the fix it looks like this:</p>
+<p>O4: GameObject components=O5, O6<br>O5: RigidBody<br>O6: BoxCollider</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Saving.</strong></p>
+<ul>
+<li>如果设置了”force text serialization”，并且用文本编辑器打开<code>.unity</code>的scene文件，<strong>we run the serializer with a ymal backend.</strong></li>
+</ul>
+</li>
+<li><strong>Loading.</strong><ul>
+<li>向后兼容加载（backwards compatible loading）也是基于系列化机制(serialization)的系统。In-Editor的yaml loading利用了序列化机制，运行时加载scenes和assets也利用了这个。Assetbundles也利用了序列化系统(serialization system)。</li>
+</ul>
+</li>
+<li><strong>Hot reloading of editor code.</strong><ul>
+<li>当你改变了editor脚本数据，我们会序列化所有的editor窗口（它们都继承自UnityEngine.Object!），然后我们销毁所有的窗口，unload掉所有的旧的C#代码，加载新的C#代码，重新创建窗口，并在最后反序列化数据流中的数据到新的窗口。</li>
+</ul>
+</li>
+<li><strong>Resource.GarabageCollectSharedAssets().</strong><ul>
+<li>Unity中使用的GC(native garabage collector)，不同于C#所使用的GC。我们使用这个系统，当加载一个scene，之前的scene未引用的内容就会被unload掉。这种GC会在某种模式下运行序列器(serializer)，在这个模式下我们用它来让对象通知所有的引用到外部的UnityEngine.Objects。这就是为什么我们在scene1中使用的textures会在scene2中被unload掉。<blockquote>
+<p>This is our native garbage collector and is different to the C# garbage collector. It is the thing that we run after you load a scene to figure out which things from the previous scene are no longer referenced, so we can unload them. The native garbage collector runs the serializer in a mode where we use it to have objects report all references to external UnityEngine.Objects. This is what makes textures that were used by scene1, get unloaded when you load scene2.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>The serialization system is written in C++, we use it for all our internal object types (Textures, AnimationClip, Camera, etc). Serialization happens at the UnityEngine.Object level, each UnityEngine.Object is always serialized as a whole. They can contain references to other UnityEngine.Objects and those references get serialized properly.</p>
+</blockquote>
+<p>由于一些执行效率的需要，serializer的行为不完全是如你所愿，比如说MonoBehaviour component的序列化是由你写的脚本所支持的，所以了解serializer的运行细节能够让你更好的使用它。</p>
+<p><strong>为了能让我们写的脚本中的序列化区域(a fieldof my script)能够被序列化需要什么条件？</strong></p>
+<ul>
+<li>Be public,or have [SerializeField] attribute</li>
+<li>Not be static</li>
+<li>Not be const</li>
+<li>Not be readonly</li>
+<li>The fieldtype needs to be a type that we can serialize.</li>
+</ul>
+<p><strong>什么样的类型(fieldtype)能被序列化呢？</strong></p>
+<ul>
+<li>Custom non abstrace classes with [Serializable] attribute.</li>
+<li>Custom structs with [Serializable] attribute. (new inUnity4.5)</li>
+<li>References to objects that derive from UnityEngine.Object</li>
+<li>Primitive data dypes(int,float,double,bool,string,etc)</li>
+<li>Array of a fieldtype we can serialize</li>
+<li>List<t> of a fieldtype we can serialize</t></li>
+</ul>
+<p>那么什么情况是，serializer的动作会是与我们的期望有所不同呢？<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Serializable</span>]</span><br><span class="line"><span class="keyword">class</span> <span class="title">Animal</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">string</span> name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title">MyScript</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Animal[] animals;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>当我们试着在数组<code>animals</code>加入三个相同的<code>Animal object</code>对象引用的时候，即三个引用都指向相同的对象。在已序列化的数据流中你会发现三个对象，当你进行反序列化会发现那里有三个不同的对象。</em></p>
+<p>当你需要需要序列化一个比较复杂的引用的对象列表，这个时候就不能依靠Unity的serializer。你需要做些操作为了能让这些数据正常序列化。</p>
+<p>但是需要注意的是，这个情况只适应于自定义类(custonm classes)，因为他们是被内联的序列化（serialized “inline”）,因为他们的数据成为了既存的MonoBehaviour中的完整的序列化数据的一部分。当你的变量区域有一个UnityEngine.Object的派生类引用，那么数据并不是内联序列化，那么其实际的引用数据会被成功的序列化。</p>
+<blockquote>
+<p>Note that this is only true for custom classes, as they are serialized “inline” because their data becomes part of the complete serializationdata for the MonoBehaviour they are used in. When you have fields that have a reference to something that is a UnityEngine.Object derived class, like a “public Camera myCamera”, the data from that camera are not serialized inline, and an actual reference to the camera UnityEngine.Object is serialized.</p>
+</blockquote>
+<p>(我担心自己的理解有偏差还是把英文原文贴了出来。)</p>
+<p><strong>No support for null for custom classes</strong></p>
+<blockquote>
+<p>The serializer does not support null. If it serializes an object and a field is null, we just instantiate a new object of that type and serialize that. Obviously this could lead to infinite cycles, so we have a relatively magical depth limit of 7 levels. At that point we just stop serializing fields that have types of custom classes/structs and lists and arrays. [1]</p>
+</blockquote>
+<p>Serializer不支持null类型的序列化，如果执行这样的操作了就会导致死循环，unity在这种死循环中加入了最大的生成层次。在Unity4.5之后的版本加入了警告的信息。</p>
+<p><strong>No support for polymorphism</strong></p>
+<p>不支持多态。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public Animal[] animals;</span><br></pre></td></tr></table></figure></p>
+<p>在里面加入一个<code>dog</code>,<code>cat</code>,<code>giraffe</code>三个派生实例，在序列化之后我们得到的是三个<code>Animal</code>类型的实例。</p>
+<p>这会发生在自定义类(“custom classes”)的内联序列化(get serialized inline)过程中。当对象实例是UnityEngine.Object’s派生的实例多态的特性还是有效的。</p>
+<blockquote>
+<p>You’d make a ScriptableObject derived class or another MonoBehaviour derived class, and reference that. The downside of doing this, is that you need to store that monobehaviour or scriptable object somewhere and cannot serialize it inline nicely.</p>
+</blockquote>
+<p><em>你可以利用ScriptableObject派生类或者另一个MonoBehavior派生类，并引用这个生成的实例。这种方式的缺点是，你必须在某个地方存储monobehaviour或者scriptable对象，而不能很好的内联序列化(serailized inline)。</em></p>
+<p>产生这样的限制的原因是，序列化系统的一个核心功能之一的实现，了解一个对象的数据结构依靠的是类的类型，而不是运行时被存储在这个类区域的数据类型。</p>
+<blockquote>
+<p>The reason for these limitations is that one of the core foundations of the serialization system is that the layout of the datastream for an object is known ahead of time, and depends on the types of the fields of the class, instead of what happens to be stored inside the fields.</p>
+</blockquote>
+<p><strong>那么如何序列化一些Uinty不支持的数据类型？</strong></p>
+<p>大多情况下可以使用<strong>serialization callbacks</strong>。它们会在serializer开始读取你的自定义数据区域之前通知你，并在serializer结束之后写入数据。（应该就是上面说的序列化之前存储monobehaviour或者scriptable对象，并在序列化完成之后将数据写入。）</p>
+<blockquote>
+<p>In many cases the best approach is to use serialization callbacks. They allow you to be notified before the serializer reads data from your fields and after it is done writing to them. You can use this to have a different representation of your hard-to-serialize data at runtime than when you actually serialize. You’d use these to transform your data into something Unity understands right before Unity wants to serialize it, you also use it to transform the serialized form back into the form you’d like to have your data in at runtime, right after Unity has written the data to your fields.</p>
+</blockquote>
+<p>让我们创建一个树状的数据的结构(tree datastructure)，如果你直接让Unity去序列化这样的数据，”no support for null”的限制会让你的数据流变得非常大，导致一些程序效率的问题。</p>
+<blockquote>
+<p>Let’s say you want to have a tree datastructure. If you let Unity directly serialize the data structure, the “no support for null” limitation would cause your datastream to become very big, leading to performance degradations in many systems:</p>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">VerySlowBehaviourDoNotDoThis</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Serializable</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Node</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">string</span> interestingValue = <span class="string">"value"</span>;</span><br><span class="line">        </span><br><span class="line">       <span class="comment">//The field below is what makes the serialization data become huge because</span></span><br><span class="line">       <span class="comment">//it introduces a 'class cycle'.</span></span><br><span class="line">       <span class="keyword">public</span> List&amp;lt;Node&amp;gt; children = <span class="keyword">new</span> List&amp;lt;Node&amp;gt;();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//this gets serialized</span></span><br><span class="line">    <span class="keyword">public</span> Node root = <span class="keyword">new</span> Node();</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnGUI</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Display (root);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Display</span>(<span class="params">Node node</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        GUILayout.Label (<span class="string">"Value: "</span>);</span><br><span class="line">        node.interestingValue = GUILayout.TextField(node.interestingValue, GUILayout.Width(<span class="number">200</span>));</span><br><span class="line"> </span><br><span class="line">        GUILayout.BeginHorizontal ();</span><br><span class="line">        GUILayout.Space (<span class="number">20</span>);</span><br><span class="line">        GUILayout.BeginVertical ();</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> child <span class="keyword">in</span> node.children)</span><br><span class="line">            Display (child);</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (GUILayout.Button (<span class="string">"Add child"</span>))</span><br><span class="line">            node.children.Add (<span class="keyword">new</span> Node ());</span><br><span class="line"> </span><br><span class="line">        GUILayout.EndVertical ();</span><br><span class="line">        GUILayout.EndHorizontal ();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Instead, you tell Unity not to serialize the tree directly, and you make a seperate field to store the tree in a serialized format, suited for Unity’s serializer:</p>
+</blockquote>
+<p>为serializer添加自定义数据的序列化操作</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> UnityEngine;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line">public class BehaviourWithTree : MonoBehaviour, ISerializationCallbackReceiver</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//node class that is used at runtime</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Node</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">string</span> interestingValue = <span class="string">"value"</span>;</span><br><span class="line">        <span class="keyword">public</span> List&amp;lt;Node&amp;gt; children = <span class="keyword">new</span> List&amp;lt;Node&amp;gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//node class that we will use for serialization</span></span><br><span class="line">    [<span class="meta">Serializable</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">struct</span> SerializableNode</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">string</span> interestingValue;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> childCount;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">int</span> indexOfFirstChild;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//the root of what we use at runtime. not serialized.</span></span><br><span class="line">    Node root = <span class="keyword">new</span> Node();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//the field we give unity to serialize.</span></span><br><span class="line">    <span class="keyword">public</span> List&amp;lt;SerializableNode&amp;gt; serializedNodes;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnBeforeSerialize</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//unity is about to read the serializedNodes field's contents. lets make sure</span></span><br><span class="line">        <span class="comment">//we write out the correct data into that field "just in time".</span></span><br><span class="line">        serializedNodes.Clear();</span><br><span class="line">        AddNodeToSerializedNodes(root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">AddNodeToSerializedNodes</span>(<span class="params">Node n</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> serializedNode = <span class="keyword">new</span> SerializableNode () &#123;</span><br><span class="line">            interestingValue = n.interestingValue,</span><br><span class="line">            childCount = n.children.Count,</span><br><span class="line">            indexOfFirstChild = serializedNodes.Count+<span class="number">1</span></span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        serializedNodes.Add (serializedNode);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> child <span class="keyword">in</span> n.children)</span><br><span class="line">            AddNodeToSerializedNodes (child);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnAfterDeserialize</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//Unity has just written new data into the serializedNodes field.</span></span><br><span class="line">        <span class="comment">//let's populate our actual runtime data with those new values.</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (serializedNodes.Count &amp;gt; <span class="number">0</span>)</span><br><span class="line">            root = ReadNodeFromSerializedNodes (<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            root = <span class="keyword">new</span> Node ();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">Node <span class="title">ReadNodeFromSerializedNodes</span>(<span class="params"><span class="keyword">int</span> index</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> serializedNode = serializedNodes [index];</span><br><span class="line">        <span class="keyword">var</span> children = <span class="keyword">new</span> List&amp;lt;Node&amp;gt; ();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i!= serializedNode.childCount; i++)</span><br><span class="line">            children.Add(ReadNodeFromSerializedNodes(serializedNode.indexOfFirstChild + i));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Node() &#123;</span><br><span class="line">            interestingValue = serializedNode.interestingValue,</span><br><span class="line">            children = children</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnGUI</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Display (root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Display</span>(<span class="params">Node node</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        GUILayout.Label (<span class="string">"Value: "</span>);</span><br><span class="line">        node.interestingValue = GUILayout.TextField(node.interestingValue, GUILayout.Width(<span class="number">200</span>));</span><br><span class="line"></span><br><span class="line">        GUILayout.BeginHorizontal ();</span><br><span class="line">        GUILayout.Space (<span class="number">20</span>);</span><br><span class="line">        GUILayout.BeginVertical ();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> child <span class="keyword">in</span> node.children)</span><br><span class="line">            Display (child);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (GUILayout.Button (<span class="string">"Add child"</span>))</span><br><span class="line">            node.children.Add (<span class="keyword">new</span> Node ());</span><br><span class="line"></span><br><span class="line">        GUILayout.EndVertical ();</span><br><span class="line">        GUILayout.EndHorizontal ();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Beware that the serializer, including these callbacks coming from the serializer, usually do not run on the main thread, so you are very limited in what you can do in terms of invoking Unity API. (Serialization happening as part of loading a scene happens on a loading thread. Serialization happening as part of you invoking Instantiate() from script happens on the main thread). You can however do the necessary data transformations do get your data from a non-unity-serializer-friendly format to a unity-serializer-friendly-format.</p>
+</blockquote>
+<p>需要注意的是，这些回调通常并不会运行在主线程中，所以当调用UnityAPI的时候就需要注意加一些限制。（当是scene加载过程中的序列化是loading thread中发生的，你调用<code>Instantiate()</code>函数过程中的序列化是在主线程中发生的。）</p>
+<p>通过上面的手段就可以实现一些Unity不支持的数据类型的序列化。</p>
+<p>这个时候我就会问<strong>List&lt;Node&gt;</strong>是个什么，查了一下，就是<code>&lt;</code>,<code>&gt;</code>的表示。<a href="http://www.shurey.com/js/labo/character.html" target="_blank" rel="noopener">HTML特殊文字コード表</a>。</p>
+<p>额…</p>
+<p>看了一下时间，是2014年的文章，现在已经2020年了…不过自定义序列化数据之前的东西还是没变的感觉，仍是非常有用，对我来说。</p>
+<ul>
+<li><a href="http://light11.hatenadiary.com/entry/2018/03/15/225709" target="_blank" rel="noopener">【Unity】【エディタ拡張】SerializedObjectの勘所をまとめてみる</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/serialization/" rel="tag"># serialization</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/unity-plugins/" rel="prev" title="Unity-第三方库介绍和使用">
+      <i class="fa fa-chevron-left"></i> Unity-第三方库介绍和使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/unity-async/" rel="next" title="Unity-异步处理">
+      Unity-异步处理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Serialization-序列化"><span class="nav-number">1.</span> <span class="nav-text">Serialization 序列化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serialization-in-Unity"><span class="nav-number">1.1.</span> <span class="nav-text">Serialization in Unity</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="记录Blog的维护，以备自己随时查找。">
+<meta name="keywords" content="笔记,Markdown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo+Next博客修缮笔记">
+<meta property="og:url" content="http://stonelzp.github.io/Hexo+Next-maintain-myblog-note/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="记录Blog的维护，以备自己随时查找。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-19T08:37:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo+Next博客修缮笔记">
+<meta name="twitter:description" content="记录Blog的维护，以备自己随时查找。">
+
+<link rel="canonical" href="http://stonelzp.github.io/Hexo+Next-maintain-myblog-note/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Hexo+Next博客修缮笔记 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/Hexo+Next-maintain-myblog-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo+Next博客修缮笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-19 17:37:35" itemprop="dateCreated datePublished" datetime="2019-05-19T17:37:35+09:00">2019-05-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/备忘/" itemprop="url" rel="index"><span itemprop="name">备忘</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">记录Blog的维护，以备自己随时查找。</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>经过多次的环境变迁，为了能让博客环境迁移更无脑一些，多在这里写下更新的步骤。</p>
+<a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><!--
+- 目录索引
+  - [1. 关于博客内容书写](#toc_0)
+  - [2. 关于博客构建](#toc_1)
+-->
+<!--# <h1 id="toc_0">关于博客内容书写</h1> -->
+<h1 id="关于博客内容书写"><a href="#关于博客内容书写" class="headerlink" title="关于博客内容书写"></a>关于博客内容书写</h1><ul>
+<li>2020/11/20 : 对新建文章的模板进行了修改</li>
+<li>2021/02/19 : 把博客的配置及源文件上传到了Github仓库分支方便多台PC整理博客</li>
+<li>2021/03/21 : 对新电脑上的博客重新配置遇到了好多问题</li>
+<li>2022/05/29 : 更改博客字体</li>
+<li>2024/11/15 : 更新工作流内容</li>
+</ul>
+<h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><p>果然UE4中的有些代码不会给你高亮，看起来就很不舒服，有时间填一下坑。</p>
+<h2 id="格式书写备忘"><a href="#格式书写备忘" class="headerlink" title="格式书写备忘"></a>格式书写备忘</h2><p>记不住全部的书写方式啊，主要还是记录的频率太低，经常会忘掉，把可能经常会用到的一些格式记录在这里。</p>
+<h3 id="文字添加颜色"><a href="#文字添加颜色" class="headerlink" title="文字添加颜色"></a>文字添加颜色</h3><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;span style=&quot;color: red&quot;&gt;这里是想要变色的文字&lt;/span&gt;</span><br></pre></td></tr></table></figure></p>
+<p>效果：<br><span style="color: red">这里是想要变色的文字</span></p>
+<h3 id="内容折叠"><a href="#内容折叠" class="headerlink" title="内容折叠"></a>内容折叠</h3><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;details&gt;&lt;summary&gt;缩略内容&lt;/summary&gt;</span><br><span class="line"></span><br><span class="line">(上面空一行)这里是想要展开的实际内容。</span><br><span class="line">&lt;/details&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 这里的mark默认的颜色是黄色，我查了一下修改这个颜色要修改css文件，我不会，所以放弃</span><br><span class="line">&lt;details&gt;&lt;summary&gt;&lt;mark&gt;缩略内容&lt;/mark&gt;&lt;/summary&gt;</span><br><span class="line"></span><br><span class="line">(上面空一行)这里是想要展开的实际内容。带mark</span><br><span class="line">&lt;/details&gt;</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<details><summary>缩略内容</summary><br><br>这里是想要展开的实际内容。<br></details><br><details><summary><mark>缩略内容</mark></summary><br><br>这里是想要展开的实际内容。带mark<br></details>
+
+<h3 id="添加Table"><a href="#添加Table" class="headerlink" title="添加Table"></a>添加Table</h3><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">| Row1 | Row2 | Row3 |</span><br><span class="line">| ---- | ---- | ---- |</span><br><span class="line">| Str1 | Str2 | Str3 |</span><br><span class="line">| Str4 | Str5 | Str6 |</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">| Left align | Right align | Center align |</span><br><span class="line">|:-----------|------------:|:------------:|</span><br><span class="line">| This       | This        | This         |</span><br><span class="line">| column     | column      | column       |</span><br><span class="line">| will       | will        | will         |</span><br><span class="line">| be         | be          | be           |</span><br><span class="line">| left       | right       | center       |</span><br><span class="line">| aligned    | aligned     | aligned      |</span><br></pre></td></tr></table></figure>
+<p>效果：</p>
+<table>
+<thead>
+<tr>
+<th>Row1</th>
+<th>Row2</th>
+<th>Row3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Str1</td>
+<td>Str2</td>
+<td>Str3</td>
+</tr>
+<tr>
+<td>Str4</td>
+<td>Str5</td>
+<td>Str6</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Left align</th>
+<th style="text-align:right">Right align</th>
+<th style="text-align:center">Center align</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">This</td>
+<td style="text-align:right">This</td>
+<td style="text-align:center">This</td>
+</tr>
+<tr>
+<td style="text-align:left">column</td>
+<td style="text-align:right">column</td>
+<td style="text-align:center">column</td>
+</tr>
+<tr>
+<td style="text-align:left">will</td>
+<td style="text-align:right">will</td>
+<td style="text-align:center">will</td>
+</tr>
+<tr>
+<td style="text-align:left">be</td>
+<td style="text-align:right">be</td>
+<td style="text-align:center">be</td>
+</tr>
+<tr>
+<td style="text-align:left">left</td>
+<td style="text-align:right">right</td>
+<td style="text-align:center">center</td>
+</tr>
+<tr>
+<td style="text-align:left">aligned</td>
+<td style="text-align:right">aligned</td>
+<td style="text-align:center">aligned</td>
+</tr>
+</tbody>
+</table>
+<h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">![替代文字](图片链接 &quot;图片标题&quot;)</span><br><span class="line"></span><br><span class="line">![替代文字](图片链接)</span><br></pre></td></tr></table></figure></p>
+<h2 id="网址链接"><a href="#网址链接" class="headerlink" title="网址链接"></a>网址链接</h2><p>写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 会打开新的Tab页面（比较推荐）</span><br><span class="line">&lt;a href=&quot;目标网址&quot; target=&quot;_blank&quot;&gt;表示文字&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">//</span><br><span class="line">[表示文字](目标网址)</span><br></pre></td></tr></table></figure></p>
+<h2 id="注释掉内容"><a href="#注释掉内容" class="headerlink" title="注释掉内容"></a>注释掉内容</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 要注释掉的内容 --&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="目录索引"><a href="#目录索引" class="headerlink" title="目录索引"></a>目录索引</h2><p>简单搜了一下但是没有什么比较满意的方案，还得是使用HTML的方式，但是我对html的语法真的只是一知半解。<br>我用了这种方式，MarkdownPreview没有问题，但是在分发到网站上之后，Post的右边文章目录那里段落标题会出现两遍… 懒得调查了…</p>
+<p>使用前提是定义好要索引的标题:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1 id=&quot;loc_段落标题ID&quot;&gt;段落标题&lt;/h1&gt;</span><br></pre></td></tr></table></figure></p>
+<p>将段落标题加入到目录索引<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[段落标题](@loc_段落标题ID) // 这里要@上面定义的ID</span><br></pre></td></tr></table></figure></p>
+<!-- # <h1 id="toc_1">关于博客构建</h1> -->
+<h1 id="关于博客构建"><a href="#关于博客构建" class="headerlink" title="关于博客构建"></a>关于博客构建</h1><p>博客构建过程中遇到的问题</p>
+<h2 id="博客工作流"><a href="#博客工作流" class="headerlink" title="博客工作流"></a>博客工作流</h2><p>开发分支:</p>
+<table>
+<thead>
+<tr>
+<th>分支名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SourceBranch</td>
+<td>博客内容的源码分支。所有文章的修改都会提交到这个分支上</td>
+</tr>
+<tr>
+<td>master</td>
+<td>博客发布用的分支，使用发布命令自定上传，更新会有延迟</td>
+</tr>
+</tbody>
+</table>
+<p>操作流程：</p>
+<ol>
+<li><code>git pull origin SourceBranch</code> 更新源码分支内容，如果本地环境是最新则可以跳过</li>
+<li>添加或者修改 <strong>_post</strong> 下的博文源码，并保存</li>
+<li><code>hexo d -g -m &quot;comment&quot;</code> 更新并发布最新的博客内容（推荐加上浅显易懂的注释）到<strong>master</strong>分支</li>
+<li><code>git push origin SourceBranch</code> 将博文内容上传到云上保存</li>
+</ol>
+<h2 id="博文压缩"><a href="#博文压缩" class="headerlink" title="博文压缩"></a>博文压缩</h2><p>我之前貌似有整过这个叫做<code>gulp</code>的东西。而且连<code>gulpfile.js</code>这个文件也存在。</p>
+<p>因为用起来麻烦就忘了。</p>
+<p>执行</p>
+<p><code>hexo g &amp;&amp; gulp</code></p>
+<p>就会压缩public中的静态资源文件。</p>
+<h2 id="定义新建文章的模板"><a href="#定义新建文章的模板" class="headerlink" title="定义新建文章的模板"></a>定义新建文章的模板</h2><p>因为每次都要手动添加新的项目，心血来潮找了找有没有修改新建文章模板的方法</p>
+<ul>
+<li><a href="https://azriton.github.io/2016/11/04/Hexo%E3%81%AE%E6%96%B0%E8%A6%8F%E6%8A%95%E7%A8%BF%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E3%82%92%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA/" target="_blank" rel="noopener">Hexo の 新規投稿テンプレート を カスタマイズ</a></li>
+</ul>
+<h2 id="修改code代码块自定义样式"><a href="#修改code代码块自定义样式" class="headerlink" title="修改code代码块自定义样式"></a>修改<code>code</code>代码块自定义样式</h2><p><code>\themes\next\source\css\_custom\custom.styl</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// Custom styles.</span><br><span class="line">code &#123;</span><br><span class="line">    color: #ff7600;</span><br><span class="line">    background: #fbf7f8;</span><br><span class="line">    margin: 2px;</span><br><span class="line">&#125;</span><br><span class="line">// 大代码块的自定义样式</span><br><span class="line">.highlight, pre &#123;</span><br><span class="line">    margin: 5px 0;</span><br><span class="line">    padding: 5px;</span><br><span class="line">    border-radius: 3px;</span><br><span class="line">&#125;</span><br><span class="line">.highlight, code, pre &#123;</span><br><span class="line">    border: 1px solid #d6d6d6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我加入了上面的代码，原先是什么都没有的…</p>
+<p>看了下效果，嗯，感觉什么都没变。</p>
+<p>寝るか</p>
+<h2 id="博客转移（物理意义上）"><a href="#博客转移（物理意义上）" class="headerlink" title="博客转移（物理意义上）"></a>博客转移（物理意义上）</h2><p>将自己的博客的内容转移到新的电脑遇见了不少的问题，在这里稍作记录。</p>
+<p>首先是如何使用双分支管理博客的源文件和生成的静态网页文件。<strong>SourceBranch</strong>用来管理博客的源文件，<strong>master</strong>则用来上传博客的静态文件。</p>
+<p>平常的工作流程一般是先<code>pull origin SourceBranch</code>，嘛如果有在两个电脑上进行更新的话。先对源文件及<code>source/_post</code>文件夹下面的源文件进行博文的添加和书写。其次是<code>hexo d -g -m &quot;comment&quot;</code>对源文件进行镜头网页的生成和网页部署，即生成网页并推送到Github上。最后则是将本地的<strong>SourceBranch</strong>的内容改动commit结束。</p>
+<p>前提是自己的部署Deploy文件会默认将部署推送到远程的<strong>master</strong>的分支上。</p>
+<p>然后就是这个过程中遇到的大坑。首先是Window上需要运行Hexo的环境构建，Hexo的运行需要NodeJs，但是过高的版本Hexo并不支持。我自己选的版本是nodejs.v12.14版本。太新的版本没有办法将本地生成的网页部署到（推送）远程。安装完后基本上用到的命令就是<code>npm install</code>安装所有的node_module(注意要在博客的根目录，也就是这个文件夹所在的目录),<code>npm install hexo-cli -g</code>（Hexo不好用的时候重新安装Hexo）。</p>
+<p>其次是主题的版本，我用的next的主题但是又不能随便找一个网上的主题，只好沿用自己之前的主题，把之前的电脑的主题文件整个文件夹压缩转移到了新电脑，然后运行<code>hexo clean</code>重新配置生成网页，才解决了网页里出现了不知道是哪国语言的尴尬问题。</p>
+<h2 id="删除文章"><a href="#删除文章" class="headerlink" title="删除文章"></a>删除文章</h2><p>需要删除文章的时候先执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure></p>
+<p>然后删掉Source下的源文件md,然后重新生成部署。</p>
+<h2 id="更新记录"><a href="#更新记录" class="headerlink" title="更新记录"></a>更新记录</h2><hr>
+<ul>
+<li>2021/05/05 前来更新</li>
+</ul>
+<p>对于上面的问题，由于这之前遇到了博客界面格式没有了的问题，迫不得已逐个解决了。首先是上面的next主题文件的语言问题，主要是中文的解析没对上的原因。具体的解决问题的操作的是去next主题的language文件夹中找到自己在博客的整体<code>_config.yml</code>文件中设置的语言是否存在。</p>
+<p>我上面网页中出现了不知道哪国语言的问题，经过查看之后发现,<code>_config.yml</code>文件中设置的语言是<strong>zh-Hans</strong>,而主题中的语言没有这个，解决方案是把其中的<code>zh-CN.yml</code>重命名为<code>zh-Hans.yml</code>，文字的问题就解决了。</p>
+<p>参考文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/science_Lee/article/details/84633237" target="_blank" rel="noopener">Hexo语言不生效问题</a></li>
+</ul>
+<p>然后就是格式的问题，我在本地运行的环境(<code>hexo s</code>)中博客的格式都会完美的显示，但是部署到Github之后格式就没有了，尝试了很多，最后是从CSS文件找不到路径的问题找到了答案。<br><br>原因则是网页的URL设置有些问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: http://stonelzp.github.io</span><br><span class="line">root: /</span><br></pre></td></tr></table></figure></p>
+<p>修改之后的结果。</p>
+<p>参考链接:</p>
+<ul>
+<li><a href="https://github.com/hexojs/hexo/issues/1121" target="_blank" rel="noopener">生成路径的问题，导致css，js无法加载</a></li>
+</ul>
+<hr>
+<ul>
+<li>2021/06/01 更新</li>
+</ul>
+<p>博客换了电脑之后，主题虽然没变但是好多设定都丢了，包含我用的很顺手的本地搜索。实在是太常用了，没有的话很困扰，就前来解决了。</p>
+<p>需要检查的有两处：</p>
+<ol>
+<li>hexo-generator-search插件是否安装</li>
+<li>本地搜索是否开启</li>
+</ol>
+<p>第一个直接搜命令使用npm安装就好。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure></p>
+<p>第二个去主题的配置文件找到<strong>local_search</strong>条目<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Local search</span><br><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure></p>
+<hr>
+<ul>
+<li>2022/05/29 更新</li>
+</ul>
+<p>平常看博文感觉自己的文字有些太大了，就想试着尝试修改一下字体的设置，顺便改了字体的格式。</p>
+<p>直接去Next的主题的<code>_config.yml</code>下开启:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># Global font settings used for all elements inside &lt;body&gt;.</span><br><span class="line">global:</span><br><span class="line">  external: true</span><br><span class="line">  family: Noto Serif SC</span><br><span class="line">  size: 14px</span><br><span class="line"></span><br><span class="line"># Font settings for site title (.site-title).</span><br><span class="line">title:</span><br><span class="line">  external: true</span><br><span class="line">  family:</span><br><span class="line">  size:</span><br><span class="line"></span><br><span class="line"># Font settings for headlines (&lt;h1&gt; to &lt;h6&gt;).</span><br><span class="line">headings:</span><br><span class="line">  external: true</span><br><span class="line">  family:</span><br><span class="line">  size:</span><br><span class="line"></span><br><span class="line"># Font settings for posts (.post-body).</span><br><span class="line">posts:</span><br><span class="line">  external: true</span><br><span class="line">  family:</span><br><span class="line"></span><br><span class="line"># Font settings for &lt;code&gt; and code blocks.</span><br><span class="line">codes:</span><br><span class="line">  external: true</span><br><span class="line">  family: Roboto Mono</span><br></pre></td></tr></table></figure></p>
+<p>修改结束后，使用<code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</code>命令重新生成项目，顺便本地检查一下。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://leay.net/2020/02/14/hexo-next-font/" target="_blank" rel="noopener">Hexo Next 主题字体相关配置</a></li>
+<li><a href="https://github.com/theme-next/hexo-theme-next/issues/629" target="_blank" rel="noopener">Unable to change font-size-base and/or font.global.size</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/笔记/" rel="tag"># 笔记</a>
+              <a href="/tags/Markdown/" rel="tag"># Markdown</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/c++-chapter15-virtual/" rel="prev" title="C++编程思想-第一卷-第十五章-多态性和虚函数">
+      <i class="fa fa-chevron-left"></i> C++编程思想-第一卷-第十五章-多态性和虚函数
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/c++-modifier-keyword/" rel="next" title="C++中的常见关键字记录">
+      C++中的常见关键字记录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客内容书写"><span class="nav-number">2.</span> <span class="nav-text">关于博客内容书写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代码部分"><span class="nav-number">2.1.</span> <span class="nav-text">代码部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#格式书写备忘"><span class="nav-number">2.2.</span> <span class="nav-text">格式书写备忘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文字添加颜色"><span class="nav-number">2.2.1.</span> <span class="nav-text">文字添加颜色</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内容折叠"><span class="nav-number">2.2.2.</span> <span class="nav-text">内容折叠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加Table"><span class="nav-number">2.2.3.</span> <span class="nav-text">添加Table</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">2.3.</span> <span class="nav-text">图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网址链接"><span class="nav-number">2.4.</span> <span class="nav-text">网址链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注释掉内容"><span class="nav-number">2.5.</span> <span class="nav-text">注释掉内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录索引"><span class="nav-number">2.6.</span> <span class="nav-text">目录索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于博客构建"><span class="nav-number">3.</span> <span class="nav-text">关于博客构建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#博客工作流"><span class="nav-number">3.1.</span> <span class="nav-text">博客工作流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#博文压缩"><span class="nav-number">3.2.</span> <span class="nav-text">博文压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义新建文章的模板"><span class="nav-number">3.3.</span> <span class="nav-text">定义新建文章的模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改code代码块自定义样式"><span class="nav-number">3.4.</span> <span class="nav-text">修改code代码块自定义样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#博客转移（物理意义上）"><span class="nav-number">3.5.</span> <span class="nav-text">博客转移（物理意义上）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除文章"><span class="nav-number">3.6.</span> <span class="nav-text">删除文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更新记录"><span class="nav-number">3.7.</span> <span class="nav-text">更新记录</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

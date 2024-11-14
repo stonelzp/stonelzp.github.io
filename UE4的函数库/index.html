@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。">
+<meta name="keywords" content="C++,UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4的函数库">
+<meta property="og:url" content="http://stonelzp.github.io/UE4的函数库/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.063Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4的函数库">
+<meta name="twitter:description" content="在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。">
+
+<link rel="canonical" href="http://stonelzp.github.io/UE4的函数库/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4的函数库 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4的函数库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4的函数库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-02 17:47:44" itemprop="dateCreated datePublished" datetime="2018-08-02T17:47:44+09:00">2018-08-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在UE4中总会遇见一些不知道是做什么的函数，这篇文章的目的是整理自己遇到的UE4的函数和类，和弄清函数和类的时候遇到的一些问题的解决。</p>
+<a id="more"></a>
+<h1 id="UE4中的类"><a href="#UE4中的类" class="headerlink" title="UE4中的类"></a>UE4中的类</h1><h2 id="UTexture2D"><a href="#UTexture2D" class="headerlink" title="UTexture2D"></a>UTexture2D</h2><h3 id="TextureCompressionSettings"><a href="#TextureCompressionSettings" class="headerlink" title="TextureCompressionSettings"></a>TextureCompressionSettings</h3><h3 id="TextureMipGenSettings"><a href="#TextureMipGenSettings" class="headerlink" title="TextureMipGenSettings"></a>TextureMipGenSettings</h3><h3 id="UpdateResource-Functio作用"><a href="#UpdateResource-Functio作用" class="headerlink" title="UpdateResource() Functio作用"></a>UpdateResource() Functio作用</h3><h2 id="UTextureRenderTaget2D"><a href="#UTextureRenderTaget2D" class="headerlink" title="UTextureRenderTaget2D"></a>UTextureRenderTaget2D</h2><p>Ureal Engine 4 Documentation:</p>
+<ul>
+<li><a href="http://api.unrealengine.com/INT/API/Runtime/Engine/Engine/UTextureRenderTarget2D/index.html" target="_blank" rel="noopener">UTextureRenderTarget2D</a></li>
+</ul>
+<p>可以用来存储一个2DTexture数据的类，拥有着许多的成员，文件的位置：</p>
+<ul>
+<li>C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Engine\Classes\Engine\TextureRenderTarget2D.h</li>
+<li>C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Engine\Private\TextureRenderTarget2D.cpp</li>
+</ul>
+<p>关于如何实例化这个类，我在网上并没有找到类似的实现，但是在UE4的Blueprint中可以找到一个名为<code>Create Rendr Target 2D</code>的node函数。试着找了一下这个节点的实现函数</p>
+<ul>
+<li>C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Engine\Private\KismetRendngLibrary.cpp</li>
+</ul>
+<p>其中有如下的实现代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">UTextureRenderTarget3D* UKismetRenderingLibrary::CreateRenderTarget2D(UObject* WorldContextObject, int32 Width, int32 Height, ETextureRenderTargetFormat Format)</span><br><span class="line">&#123;</span><br><span class="line">    UWorld* World = GEngine-&gt;GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Width &gt; <span class="number">0</span> &amp;&amp; Height &gt; <span class="number">0</span> &amp;&amp; World &amp;&amp; FApp::CanEverRender())</span><br><span class="line">    &#123;</span><br><span class="line">        UTextureRenderTarget2D* NewRenderTarget2D = NewObject&lt;UTextureRenderTarget2D&gt;(WorldContextObject);</span><br><span class="line">        check(NewRenderTarget2D);</span><br><span class="line">        NewRenderTarget2D-&gt;RenderTargetFormat = Format;</span><br><span class="line">        NewRenderTarget2D-&gt;InitAutoFormat(Width, Height); </span><br><span class="line">        NewRenderTarget2D-&gt;UpdateResourceImmediate(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> NewRenderTarget2D; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或许可以给与一些参照。</p>
+<h2 id="UMaterialInstanceDynamic"><a href="#UMaterialInstanceDynamic" class="headerlink" title="UMaterialInstanceDynamic"></a>UMaterialInstanceDynamic</h2><p>Ureal Engine 4 Documentation:</p>
+<ul>
+<li><a href="https://api.unrealengine.com/INT/API/Runtime/Engine/Materials/UMaterialInstanceDynamic/index.html" target="_blank" rel="noopener">UMaterialInstanceDynamic</a></li>
+</ul>
+<p>这个类的作用按照字面意思来推测是用来创建一个动态的材质实例，在UE4的Blueprint中也有相应的节点函数：<code>CreateDynamicMaterialInstance</code>。函数位置</p>
+<ul>
+<li>C:\Program Files\Epic Games\UE_4.19\Engine\Source\Runtime\Engine\Private\KismetMaterialLibrary.cpp</li>
+</ul>
+<p>其中的实现代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UMaterialInstanceDynamic</span>* <span class="title">UKismetMaterialLibrary</span>:</span>:CreateDynamicMaterialInstance(UObject* WorldContextObject, class UMaterialInterface* Parent)</span><br><span class="line">&#123;</span><br><span class="line">    UMaterialInstanceDynamic* NewMID = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (Parent)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// MIDs need to be created within a persistent object if in the construction script (or blutility) or else they will not be saved.</span></span><br><span class="line">        <span class="comment">// If this MID is created at runtime then put it in the transient package</span></span><br><span class="line">        UWorld* World = GEngine-&gt;GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::ReturnNull);</span><br><span class="line">        UObject* MIDOuter = (World &amp;&amp; (World-&gt;bIsRunningConstructionScript  || !World-&gt;IsGameWorld()) ? WorldContextObject : <span class="literal">nullptr</span>);</span><br><span class="line">        NewMID = UMaterialInstanceDynamic::Create(Parent, MIDOuter);</span><br><span class="line">        <span class="keyword">if</span> (MIDOuter == <span class="literal">nullptr</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            NewMID-&gt;SetFlags(RF_Transient);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> NewMID;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以为该材质添加值的函数实现：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> UKismetMaterialLibrary::SetScalarParameterValue(UObject* WorldContextObject, UMaterialParameterCollection* Collection, FName ParameterName, <span class="keyword">float</span> ParameterValue)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (Collection)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (UWorld* World = GEngine-&gt;GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))</span><br><span class="line">        &#123;</span><br><span class="line">            UMaterialParameterCollectionInstance* Instance = World-&gt;GetParameterCollectionInstance(Collection);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">const</span> <span class="keyword">bool</span> bFoundParameter = Instance-&gt;SetScalarParameterValue(ParameterName, ParameterValue);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!bFoundParameter &amp;&amp; !Instance-&gt;bLoggedMissingParameterWarning)</span><br><span class="line">            &#123;</span><br><span class="line">                FFormatNamedArguments Arguments;</span><br><span class="line">                Arguments.Add(TEXT(<span class="string">"ParamName"</span>), FText::FromName(ParameterName));</span><br><span class="line">                FMessageLog(<span class="string">"PIE"</span>).Warning()</span><br><span class="line">                    -&gt;AddToken(FTextToken::Create(LOCTEXT(<span class="string">"SetScalarParamOn"</span>, <span class="string">"SetScalarParameterValue called on"</span>)))</span><br><span class="line">                    -&gt;AddToken(FUObjectToken::Create(Collection))</span><br><span class="line">                    -&gt;AddToken(FTextToken::Create(FText::Format(LOCTEXT(<span class="string">"WithInvalidParam"</span>, <span class="string">"with invalid ParameterName '&#123;ParamName&#125;'. This is likely due to a Blueprint error."</span>), Arguments)));</span><br><span class="line">                Instance-&gt;bLoggedMissingParameterWarning = <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用方法是在C++中声明一个材质<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">UMaterialInstanceDynamic* mMaterial;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将mMaterial的材质实例通过Blueprint传递过来</span></span><br><span class="line"></span><br><span class="line">mMaterial-&gt;SetScalarParamaterValue(<span class="string">"TextureWidth"</span>,<span class="number">512</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//这样便可以将换递过来的Blueprint中的名为`TextureWidth`(if exist)的Parameter赋值为512了</span></span><br></pre></td></tr></table></figure></p>
+<p>但还是有许多疑问。</p>
+<h1 id="UE4中的函数"><a href="#UE4中的函数" class="headerlink" title="UE4中的函数"></a>UE4中的函数</h1><h2 id="check"><a href="#check" class="headerlink" title="check()"></a>check()</h2><p>参考链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/418935/when-should-i-use-check.html?sort=oldest" target="_blank" rel="noopener">When should I use Check()?</a></li>
+</ul>
+<h2 id="AddInstance"><a href="#AddInstance" class="headerlink" title="AddInstance()"></a>AddInstance()</h2><h1 id="UE4中的一些类型"><a href="#UE4中的一些类型" class="headerlink" title="UE4中的一些类型"></a>UE4中的一些类型</h1><h2 id="TextureAddress"><a href="#TextureAddress" class="headerlink" title="TextureAddress"></a>TextureAddress</h2><p>在<code>Texture.h</code>中看到了这个属性，不太清楚是什么属性，就查了一下。貌似是一种纹理寻址模式。因为有赋值为<code>T_Clamp</code>,Clamp让我有些回想起来在Unity中设置UV的时候有repeat跟clamp等等选项来着，需要调查一下。</p>
+<ul>
+<li><a href="https://blog.csdn.net/gggg_ggg/article/details/40374029" target="_blank" rel="noopener">D3D11_TEXTURE_ADDRESS_MODE(纹理寻址模式)</a></li>
+</ul>
+<h2 id="TextureFilter"><a href="#TextureFilter" class="headerlink" title="TextureFilter"></a>TextureFilter</h2><h2 id="SRGB是什么"><a href="#SRGB是什么" class="headerlink" title="SRGB是什么"></a>SRGB是什么</h2><p>参考链接：</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/development-discussion/content-creation/91012-frustration-black-materials-from-my-textures/page2" target="_blank" rel="noopener">sRGB - how to be?</a></li>
+<li><a href="https://blog.csdn.net/candycat1992/article/details/46228771" target="_blank" rel="noopener">【图形学】我理解的伽马校正（Gamma Correction）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/C++中的static关键字/" rel="prev" title="C++中的static关键字">
+      <i class="fa fa-chevron-left"></i> C++中的static关键字
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/UE4中读取Texture2D的像素值/" rel="next" title="UE4中读取Texture2D的像素值">
+      UE4中读取Texture2D的像素值 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的类"><span class="nav-number">1.</span> <span class="nav-text">UE4中的类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UTexture2D"><span class="nav-number">1.1.</span> <span class="nav-text">UTexture2D</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TextureCompressionSettings"><span class="nav-number">1.1.1.</span> <span class="nav-text">TextureCompressionSettings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TextureMipGenSettings"><span class="nav-number">1.1.2.</span> <span class="nav-text">TextureMipGenSettings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UpdateResource-Functio作用"><span class="nav-number">1.1.3.</span> <span class="nav-text">UpdateResource() Functio作用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTextureRenderTaget2D"><span class="nav-number">1.2.</span> <span class="nav-text">UTextureRenderTaget2D</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UMaterialInstanceDynamic"><span class="nav-number">1.3.</span> <span class="nav-text">UMaterialInstanceDynamic</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的函数"><span class="nav-number">2.</span> <span class="nav-text">UE4中的函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#check"><span class="nav-number">2.1.</span> <span class="nav-text">check()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AddInstance"><span class="nav-number">2.2.</span> <span class="nav-text">AddInstance()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中的一些类型"><span class="nav-number">3.</span> <span class="nav-text">UE4中的一些类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TextureAddress"><span class="nav-number">3.1.</span> <span class="nav-text">TextureAddress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TextureFilter"><span class="nav-number">3.2.</span> <span class="nav-text">TextureFilter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SRGB是什么"><span class="nav-number">3.3.</span> <span class="nav-text">SRGB是什么</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

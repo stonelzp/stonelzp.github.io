@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="UE中的接口内容整理到这里。">
+<meta name="keywords" content="UnrealEngine4,UnrealEngine5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE5中的INTERFACE">
+<meta property="og:url" content="http://stonelzp.github.io/UE5-how-to-use-Interface/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="UE中的接口内容整理到这里。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.064Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE5中的INTERFACE">
+<meta name="twitter:description" content="UE中的接口内容整理到这里。">
+
+<link rel="canonical" href="http://stonelzp.github.io/UE5-how-to-use-Interface/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE5中的INTERFACE | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE5-how-to-use-Interface/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE5中的INTERFACE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-03 20:58:37" itemprop="dateCreated datePublished" datetime="2024-01-03T20:58:37+09:00">2024-01-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UE5/" itemprop="url" rel="index"><span itemprop="name">UE5</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>UE中的接口内容整理到这里。<br><a id="more"></a></p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h1 id="UInterface"><a href="#UInterface" class="headerlink" title="UInterface"></a>UInterface</h1><h3 id="UE4中的Interface"><a href="#UE4中的Interface" class="headerlink" title="UE4中的Interface"></a>UE4中的Interface</h3><p>关于UE4或者说C++的一些接口的用法进行一些记录。原本是ActionRPG中的Module开始调查，就先从Module的接口开始说起，不过除了调查这个是什么的接口，更重要的是了解接口的使用方式，不仅仅是UE4中的有重要作用的接口。</p>
+<p>C++的接口的一些特性使用方法更为重要。</p>
+<h4 id="IModuleInterface"><a href="#IModuleInterface" class="headerlink" title="IModuleInterface"></a>IModuleInterface</h4><h4 id="UInterface-1"><a href="#UInterface-1" class="headerlink" title="UInterface"></a>UInterface</h4><p>关于UE4中的<code>UINTERFACE()</code>使用的频率十分之高，熟悉之后就会发现接口这个功能或者说书习惯显得十分重要。</p>
+<p>这一部分是跟ActionRPG项目没有关系的整理：</p>
+<ul>
+<li><a href="https://usagi.hatenablog.jp/entry/2017/07/04/042417" target="_blank" rel="noopener">UE4/C++ Interface の作り方</a></li>
+<li><a href="https://qiita.com/bigengelt/items/12dabebc1bf646f4be13" target="_blank" rel="noopener">【UE4】C++でInterfaceを使う方法</a></li>
+</ul>
+<p>上面的文章相当的有用。从零创建一个UE4可以使用的UInterface的方法。</p>
+<p>最省力的方式是用UE4Editor里面新建C++的方式，下拉到最后一行找到<strong>Unreal Interface</strong>，直接创建一个接口就可以了。<br>如何添加接口的函数就是一个难点了。</p>
+<p>创建接口的函数就有些看自己的习惯了</p>
+<h5 id="后续希望蓝图实现的接口函数"><a href="#后续希望蓝图实现的接口函数" class="headerlink" title="后续希望蓝图实现的接口函数"></a>后续希望蓝图实现的接口函数</h5><p>也是最常见的一种方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// === MyInterface.h ===</span><br><span class="line">// 手間暇(1): UINTERFACE で UInterface を public 継承した U プリフィックスのクラスを定義する</span><br><span class="line">UINTERFACE(BlueprintType)</span><br><span class="line">class MyApp_API UMyInterface: public UInterface</span><br><span class="line">&#123;</span><br><span class="line">  // 要注意: ここでもこちらは U プリフィックス版を使う</span><br><span class="line">  GENERATED_UINTERFACE_BODY()</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 手間暇(2): UE4のクラス定義マクロを付けずに先に定義した U プリフィックスのクラスの I プリフィックス版のクラスを定義する</span><br><span class="line">class MyApp_API IMyInterface</span><br><span class="line">&#123;</span><br><span class="line">  // 要注意: ここでもこちらは I プリフィックス版を使う</span><br><span class="line">  GENERATED_IINTERFACE_BODY()</span><br><span class="line">public:</span><br><span class="line">  // 手間暇(3) Blueprint へ関数を公開するめんどくさいマクロをだらだら書く（めんどくさいでござる＠ｗ＠）</span><br><span class="line">  UFUNCTION( BlueprintNativeEvent, BlueprintCallable, Category = &quot;MyInterface&quot; )</span><br><span class="line">  float GetMyValue();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码直接从上面的文章链接中复制过来的。<br>可以看到接口函数的声明添加了<code>BlueprintNativeEvent</code>这个Meta修饰符，当然上面的代码不是使用上面说的最省力的方式的代码，这里<code>UMyInterface</code>里的UClass的meta修饰符使用了<code>BlueprintType</code>，UE4默认创建的话是<code>MinimalAPI</code>。</p>
+<p>至于使用哪种的话，<code>MinimalAPI</code>Meta修饰符好像是为了把UClass类<strong>类型</strong>的情报显示给其它module的，由于只是导出类型信息给其它module，可以减少编译时间，我也不知道该不该使用这个。不过想要在BP中使用的话<code>BlueprintType</code>肯定是需要的哇。</p>
+<p>然后是实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// === MyInterface.cpp ===</span><br><span class="line">// 手間暇(4): GENERATED_UINTERFACE_BODY が宣言だけ自動的に生成する U プリフィックス版の方の ctor を定義する</span><br><span class="line">UMyInterface::UMyInterface( const class FObjectInitializer&amp; ObjectInitializer ): Super( ObjectInitializer ) &#123; &#125;</span><br><span class="line"></span><br><span class="line">// 手間暇(5): ここでようやく C++ 的な virtual-override における virtual 宣言された基底クラスのメンバー関数を定義</span><br><span class="line">// Note: どこで↓の宣言に相当する virtual retur_type FunctionName_Implementation(); が行われているのかは後述。</span><br><span class="line">float GetMyValue_Implementation() &#123; return 3.14159265358979f; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里需要注意的是，我们在定义UInterface的时候使用的是<code>GENERATED_IINTERFACE_BODY</code>这个宏，所以我们需要再添加一个<code>FObjectInitializer</code>参数的构造函数定义，貌似不加的话会报错（我记不太清了如果说错了对不起）。构造函数的声明不显式声明没问题，宏那里帮忙做了好像。</p>
+<p>最后是接口的使用:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// === MyImplementation.h ===</span><br><span class="line">// 手間暇(6): インターフェースを実装する UE4 オブジェクトクラスでの override 実装の宣言</span><br><span class="line">float GetMyValue_Implementation() override;</span><br><span class="line"></span><br><span class="line">// === MyImplementation.cpp</span><br><span class="line">// 手間暇(7): インターフェースを実装する UE4 オブジェクトクラスでの override 実装の定義</span><br><span class="line">float MyImplementation::GetMyValue_Implementation() &#123; return 1.41421356f; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是声明的是<code>GetMyValue</code>而Override的则是<code>GetMyValue_Implementation</code>，这就是UE里的黑魔法了，记住就行。</p>
+<p>相比上面的写法我更喜欢下面的方法</p>
+<h5 id="只想C-实现的接口函数"><a href="#只想C-实现的接口函数" class="headerlink" title="只想C++实现的接口函数"></a>只想C++实现的接口函数</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#pragma once</span><br><span class="line"></span><br><span class="line">#include &quot;CoreMinimal.h&quot;</span><br><span class="line"></span><br><span class="line">#include &quot;UObject/Interface.h&quot;</span><br><span class="line">#include &quot;GRAIDebugMoveToInterface.generated.h&quot;</span><br><span class="line"></span><br><span class="line">UINTERFACE(MinimalAPI, meta = (CannotImplementInterfaceInBlueprint))</span><br><span class="line">class UMyInterface : public UInterface</span><br><span class="line">&#123;</span><br><span class="line">	GENERATED_BODY()</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class GOLEMRAIDERS_API IMyInterface</span><br><span class="line">&#123;</span><br><span class="line">	GENERATED_BODY()</span><br><span class="line"></span><br><span class="line">	// Add interface functions to this class. This is the class that will be inherited to implement this interface.</span><br><span class="line">public:</span><br><span class="line">    virtual void DebugGetMyValue() &#123;&#125; // 纯虚函数应该不支持</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>像上面的虚函数写法就很简洁，而且cpp文件什么都不需要了。<br><code>GENERATED_BODY</code>帮我们把构造函数的定义也一起做了。</p>
+<p>接口的使用就是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// === MyImplementation.cpp</span><br><span class="line">virtual void DebugGetMyValue() override;</span><br></pre></td></tr></table></figure></p>
+<p>我感觉这种写法就是披着UE4C++皮的很普通的C++的接口使用方式，泛用性不是很高，至少像再UE4中实现的话还是用第一种方式。</p>
+<h5 id="蓝图UINTERFACE的使用"><a href="#蓝图UINTERFACE的使用" class="headerlink" title="蓝图UINTERFACE的使用"></a>蓝图UINTERFACE的使用</h5><p>当使用BluepintNativeEvent创建好了Interface之后就是使用了，导入头文件什么的就不说了</p>
+<p>假定我们现在有一个实现了这个接口的实例Actor:<code>SampleActor</code>,调用这个接口的操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if(SampleActor-&gt;GetClass()-&gt;ImplementsInterface(UMyInterface::StaticClass()))</span><br><span class="line">&#123;</span><br><span class="line">    IMyInterface::Execute_DebugMyValue(SampleActor);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用函数的方法就很简单。</p>
+<h5 id="UINTERFACE修饰符"><a href="#UINTERFACE修饰符" class="headerlink" title="UINTERFACE修饰符"></a>UINTERFACE修饰符</h5>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UnrealEngine4/" rel="tag"># UnrealEngine4</a>
+              <a href="/tags/UnrealEngine5/" rel="tag"># UnrealEngine5</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/UE5-gameplayTag/" rel="prev" title="UE5中的GameplayTag">
+      <i class="fa fa-chevron-left"></i> UE5中的GameplayTag
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/ue5-how-to-use-enum/" rel="next" title="UE5中的ENUM">
+      UE5中的ENUM <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UInterface"><span class="nav-number">2.</span> <span class="nav-text">UInterface</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的Interface"><span class="nav-number">2.0.1.</span> <span class="nav-text">UE4中的Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IModuleInterface"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">IModuleInterface</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UInterface-1"><span class="nav-number">2.0.1.2.</span> <span class="nav-text">UInterface</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#后续希望蓝图实现的接口函数"><span class="nav-number">2.0.1.2.1.</span> <span class="nav-text">后续希望蓝图实现的接口函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#只想C-实现的接口函数"><span class="nav-number">2.0.1.2.2.</span> <span class="nav-text">只想C++实现的接口函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#蓝图UINTERFACE的使用"><span class="nav-number">2.0.1.2.3.</span> <span class="nav-text">蓝图UINTERFACE的使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UINTERFACE修饰符"><span class="nav-number">2.0.1.2.4.</span> <span class="nav-text">UINTERFACE修饰符</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

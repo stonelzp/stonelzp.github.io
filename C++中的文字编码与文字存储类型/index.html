@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在准备把函数名字输出的时候遇到了输出乱码的问题。12TCHAR* text = &quot;DLL内容テスト。&quot;;UE_LOG(LogTemp, Log, TEXT(&quot;TEXT: %s&quot;), text);">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++中的文字编码与文字存储类型">
+<meta property="og:url" content="http://stonelzp.github.io/C++中的文字编码与文字存储类型/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="在准备把函数名字输出的时候遇到了输出乱码的问题。12TCHAR* text = &quot;DLL内容テスト。&quot;;UE_LOG(LogTemp, Log, TEXT(&quot;TEXT: %s&quot;), text);">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:46.966Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++中的文字编码与文字存储类型">
+<meta name="twitter:description" content="在准备把函数名字输出的时候遇到了输出乱码的问题。12TCHAR* text = &quot;DLL内容テスト。&quot;;UE_LOG(LogTemp, Log, TEXT(&quot;TEXT: %s&quot;), text);">
+
+<link rel="canonical" href="http://stonelzp.github.io/C++中的文字编码与文字存储类型/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>C++中的文字编码与文字存储类型 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/C++中的文字编码与文字存储类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++中的文字编码与文字存储类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-02-14 15:25:34" itemprop="dateCreated datePublished" datetime="2019-02-14T15:25:34+09:00">2019-02-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:46" itemprop="dateModified" datetime="2024-11-12T20:51:46+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在准备把函数名字输出的时候遇到了输出乱码的问题。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TCHAR* text = <span class="string">"DLL内容テスト。"</span>;</span><br><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"TEXT: %s"</span>), text);</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>在我写这段代码之前我连<code>TCHAR</code>是什么类型都不知道，经过一番的调查，关于文字编码和文字的数据存储类型，了解到了很多。</p>
+<h2 id="源码的存储格式"><a href="#源码的存储格式" class="headerlink" title="源码的存储格式"></a>源码的存储格式</h2><p>关于源码的存储格式，在我现在的地方，使用的大多是日语系统因此在什么都不动的情况下使用的是日语的默认 <strong>Japanese(Shift-JIS)</strong> 格式。至于怎么确认存储格式的话，在一些编辑器中应该就可以查看。</p>
+<ul>
+<li>在Visual Studio 2017中改变文件存储格式<ul>
+<li>File -&gt; Save as -&gt; 下面Save旁边的箭头 -&gt; save with encoding -&gt; replace -&gt; Encoding</li>
+</ul>
+</li>
+</ul>
+<p>一般比较喜欢的就是<strong>Unicode(UTF-8)</strong> 就是了，毕竟兼容了英文字母之外的字符。</p>
+<p>比如最前面把函数名字输出却遇到了乱码的的方，如果将源码存储为UTF-8格式，就不会出现乱码了。</p>
+<h2 id="C-中的字符存储类型"><a href="#C-中的字符存储类型" class="headerlink" title="C++中的字符存储类型"></a>C++中的字符存储类型</h2><p>关于字符的存储问题，首先要分清楚各种字符的存储类型。</p>
+<h4 id="char"><a href="#char" class="headerlink" title="char"></a>char</h4><p>普通的8位字节类型。</p>
+<h4 id="wchar-t"><a href="#wchar-t" class="headerlink" title="wchar_t"></a>wchar_t</h4><p>宽字符类型，表示范围要远大于char类型，表示类型有16位与32位，具体环境具体判断。Unicode编码字符一般以wchar_t类型存储。</p>
+<p>为了让编译器识别Unicode字符串，必须在前面加一个<strong>L</strong> :<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wchar_t</span> * text = <span class="string">L"这是中文字符"</span>;</span><br></pre></td></tr></table></figure></p>
+<p>看到这个<code>L</code>，让我想起了现在看的一个日志开源库里的一段糟心的代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _WIN32</span></span><br><span class="line"><span class="meta">#   <span class="meta-keyword">define</span> _PLOG_NSTR(x) L##x</span></span><br><span class="line"><span class="meta">#   <span class="meta-keyword">define</span> PLOG_NSTR(x)  _PLOG_NSTR(x)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#   <span class="meta-keyword">define</span> PLOG_NSTR(x)  x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage</span></span><br><span class="line">PLOG_NSTR(<span class="string">"context"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>简单来说就是一个把字符串添加L的宏，刚开始看到的时候糟心的不行。这段内容使用Unicode编码的意思，但是这里有一个问题：</p>
+<ul>
+<li>添加了L也就是说是使用Unicode编码，使用wchar_t数据类型存储。接着上述例子，<code>PLOG_NSTR</code>宏接收的如果不是简单的英文字母而是汉字或者日语，简单地输出会正确的输出吗？</li>
+<li><p>此时源码的存储格式是否支持Unicode编码会产生影响吗？</p>
+<ul>
+<li><p>Shift-JIS格式的源码配合英文字母是能够正确输出的(源码是DLL)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PLOG_NSTR(<span class="string">"line@"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// output</span></span><br><span class="line">line@</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Shift-JIS格式的源码配合日文内容也是能够正确输出的(源码是DLL)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PLOG_NSTR(<span class="string">"line内容テスト@"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// output</span></span><br><span class="line">line内容テスト@</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当在UEEditor中实验的时候，Shift-JIS的格式源码没有正确输出。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>结论：源码的存储格式应该存储为Unicode格式。在字符编码想要支持Unicode和ANSI两种格式的时候应该添加类似以下的宏<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _UNICODE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __T(x)    L##x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x)     __T(x)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x)     x</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>关于为什么不直接使用添加L的宏的原因是：防止数据变量声明和定义时的类型冲突。使用宏避免char与L的宽字符存储类型冲突。</p>
+<p>在tchar.h文件中可以找到关于__T(x)宏的定义，貌似不包含这个文件的时候，自己定义也可以。</p>
+<h4 id="TCHAR"><a href="#TCHAR" class="headerlink" title="TCHAR"></a>TCHAR</h4><p>THAR是对上述两种字符存储类型的统一，参考以下：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> TCHAR;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>当程序定义了UNICODE的时候TCHAR就是宽字符存储类型即wchar_t，当未定义的时候就是普通的char数据类型。</p>
+<h2 id="UE4中的字符类型转换"><a href="#UE4中的字符类型转换" class="headerlink" title="UE4中的字符类型转换"></a>UE4中的字符类型转换</h2><p>当对字符的存储类型有了一些了解，就来看看他们之间的转换吧。先列出一些参考文章：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/en-US/Programming/UnrealArchitecture/StringHandling/CharacterEncoding" target="_blank" rel="noopener">Charactor Encoding</a></li>
+</ul>
+<h2 id="C-宽字符"><a href="#C-宽字符" class="headerlink" title="C++宽字符"></a>C++宽字符</h2><p>当我觉得我能理解并分别和使用C++中的宽字符的时候，现实告诉我还是太天真了。</p>
+<p>先看看这篇文章：</p>
+<ul>
+<li><a href="https://blog.csdn.net/daliang126/article/details/53584395" target="_blank" rel="noopener">彻底解密C++宽字符</a></li>
+</ul>
+<p>写了很多我看不懂的，就是很复杂。我有照着别的示例程序试着写了一下宽窄字符转换，但是英文还好，没看出来什么变化，但是把日语从<code>const char*</code> 变成<code>const wchar_t*</code>的时候乱码还是乱码。</p>
+<p>我使用的是<code>mbstowcs</code>函数来实现的，微软的官网文档也有介绍。官方推荐的是使用<code>mbstowcs_s</code>这个函数。有机会的话可以再试试。</p>
+<p>应该有更深层次的原因，只不过我放弃了。借用4的<code>FString</code>和<code>TEXT()</code>宏来解决了。</p>
+<p>我在plog中看到的宽窄字符转换跟下面的很像说不定好用：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Unicode字符集下可用</span></span><br><span class="line"><span class="comment">//--------------------------------------------------------宽字符串转换到窄字符串</span></span><br><span class="line"><span class="keyword">char</span>* pC = <span class="literal">NULL</span>;   </span><br><span class="line"><span class="keyword">wchar_t</span> wStr[<span class="number">20</span>] = <span class="string">L"宽字符串"</span>;  </span><br><span class="line"><span class="keyword">int</span> iLen = WideCharToMultiByte( CP_ACP,<span class="number">0</span>,wStr,<span class="number">-1</span>,<span class="literal">NULL</span>,<span class="number">0</span>,<span class="literal">NULL</span>,<span class="literal">NULL</span>); </span><br><span class="line"><span class="keyword">if</span>( iLen &gt; <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">    pC = ( <span class="keyword">char</span>* )HeapAlloc( GetProcessHeap() ,<span class="number">0</span> ,iLen );</span><br><span class="line">    <span class="keyword">if</span>( !pC ) <span class="keyword">return</span>;</span><br><span class="line">    WideCharToMultiByte( CP_ACP ,<span class="number">0</span> ,wStr ,<span class="number">-1</span> ,pC ,iLen ,<span class="literal">NULL</span> ,<span class="literal">NULL</span> );  </span><br><span class="line">    <span class="built_in">printf</span>( <span class="string">"%s \n"</span>, pC );</span><br><span class="line">    HeapFree( GetProcessHeap() ,<span class="number">0</span> ,pC );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//--------------------------------------------------------窄字符串转换到宽字符串</span></span><br><span class="line"><span class="keyword">char</span> cStr[<span class="number">20</span>] = <span class="string">"这是窄字符串"</span>;</span><br><span class="line"><span class="keyword">wchar_t</span>* pWideString = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">int</span> iLenWide = MultiByteToWideChar( CP_ACP ,<span class="number">0</span> ,cStr ,<span class="number">-1</span> ,<span class="literal">NULL</span> ,<span class="number">0</span> ); </span><br><span class="line"><span class="keyword">if</span> ( iLenWide &gt; <span class="number">0</span> )</span><br><span class="line">&#123;</span><br><span class="line">    pWideString = ( <span class="keyword">wchar_t</span>* )<span class="built_in">malloc</span>( iLenWide * <span class="keyword">sizeof</span>(<span class="keyword">wchar_t</span>) );</span><br><span class="line">    <span class="keyword">if</span>( !pWideString ) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    MultiByteToWideChar( CP_ACP ,<span class="number">0</span> ,cStr ,<span class="number">-1</span> ,pWideString ,iLenWide ); </span><br><span class="line">    MessageBox( <span class="literal">NULL</span>, pWideString , <span class="number">0</span> , <span class="number">0</span> );  </span><br><span class="line">    <span class="built_in">free</span>( pWideString ); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/use-dll-in-ue4-unity/" rel="prev" title="初识DLL-在UE4与Unity中使用DLL">
+      <i class="fa fa-chevron-left"></i> 初识DLL-在UE4与Unity中使用DLL
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/C++中的强制类型转换-cast/" rel="next" title="C++中的强制类型转换-cast">
+      C++中的强制类型转换-cast <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码的存储格式"><span class="nav-number">1.</span> <span class="nav-text">源码的存储格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-中的字符存储类型"><span class="nav-number">2.</span> <span class="nav-text">C++中的字符存储类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#char"><span class="nav-number">2.0.1.</span> <span class="nav-text">char</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wchar-t"><span class="nav-number">2.0.2.</span> <span class="nav-text">wchar_t</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCHAR"><span class="nav-number">2.0.3.</span> <span class="nav-text">TCHAR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4中的字符类型转换"><span class="nav-number">3.</span> <span class="nav-text">UE4中的字符类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-宽字符"><span class="nav-number">4.</span> <span class="nav-text">C++宽字符</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

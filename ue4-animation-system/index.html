@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="主要是用来记录遇见的关于AnimationSystem相关的知识。估计会是一篇很长的文章。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4中的AnimationSystem理解">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-animation-system/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="主要是用来记录遇见的关于AnimationSystem相关的知识。估计会是一篇很长的文章。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.034Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4中的AnimationSystem理解">
+<meta name="twitter:description" content="主要是用来记录遇见的关于AnimationSystem相关的知识。估计会是一篇很长的文章。">
+
+<link rel="canonical" href="http://stonelzp.github.io/ue4-animation-system/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4中的AnimationSystem理解 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue4-animation-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4中的AnimationSystem理解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-05 19:03:58" itemprop="dateCreated datePublished" datetime="2022-05-05T19:03:58+09:00">2022-05-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>主要是用来记录遇见的关于AnimationSystem相关的知识。估计会是一篇很长的文章。</p>
+<a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>不光是UE4，也会包含UE5的内容。</p>
+<p>官方文档：</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/AnimatingObjects/SkeletalMeshAnimation/Overview/" target="_blank" rel="noopener">Animation System Overview</a></li>
+</ul>
+<p>这个文章我很久以前看过，再看应该也会有新收获。</p>
+<ul>
+<li><a href="https://www.slideshare.net/EpicGamesJapan/cedec2018-ue4-111104578" target="_blank" rel="noopener">[CEDEC2018] UE4アニメーションシステム総おさらい</a></li>
+</ul>
+<h2 id="AnimationNode的制作"><a href="#AnimationNode的制作" class="headerlink" title="AnimationNode的制作"></a>AnimationNode的制作</h2><ul>
+<li><a href="https://docs.unrealengine.com/4.26/en-US/AnimatingObjects/AnimationNodeTechnicalGuide/" target="_blank" rel="noopener">Animation Node Technical Guide - Guide to creating new nodes for use within graphs in Anim Blueprints.</a></li>
+<li><a href="https://qiita.com/go_astrayer/items/accf6772c38979ffecb5" target="_blank" rel="noopener">受け取ったポースを返すだけのアニメーションノードを作ってみた</a></li>
+<li><a href="https://qiita.com/unknown_ds/items/b343a2ab56d77f1b97c5" target="_blank" rel="noopener">UE4 アニメ―ションノードの作成（ボーンのトランスフォーム）を試してみる</a></li>
+<li><a href="https://qiita.com/go_astrayer/items/eb8b2d249018ac4f472f" target="_blank" rel="noopener">アニメーションノードをまとめたアニメーションノードを作ってみた</a></li>
+<li><a href="https://qiita.com/Rinderon/items/6c5351df66f82d16a6f3" target="_blank" rel="noopener">【UE4】C++アニメーションノードを見よう見まねで作ったメモ</a></li>
+</ul>
+<h2 id="惯性混合"><a href="#惯性混合" class="headerlink" title="惯性混合"></a>惯性混合</h2><p>之前在调查惯性混合的时候查找了很多文章，UE4中提供了某种程度上的惯性混合支持，但是在播放Montage的时候就没有相应的支持了。UE5的版本添加了支持这一个特性，由于当时是使用了旧的UE4的版本，于是参考了UE5的源码对UE4引擎源码做了一些修改。<br>与此同时，也稍微对UE的AnimationSystem有了一些了解。</p>
+<ul>
+<li><a href="https://www.gdcvault.com/play/1025331/Inertialization-High-Performance-Animation-Transitions" target="_blank" rel="noopener">    Inertialization: High-Performance Animation Transitions in ‘Gears of War’</a></li>
+<li><a href="https://hogetatu.hatenablog.com/entry/2018/06/02/185613" target="_blank" rel="noopener">慣性ベースドなアニメーションブレンド（解説編）</a></li>
+<li><a href="https://hogetatu.hatenablog.com/entry/2018/06/10/232856" target="_blank" rel="noopener">慣性ベースドなアニメーションブレンド（実装編）</a></li>
+</ul>
+<h1 id="尚未整理的文章"><a href="#尚未整理的文章" class="headerlink" title="尚未整理的文章"></a>尚未整理的文章</h1><p>关于AnimationSystem的内容相当的多，<span style="color: red">以下的链接文章的内容都需要我整理。</span></p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/AnimatingObjects/SkeletalMeshAnimation/AnimHowTo/LayerEditing/" target="_blank" rel="noopener">Editing Animation Layers - An idle animation is edited to create a new reload animation through Animation Layer Editing.</a></li>
+<li><a href="https://docs.unrealengine.com/4.27/en-US/AnimatingObjects/SkeletalMeshAnimation/NodeReference/SkeletalControls/AnimDynamics/" target="_blank" rel="noopener">AnimDynamics - Describes how AnimDynamics can be used to provide physically based secondary animation.</a></li>
+</ul>
+<p>Control Rig真的很重要！！！</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/5.0/en-US/control-rig-in-unreal-engine/" target="_blank" rel="noopener">Control Rig - Rig and Animate characters in real-time using Control Rig.</a></li>
+</ul>
+<p>Advanced Locomotion System V4这个动画系统，由于是免费的，或许在制作动画的时候有些启发</p>
+<ul>
+<li><a href="https://www.unrealengine.com/marketplace/en-US/product/advanced-locomotion-system-v1?lang=en-US" target="_blank" rel="noopener">Advanced Locomotion System V4</a></li>
+<li><p><a href="https://www.bilibili.com/read/cv9226463" target="_blank" rel="noopener">UE4无缝动画系统 ALS V4 分析（Advanced Locomotion System V4） 拆解 文档 教程</a></p>
+</li>
+<li><p><a href="https://qiita.com/unknown_ds/items/d06c7d8203c6420eac8b" target="_blank" rel="noopener">UE4 SlotAnimationについて</a></p>
+</li>
+<li><p><a href="https://forums.unrealengine.com/t/play-slot-animation-is-not-work/417823" target="_blank" rel="noopener">Play Slot Animation is not work</a></p>
+</li>
+<li><p><a href="https://docs.unrealengine.com/4.26/en-US/AnimatingObjects/SkeletalMeshAnimation/NodeReference/Blend/" target="_blank" rel="noopener">Blend Nodes - Animation nodes that blend multiple animations together based on a set of criteria.</a></p>
+</li>
+<li><p><a href="https://docs.unrealengine.com/4.26/en-US/AnimatingObjects/SkeletalMeshAnimation/StateMachines/TransitionRules/" target="_blank" rel="noopener">Transition Rules - Guide to rules that govern State Machine Transitions</a></p>
+</li>
+<li><p><a href="https://arrowinmyknee.com/2019/09/11/a-deep-look-into-animation-framework-in-ue4/" target="_blank" rel="noopener">A deep look into animation framework in ue4</a></p>
+</li>
+</ul>
+<p>关于SyncGroup具体的使用场景我还没有一个正确的概念。</p>
+<ul>
+<li><p><a href="https://docs.unrealengine.com/4.26/en-US/AnimatingObjects/SkeletalMeshAnimation/SyncGroups/" target="_blank" rel="noopener">Sync Groups - Sync Groups allow you to maintain the synchronization of animations of different lengths.</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/62401630" target="_blank" rel="noopener">UE4动画系统的那些事（一）：UE4动画系统基础</a></p>
+</li>
+<li><p><a href="https://forums.unrealengine.com/t/using-montage-to-blend-between-animation-states/211360" target="_blank" rel="noopener">Using montage to blend between animation states</a></p>
+</li>
+<li><p><a href="https://forums.unrealengine.com/t/how-get-the-animation-blend-weight-of-some-state-in-c/378915" target="_blank" rel="noopener">How get the animation blend weight of some state in C++</a></p>
+</li>
+<li><p><a href="https://forums.unrealengine.com/t/docs-on-blend-profile/107004" target="_blank" rel="noopener">Docs on blend profile?</a></p>
+</li>
+</ul>
+<p>这篇文章我放在这里有些奇怪，实在是因为我找不到任何关于BlendProfile的UE4相关的文档，看能否触类旁通一下。</p>
+<ul>
+<li><a href="https://arrowinmyknee.com/2020/07/07/Animation-Blend-Profile-in-Unity/" target="_blank" rel="noopener">Animation Blend Profile in Unity</a></li>
+<li><p><a href="https://docs.unrealengine.com/4.26/en-US/API/Runtime/Engine/Animation/UBlendProfile/" target="_blank" rel="noopener">UBlendProfile - A blend profile is a set of per-bone scales that can be used in transitions and blend lists to tweak the weights of specific bones.</a></p>
+</li>
+<li><p><a href="https://qiita.com/unknown_ds/items/d3d802415c16101d47f1" target="_blank" rel="noopener">UE4 ルートモーションについてのメモ</a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/ue4-packaging-settings/" rel="prev" title="UE4-Packaging设置的注意点">
+      <i class="fa fa-chevron-left"></i> UE4-Packaging设置的注意点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/ue4-automatic-tools/" rel="next" title="UE4-自动化工具介绍">
+      UE4-自动化工具介绍 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AnimationNode的制作"><span class="nav-number">1.1.</span> <span class="nav-text">AnimationNode的制作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#惯性混合"><span class="nav-number">1.2.</span> <span class="nav-text">惯性混合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#尚未整理的文章"><span class="nav-number">2.</span> <span class="nav-text">尚未整理的文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

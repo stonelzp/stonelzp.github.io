@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。">
+<meta name="keywords" content="C++,编程,UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4中需要了解的基础概念">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-basic-knowledge/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.062Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4中需要了解的基础概念">
+<meta name="twitter:description" content="为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。">
+
+<link rel="canonical" href="http://stonelzp.github.io/ue4-basic-knowledge/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4中需要了解的基础概念 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue4-basic-knowledge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4中需要了解的基础概念
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-07-18 15:32:31" itemprop="dateCreated datePublished" datetime="2018-07-18T15:32:31+09:00">2018-07-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>为了记录自己在学习UE引擎过程中遇到的一些疑问点。亦或者是一些值得去记录的知识点。<br><a id="more"></a></p>
+<h1 id="UE4中常见的知识点"><a href="#UE4中常见的知识点" class="headerlink" title="UE4中常见的知识点"></a>UE4中常见的知识点</h1><h2 id="更新历史"><a href="#更新历史" class="headerlink" title="更新历史"></a>更新历史</h2><ul>
+<li>~2020/06 入社现在的公司之前<ul>
+<li>在之前的公司陆陆续续更新了好多东西，有些杂乱倒也还好，今后准备更新更多UE4的内容</li>
+</ul>
+</li>
+<li>2020/06/03 更新一些使用VisualStudio的UE4SetUp内容</li>
+<li>2020/08/21 更新UE4中的修饰符(Specifiers)部分    </li>
+</ul>
+<h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C++部分"></a>C++部分</h2><h3 id="C-与C-的不同之处"><a href="#C-与C-的不同之处" class="headerlink" title="C++与C#的不同之处"></a>C++与C#的不同之处</h3><p>时隔多年见到C++的第一个违和感是头文件，为什么需要写头文件这个问题我找了一些别人写的代码发现了一下几个规则：</p>
+<ul>
+<li><p>在C++的头文件中<code>SampleCode.h</code>中一般都会预先定义一些东西</p>
+<ul>
+<li><p>需要包含的其他头文件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Engine.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"MyAppUtilities.h"</span></span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义需要使用的宏 预处理（<a href="www.runoob.com/cplusplus/cpp-preprocessor.html">C++的预处理器需要了解一下</a>）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一般常量居多？</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PI 3.1415926</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>定义类，类中包含该有的成员，</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SampleClass</span>&#123;</span></span><br><span class="line">    <span class="comment">//Attributes or functions</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span>:</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="UE4中的C-不同的地方"><a href="#UE4中的C-不同的地方" class="headerlink" title="UE4中的C++不同的地方"></a>UE4中的C++不同的地方</h3><h4 id="1-UCLASS-宏"><a href="#1-UCLASS-宏" class="headerlink" title="1.UCLASS()宏"></a>1.UCLASS()宏</h4><p>想要让类与UE4的类库联动的话，就需要这个宏。</p>
+<h5 id="UCLASS-大概的使用方法"><a href="#UCLASS-大概的使用方法" class="headerlink" title="UCLASS()大概的使用方法"></a>UCLASS()大概的使用方法</h5><p>Sample Code:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Engine.h"</span>  <span class="comment">//如果需要使用UE的library的话</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"MyAppUtilities.h"</span></span></span><br><span class="line"></span><br><span class="line">UCLASS()</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UMyClass</span> :</span> <span class="keyword">public</span> UObject&#123;</span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//构造函数(公有的？)</span></span><br><span class="line">    UMyClass();</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, Category = <span class="string">"MyApp"</span>)</span><br><span class="line">    int32 IntProp;</span><br><span class="line"></span><br><span class="line">    UFUNCTION(BlueprintCallable, Category = <span class="string">"MyApp"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">float</span> <span class="title">LengthOfSomething</span><span class="params">(<span class="keyword">const</span> int32 index)</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    TArray&lt;<span class="keyword">int</span>&gt; IntArrayWork;</span><br><span class="line">    <span class="comment">//标准c++中的数组声明</span></span><br><span class="line">    <span class="comment">//std::vector&lt;int&gt; IntArrayWork;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对于<code>UCLASS()</code>，如果需要继承UE的类库，则都要加上这个。<strong>最好声明的类名也以<code>U</code>开头为好？</strong> 但是我觉得这种声明不是跟UE的类库搞混了吗， ~辨识度低我觉得应该没有这么智障的规则~。好的，有这种规则好像。类似的其他的以<code>E,F,I,T,S</code>等等的字母作为变量名的开始。</p>
+<p>关于在头文件中添加注释的问题，在UE4的执行中倘若添加了日语(应该中文也一样)的注释，有可能会发生问题。所以在头文件中尽可能的使用英文注释。还有应该避免在各种宏的后面直接追加注释。</p>
+<p>就目前的问题来说在<code>UFUNCTION</code>宏的后面直接加入日文注释(UTF-8)的话，会有编译无法通过的问题。所以为了避免上述问题应该尽量：</p>
+<ul>
+<li>头文件中使用英文注释</li>
+<li>不要直接在各种UE4的宏后面(例如<code>UFUNCTION</code>后)直接添加注释。</li>
+</ul>
+<h5 id="UCLASS-参数的含义"><a href="#UCLASS-参数的含义" class="headerlink" title="UCLASS() 参数的含义"></a>UCLASS() 参数的含义</h5><p><strong>CPPExampleActor.h</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"GameFramework/Actor.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CppExampleStruct.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CppExampleEnum.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CpExampleActor.generated.h"</span></span></span><br><span class="line"></span><br><span class="line">UCLASS(BlueprintType)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ACppExampleActor</span> :</span> <span class="keyword">public</span> AActor&#123;</span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EdtAnywhere, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">    FCppExampleStruct MyStructProp;</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">    ECppExampleEnum Type;</span><br><span class="line"></span><br><span class="line">    UFUNCTION(BlueprintCallable, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">float</span> <span class="title">MyActorFunc</span><span class="params">(<span class="keyword">const</span> <span class="keyword">float</span> Input)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>通过指定<code>UNCLASS()</code>的参数，可以指定类的类型。</p>
+<ul>
+<li><strong>BlueprintType</strong>表示这个类可以作为Blueprint的变量来使用。<ul>
+<li><code>UPROPERTY()</code>的声明，在这个Actor的Detail面板上可以看到该<code>Category</code>下有声明的<code>MyStructProp</code>和<code>Type</code>属性。</li>
+<li>具体的<code>BlueprintType</code>的使用例子则仍需要调查。<code>BlueprintType</code>类型能做到的事情。</li>
+</ul>
+</li>
+<li><p>多个参数</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )</span><br></pre></td></tr></table></figure>
+<p>  这个的使用含义现在还不清楚各自代表着什么意思。</p>
+</li>
+</ul>
+<h5 id="USTRUCT-结构体"><a href="#USTRUCT-结构体" class="headerlink" title="USTRUCT()结构体"></a>USTRUCT()结构体</h5><p><strong>CppExampleStruct.h</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CppExampleStruct.generated.h"</span></span></span><br><span class="line"></span><br><span class="line">USTRUCT(BlueprintType)</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FCppExampleStruct</span> &#123;</span></span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">    <span class="keyword">float</span> Value;</span><br><span class="line"></span><br><span class="line">    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category=<span class="string">"UE C++ Book"</span>)</span><br><span class="line">    int32 Index;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>构造体的声明名字最好以<code>F</code>开始。其他的基本上使用方法与类相同。</p>
+<h5 id="UENUM-枚举类型"><a href="#UENUM-枚举类型" class="headerlink" title="UENUM()枚举类型"></a>UENUM()枚举类型</h5><p><strong>CppExampleEnum.h</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line">UENUM(BlueprintType)</span><br><span class="line"><span class="keyword">enum</span> <span class="class"><span class="keyword">class</span> <span class="title">ECppExampleEnum</span> :</span> uint8 &#123;</span><br><span class="line">    None = <span class="number">0</span>,</span><br><span class="line">    Foo,</span><br><span class="line">    Bar</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>对于<code>enum class ECppExampleEnum : uint8</code>这种写法有些迷惑。</p>
+<ul>
+<li><code>class</code>是为了使枚举类型更安全。为什么安全，参考下面的链接。之后整理。</li>
+<li><code>uint8</code>是为了指定枚举器的基础类型。</li>
+</ul>
+<p>参考链接:</p>
+<ul>
+<li><a href="https://blog.csdn.net/sanoseiichirou/article/details/50180533#2-enum-class-%E5%92%8C-enum-struct" target="_blank" rel="noopener">C++11的enum class &amp; enum struct和enum</a></li>
+<li><a href="https://blog.csdn.net/sanoseiichirou/article/details/50171727" target="_blank" rel="noopener">C\C++中的整形提升</a></li>
+<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2347.pdf" target="_blank" rel="noopener">C++标准文档-n2347</a></li>
+</ul>
+<h4 id="2-GENERAED-BODY"><a href="#2-GENERAED-BODY" class="headerlink" title="2.GENERAED_BODY()"></a>2.GENERAED_BODY()</h4><p>在阅读源码的时候会发现还有一个<code>GENERATED_UCALSS_BODY()</code>的宏，这两者之间又有区别。</p>
+<p>为什么要使用这个宏呢？</p>
+<blockquote>
+<p>Those macro pastes code generated by UnrealHeaderTool (UHT) contained in HeaderFileName.generated.h to class or struct deceleration, it is required for UObject to properly function. It’s primerly for reflection system, UHT maps your class and generate registration code, so you don’t need to register class, properties and and functions to that system, UHT prepares that for you + it includes helpful functions like StaticClass() which you probably already meet. But it can’t alter how C++ compiler work and you need to paste the code that it prepares via that macro to your class.</p>
+<p>In C++ you can’t read structure of you code after compilation, everything is turned in to numbers and addresses, so application it self it need to implement so called reflection system in order to see it’s classes, properties and functions, to see it’s own reflection, like animal having ability to recognize it self in reflection, like name suggests and this is what UE4 and UHT provides. This way for example editor see all classes, properties and nodes based from C++. You can use it in game too to create auto discovery of actor classes and there properties, create smart UI so you don’t need to make new UI for each thing.</p>
+<p>The link provided by ali explains the diffrence between the too, but you should use GENERATED_BODY() as other one is old method, it’s still being keeped alive as some of engine code still didn’t switch to new macro.</p>
+</blockquote>
+<p>这段很长，是抄自<a href="https://answers.unrealengine.com/questions/772178/what-do-generated-body-and-generated-uclass-body-d.html?sort=oldest" target="_blank" rel="noopener">What do, GENERATED_BODY() and GENERATED_UCLASS_BODY(), do?</a></p>
+<p>当我们定义了GENERATED_BODY()宏之后，构造函数（constructor）就不是必须的了。但是如果需要的话还是可以照常进行声明和定义。</p>
+<blockquote>
+<p>The other difference is that, in comparison to GENERATED_UCLASS_BODY(), GENERATED_BODY() doesn’t have the public specifier in it, so any class members that are declared after it are private by default (you can explicitly declare them as public). In your situation, please make sure that you have your constructor declared and defined correctly:</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//.h file</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    AFPSGameMode(<span class="keyword">const</span> class FObjectInitializer&amp; ObjectInitializer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// .cpp file</span></span><br><span class="line">AFPSGameMode::AFPSGameMode(<span class="keyword">const</span> class FObjectInitializer&amp; ObjectInitializer)</span><br><span class="line">&#123;</span><br><span class="line">       <span class="comment">// constructor functionality</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>目前<code>GENERATED_BODY()</code>这个使用方式是UE4更推荐的。</p>
+<h4 id="3-UPROPERTY-UFUNCTION"><a href="#3-UPROPERTY-UFUNCTION" class="headerlink" title="3.UPROPERTY() UFUNCTION()"></a>3.UPROPERTY() UFUNCTION()</h4><p>使用这个声明的属性跟方法UE的Blueprint可以使用。</p>
+<h5 id="UPROPERTY-宏"><a href="#UPROPERTY-宏" class="headerlink" title="UPROPERTY()宏"></a>UPROPERTY()宏</h5><p><code>UPROPERTY()</code>的参数的含义</p>
+<ul>
+<li><p><code>UPROPERTY()</code>没有参数的情况，UE4的Blueprint和Level Editor都不能读取或者修改，但是却可以将这个变量纳入到UE4的GC对象中。比如：</p>
+  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY()</span><br><span class="line">AActor* OwningActor;</span><br></pre></td></tr></table></figure>
+<p>  这种情况，如果<code>OwningActor</code>拥有了实例化对象，不手动释放也是没有问题的。或者说注意别手动释放了，会出问题的。</p>
+</li>
+<li><code>UPROPERTY(EditAnywhere, Category=&quot;UE C++ Book&quot;</code>,<code>EditAnywhere</code>属性表示在Level Editor中也可以操作这个属性。<ul>
+<li>那么Blueprint与Level Editor的差别在哪里，需要调查。<ul>
+<li>猜测的结果，Blueprint就是那个连来连去的蓝图，可以在那个蓝图的编辑器中取到属性。</li>
+<li>Level Editor指的是操作的画面，在Level Editor中可以取到的意思应该是在Detail panel中直接设定或者读取值那样。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>UPROPERTY(BlueprintReadWrite, Category=&quot;UE C++ Book&quot;)</code>,<code>BlueprintReadWrite</code>表示Blueprint可以读写。</li>
+<li>其他的属性，还有<code>meta</code>属性可以查找下面的链接：<ul>
+<li><a href="http://api.unrealengine.com/INT/Programming/UnrealArchitecture/Reference/Properties/Specifiers/index.html" target="_blank" rel="noopener">Property Specifiers</a></li>
+<li><a href="http://api.unrealengine.com/INT/Programming/UnrealArchitecture/Reference/Metadata/index.html" target="_blank" rel="noopener">Metadata Specifiers</a><h5 id="UFUNCTION宏"><a href="#UFUNCTION宏" class="headerlink" title="UFUNCTION宏"></a>UFUNCTION宏</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UFUNCTION(BlueprintCallable,Category = <span class="string">"UE C++"</span>)</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">float</span> <span class="title">FunctionName</span><span class="params">(<span class="keyword">const</span> <span class="keyword">float</span> Variable)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>像上面的使用方法，在函数的前面添加<code>UNFUNCTION macro</code>宏可以制作UE4的Blueprint编辑器的函数节点以供调用。在虚幻4的Blueprint编辑器中使用此函数。</p>
+<h4 id="4-TArray-UE4中的数组（重要）"><a href="#4-TArray-UE4中的数组（重要）" class="headerlink" title="4.TArray-UE4中的数组（重要）"></a>4.TArray-UE4中的数组（重要）</h4><p>先上本家，官方文档<a href="https://docs.unrealengine.com/en-us/Programming/UnrealArchitecture/TArrays" target="_blank" rel="noopener">TArray:Arrays in Unreal Engine</a>。</p>
+<p>再上中文翻译<a href="https://blog.csdn.net/cartzhang/article/details/45367171" target="_blank" rel="noopener">虚幻引擎中的数组–TArry:Arrays</a></p>
+<h4 id="5-C-中的静态函数static与UE-C-Unreal-Engine-C-的静态函数"><a href="#5-C-中的静态函数static与UE-C-Unreal-Engine-C-的静态函数" class="headerlink" title="5.C++中的静态函数static与UE C++(Unreal Engine C++)的静态函数"></a>5.C++中的静态函数static与UE C++(Unreal Engine C++)的静态函数</h4><p>在C++中的静态函数与非静态函数的执行确实是有差别的。</p>
+<p>复习一下C++中的静态函数：</p>
+<ul>
+<li>static修饰变量</li>
+<li>static修饰函数<br>参考文章：</li>
+<li><a href="http://zheming.wang/blog/2012/06/28/18316F9F-EB98-4088-AE29-C151BAEC8E71/" target="_blank" rel="noopener">C/C++ 中的static关键字</a></li>
+<li><a href="https://msdn.microsoft.com/zh-cn/library/y5f6w579.aspx" target="_blank" rel="noopener">存储类 (C++)</a></li>
+<li><a href="http://c.biancheng.net/cpp/biancheng/view/210.html" target="_blank" rel="noopener">C++静态成员函数</a></li>
+<li><a href="http://c.biancheng.net/cpp/biancheng/view/209.html" target="_blank" rel="noopener">C++ static静态成员变量</a></li>
+</ul>
+<p>UE C++中关于静态函数的使用应该大同小异，但是也不排除有差别的可能性。</p>
+<p>将来可能会派上用场的文章</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/716472/%E3%82%AF%E3%83%A9%E3%82%B9%E3%81%AB%E3%82%B9%E3%82%BF%E3%83%86%E3%82%A3%E3%83%83%E3%82%AF%E5%A4%89%E6%95%B0%E3%82%92%E6%8C%81%E3%81%9F%E3%81%9B%E3%81%9F%E3%81%84.html" target="_blank" rel="noopener">クラスにスタティック変数を持たせたい</a></li>
+</ul>
+<h4 id="6-Blueprint函数node-节点-的输入与输出"><a href="#6-Blueprint函数node-节点-的输入与输出" class="headerlink" title="6.Blueprint函数node(节点)的输入与输出"></a>6.Blueprint函数node(节点)的输入与输出</h4><p>在UE C++中函数的参数对应Blueprint的node的输入pin，函数的返回值则对应着node的输出pin<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UFUNCTION(BlueprintCallable,Category=<span class="string">"classcategory"</span>)</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">MyFunc</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">const</span> <span class="keyword">int</span>&amp; c,<span class="keyword">int</span>&amp; d)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>上述的情况下<code>a,b,c</code>三个变量对应着node的三个输入pin，但是<code>return value,d</code>对应着node的输出pin。也就是说：<strong>没有<code>const</code>修饰的引用型参数会被分配到输出pin的阵营中。</strong></p>
+<p>这里便引申出几个问题</p>
+<ul>
+<li>UE C++的函数参数为什么要使用<code>const</code>修饰，使用常量的必要性是什么</li>
+<li>万一想要使用<code>const</code>修饰的引用型参数作为node的输入pin怎么办</li>
+<li>想要增加node的输出pin的话，除此之外还有别的写法么</li>
+</ul>
+<h5 id="Blueprint支持的数据类型很有限"><a href="#Blueprint支持的数据类型很有限" class="headerlink" title="Blueprint支持的数据类型很有限"></a>Blueprint支持的数据类型很有限</h5><ul>
+<li><code>bool</code></li>
+<li><code>uint8</code></li>
+<li><code>int32</code></li>
+<li><code>float</code></li>
+</ul>
+<h4 id="7-UE4的Head-File"><a href="#7-UE4的Head-File" class="headerlink" title="7.UE4的Head File"></a>7.UE4的Head File</h4><p>UE4中的头文件有许多中，为了能够分清使用方法把遇到的头文件整理一下</p>
+<h5 id="Actor-h"><a href="#Actor-h" class="headerlink" title="Actor.h"></a>Actor.h</h5><p>一般的写法是<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"GameFramework/Actor.h"</span></span></span><br></pre></td></tr></table></figure></p>
+<p>一般是继承了UE4中的<code>Actor</code>类的话都需要包含这个头文件。</p>
+<h5 id="xxx-generated-h"><a href="#xxx-generated-h" class="headerlink" title="xxx.generated.h"></a>xxx.generated.h</h5><p>比如说<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CppGate.generated.h"</span></span></span><br></pre></td></tr></table></figure></p>
+<p>这个头文件是有UE4的UnrealHeaderTool自动生成的文件。如果类继承了<code>UObject</code>类并且想要在Blueprint中使用这个类的话，就需要include这个头文件。而且需要把这个头文件放到所有的头文件的最后才行。</p>
+<h4 id="8-UE4中的特殊容器"><a href="#8-UE4中的特殊容器" class="headerlink" title="8.UE4中的特殊容器"></a>8.UE4中的特殊容器</h4><h5 id="1-FVector"><a href="#1-FVector" class="headerlink" title="1.FVector"></a>1.FVector</h5><p>一个表示3D空间的向量。可以用来表示空间的一个点或者方向。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="http://api.unrealengine.com/INT/API/Runtime/Core/Math/FVector/" target="_blank" rel="noopener">FVector</a></li>
+</ul>
+<h4 id="9-类的初始值设定"><a href="#9-类的初始值设定" class="headerlink" title="9.类的初始值设定"></a>9.类的初始值设定</h4><p>基础类型变量的初始化可以在声明的同时进行，以外的数据类型(FVector等)初始化需要在构造函数中进行。静态变量的初始化则需要在类外进行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int ClassExample::static_var;  //equle 0</span><br><span class="line">//or lik this</span><br><span class="line">int ClassExample::static_var = 4;</span><br></pre></td></tr></table></figure></p>
+<h3 id="pragma-once-vs-include-guard"><a href="#pragma-once-vs-include-guard" class="headerlink" title="#pragma once vs include guard"></a>#pragma once vs include guard</h3><p>打开UE工程看到一些<code>.h</code>头文件的源码的时候看到了<code>#pragma once</code>有些困惑，不知道是做什么用的。于是调查了一下。</p>
+<p>总体来说这两个命令都是为了避免同一个头文件被include多次</p>
+<p>方式1：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __SOMEFILE_H_</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __SOMEFILE_H_</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+<p>方式2：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<h4 id="ifndef方式"><a href="#ifndef方式" class="headerlink" title="#ifndef方式"></a>#ifndef方式</h4><p>这种方式受C/C++语言标准支持，可以保证同一个文件不会被同时包含，也能保证内容完全相同的两个文件（或者代码片段）不会被同时包含。缺点是不同头文件中的宏的名字如果相同，会导致编译器找不到声明的问题。另外由于编译器每次需要打开头文件来判定是否有重复的定义，会导致编译的时间要长。</p>
+<h4 id="progma-once方式"><a href="#progma-once方式" class="headerlink" title="#progma once方式"></a>#progma once方式</h4><p>这种方式是保证“物理存在上”同一个文件不会被包含多次。而不是内容相同的两个文件。而且无法对一个头文件中一段代码做<code>pragma once</code>声明，只能针对文件。当然也不会发生第一种方式的宏名碰撞引发的问题。</p>
+<p>使用哪一种方式见仁见智，有好处有坏处。根据情况使用。</p>
+<ul>
+<li><a href="https://www.cnblogs.com/hokyhu/archive/2009/03/30/1425604.html" target="_blank" rel="noopener">附上别人的博客链接: #pragma once与#ifndef解析</a></li>
+<li><a href="flast.hateblo.jp/entry/2015/12/05/000000">时间线比较新的分析: インクルードガードとpragma once</a></li>
+<li><a href="https://stackoverflow.com/questions/1143936/pragma-once-vs-include-guards" target="_blank" rel="noopener">stackoverflow上关于上述两种方式的争论: #pragma once vs include guards?</a></li>
+</ul>
+<h3 id="C-中的类与结构体"><a href="#C-中的类与结构体" class="headerlink" title="C++中的类与结构体"></a>C++中的类与结构体</h3><p>参考链接：</p>
+<ul>
+<li><a href="https://blog.csdn.net/Loving_Forever_/article/details/51483828" target="_blank" rel="noopener">详解C结构体、C++结构体 和 C++类的区别</a></li>
+</ul>
+<h3 id="开启HSLS语法高亮"><a href="#开启HSLS语法高亮" class="headerlink" title="开启HSLS语法高亮"></a>开启HSLS语法高亮</h3><h4 id="HLSL-Tools-for-Visual-Studio"><a href="#HLSL-Tools-for-Visual-Studio" class="headerlink" title="HLSL Tools for Visual Studio"></a>HLSL Tools for Visual Studio</h4><p>应该是HLSL的语法编辑器插件，有自动补全的功能，附上下载链接。但是并没有解语法高亮的问题。</p>
+<p>下载链接：</p>
+<ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=TimGJones.HLSLToolsforVisualStudio" target="_blank" rel="noopener">HLSL Tools for Visual Studio</a></li>
+</ul>
+<h4 id="在VS2017中开启语法高亮（syntax-high-lighting）"><a href="#在VS2017中开启语法高亮（syntax-high-lighting）" class="headerlink" title="在VS2017中开启语法高亮（syntax high lighting）"></a>在VS2017中开启语法高亮（syntax high lighting）</h4><p>虽然不是针对VS2017的解决方案，但是设定之后的确解决的这个问题：</p>
+<p>设定顺序：</p>
+<ul>
+<li>在VS2017中 Go to Tools -&gt; Options -&gt; Text Editor -&gt; Fie Extension 在这里选择编辑文件的扩展名与文法编辑器，然后添加保存。</li>
+</ul>
+<p>这样设定应该里面有效果了。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/21499143/how-to-get-syntax-highlighting-for-alternate-file-extension-for-visual-studio-20" target="_blank" rel="noopener">How to get syntax highlighting for alternate file extension for Visual Studio 2010 or 2013?
+</a></li>
+</ul>
+<h2 id="UnrealEngine部分"><a href="#UnrealEngine部分" class="headerlink" title="UnrealEngine部分"></a>UnrealEngine部分</h2><h3 id="UE4中使用的一些Tip"><a href="#UE4中使用的一些Tip" class="headerlink" title="UE4中使用的一些Tip"></a>UE4中使用的一些Tip</h3><h4 id="1-快速制作封闭空间"><a href="#1-快速制作封闭空间" class="headerlink" title="1. 快速制作封闭空间"></a>1. 快速制作封闭空间</h4><p>快速挖空一个几何体的制作顺序：</p>
+<ul>
+<li>Modes panel -&gt; Geometry -&gt; Box -&gt; 设置尺寸</li>
+<li>Details panel -&gt; Brush settings -&gt; Hollow 属性check</li>
+</ul>
+<h4 id="2-调整模型的模型坐标的原点"><a href="#2-调整模型的模型坐标的原点" class="headerlink" title="2.调整模型的模型坐标的原点"></a>2.调整模型的模型坐标的原点</h4><p>根据模型的大小来调整模型坐标的原点，顺序：</p>
+<ul>
+<li>双击UE4中导入的模型，打开材质编辑器(static mesh editor也叫Material Editor)</li>
+<li>点击<code>Show Pivot</code>显示模型坐标，同时在左上角看见，模型的大小</li>
+<li>在<code>Detail panel</code>中找到Transform，调整<code>Import Tansiation</code>的数值，移动坐标系</li>
+<li>Tool bar -&gt; Asset -&gt; Reimport Model 之后就会发现模型坐标按照指示移动了</li>
+</ul>
+<h4 id="3-制作天空球-与雾"><a href="#3-制作天空球-与雾" class="headerlink" title="3.制作天空球(与雾)"></a>3.制作天空球(与雾)</h4><p>感觉要制作出天空的感觉同时还有雾的模糊的时候使用，可以看见太阳就是不知道能否模拟太阳的移动</p>
+<p>顺序:</p>
+<ol>
+<li>选定平行光源，开启Light -&gt; Atmosphere/Sun light</li>
+<li>将Visual Effects -&gt; Atmospheric Fog 拖拽至场景中</li>
+<li>Content Browser panel右下的View Options中开启Show Engine Content</li>
+<li>在Engine Content中找到BP_Sky_Sphere并将其拖拽至场景中</li>
+<li>在BP_Sky_Sphere的Details面板中的Directional Light Actor选定上面的平行光</li>
+</ol>
+<h4 id="4-UE4中的Volume应用"><a href="#4-UE4中的Volume应用" class="headerlink" title="4.UE4中的Volume应用"></a>4.UE4中的Volume应用</h4><p>在UE中使用Volume执行不同的任务可以解决很多问题，比如说：</p>
+<ul>
+<li>给玩家施加伤害</li>
+<li>改变物理定律，在Volume中允许玩家悬浮等等</li>
+<li>作为碰撞表面，不允许玩家进入</li>
+<li>改变计算关卡光照和可见性方式</li>
+</ul>
+<p>等等，出了直接使用Modes panel中的Volume工具之外，也可以直接将几何体笔刷(brush)转化为相应的Volume。Details -&gt; Actor -&gt; Convert Actor -&gt; Volume(that you want)</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="http://api.unrealengine.com/INT/Engine/Actors/Volumes/" target="_blank" rel="noopener">Volume Reference</a></li>
+</ul>
+<h4 id="5-Z-Fighting"><a href="#5-Z-Fighting" class="headerlink" title="5.Z-Fighting"></a>5.Z-Fighting</h4><p>Z-Fighting又Depth Fighting，深冲突。就是贴图会出现闪烁的情况，与实际模型产生交叉融合</p>
+<p>z-fighting的出现是的不同面上的像素在z-buffer中的值相近，导致前台取像素的时候一会去这个面的，一会取那个面的。改变照相机的near、far属性会涉及到z-buffer中的值的精度。因为在各个平台上z-buffer位数不同，因此改变near和far能给z-buffer中的值的浮点数部分尽量留出空间，消除z-fighting。</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://www.arvrschool.com/read.php?tid=682" target="_blank" rel="noopener">z-fighting在unity中的解决方式</a></li>
+</ul>
+<h4 id="6-将选定的Actor合并为组"><a href="#6-将选定的Actor合并为组" class="headerlink" title="6.将选定的Actor合并为组"></a>6.将选定的Actor合并为组</h4><p>使用<code>Ctrl+G</code>的快捷键可以快速把选定的Actor(场景的素材)合并为一组，下次选定的时候会选定为一组。便于移动或者复制。</p>
+<p>使用<code>Shift+G</code>的快捷键会解除分组。当然这些操作都可以在选中Actor之后:</p>
+<ul>
+<li>Right Click -&gt; Group进行分组和分解</li>
+</ul>
+<h4 id="7-UE4中的Material和Material-Function"><a href="#7-UE4中的Material和Material-Function" class="headerlink" title="7.UE4中的Material和Material Function"></a>7.UE4中的Material和Material Function</h4><p>在UE4中偶然看到了这两个材质的声明，发现名字不太一样，需要调查一下。</p>
+<h3 id="UE-C-中的需要注意的问题"><a href="#UE-C-中的需要注意的问题" class="headerlink" title="UE C++中的需要注意的问题"></a>UE C++中的需要注意的问题</h3><h4 id="1-ConstructorHelpers类的使用"><a href="#1-ConstructorHelpers类的使用" class="headerlink" title="1.ConstructorHelpers类的使用"></a>1.ConstructorHelpers类的使用</h4><p>就我的理解这个类可以在其他类的构造函数中实例化对象。自己的情况中多为获取在工程中的资源，并不是level中的Actor资源而是单纯的Content文件夹中的某个资源。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用实例</span></span><br><span class="line"><span class="comment">// SampleActorComponent.cpp中的构造函数</span></span><br><span class="line">USampleActorComponent::USampleActorComponent()</span><br><span class="line">&#123;</span><br><span class="line">    PrimaryComponnetTick.bCanEverTick = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> ConstructorHelpers::FObjectFinder&lt;UStaticMesh&gt; SampleAsset(TEXT(<span class="string">"StaticMesh'/Game/StartrContent/Shapes/Shape_Plane.Shape_Plane'"</span>));</span><br><span class="line">    sample_mesh = SampleAsset.Object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样就能成功取到Content中的资源，当然不限于<code>StaticMesh</code>其他的类型<code>UMaterial</code>等等的类型都可以取到。需要注意的是</p>
+<ul>
+<li>ConstructorHelpers类的使用必须是要在类的构造函数中进行（吃了不少苦头）</li>
+<li>SampleAsset的资源链接可以直接在UE4的Content文件夹右键资源<code>copy reference</code>中直接取到</li>
+</ul>
+<p>关于更多的使用应该在另一篇博文中有拓展。</p>
+<h4 id="2-在C-类中为类添加用户输入响应"><a href="#2-在C-类中为类添加用户输入响应" class="headerlink" title="2.在C++类中为类添加用户输入响应"></a>2.在C++类中为类添加用户输入响应</h4><p>在网上搜了一下如何给一个脚本添加键盘输入事件，也不是那么全，有价值的一个提问是这个</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/166084/check-keyboard-events-in-code.html" target="_blank" rel="noopener">Check Keyboard Event in code</a></li>
+</ul>
+<p>但是试了一下并不好用，就自己的理解来说，基本上想要键盘的输入的事件响应的基本上都应该去继承UE4的<code>PawnActor</code>类去了，而我自己就是想用键盘来调试而已。继承的类是<code>ActorComponent</code>，并不能实现他们的代码。后来找了一找还是有实现方法的。</p>
+<p>首先要去UE4的Editor中的Project Settings中的input选项中将自己想要绑定的键位命名并登录。我起的名字就是<code>PressedF</code>等等。</p>
+<p>然后就是在c++中实现绑定了：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SampleActorComponent.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> USampleActorComponent::BeginPlay()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 因为要绑定一下键位的事件，所以需要在这里写</span></span><br><span class="line">    <span class="keyword">this</span>-&gt;GetOwner()-&gt;EnableInput(<span class="keyword">this</span>-&gt;GetWorld()-&gt;GetFirstPlayerController());</span><br><span class="line">    UInputComponent * myInputComp = <span class="keyword">this</span>-&gt;GetOwner()-&gt;InputComponent;</span><br><span class="line">    <span class="keyword">if</span>(myInputComp)    <span class="comment">// check(myInputComp)</span></span><br><span class="line">    &#123;</span><br><span class="line">        SetupMyPlayerInput(myInputComponent);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> USampeActorComponent::SetupMyPlayerInput(UInputComponent * myInputComponent)</span><br><span class="line">&#123;</span><br><span class="line">    myInputComponent-&gt;BindAction(<span class="string">"PressedF"</span>, IE_Pressed, <span class="keyword">this</span>, &amp;USampleActorComponent::PressedMethod);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> USampleActorComponent::PressedMethod()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 这里是按下键盘键位之后的动作内容</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SampleActorCompoennt.h</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">USampleActorComponent</span> :</span> <span class="keyword">public</span> UActorComponent</span><br><span class="line">&#123;</span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    UFUNCTINN(BlueprintCallable, Category = <span class="string">"MyUE4Class"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">PressedMethod</span><span class="params">()</span></span>;  <span class="comment">// 这个在头文件的声明一定要使用UFUNCTION宏来修饰否则没有作用</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SetupMyPlayerInput</span><span class="params">(UInputComponent * myInputComponent)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>完整的使用方法大概就是这样，应该有一篇文章介绍的很详细的但是关掉了页面不太好找了。</p>
+<h4 id="3-像Unity一样保存场景中的参照"><a href="#3-像Unity一样保存场景中的参照" class="headerlink" title="3.像Unity一样保存场景中的参照"></a>3.像Unity一样保存场景中的参照</h4><p>在Unity中把scene中的参照直接拖进脚本的声明公共变量以达到快速参照的目的，在UE4中也有类似的用法。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">USampleClass</span> :</span> <span class="keyword">public</span> UActorComponent</span><br><span class="line">&#123;</span><br><span class="line">    GENERATED_BODY()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    USampleClass();</span><br><span class="line"></span><br><span class="line">    UPROPERTY(EditAnywhere, Category = <span class="string">"Edit"</span>)</span><br><span class="line">    AActor * targrtActor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为属性添加UPROPERTY()宏让变量暴露给编辑器，然后在该脚本的Detail面板上wei该变量找到场景中的Actor参照。虽然不能拖拽了。</p>
+<hr>
+<p><span style="color: blue">Tips更新(2020/06/03)</span></p>
+<p>上面是C++中编程的场景，在UE的蓝图中保存参照的时候非常简单，直接将Actor从场景中拖到蓝图里就自动出现对象的引用了。但是在使用的过程中还是会有一些不便，比如说还要调整窗口的大小进行拖拽。</p>
+<p>我在浏览官网的时候偶然发现的一个功能，<strong>就是在进入蓝图之前先选中Actor，复数的Actor也是可以的（当然这里应该不仅限于Actor），然后打开蓝图之后就会出现Call Function On Selected Actors这样的选项</strong>。嗯，这应该会有些用处。</p>
+<hr>
+<h4 id="4-获取Actor上的Component"><a href="#4-获取Actor上的Component" class="headerlink" title="4.获取Actor上的Component"></a>4.获取Actor上的Component</h4><p>不知道是不是UE4中获取Actor上的组件就这么麻烦还是我没找到，组件的获取并不是那么单纯的事情。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取名为targetActor身上的脚本组件（</span></span><br><span class="line"></span><br><span class="line">TArray&lt;USampleActorComponent*&gt; Comps;</span><br><span class="line">targetActor_p-&gt;GetComponents&lt;USampleActorComponent&gt;(Comps);</span><br><span class="line"><span class="comment">// 这样Comps[0]的内容应该就是想要的组件的参照了</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="5-在UEC-中实现代理"><a href="#5-在UEC-中实现代理" class="headerlink" title="5.在UEC++中实现代理"></a>5.在UEC++中实现代理</h4><p>我在现实中都没怎么用到过得代理，我竟然一次用了这么多。在UE4中代理的制作感觉好简单好方便。之前有一个是在C++中声明代理，但是实现是在蓝图中的，叫Multi-Cast-Delegate好像。这次完全是在C++中声明在C++中实现代理。</p>
+<p>再来复述一下代理的情况：一个类想要做一件事儿，但是这件事跟这个类的关系是只想知道这件事做了而已，具体做的内容完全不关心，这件事情的实现是另一个类的分工。这个时候只要在自己的类里面声明一个代理，当想要执行的时候通知那个类就行。就像是事件一样。</p>
+<h5 id="1-定义代理类型"><a href="#1-定义代理类型" class="headerlink" title="1.定义代理类型"></a>1.定义代理类型</h5><p>在UE4中引擎为我们做了大部分，而我们只要用就可以了。首先定义代理的类型。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"CoreMinimal.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"SampleDelegateComponent.h"</span>  <span class="comment">// 我们需要委托的类头文件声明</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"SampleActoomponent.generated.h"</span>   <span class="comment">// 这个头文件是自动生成的，没有的话要手动补上去就是自己的文件名加上.generated.h，而且这个声明必须要在所有的声明的最后。原因不清楚</span></span></span><br><span class="line"></span><br><span class="line">DECLARE_DELEGATE(SampleDelegate)</span><br><span class="line"></span><br><span class="line">UCLASS()</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">USampleActorComponnet</span> :</span> UActorComponent</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Class Contents</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样我们便声明了一个类型为SampleDelegate的代理了。</p>
+<h5 id="2-声明代理"><a href="#2-声明代理" class="headerlink" title="2.声明代理"></a>2.声明代理</h5><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在USampleActorComponent中的声明这个该类型的代理变量</span></span><br><span class="line">SampleDelegate sample_delegate;</span><br></pre></td></tr></table></figure>
+<h5 id="3-绑定代理"><a href="#3-绑定代理" class="headerlink" title="3.绑定代理"></a>3.绑定代理</h5><p>用上一条的方法获取到level中的Actor的参照，然后将代理绑定到这个想要代为我们执行的实例上去。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取得需要绑定的实例参照</span></span><br><span class="line"><span class="keyword">if</span>(targetActor)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 获取到实例身上的脚本组件</span></span><br><span class="line">    TArray&lt;USampleDelegateComponent*&gt; Comps;</span><br><span class="line">    targetActor-&gt;GetComponents&lt;USampleDelegateComponent&gt;(Comps);</span><br><span class="line">    <span class="comment">// 绑定代理</span></span><br><span class="line">    sample_delegate.BindUObject(Comp[<span class="number">0</span>], &amp;USampleDelegateComponent::MethodWanted);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-代理执行"><a href="#4-代理执行" class="headerlink" title="4.代理执行"></a>4.代理执行</h5><p>剩下的就是在想要的时候执行代理就好了。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sample_delegate.Execute();</span><br></pre></td></tr></table></figure></p>
+<h4 id="6-动态加载资源"><a href="#6-动态加载资源" class="headerlink" title="6.动态加载资源"></a>6.动态加载资源</h4><p>关于动态加载资源又是能说一箩筐的话题，这次只记录自己用到的。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UTexture2D * sampleTex = LoadObject&lt;UTexture2D&gt;(<span class="literal">NULL</span>, TEXT(<span class="string">"Texture2D'/Game/Path..'"</span>), <span class="literal">NULL</span>, LOAD_None, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure></p>
+<p>参数啥的也不太清楚，用的时候按照这个方向查吧。之后的关于如何从零开始制作烟雾特效的教程里应该会出现。</p>
+<h4 id="7-动态改变物体材质参数"><a href="#7-动态改变物体材质参数" class="headerlink" title="7.动态改变物体材质参数"></a>7.动态改变物体材质参数</h4><p>关于UE4的材质，有好多的话要说，关于如何动态的改变一个物体材质的问题要是不是自己非要用C++写蓝图，估计也不会钻研的那么深。</p>
+<p>首先是要动态的改变一个材质里面的参数需要我们创建一个动态的材质。也就是说我们需要得到场景中的物体的材质的实例参照，然后以这个参照为模板创建一个动态材质，再把这个修改了的动态材质赋给物体。</p>
+<p>老规矩，上代码：</p>
+<p><strong>.h文件</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Class内，省略大部分框架代码</span></span><br><span class="line"><span class="comment">// 头文件中声明材质</span></span><br><span class="line">UMaterial * target_material;</span><br><span class="line">UMaterialInstanceDynamic * target_material_dynamic;</span><br></pre></td></tr></table></figure></p>
+<p><strong>.cpp文件</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造函数中使用ConstructorHelpers获取到物体的材质</span></span><br><span class="line"><span class="keyword">static</span> ConstructorHelpers::FObjectFinder&lt;UMaterial&gt; targetMT(TEXT(<span class="string">"PATH"</span>));</span><br><span class="line">target_material = targetMT.Object;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 随后可以在BeginPlay函数中对动态材质进行初始化</span></span><br><span class="line">target_material_dynamic = UMaterialInstanceDynamic::Create(target_material, <span class="keyword">this</span>-&gt;GetWorld());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可以为材质中的变量赋值</span></span><br><span class="line">target_material_dynamic-&gt;SetScalarParameterValue(<span class="string">"MaterialParaName"</span>,<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 拓展复习~</span></span><br><span class="line"><span class="comment">// 获取一个UStaticMesh上的组件的材质</span></span><br><span class="line">TArray&lt;UStaticMeshComponent*&gt;comps;</span><br><span class="line"><span class="keyword">this</span>-&gt;GetOwner()-&gt;GetComponnets&lt;UStaticMeshComponent&gt;(comps);</span><br><span class="line">target_material = (UMaterial*)comps[<span class="number">0</span>]-&gt;GetMaterial(<span class="number">0</span>)    <span class="comment">// 指针类型强制转换这一步很重要</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新材质结束之后要赋给物体</span></span><br><span class="line">mesh_comp = comps[<span class="number">0</span>]</span><br><span class="line">mesh_comp-&gt;SetMaterial(<span class="number">0</span>, target_material_dynamic);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面的是比较重要的一步</span></span><br><span class="line"><span class="comment">// 在BeginPlay中实例化动态材质之后需要</span></span><br><span class="line">target_material_dynamic-&gt;AddToRoot();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 完后再EndPlay中将动态材质移除</span></span><br><span class="line">target_material_dynamic-&gt;RemoveFromRoot();</span><br></pre></td></tr></table></figure></p>
+<p>这个也是吃了苦头的，因为自己非要用C++写，不用蓝图，这东西谁都不会告诉我啊。AddToRoot这个操作让UE的GC不会把我们创建的动态材质给回收掉。而使用的AddToRoot的东西在结束或者不想用的时候RemoveFromRoot，以便回收。哎呀没加的时候UE4崩的不要不要的。</p>
+<h4 id="8-UE-LOG输出奇奇怪怪的数据类型"><a href="#8-UE-LOG输出奇奇怪怪的数据类型" class="headerlink" title="8.UE_LOG输出奇奇怪怪的数据类型"></a>8.UE_LOG输出奇奇怪怪的数据类型</h4><p>总是想输出些什么。使用UE_LOG可以在UE4的Editor输出运行的信息。但是C++嘛，你让它输出<code>FString</code>类型的东西，他不认识就不输出这个时候就像下面这样：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UE_LOG(LogTemp, Log, TEXT(<span class="string">"output message %s"</span>), *(FDateTime::Now().ToString()));</span><br></pre></td></tr></table></figure></p>
+<p>使用指针强制转换，我也不知道是个什么原理。</p>
+<h4 id="9-FTimerManager定时器"><a href="#9-FTimerManager定时器" class="headerlink" title="9.FTimerManager定时器"></a>9.FTimerManager定时器</h4><p>定时器是个好东西。但是要怎么用呢？</p>
+<p>首先要获取到这个定时器，在世界中有这么一个定时器：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 为什么要加 &amp; ，引用的作用应该就是我不知道，不加就报错。我也不知道我是怎么灵机一动加上就好用的。</span></span><br><span class="line">FTimeManager &amp;timer = <span class="keyword">this</span>-&gt;GetOwner()-&gt;GetWorldTimerManager();</span><br></pre></td></tr></table></figure></p>
+<p>然后声明一个Handle<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在.h文件中声明一个Timer Handle供我们使用，一个Handle就是一个定时的名字应该</span></span><br><span class="line">FTimerHandle timer_handle;</span><br></pre></td></tr></table></figure></p>
+<p>最后开始定时：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timer.SetTimer(timer_handle, <span class="keyword">this</span>, &amp;USampleActorComponent::TimerMethodWnted, <span class="number">1.0</span>, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure></p>
+<p>参数的意思应该一目了然了。</p>
+<h3 id="UE4项目右键找不到GenerateProjectFile选项的问题"><a href="#UE4项目右键找不到GenerateProjectFile选项的问题" class="headerlink" title="UE4项目右键找不到GenerateProjectFile选项的问题"></a>UE4项目右键找不到GenerateProjectFile选项的问题</h3><p>换新电脑或者重做系统之后会遇到的麻烦事儿，就是想要重新生成UE4的<strong>sln</strong>工程文件，右键却找不到重新生成选项的问题。解决方案是：</p>
+<p><strong>找到使用的引擎文件中的UnrealVersionSelector.exe文件，并双击。</strong></p>
+<p>一般这个文件都是在UE4的<em>Binary</em>文件夹下面。</p>
+<p>参考资料：<br><a href="https://forums.unrealengine.com/development-discussion/content-creation/81964-association-uproject-unreal-are-broken?109862-Association-uproject-unreal-are-broken=" target="_blank" rel="noopener">Association .uproject / unreal are broken</a></p>
+<h3 id="UE4的uproject文件中EngineAssociation项目版本管理的问题"><a href="#UE4的uproject文件中EngineAssociation项目版本管理的问题" class="headerlink" title="UE4的uproject文件中EngineAssociation项目版本管理的问题"></a>UE4的uproject文件中EngineAssociation项目版本管理的问题</h3><p>基本上在项目版本管理也就是使用Git之类，使用自定义引擎的时候避免不了遇到这个问题。</p>
+<p>一时之计是去RegistryEditor那里 <code>HKEY_CURRENT_USER\SOFTWARE\Epic Games\Unreal Engine\Builds</code> 路径下面找到自己自定义的引擎的名字，修改为跟版本管理攻击一样的数列，这样差分就消失了。等下次有人又更新了就随之更新，反正uproject文件的更新频率不会高的。</p>
+<p>但是这也是权宜之计，我也知道。</p>
+<p>也许会有更好的方法。</p>
+<p>貌似可以有直接修改源码的方式，只不过我没有试过。</p>
+<ul>
+<li><a href="https://historia.co.jp/archives/3113/" target="_blank" rel="noopener">[UE4] エンジンをコードからビルドした場合のバージョン表記</a></li>
+</ul>
+<h2 id="UE4知识拓展"><a href="#UE4知识拓展" class="headerlink" title="UE4知识拓展"></a>UE4知识拓展</h2><p>主要用来记录一些常见但是需要理解的优先级不高或者不太常用的知识点的拓展。</p>
+<h3 id="Wildcard-类型"><a href="#Wildcard-类型" class="headerlink" title="Wildcard 类型"></a>Wildcard 类型</h3><p><code>Wildcard</code>这个数据类型是UE4的Editor的可以适配所有类型的Pin的类型。</p>
+<p>可以用来作为一些宏的Event的类型指定，就像为函数提供一个delegate一样，UE4的蓝图的宏也可以使用类似的特性。</p>
+<ul>
+<li><a href="http://papersloth.hatenablog.com/entry/2019/10/23/024329" target="_blank" rel="noopener">UE4 Blueprintでdelegateを引数で使用する方法</a></li>
+</ul>
+<p>这篇文章的知识点随着时间的推移开始变得有些杂乱了，该考虑一下重新整理文章内容了。</p>
+<h3 id="从UE4的源码中对工程进行设置"><a href="#从UE4的源码中对工程进行设置" class="headerlink" title="从UE4的源码中对工程进行设置"></a>从UE4的源码中对工程进行设置</h3><p><span style="color:blue">2020/06/03更新</span></p>
+<p>参照官网上的步骤下载并配置源码版UnrealEngine，这其中有一个我漏掉的步骤，就是把UE4设置为启动工程</p>
+<p>即在工程项目的SolutionExplorer中找到项目右键，会出现<strong>Set as StartUp Project</strong>,对，要执行这一步操作，然后在Build界面中选择<strong>Build UE4</strong>，因为这里不选直接使用默认的编译的话，会把全体都编译，有时间可以这么搞，没时间还是别这么搞，真的费时间。</p>
+<p>这样按理说就可以使用编译好的引擎打开想要工作的项目了。</p>
+<h3 id="DefaultBuildSettings"><a href="#DefaultBuildSettings" class="headerlink" title="DefaultBuildSettings"></a>DefaultBuildSettings</h3><p>UE4自4.24版本之后更改了默认的编译设定，<code>BuildSettingsVersion.V2</code></p>
+<p>Here’s an example V1(legacy) target.cs file:<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copyright 1998-2019 Epic Games, Inc. All Right Reserved.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnrealBuildTool;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AGobesTestEditorTarget</span> : <span class="title">TargetRules</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AGnoesTsetEditorTarget</span>(<span class="params"> TargetInfo Target </span>) : <span class="title">base</span>(<span class="params">Target</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Type = TargetType.Editor;</span><br><span class="line">        DefaultBuildSettings = BuildSettingsVersion.V1;</span><br><span class="line">        ExtraModuleNames.AddRange( <span class="keyword">new</span> String[] &#123; <span class="string">"AgonesTest"</span> &#125; );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Here’s an example V2 (new) target.cs:<br><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copyright 1998-2019 Epic Games, Inc. All Right Reserved.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> UnrealBuildTool;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AGobesTestEditorTarget</span> : <span class="title">TargetRules</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AGnoesTsetEditorTarget</span>(<span class="params"> TargetInfo Target </span>) : <span class="title">base</span>(<span class="params">Target</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Type = TargetType.Editor;</span><br><span class="line">        DefaultBuildSettings = BuildSettingsVersion.V2;</span><br><span class="line">        ExtraModuleNames.AddRange( <span class="keyword">new</span> String[] &#123; <span class="string">"AgonesTest"</span> &#125; );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>还有就是需要注意的是，当由之前的V1版本切换到V2版本之后会出现include文件路径不对的问题，换了一种编译方式，编译路径也不一样了。<br>然后就是自己的发现就是V2编译的路径变成了<strong>相对路径</strong>。</p>
+<h1 id="道听途说"><a href="#道听途说" class="headerlink" title="道听途说"></a>道听途说</h1><h4 id="1-关于C-中的资源释放"><a href="#1-关于C-中的资源释放" class="headerlink" title="1.关于C++中的资源释放"></a>1.关于C++中的资源释放</h4><p>一般在c++中应该是资源的获取与申请（<code>new</code>等等的操作）与资源的释放都是需要程序员手动操作的。但是如果使用了UE管理的资源，比如继承了UE中的类库等等的操作，那么释放这些资源的操作，在UE中会自动释放而不需要程序员的额外操作，反而要是操作了还会出问题。</p>
+<p>当然这个问题只是道听途说，未能够验证。</p>
+<p>当然需要仔细调查了啊</p>
+<h4 id="2-关于UE中UObject的派生对象的垃圾回收问题"><a href="#2-关于UE中UObject的派生对象的垃圾回收问题" class="headerlink" title="2.关于UE中UObject的派生对象的垃圾回收问题"></a>2.关于UE中UObject的派生对象的垃圾回收问题</h4><p>如果一个UObject的派生类对象中有一个UObject的派生类对象的指针变量，当这个指针变量经过<code>NewObject&lt;&gt;()</code>的操作实例化了之后，这个实例化对象就成为了<strong>GC对象</strong>（garbage collection）,但是仅仅如此还不足以达到自动回收的目的，像下面这样在声明之前加上<code>UPROPERTY()</code>宏，就不需要显式的<code>delete</code>垃圾回收了。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY()</span><br><span class="line">UObject* MyObjectReference;</span><br></pre></td></tr></table></figure></p>
+<p>总结来说，在C++中使用了<code>new</code>等等的方式来申请了一部分空间的话在使用结束的时候需要显式的释放掉，否则的话就会造成内存泄漏。然而上述的使用方式会使得这样声明的实例对象能够得到的资源自动回收。</p>
+<p>参考来源:</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/4485/question-uobject-pointer-references.html" target="_blank" rel="noopener">[Question]UObject Pointer References</a></li>
+</ul>
+<h1 id="关于C-好像发现了一个不得了的链接"><a href="#关于C-好像发现了一个不得了的链接" class="headerlink" title="关于C++好像发现了一个不得了的链接"></a>关于C++好像发现了一个不得了的链接</h1><p>貌似可以在这个链接中找到C++的标准文档，英文文档。</p>
+<ul>
+<li><a href="http://www.open-std.org/" target="_blank" rel="noopener">Open Standards</a></li>
+</ul>
+<h1 id="一些感觉蛮重要的文章"><a href="#一些感觉蛮重要的文章" class="headerlink" title="一些感觉蛮重要的文章"></a>一些感觉蛮重要的文章</h1><p>这里放置一些我想看但是暂时没有时间看的文章。</p>
+<ul>
+<li><a href="http://techblog.sega.jp/entry/2018/11/26/100000" target="_blank" rel="noopener">20年オヤジのUnreal Engine 4 TIPS</a></li>
+</ul>
+<p>感觉是比较新的知识点，总是有看到过的影子，关于<strong>MeshDistanceFields</strong>:</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/ja/Engine/Rendering/LightingAndShadows/MeshDistanceFields/index.html" target="_blank" rel="noopener">メッシュディスタンス フィールド</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/编程/" rel="tag"># 编程</a>
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/C#中的单例模式-SingletonPattern/" rel="prev" title="C#中的单例模式-SingletonPattern">
+      <i class="fa fa-chevron-left"></i> C#中的单例模式-SingletonPattern
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/关于学习UE4的粒子系统过程中遇到的疑问/" rel="next" title="关于学习UE4的粒子系统过程中遇到的疑问">
+      关于学习UE4的粒子系统过程中遇到的疑问 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中常见的知识点"><span class="nav-number">1.</span> <span class="nav-text">UE4中常见的知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#更新历史"><span class="nav-number">1.1.</span> <span class="nav-text">更新历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-部分"><span class="nav-number">1.2.</span> <span class="nav-text">C++部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#C-与C-的不同之处"><span class="nav-number">1.2.1.</span> <span class="nav-text">C++与C#的不同之处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中的C-不同的地方"><span class="nav-number">1.2.2.</span> <span class="nav-text">UE4中的C++不同的地方</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-UCLASS-宏"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">1.UCLASS()宏</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UCLASS-大概的使用方法"><span class="nav-number">1.2.2.1.1.</span> <span class="nav-text">UCLASS()大概的使用方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UCLASS-参数的含义"><span class="nav-number">1.2.2.1.2.</span> <span class="nav-text">UCLASS() 参数的含义</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#USTRUCT-结构体"><span class="nav-number">1.2.2.1.3.</span> <span class="nav-text">USTRUCT()结构体</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UENUM-枚举类型"><span class="nav-number">1.2.2.1.4.</span> <span class="nav-text">UENUM()枚举类型</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-GENERAED-BODY"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2.GENERAED_BODY()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-UPROPERTY-UFUNCTION"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">3.UPROPERTY() UFUNCTION()</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UPROPERTY-宏"><span class="nav-number">1.2.2.3.1.</span> <span class="nav-text">UPROPERTY()宏</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UFUNCTION宏"><span class="nav-number">1.2.2.3.2.</span> <span class="nav-text">UFUNCTION宏</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-TArray-UE4中的数组（重要）"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">4.TArray-UE4中的数组（重要）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-C-中的静态函数static与UE-C-Unreal-Engine-C-的静态函数"><span class="nav-number">1.2.2.5.</span> <span class="nav-text">5.C++中的静态函数static与UE C++(Unreal Engine C++)的静态函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-Blueprint函数node-节点-的输入与输出"><span class="nav-number">1.2.2.6.</span> <span class="nav-text">6.Blueprint函数node(节点)的输入与输出</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Blueprint支持的数据类型很有限"><span class="nav-number">1.2.2.6.1.</span> <span class="nav-text">Blueprint支持的数据类型很有限</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-UE4的Head-File"><span class="nav-number">1.2.2.7.</span> <span class="nav-text">7.UE4的Head File</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Actor-h"><span class="nav-number">1.2.2.7.1.</span> <span class="nav-text">Actor.h</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#xxx-generated-h"><span class="nav-number">1.2.2.7.2.</span> <span class="nav-text">xxx.generated.h</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-UE4中的特殊容器"><span class="nav-number">1.2.2.8.</span> <span class="nav-text">8.UE4中的特殊容器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-FVector"><span class="nav-number">1.2.2.8.1.</span> <span class="nav-text">1.FVector</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-类的初始值设定"><span class="nav-number">1.2.2.9.</span> <span class="nav-text">9.类的初始值设定</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pragma-once-vs-include-guard"><span class="nav-number">1.2.3.</span> <span class="nav-text">#pragma once vs include guard</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ifndef方式"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">#ifndef方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#progma-once方式"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">#progma once方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-中的类与结构体"><span class="nav-number">1.2.4.</span> <span class="nav-text">C++中的类与结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启HSLS语法高亮"><span class="nav-number">1.2.5.</span> <span class="nav-text">开启HSLS语法高亮</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HLSL-Tools-for-Visual-Studio"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">HLSL Tools for Visual Studio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在VS2017中开启语法高亮（syntax-high-lighting）"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">在VS2017中开启语法高亮（syntax high lighting）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UnrealEngine部分"><span class="nav-number">1.3.</span> <span class="nav-text">UnrealEngine部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4中使用的一些Tip"><span class="nav-number">1.3.1.</span> <span class="nav-text">UE4中使用的一些Tip</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-快速制作封闭空间"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">1. 快速制作封闭空间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-调整模型的模型坐标的原点"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">2.调整模型的模型坐标的原点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-制作天空球-与雾"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">3.制作天空球(与雾)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-UE4中的Volume应用"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">4.UE4中的Volume应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Z-Fighting"><span class="nav-number">1.3.1.5.</span> <span class="nav-text">5.Z-Fighting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-将选定的Actor合并为组"><span class="nav-number">1.3.1.6.</span> <span class="nav-text">6.将选定的Actor合并为组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-UE4中的Material和Material-Function"><span class="nav-number">1.3.1.7.</span> <span class="nav-text">7.UE4中的Material和Material Function</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE-C-中的需要注意的问题"><span class="nav-number">1.3.2.</span> <span class="nav-text">UE C++中的需要注意的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ConstructorHelpers类的使用"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">1.ConstructorHelpers类的使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-在C-类中为类添加用户输入响应"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">2.在C++类中为类添加用户输入响应</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-像Unity一样保存场景中的参照"><span class="nav-number">1.3.2.3.</span> <span class="nav-text">3.像Unity一样保存场景中的参照</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-获取Actor上的Component"><span class="nav-number">1.3.2.4.</span> <span class="nav-text">4.获取Actor上的Component</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-在UEC-中实现代理"><span class="nav-number">1.3.2.5.</span> <span class="nav-text">5.在UEC++中实现代理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-定义代理类型"><span class="nav-number">1.3.2.5.1.</span> <span class="nav-text">1.定义代理类型</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-声明代理"><span class="nav-number">1.3.2.5.2.</span> <span class="nav-text">2.声明代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-绑定代理"><span class="nav-number">1.3.2.5.3.</span> <span class="nav-text">3.绑定代理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-代理执行"><span class="nav-number">1.3.2.5.4.</span> <span class="nav-text">4.代理执行</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-动态加载资源"><span class="nav-number">1.3.2.6.</span> <span class="nav-text">6.动态加载资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-动态改变物体材质参数"><span class="nav-number">1.3.2.7.</span> <span class="nav-text">7.动态改变物体材质参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-UE-LOG输出奇奇怪怪的数据类型"><span class="nav-number">1.3.2.8.</span> <span class="nav-text">8.UE_LOG输出奇奇怪怪的数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-FTimerManager定时器"><span class="nav-number">1.3.2.9.</span> <span class="nav-text">9.FTimerManager定时器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4项目右键找不到GenerateProjectFile选项的问题"><span class="nav-number">1.3.3.</span> <span class="nav-text">UE4项目右键找不到GenerateProjectFile选项的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UE4的uproject文件中EngineAssociation项目版本管理的问题"><span class="nav-number">1.3.4.</span> <span class="nav-text">UE4的uproject文件中EngineAssociation项目版本管理的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UE4知识拓展"><span class="nav-number">1.4.</span> <span class="nav-text">UE4知识拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Wildcard-类型"><span class="nav-number">1.4.1.</span> <span class="nav-text">Wildcard 类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从UE4的源码中对工程进行设置"><span class="nav-number">1.4.2.</span> <span class="nav-text">从UE4的源码中对工程进行设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DefaultBuildSettings"><span class="nav-number">1.4.3.</span> <span class="nav-text">DefaultBuildSettings</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#道听途说"><span class="nav-number">2.</span> <span class="nav-text">道听途说</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-关于C-中的资源释放"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">1.关于C++中的资源释放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-关于UE中UObject的派生对象的垃圾回收问题"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">2.关于UE中UObject的派生对象的垃圾回收问题</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于C-好像发现了一个不得了的链接"><span class="nav-number">3.</span> <span class="nav-text">关于C++好像发现了一个不得了的链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些感觉蛮重要的文章"><span class="nav-number">4.</span> <span class="nav-text">一些感觉蛮重要的文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

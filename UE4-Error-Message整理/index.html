@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="整理在学习UE4的过程中遇到的一些BUG。">
+<meta name="keywords" content="UE4,UE4Error">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4:Error_Message整理">
+<meta property="og:url" content="http://stonelzp.github.io/UE4-Error-Message整理/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="整理在学习UE4的过程中遇到的一些BUG。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://stonelzp.github.io/UE4-Error-Message整理/Annotation%202020-07-16%20181212.jpg">
+<meta property="og:updated_time" content="2024-11-12T11:51:46.971Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4:Error_Message整理">
+<meta name="twitter:description" content="整理在学习UE4的过程中遇到的一些BUG。">
+<meta name="twitter:image" content="http://stonelzp.github.io/UE4-Error-Message整理/Annotation%202020-07-16%20181212.jpg">
+
+<link rel="canonical" href="http://stonelzp.github.io/UE4-Error-Message整理/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4:Error_Message整理 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/UE4-Error-Message整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4:Error_Message整理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-08-16 17:28:14" itemprop="dateCreated datePublished" datetime="2018-08-16T17:28:14+09:00">2018-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:46" itemprop="dateModified" datetime="2024-11-12T20:51:46+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>整理在学习UE4的过程中遇到的一些BUG。</p>
+<a id="more"></a>
+<h1 id="UE4中遇见的报错"><a href="#UE4中遇见的报错" class="headerlink" title="UE4中遇见的报错"></a>UE4中遇见的报错</h1><p>旨在记录UE4学习过程中遇见的各种报错。</p>
+<h2 id="class关键字的使用"><a href="#class关键字的使用" class="headerlink" title="class关键字的使用"></a>class关键字的使用</h2><p><code>syntax error:missing &#39;;&#39; before &#39;*&#39;</code> 这样完全不知到为什么的报错。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://answers.unrealengine.com/questions/701590/syntax-error-missing-before-first-person-shooter-c.html" target="_blank" rel="noopener">syntax error: missing ‘;’ before ‘*’ (First Person Shooter C++ Tutorial)</a></li>
+</ul>
+<p>加了一个关键字<code>class</code>就解决了。</p>
+<p>在UE4C++里面，ForwardDeclaration是非常常见的，要铭记于心才行。<br>关于ForwardDeclaration:</p>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/what-are-forward-declarations-in-c/" target="_blank" rel="noopener">What are Forward declarations in C++</a></li>
+</ul>
+<h2 id="bUsedWithInstancedStaticMeshes"><a href="#bUsedWithInstancedStaticMeshes" class="headerlink" title="bUsedWithInstancedStaticMeshes"></a>bUsedWithInstancedStaticMeshes</h2><p>时间太过于久远再加上自己的懒惰，这个错误到底是在说什么我也不清楚了。</p>
+<p><code>LogMaterial: Warning: Material /Game/MagicCircle/Materials/MT_Smoke.MT_Smoke missing bUsedWithInstancedStaticMeshes=True! Default Material will be used in game.</code></p>
+<h2 id="包含头文件的问题"><a href="#包含头文件的问题" class="headerlink" title="包含头文件的问题"></a>包含头文件的问题</h2><p>就像下面的信息描述的，我使用了一个<code>TWeakObjectPtr</code>来进行值的初始化，于是便报错了，各种调查结果显示，是赋值的值的类型的头文件没有好好的包含进去，以至于找不到该类型。</p>
+<p><code>error C2664: &#39;FWeakObjectPtr &amp;FWeakObjectPtr::operator =(const FWeakObjectPtr &amp;)&#39;: cannot convert argument 1 from &#39;T *&#39; to &#39;const UObject *&#39;</code></p>
+<p><img src="Annotation 2020-07-16 181212.jpg" alt="Error description"></p>
+<p>参考的链接：<a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/42246-tweakobjectptr-with-custom-character-class" target="_blank" rel="noopener">TWeakObjectPtr with Custom Character Class</a></p>
+<p><code>error C2440: &#39;initializing&#39; : cannot convert from &#39;initializer-list&#39;</code></p>
+<p>关于这个错误类型，涉及到一些初始化操作，但我的情况下还是头文件没有包含进去的问题，真是头大。</p>
+<h2 id="unresolved-eternal-symbol类型"><a href="#unresolved-eternal-symbol类型" class="headerlink" title="unresolved eternal symbol类型"></a>unresolved eternal symbol类型</h2><p>有的时候会在错误信息中包含上述关键词的错误</p>
+<p><code>error Link2019: unresolved external symbol 函数名</code> 这样的错误是找到了函数的声明但是却找不到函数的定义。</p>
+<p>一般需要检查Build.cs文件中的依赖项是否添加。</p>
+<p>亦或者出现在利用另一个<strong>Module</strong>中的函数的时候，找不到函数的实现，出现上面的错误编译不通过。实际上调用的函数是虚函数的话就没有问题，关键是不是虚函数的情况。</p>
+<p>所以问我怎么办我也不太清楚，这一部分好好参考如何添加Module或者ActionRPG的LoadScreen部分的源码好好实现应该就没有问题了。</p>
+<h2 id="蓝图的编译错误"><a href="#蓝图的编译错误" class="headerlink" title="蓝图的编译错误"></a>蓝图的编译错误</h2><p><code>Can’t parse default value ‘none’ for ...</code>这样的错误，发生在变量的地方，一把都是Array的情况，就是明明没有问题，编译就是通不过。</p>
+<p>搜了一下发现UE4.26版本会经常出现这个问题，我也的确用的就是UE4.26。解决方案就是:</p>
+<ul>
+<li>向这个Array里添加一个元素</li>
+<li>移除这个元素</li>
+<li>再编译保存，编译错误就会消失</li>
+</ul>
+<p>出现这个问题的原因：</p>
+<blockquote>
+<p>It has kept the original value of “none” instead of updating it to be an “Empty Array”</p>
+<p>To fix you need to modify the default value and save.</p>
+</blockquote>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/t/cant-parse-default-value-none-for-cameras/478596" target="_blank" rel="noopener"> Can’t parse default value ‘none’ for Cameras?</a></li>
+</ul>
+<h1 id="别人的劳动成果"><a href="#别人的劳动成果" class="headerlink" title="别人的劳动成果"></a>别人的劳动成果</h1><p>另外贴一个别人整理的一些报错的文章</p>
+<ul>
+<li><a href="https://finap.hateblo.jp/entry/2019/12/06/000000" target="_blank" rel="noopener">UE4 C++ビルドエラー対応覚書</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+              <a href="/tags/UE4Error/" rel="tag"># UE4Error</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/UE4-ConstructorHelpers-FObjectFinder/" rel="prev" title="UE4-ConstructorHelpers::FObjectFinder">
+      <i class="fa fa-chevron-left"></i> UE4-ConstructorHelpers::FObjectFinder
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/git-rebases使用方法/" rel="next" title="git-rebases使用方法">
+      git-rebases使用方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4中遇见的报错"><span class="nav-number">1.</span> <span class="nav-text">UE4中遇见的报错</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#class关键字的使用"><span class="nav-number">1.1.</span> <span class="nav-text">class关键字的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bUsedWithInstancedStaticMeshes"><span class="nav-number">1.2.</span> <span class="nav-text">bUsedWithInstancedStaticMeshes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包含头文件的问题"><span class="nav-number">1.3.</span> <span class="nav-text">包含头文件的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unresolved-eternal-symbol类型"><span class="nav-number">1.4.</span> <span class="nav-text">unresolved eternal symbol类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#蓝图的编译错误"><span class="nav-number">1.5.</span> <span class="nav-text">蓝图的编译错误</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#别人的劳动成果"><span class="nav-number">2.</span> <span class="nav-text">别人的劳动成果</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="UE4中的MetadataSpecifiers是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是PropertySpecifers这个概念。">
+<meta name="keywords" content="UE4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4中的Meta修饰符">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-meta-data-specifiers/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="UE4中的MetadataSpecifiers是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是PropertySpecifers这个概念。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.035Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4中的Meta修饰符">
+<meta name="twitter:description" content="UE4中的MetadataSpecifiers是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是PropertySpecifers这个概念。">
+
+<link rel="canonical" href="http://stonelzp.github.io/ue4-meta-data-specifiers/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4中的Meta修饰符 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue4-meta-data-specifiers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4中的Meta修饰符
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-10 12:21:00" itemprop="dateCreated datePublished" datetime="2021-05-10T12:21:00+09:00">2021-05-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>UE4中的<strong>MetadataSpecifiers</strong>是个很邪门的东西，一开始的时候根本不知道是什么东西怎么用，等到对UE4C++有了较为深入的了解还有引擎的源码读多了之后，才知道这个东西虽然不用也行但是用了有的时候会更方便一些。与之同样重要或者说更为重要的是<strong>PropertySpecifers</strong>这个概念。</p>
+<a id="more"></a>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>发现了一个非常非常有用的，需要时常看看：</p>
+<ul>
+<li><a href="https://benui.ca/unreal/uproperty/" target="_blank" rel="noopener">All UPROPERTY Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/ufunction/" target="_blank" rel="noopener">All UFUNCTION Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uparam/" target="_blank" rel="noopener">All UPARAM Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uclass/" target="_blank" rel="noopener">All UCLASS Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/ustruct/" target="_blank" rel="noopener">All USTRUCT Specifiers</a></li>
+<li><a href="https://benui.ca/unreal/uenum-umeta/" target="_blank" rel="noopener">All UENUM and UMETA Specifiers</a></li>
+</ul>
+<h1 id="MetadataSpecifiers"><a href="#MetadataSpecifiers" class="headerlink" title="MetadataSpecifiers"></a>MetadataSpecifiers</h1><blockquote>
+<p>When declaring classes, interfaces, structs, enums, enum values, functions, or properties, you can add Metadata Specifiers to control how they interact with various aspects of the engine and editor. Each type of data structure or member has its own list of Metadata Specifiers.</p>
+</blockquote>
+<p>上面是官方文档<a href="https://docs.unrealengine.com/en-US/ProgrammingAndScripting/GameplayArchitecture/Metadata/index.html" target="_blank" rel="noopener">Metadata Specifiers</a>的描述，当我声明UE4的数据结构的时候，基本上都可以添加Meta修饰符来实现一些动作，每种数据结构和成员都有它自己的一个Metadata修饰符的列表，而我的目的就是把自己遇到过的Meta修饰符整理，记录下使用方法。</p>
+<p>需要注意的是，Metadata修饰符之存在于Editor部分，不要把Metadata修饰符的使用范围扩大到游戏中的逻辑，比如说游戏运行是变量数据的读取。仅仅是方便我们在UE4的Editor中开发的存在。</p>
+<h2 id="遇到的一些使用"><a href="#遇到的一些使用" class="headerlink" title="遇到的一些使用"></a>遇到的一些使用</h2><h3 id="Meta-EditCondition-“变量名”"><a href="#Meta-EditCondition-“变量名”" class="headerlink" title="Meta = (EditCondition = “变量名”)"></a>Meta = (EditCondition = “变量名”)</h3><p>这里的变量名大多是布尔类型。用途是控制Detail面板上的变量能否修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWirte)</span><br><span class="line">uint8 bCondition : 1;</span><br><span class="line"></span><br><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWirte, meta = (EditCondition = &quot;bCondition&quot;))</span><br><span class="line">float SettingsValue;</span><br></pre></td></tr></table></figure>
+<p>这样Detail面板上的<code>SettingsValue</code>的值就会根据<code>bCondition</code>的值而允许修改或者不允许修改。</p>
+<p><code>meta = (EditCondition = &quot;!bCondition&quot;)</code>这样的写法也是可以的。</p>
+<p>UE4.23版本之后EditCondition也可以对<strong>布尔表达式</strong>进行评估了，也就是说<code>EditCondition = &quot;EnumType == ETestEnumType::TypeA&quot;</code>这种写法也是支持了。</p>
+<ul>
+<li>参考文章：<a href="https://qiita.com/Dv7Pavilion/items/6f86134587b3ad6ff396" target="_blank" rel="noopener">【UE4】詳細パネルでの編集可・不可を制御する</a></li>
+</ul>
+<h3 id="Meta-WorldContext-”WorldContextObject”-CallableWithoutWorldContext"><a href="#Meta-WorldContext-”WorldContextObject”-CallableWithoutWorldContext" class="headerlink" title="Meta = (WorldContext=”WorldContextObject”, CallableWithoutWorldContext)"></a>Meta = (WorldContext=”WorldContextObject”, CallableWithoutWorldContext)</h3><p>这个我用来定义BlueprintCallable函数时调用省略<code>WorldContextObject</code>。</p>
+<p>想要记录下这个meta的原因是，我想得到当前调用函数所在的Blueprint的名字。在C++中直接使用<code>__Function__</code>写个宏就可以直接得到调用函数的名字，但是在Blueprint中，没有宏当参数这么便利的方法，得顺便把self当参数传进去。</p>
+<p>这就导致我想输出蓝图名字的时候，无论如何都得额外做一个把self传进去的操作。</p>
+<p>但是有一天我发现，为什么UE4自带的<code>Print</code>函数就没有传这样的参，而且还把调用蓝图的名字输出来了。看代码就知道了。</p>
+<p>在下面的源代码中可以找到UE4自带的Print函数声明定义：</p>
+<ul>
+<li><code>Engine\Source\Runtime\Engine\Classes\Kismet\KismetSystemLibrary.h</code></li>
+<li><code>Engine\Source\Runtime\Engine\Private\KismetSystemLibrary.cpp</code></li>
+</ul>
+<p>会找到下面的声明：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UFUNCTION(BlueprintCallable, meta=(WorldContext=<span class="string">"WorldContextObject"</span>, CallableWithoutWorldContext, Keywords = <span class="string">"log print"</span>, AdvancedDisplay = <span class="string">"2"</span>, DevelopmentOnly), Category=<span class="string">"Utilities|String"</span>)</span><br><span class="line">static void PrintString(UObject* WorldContextObject, const FString&amp; InString = FString(TEXT("Hello")), bool bPrintToScreen = true, bool bPrintToLog = true, FLinearColor TextColor = FLinearColor(0.0, 0.66, 1.0), float Duration = 2.f);</span><br></pre></td></tr></table></figure></p>
+<p>重点是下面:<br><strong>WorldContext=”WorldContextObject”, CallableWithoutWorldContext</strong> 这部分。</p>
+<p>受这个启发，这个让我们可以不用传入额外的参数（self），并且使用<code>GetNameSafe</code>函数得到名字。</p>
+<p><strong>Tips:</strong></p>
+<ol>
+<li>Keywords关键字可以设置搜索的关键字。细节上面的官方文档中有。</li>
+<li><code>GEngine-&gt;AddOnScreenDebugMessage((uint64)-1, Duration, TextColor.ToFColor(true), FinalDisplayString);</code>向屏幕输出LOG，来自上面<code>PrintString()</code>函数的实现。</li>
+</ol>
+<h3 id="Meta-MakeEditWidget-true"><a href="#Meta-MakeEditWidget-true" class="headerlink" title="Meta = (MakeEditWidget=true)"></a>Meta = (MakeEditWidget=true)</h3><blockquote>
+<p>Used for Transform or Rotator properties, or Arrays of Transforms or Rotators. Indicates that the property should be exposed in the viewport as a movable widget.</p>
+</blockquote>
+<p>来自官网的描述，跟Transform和Rorator属性很搭。感觉用处很大，我看别的文章FVector也可以用？没有验证过。</p>
+<h1 id="Class-Specifier"><a href="#Class-Specifier" class="headerlink" title="Class Specifier"></a>Class Specifier</h1><p>除了一些meta限定，其它的地方UE4也提供了许多修饰符。这个是<strong>UCLASS</strong>定义的时候使用的修饰符，可以定义UCLASS在Engine和Editor中的一些行为。</p>
+<ul>
+<li><a href="https://docs.unrealengine.com/4.26/en-US/ProgrammingAndScripting/GameplayArchitecture/Classes/Specifiers/" target="_blank" rel="noopener">Class Specifiers</a></li>
+</ul>
+<h2 id="一些我用过的"><a href="#一些我用过的" class="headerlink" title="一些我用过的"></a>一些我用过的</h2><h3 id="MinimalAPI"><a href="#MinimalAPI" class="headerlink" title="MinimalAPI"></a>MinimalAPI</h3><blockquote>
+<p>他のモジュールで使用するために、クラスの型情報のみエクスポートさせます。クラスはキャスト可能ですが、クラスの関数を呼び出すことはできません (インライン メソッドは除く)。これにより、他のモジュールからすべての関数にアクセス可能である必要のないクラスで何もかもをエクスポートしないことでコンパイル時間を短縮できます。</p>
+</blockquote>
+<p>官网上的内容。</p>
+<h3 id="hidecategories-“category1-category2”"><a href="#hidecategories-“category1-category2”" class="headerlink" title="hidecategories=(“category1|category2”)"></a>hidecategories=(“category1|category2”)</h3><p>官网上也这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HideCategories=(Category1, Category2, ...)</span><br></pre></td></tr></table></figure></p>
+<p>作用就是可以隐藏定义的Category，由于这个修饰符是会影响到子类的，所以被我用来在子类的蓝图中隐藏父类中的Category。<br>在蓝图里面也可以直接添加隐藏的Categories。</p>
+<h1 id="Property-Specifiers"><a href="#Property-Specifiers" class="headerlink" title="Property Specifiers"></a>Property Specifiers</h1><p>这一部分用来记录<code>UPROPERTY()</code>，修饰属性的各种修饰符。</p>
+<h2 id="一些我用过的-1"><a href="#一些我用过的-1" class="headerlink" title="一些我用过的"></a>一些我用过的</h2><h3 id="常用的属性读写权限EditAnywhere等"><a href="#常用的属性读写权限EditAnywhere等" class="headerlink" title="常用的属性读写权限EditAnywhere等"></a>常用的属性读写权限EditAnywhere等</h3><p>这些是最常使用的属性：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center">Level Editor<br>:可读</th>
+<th style="text-align:center">Level Editor<br>:可写</th>
+<th style="text-align:center">Blueprint Editor<br>:可读</th>
+<th>Blueprint Editor<br>:可写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">EditAnywhere</td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td><span style="color:green">〇<span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">EditDefaultOnly</td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td><span style="color:green">〇<span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">EditInstanceOnly</td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td><span style="color:red">✖<span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">VisibleAnywhere</td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td><span style="color:red">✖<span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">VisableDefaultsOnly</td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td><span style="color:red">✖<span></span></span></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">VisbaleInstanceOnly</td>
+<td style="text-align:center"><span style="color:green">〇<span></span></span></td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td style="text-align:center"><span style="color:red">✖<span></span></span></td>
+<td><span style="color:red">✖<span></span></span></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Transient"><a href="#Transient" class="headerlink" title="Transient"></a>Transient</h3><p>根据官网的描述：</p>
+<blockquote>
+<p>Property is transient, meaing it will not be saved or loaded. Properties tagged this way will be zero-filled at loat time.</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(Transient)</span><br><span class="line">int32 ValueX;</span><br></pre></td></tr></table></figure>
+<p>说实话，在没有对UE4的多人模式进行学习的时候真是一头雾水。被标记了这个属性修饰符的变量，意味着变量存储的是一个暂时的值，我们并不想永久的保存它，比如说这个变量保存的是其它类中的内容，就好像是弱指针一样，只是暂时的保留这个变量的值。</p>
+<p>还有一个作用就是，标记了这个修饰符的变量，它不会被Serialize(见UE4的Net Serialize)。</p>
+<h3 id="EditFixedSize"><a href="#EditFixedSize" class="headerlink" title="EditFixedSize"></a>EditFixedSize</h3><p>禁止在LevelEditor对TArray进行元素添加操作。具体使用情况还不清楚，可能哪一天会派上用场。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, EditFixedSize)</span><br><span class="line">TArray&lt;FName&gt; FixedSizeArray;</span><br></pre></td></tr></table></figure></p>
+<h3 id="ClampMin-ClampMax-UIMin-UIMax"><a href="#ClampMin-ClampMax-UIMin-UIMax" class="headerlink" title="ClampMin, ClampMax, UIMin, UIMax"></a>ClampMin, ClampMax, UIMin, UIMax</h3><table>
+<thead>
+<tr>
+<th>Property Mata Tag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ClampMin=”N”</td>
+<td>Used for float and integer properties. Specifies the minimum value N that may be entered for the property.</td>
+</tr>
+<tr>
+<td>ClampMax=”N”</td>
+<td>Used for float and integer properties. Specifies the maximum value N that may be entered for the property.</td>
+</tr>
+</tbody>
+</table>
+<p>上面来自官网，本质就是Clamp处理。</p>
+<p>UIMin和UIMax我没有在官网找到解释，功能就是限制UI，在属性条目上用鼠标拖动调整数值的时候限制数值的处理。</p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=&quot;Sample&quot;, meta=( ClampMin = 0, ClampMax = 1, UIMin = 0, UIMax = 1 ))</span><br><span class="line">float Sample;</span><br></pre></td></tr></table></figure></p>
+<h3 id="AllowPrivateAccess"><a href="#AllowPrivateAccess" class="headerlink" title="AllowPrivateAccess"></a>AllowPrivateAccess</h3><blockquote>
+<p>Indicates that a private member marked as BlueprintReadOnly or BlueprintReadWirte should be accessible from blueprints.</p>
+</blockquote>
+<p>我遇到的是使用私有成员，单独标记位BlueprintReadOnly的时候会报错，这个时候就需要AllowPrivateAccess出马了。</p>
+<p>下面是来源于引擎的一段源码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private:</span><br><span class="line">UPROPERTY(Category = CameraActor, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = &quot;true&quot;))</span><br><span class="line">class UCameraComponent* CameraComponent;</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/UE4-DataTable的使用/" rel="prev" title="UE4-DataTable的使用">
+      <i class="fa fa-chevron-left"></i> UE4-DataTable的使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/ue4-serialization/" rel="next" title="UE4中的Serialization">
+      UE4中的Serialization <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MetadataSpecifiers"><span class="nav-number">2.</span> <span class="nav-text">MetadataSpecifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的一些使用"><span class="nav-number">2.1.</span> <span class="nav-text">遇到的一些使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-EditCondition-“变量名”"><span class="nav-number">2.1.1.</span> <span class="nav-text">Meta = (EditCondition = “变量名”)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-WorldContext-”WorldContextObject”-CallableWithoutWorldContext"><span class="nav-number">2.1.2.</span> <span class="nav-text">Meta = (WorldContext=”WorldContextObject”, CallableWithoutWorldContext)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Meta-MakeEditWidget-true"><span class="nav-number">2.1.3.</span> <span class="nav-text">Meta = (MakeEditWidget=true)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Class-Specifier"><span class="nav-number">3.</span> <span class="nav-text">Class Specifier</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些我用过的"><span class="nav-number">3.1.</span> <span class="nav-text">一些我用过的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MinimalAPI"><span class="nav-number">3.1.1.</span> <span class="nav-text">MinimalAPI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hidecategories-“category1-category2”"><span class="nav-number">3.1.2.</span> <span class="nav-text">hidecategories=(“category1|category2”)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Property-Specifiers"><span class="nav-number">4.</span> <span class="nav-text">Property Specifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些我用过的-1"><span class="nav-number">4.1.</span> <span class="nav-text">一些我用过的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的属性读写权限EditAnywhere等"><span class="nav-number">4.1.1.</span> <span class="nav-text">常用的属性读写权限EditAnywhere等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transient"><span class="nav-number">4.1.2.</span> <span class="nav-text">Transient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#EditFixedSize"><span class="nav-number">4.1.3.</span> <span class="nav-text">EditFixedSize</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClampMin-ClampMax-UIMin-UIMax"><span class="nav-number">4.1.4.</span> <span class="nav-text">ClampMin, ClampMax, UIMin, UIMax</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AllowPrivateAccess"><span class="nav-number">4.1.5.</span> <span class="nav-text">AllowPrivateAccess</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

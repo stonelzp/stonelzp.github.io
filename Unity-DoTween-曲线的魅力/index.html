@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。">
+<meta name="keywords" content="Plugins,DoTween,Curve">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity-DoTween-曲线的魅力">
+<meta property="og:url" content="http://stonelzp.github.io/Unity-DoTween-曲线的魅力/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.214Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unity-DoTween-曲线的魅力">
+<meta name="twitter:description" content="因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。">
+
+<link rel="canonical" href="http://stonelzp.github.io/Unity-DoTween-曲线的魅力/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Unity-DoTween-曲线的魅力 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/Unity-DoTween-曲线的魅力/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unity-DoTween-曲线的魅力
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-11 14:44:27" itemprop="dateCreated datePublished" datetime="2019-09-11T14:44:27+09:00">2019-09-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Unity/" itemprop="url" rel="index"><span itemprop="name">Unity</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>因为在使用DoTween的时候，有许多我不知道的用法，关于曲线的使用和一些很重要的名词。这篇文章主要用来记录这些曲线的操作和使用。</p>
+<a id="more"></a>
+<p>首先是曲线的基础：</p>
+<ul>
+<li><a href="https://postd.cc/bezier-curves/" target="_blank" rel="noopener">一から学ぶベジェ曲線</a></li>
+</ul>
+<p>虽然是随便搜也能搜到，暂且记下来吧。</p>
+<h2 id="ease"><a href="#ease" class="headerlink" title="ease"></a>ease</h2><ul>
+<li><a href="https://easings.net/" target="_blank" rel="noopener">Easing functions specify the rate of change of a parameter over time</a></li>
+</ul>
+<p>相当实用的网站，大佬教我搜<strong>ease</strong>的时候搜到的。</p>
+<h2 id="DoTween"><a href="#DoTween" class="headerlink" title="DoTween"></a>DoTween</h2><p>其实应该把这个放到<strong>Unity-插件</strong>的内容里的，感觉和曲线息息相关的插件，就放到了这里。</p>
+<ul>
+<li><a href="http://dotween.demigiant.com/documentation.php" target="_blank" rel="noopener">DOCUMENTATION</a></li>
+</ul>
+<h3 id="DoPath-DoLocalPath"><a href="#DoPath-DoLocalPath" class="headerlink" title="DoPath/DoLocalPath"></a>DoPath/DoLocalPath</h3><p>这个是我所需要的，我使用的地方。</p>
+<p>关于这个插件有很多的使用，有免费版和Pro版。我看到有人整理的我就先上个链接<br>-<a href="https://gist.github.com/anzfactory/da73149ba91626ba796d598578b163cc" target="_blank" rel="noopener">HowTo_DOTween.md</a></p>
+<p>我自己的话充其量用了上面的路径功能，换了换set ease的条件。还有一些<strong>RX</strong>的使用，<code>Onstart()</code>,<code>OnComplete()</code>。</p>
+<h3 id="DoTween停止操作"><a href="#DoTween停止操作" class="headerlink" title="DoTween停止操作"></a>DoTween停止操作</h3><p>unity的Scene之间移动的时候需要停止DoTween的动作，当然tween的本体在切换Scene的时候不会被destory的。于是就出现了一个奇怪的现象。</p>
+<p><strong>Tween的object把setActive(false)执行之后仍然继续活动</strong></p>
+<p>这就奇了怪了，我的猜测是在Unity中跟gameobject相关的操作都是在主线程中运行，但是Tween的操作是子线程，但是反过来一想又不太对，Tween操作transform的移动不应该是主线程中吗，反正不太清楚，出现了这个问题，我的解决方案是：</p>
+<p>先执行<code>Complete()</code>，再<code>setActive(false)</code>。</p>
+<p>这里有一个疑问，我在使用Complete之前有尝试过Kill这个方法，但是，反正就是未能解决我遇到的问题，保险起见我是在执行Kill之前又添加了Complete的操作，虽然感觉不太好，但还是那么做了…</p>
+<p>参考文章：<a href="https://qiita.com/kagigi/items/bdf4d42835add07b0077#complete-or-kill%E3%81%99%E3%82%8B%E3%81%BE%E3%81%A7%E6%AE%8B%E3%82%8A%E7%B6%9A%E3%81%91%E3%82%8B%E5%95%8F%E9%A1%8C" target="_blank" rel="noopener">DOTweenをふわっとまとめてみた</a></p>
+<h2 id="Unity-DoTween-Shortcut"><a href="#Unity-DoTween-Shortcut" class="headerlink" title="Unity DoTween Shortcut"></a>Unity DoTween Shortcut</h2><blockquote>
+<p>DOTween includes shortcuts for some known Unity objects, like Transform, Rigidbody and Material. You can start a tween directly from a reference to these objects (which will also automatically set the object itself as the tween target), like:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; transform.DOMove(new Vector3(2,3,4), 1);</span><br><span class="line">&gt; rigidbody.DOMove(new Vector3(2,3,4), 1);</span><br><span class="line">&gt; material.DOColor(Color.green, 1);</span><br><span class="line"></span><br><span class="line">Dotween提供的这种快捷的方式很好理解，但是这种方式的实现就很厉害，值得学习。比如说这个transform的DOMove方法的shortcut实现：</span><br><span class="line">```csharp</span><br><span class="line">public static TweenerCore&lt;Vector3, Vector3, VectorOptions&gt; DoMove(this Transform target, Vector3 endValue, float duration, bool snapping = false);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>C#该学的东西还是有很多很多啊，学无止境啊。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Plugins/" rel="tag"># Plugins</a>
+              <a href="/tags/DoTween/" rel="tag"># DoTween</a>
+              <a href="/tags/Curve/" rel="tag"># Curve</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/ue4-editor-extension/" rel="prev" title="UE4-Editor扩展">
+      <i class="fa fa-chevron-left"></i> UE4-Editor扩展
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/unity-plugins/" rel="next" title="Unity-第三方库介绍和使用">
+      Unity-第三方库介绍和使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ease"><span class="nav-number">1.</span> <span class="nav-text">ease</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DoTween"><span class="nav-number">2.</span> <span class="nav-text">DoTween</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DoPath-DoLocalPath"><span class="nav-number">2.1.</span> <span class="nav-text">DoPath/DoLocalPath</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DoTween停止操作"><span class="nav-number">2.2.</span> <span class="nav-text">DoTween停止操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unity-DoTween-Shortcut"><span class="nav-number">3.</span> <span class="nav-text">Unity DoTween Shortcut</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

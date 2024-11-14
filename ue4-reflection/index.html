@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Roboto Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"stonelzp.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="反射在其它的比如说C#，JAVA语言中比较常见。反射概况的来说是描述类在运行时的状态，反射中包含的信息有类名，类数据成员，数据成员类型，还有每个成员位于对象内存映像的偏移(offset)，类所有成员函数的信息。">
+<meta name="keywords" content="UE4,UE4.25">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UE4-反射机制">
+<meta property="og:url" content="http://stonelzp.github.io/ue4-reflection/index.html">
+<meta property="og:site_name" content="StoneのBLOG">
+<meta property="og:description" content="反射在其它的比如说C#，JAVA语言中比较常见。反射概况的来说是描述类在运行时的状态，反射中包含的信息有类名，类数据成员，数据成员类型，还有每个成员位于对象内存映像的偏移(offset)，类所有成员函数的信息。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-11-12T11:51:47.007Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UE4-反射机制">
+<meta name="twitter:description" content="反射在其它的比如说C#，JAVA语言中比较常见。反射概况的来说是描述类在运行时的状态，反射中包含的信息有类名，类数据成员，数据成员类型，还有每个成员位于对象内存映像的偏移(offset)，类所有成员函数的信息。">
+
+<link rel="canonical" href="http://stonelzp.github.io/ue4-reflection/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>UE4-反射机制 | StoneのBLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">StoneのBLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">生活这种事情，从来都是自我陶醉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://stonelzp.github.io/ue4-reflection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="stone">
+      <meta itemprop="description" content="爱自己，对爱你的人来说，是最大的安慰">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="StoneのBLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UE4-反射机制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-18 12:07:20" itemprop="dateCreated datePublished" datetime="2020-11-18T12:07:20+09:00">2020-11-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2024-11-12 20:51:47" itemprop="dateModified" datetime="2024-11-12T20:51:47+09:00">2024-11-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/UnrealEngine4/" itemprop="url" rel="index"><span itemprop="name">UnrealEngine4</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>反射在其它的比如说C#，JAVA语言中比较常见。反射概况的来说是描述类在运行时的状态，反射中包含的信息有类名，类数据成员，数据成员类型，还有每个成员位于对象内存映像的偏移(offset)，类所有成员函数的信息。</p>
+<a id="more"></a>
+<p>C++本身是不支持反射的，4在C++的基础上搭建了自己的一套反射机制。</p>
+<h1 id="UE4的反射机制原理"><a href="#UE4的反射机制原理" class="headerlink" title="UE4的反射机制原理"></a>UE4的反射机制原理</h1><ul>
+<li><a href="https://www.unrealengine.com/en-US/blog/unreal-property-system-reflection?sessionInvalidated=true&amp;lang=en-US" target="_blank" rel="noopener">Unreal Property System (Reflection)</a></li>
+</ul>
+<p>Property system的层级<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">UField</span><br><span class="line">        UStruct</span><br><span class="line">                UClass (C++ class)</span><br><span class="line">                UScriptStruct (C++ struct)</span><br><span class="line">                UFunction (C++ function)</span><br><span class="line"></span><br><span class="line">        UEnum (C++ enumeration)</span><br><span class="line"></span><br><span class="line">        UProperty (C++ member variable <span class="keyword">or</span> function parameter)</span><br><span class="line"></span><br><span class="line">                (Many subclasses <span class="keyword">for</span> different types)</span><br></pre></td></tr></table></figure></p>
+<p>上面的文章虽然是很久之前文章，但是还是很厉害。</p>
+<h2 id="利用反射对属性进行读写"><a href="#利用反射对属性进行读写" class="headerlink" title="利用反射对属性进行读写"></a>利用反射对属性进行读写</h2><p>最近在搞使用ImGui对ini文件进行读写的功能，同时又希望像UE4的Editor那样，对于添加的UCLASS的类中的UPROPERTY属性自动的显示各种类型的UI。于是就研究了一下反射，虽然原理什么的我还是不是很清楚，希望能多读读上面的文章而不是只是单纯的记录下来，终归动还是能动的。</p>
+<p>直接贴上代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Debug settings UI</span></span><br><span class="line"><span class="keyword">bool</span> show_about_app = <span class="literal">true</span>;</span><br><span class="line">ImGui::Begin(<span class="string">"DebugSettings"</span>, &amp;show_about_app, ImGuiWindowFlags_AlwaysAutoResize);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Creaete DebugUI for UObject</span></span><br><span class="line"><span class="keyword">bool</span> AnyPropertiesEdited = <span class="literal">false</span>;</span><br><span class="line">UClass* obj = DebugSettings-&gt;GetClass();</span><br><span class="line"><span class="keyword">for</span>(TFieldIterator&lt;FProperty&gt; PropertyIterator(obj); PropertyIterator; ++PropertyIterator)</span><br><span class="line">&#123;</span><br><span class="line">        FProperty* Property = *PropertyIterator;</span><br><span class="line">        <span class="keyword">if</span>(FBoolProperty* BoolProperty = CastField&lt;FBoolProperty&gt;(Property))</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// UE_LOG(LogTemp, Log, TEXT("cast bool property successed."));</span></span><br><span class="line">                <span class="keyword">static</span> <span class="keyword">bool</span> sampleBool = BoolProperty-&gt;GetPropertyValue_InContainer(DebugSettings);</span><br><span class="line">                ImGui::Checkbox(TCHAR_TO_ANSI(*BoolProperty-&gt;GetName()), &amp;sampleBool);</span><br><span class="line">                <span class="keyword">if</span>(ImGui::IsItemEdited())</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// Apply changes</span></span><br><span class="line">                        BoolProperty-&gt;SetPropertyValue(BoolProperty-&gt;ContainerPtrToValuePtr&lt;<span class="keyword">bool</span>&gt;(DebugSettings), sampleBool);</span><br><span class="line">                        AnyPropertiesEdited = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(FIntProperty* IntProperty = CastField&lt;FIntProperty&gt;(Property))</span><br><span class="line">        &#123;</span><br><span class="line">                <span class="comment">// UE_LOG(LogTemp, Log, TEXT("cast int property successed."));</span></span><br><span class="line">                <span class="keyword">static</span> <span class="keyword">int</span> sampleInt = IntProperty-&gt;GetPropertyValue_InContainer(DebugSettings);</span><br><span class="line">                ImGui::InputInt(TCHAR_TO_ANSI(*IntProperty-&gt;GetName()), &amp;sampleInt);</span><br><span class="line">                <span class="keyword">if</span>(ImGui::IsItemEdited())</span><br><span class="line">                &#123;</span><br><span class="line">                        <span class="comment">// Apply changes</span></span><br><span class="line">                        IntProperty-&gt;SetPropertyValue(IntProperty-&gt;ContainerPtrToValuePtr&lt;<span class="keyword">int</span>&gt;(DebugSettings), sampleInt);</span><br><span class="line">                        AnyPropertiesEdited = <span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">auto</span> StrProperty = CastField&lt;FStrProperty&gt;(Property))</span><br><span class="line">        &#123;</span><br><span class="line">            FString sampleStr = StrProperty-&gt;GetPropertyValue_InContainer(DebugSettings);</span><br><span class="line">            <span class="comment">// <span class="doctag">TODO:</span></span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(AnyPropertiesEdited)</span><br><span class="line">&#123;</span><br><span class="line">        DebugSettings-&gt;SaveConfig();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ImGui::End();</span><br></pre></td></tr></table></figure></p>
+<p>没有对应所有的类型，但是知道了方法就行了。</p>
+<p>这其中有一篇文章很重要：</p>
+<ul>
+<li><a href="https://www.ayumax.net/entry/2020/03/22/144226" target="_blank" rel="noopener">UProperty -&gt; FPropertyへの変化(UE4 4.25)</a></li>
+</ul>
+<p>UE4.25版本更改了<code>UProperty-&gt;FProperty</code>，跟之前写法会有些出入</p>
+<p>还参考了其他人的提问的文章</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/108323-how-to-list-uproperties-of-an-uobject-at-runtime-read-write-uproperty" target="_blank" rel="noopener">How to list UProperties of an UObject at runtime? Read/write UProperty?</a></li>
+</ul>
+<h2 id="利用反射对函数进行操作"><a href="#利用反射对函数进行操作" class="headerlink" title="利用反射对函数进行操作"></a>利用反射对函数进行操作</h2><p>有一天突发奇想，UE4的反射机制可不可以遍历<code>UObject</code>中的<code>UFUNCTION</code>？然后根据<code>UUFUNCTION</code>的的类型，比如说根据Meta修饰符来切换ImmGui的UI类型，Button啥的。</p>
+<p>遍历<code>UFUNCTION</code>貌似是可行的:</p>
+<ul>
+<li><a href="https://forums.unrealengine.com/development-discussion/c-gameplay-programming/1461760-how-i-get-all-functions-of-one-object" target="_blank" rel="noopener">How I Get All Functions of one Object??? - Unreal Engine Forums</a></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> UMyClass::ListAllObjectUFunctions(<span class="keyword">const</span> UObject* Object) &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ( TFieldIterator&lt;UFunction&gt; FIT ( Object-&gt;GetClass(), EFieldIteratorFlags::IncludeSuper ); FIT; ++FIT) &#123;</span><br><span class="line"></span><br><span class="line">        UFunction* Function = *FIT;</span><br><span class="line">        UE_LOG ( LogTemp, Log, TEXT( <span class="string">"Function Found:  %s();"</span> ), *Function-&gt;GetName() );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至于自定义的Meta修饰符，我还没开始调查。啧。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/mohuak/article/details/81913532?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromBaidu-1.add_param_isCf&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromBaidu-1.add_param_isCf" target="_blank" rel="noopener">UE4反射原理的探究</a></li>
+<li><a href="https://www.cnblogs.com/ghl_carmack/p/5698438.html" target="_blank" rel="noopener">虚幻4属性系统（反射）翻译</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/60622181" target="_blank" rel="noopener">UE4反射机制</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/25098685" target="_blank" rel="noopener">《InsideUE4》UObject（四）类型系统代码生成</a></li>
+</ul>
+<p>感觉上面的文章都很重要。尤其是最后一篇。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/UE4/" rel="tag"># UE4</a>
+              <a href="/tags/UE4-25/" rel="tag"># UE4.25</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/ue4-4.25-version-newfunction/" rel="prev" title="UE4-版本4.25新特性">
+      <i class="fa fa-chevron-left"></i> UE4-版本4.25新特性
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/ue4-imgui/" rel="next" title="UE4-ImGui使用">
+      UE4-ImGui使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#UE4的反射机制原理"><span class="nav-number">1.</span> <span class="nav-text">UE4的反射机制原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#利用反射对属性进行读写"><span class="nav-number">1.1.</span> <span class="nav-text">利用反射对属性进行读写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用反射对函数进行操作"><span class="nav-number">1.2.</span> <span class="nav-text">利用反射对函数进行操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="stone"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">stone</p>
+  <div class="site-description" itemprop="description">爱自己，对爱你的人来说，是最大的安慰</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">126</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/stonelzp" title="GitHub → https://github.com/stonelzp" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">stone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
